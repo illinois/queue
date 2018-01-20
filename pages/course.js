@@ -86,7 +86,10 @@ class Page extends React.Component {
         const queue = this.props.queues[id]
         return (
           <Link route='queue' params={{id}} key={id} passHref>
-            <ListGroupItem tag="a" action>{queue.name}</ListGroupItem>
+            <ListGroupItem tag="a" action>
+              <div className="h5">{queue.name}</div>
+              <div className="text-muted">Location: {queue.location}</div>
+            </ListGroupItem>
           </Link>
         )
       })
