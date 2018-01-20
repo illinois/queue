@@ -4,7 +4,8 @@ import {
   FETCH_COURSES_FAILURE,
   FETCH_COURSE_REQUEST,
   FETCH_COURSE_SUCCESS,
-  FETCH_COURSE_FAILURE
+  FETCH_COURSE_FAILURE,
+  CREATE_QUEUE_SUCCESS
 } from '../constants/ActionTypes'
 
 const defaultState = {
@@ -13,13 +14,25 @@ const defaultState = {
   courses: {}
 }
 
-const updateCourse = (state, course) => {
+function normalizeCourse(course) {
+  const newCourse = Object.assign({}, course)
+  if (course.queues) {
+    newCourse.queues = course.queues.map(queue => queue.id)
+  }
+  return newCourse
+}
+
+function addQueueToCourse(state, courseId, queue) {
+  if (!(courseId in state.courses) || state.courses[courseId].queues.indexOf(queue.id) !== -1) {
+    return state
+  }
+
   const newState = Object.assign({}, state)
-  newState.courses[course.id] = course
+  newState.courses[courseId].queues.push(queue.id)
   return newState
 }
 
-const queues = (state = defaultState, action) => {
+const courses = (state = defaultState, action) => {
   switch (action.type) {
     case FETCH_COURSES_REQUEST:
       return Object.assign({}, state, {
@@ -29,7 +42,7 @@ const queues = (state = defaultState, action) => {
       return Object.assign({}, state, {
         isFetching: false,
         courses: action.courses.reduce((obj, item) => {
-          obj[item.id] = item
+          obj[item.id] = normalizeCourse(item)
           return obj
         }, {})
       })
@@ -41,10 +54,19 @@ const queues = (state = defaultState, action) => {
         error: true
       })
     case FETCH_COURSE_SUCCESS:
-      return updateCourse(state, action.course)
+      const course = action.course
+      return Object.assign({}, state, {
+        courses: {
+          ...state.courses,
+          [course.id]: normalizeCourse(course)
+        }
+      })
+    case CREATE_QUEUE_SUCCESS:
+      const queue = action.data.queue
+      return addQueueToCourse(state, action.courseId, queue)
     default:
       return state
   }
 }
 
-export default queues
+export default courses

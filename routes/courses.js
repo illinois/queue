@@ -36,10 +36,25 @@ router.post('/', (req, res, next) => {
   const course = Course.build()
   course.name = req.body.name
 
-  console.log(req.body)
-  console.log(course)
-
   course.save().then(course => res.send({ success: true, course }))
+})
+
+
+// Create a queue for this course
+router.post('/:courseId/queues', (req, res, next) => {
+  const courseId = validator.toInt(req.params.courseId)
+
+  const queue = Queue.build({
+    name: req.body.name,
+    location: req.body.location,
+    courseId: req.params.courseId
+  })
+
+  queue.save().then(queue => res.send({
+    result: 'success',
+    resultText: 'Queue created',
+    queue
+  }))
 })
 
 module.exports = router

@@ -21,9 +21,6 @@ const addStaff = (staff, state) => {
 }
 
 const removeStaff = (id, state) => {
-  console.log('weeee')
-  console.log(id)
-  console.log(id.id)
   return Object.assign({}, state, {
     staff: [...state.staff].filter(staff => staff.id != id)
   })

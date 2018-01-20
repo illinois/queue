@@ -1,5 +1,4 @@
 import {Link} from '../routes'
-// import Link from 'next/link'
 import {
   Container,
   ListGroup,
@@ -33,10 +32,9 @@ class Page extends React.Component {
   }
 
   render() {
-    Object.keys(this.props.courses)
     const courses = this.props.courses.map(course => (
       <Link route='course' params={{id: course.id}} key={course.id} passHref>
-        <ListGroupItem tag="a" action >{course.name}</ListGroupItem>
+        <ListGroupItem tag="a" action>{course.name}</ListGroupItem>
       </Link>
     ))
 
@@ -49,7 +47,7 @@ class Page extends React.Component {
     return (
       <Layout>
         <Container>
-          <Card className="course-card">
+          <Card className="courses-card">
             <CardBody>
               <CardTitle tag="h3">Hey there!</CardTitle>
               <CardSubtitle>Please select your course from the list below.</CardSubtitle>
@@ -67,7 +65,7 @@ class Page extends React.Component {
           </Card>
         </Container>
         <style jsx>{`
-          :global(.course-card) {
+          :global(.courses-card) {
             width: 100%;
             max-width: 500px;
             margin: auto;

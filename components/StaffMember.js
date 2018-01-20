@@ -7,7 +7,7 @@ const StaffMember = ({name, id, removeStaff}) => (
     <span className="btn-remove-staff ml-auto">
       <FontAwesomeIcon
         icon={faTimes}
-        onClick={() => {console.log('bad'); removeStaff(id)}}
+        onClick={() => removeStaff(id)}
       />
     </span>
     <style jsx>{`

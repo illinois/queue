@@ -26,8 +26,10 @@ Object.keys(db).forEach(function(modelName) {
   }
 })
 
-// Create all tables if needed
-sequelize.sync()
+if (env === 'development') {
+  // Create all tables if needed
+  sequelize.sync({ force: true })
+}
 
 db.sequelize = sequelize
 db.Sequelize = Sequelize

@@ -3,6 +3,7 @@
 module.exports = function(sequelize, DataTypes) {
     var obj = sequelize.define("queue", {
       name: DataTypes.TEXT,
+      location: DataTypes.TEXT,
 
       startTime: DataTypes.DATE,
       endTime: DataTypes.DATE,

@@ -7,7 +7,6 @@ export default class QuestionList extends React.Component {
   }
 
   render() {
-    console.log(this.props)
     const items = (this.props.questions || []).map(question => (
       <div key={question._id}>{question.pseudonym}</div>
     ))
