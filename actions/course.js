@@ -1,5 +1,5 @@
-import * as types from '../constants/ActionTypes'
 import axios from 'axios'
+import * as types from '../constants/ActionTypes'
 
 /************************
  * Creating a new course

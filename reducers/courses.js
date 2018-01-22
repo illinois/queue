@@ -5,13 +5,13 @@ import {
   FETCH_COURSE_REQUEST,
   FETCH_COURSE_SUCCESS,
   FETCH_COURSE_FAILURE,
-  CREATE_QUEUE_SUCCESS
+  CREATE_QUEUE_SUCCESS,
 } from '../constants/ActionTypes'
 
 const defaultState = {
   isFetching: true,
   error: false,
-  courses: {}
+  courses: {},
 }
 
 function normalizeCourse(course) {
@@ -46,7 +46,6 @@ const courses = (state = defaultState, action) => {
           return obj
         }, {})
       })
-      return removeStaff(action.id, state)
     case FETCH_COURSES_FAILURE:
       return Object.assign({}, state, {
         isFetching: false,
@@ -62,7 +61,7 @@ const courses = (state = defaultState, action) => {
         }
       })
     case CREATE_QUEUE_SUCCESS:
-      const queue = action.data.queue
+      const queue = action.queue
       return addQueueToCourse(state, action.courseId, queue)
     default:
       return state

@@ -1,11 +1,15 @@
-const express = require('express')
-const router = express.Router()
-const validator = require('validator')
+const router = require('express').Router({
+  mergeParams: true,
+})
+
+const { check } = require('express-validator/check')
+const { matchedData } = require('express-validator/filter')
 
 const {
   Course,
-  Queue
+  Queue,
 } = require('../models')
+const { failIfErrors } = require('./util')
 
 
 // Get all courses
@@ -15,46 +19,33 @@ router.get('/', (req, res, next) => {
 
 
 // Get a specific course
-router.get('/:courseId', function (req, res, next) {
-  var courseId = validator.toInt(req.params.courseId)
+router.get('/:courseId', [
+  check('courseId').toInt(),
+  failIfErrors,
+], (req, res, next) => {
+  const data = matchedData(req)
 
   Course.findOne({
-    where: { id: courseId },
+    where: { id: data.courseId },
     include: [
-      { model: Queue, recursive: true }
-    ]
+      { model: Queue, recursive: true },
+    ],
   }).then(course => res.send(course))
 })
 
 
 // Create a new course
-router.post('/', (req, res, next) => {
-  if (!req.body.name) {
-    res.status(400).send({ success: false, message: 'Course name not specified' })
-    return
-  }
-  const course = Course.build()
-  course.name = req.body.name
+router.post('/', [
+  check('name', 'name must be specified'),
+  failIfErrors,
+], (req, res, next) => {
+  const data = matchedData(req)
 
-  course.save().then(course => res.send({ success: true, course }))
-})
-
-
-// Create a queue for this course
-router.post('/:courseId/queues', (req, res, next) => {
-  const courseId = validator.toInt(req.params.courseId)
-
-  const queue = Queue.build({
-    name: req.body.name,
-    location: req.body.location,
-    courseId: req.params.courseId
+  const course = Course.build({
+    name: data.name,
   })
 
-  queue.save().then(queue => res.send({
-    result: 'success',
-    resultText: 'Queue created',
-    queue
-  }))
+  course.save().then(newCourse => res.status(201).send(newCourse))
 })
 
 module.exports = router

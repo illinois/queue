@@ -1,23 +1,62 @@
-var express = require('express');
-var router = express.Router();
-var validator = require("validator");
+const router = require('express').Router({
+  mergeParams: true,
+})
 
-var models = require("../models/");
+const { check } = require('express-validator/check')
+const { matchedData } = require('express-validator/filter')
 
+const { Question } = require('../models/')
+const { validateQueue, failIfErrors } = require('./util')
 
 
 function modifyBeingAnsering(questionId, answering) {
-  return models.Question.findOne({
+  return Question.findOne({
     where: {
       id: questionId,
     }
-  }).then(function (question) {
+  }).then((question) => {
     question.beingAnswered = answering;
     if (answering) { question.answerStartTime = new Date(); }
 
     return question.save();
   });
 }
+
+// Adds a question to a queue
+router.post('/', [
+  validateQueue,
+  check('name').isLength({ min: 1 }).trim(),
+  check('location').isLength({ min: 1 }).trim(),
+  check('topic').isLength({ min: 1 }).trim(),
+  failIfErrors,
+], (req, res, next) => {
+  const data = matchedData(req)
+
+  const question = Question.build({
+    name: data.name,
+    location: data.location,
+    topic: data.topic,
+    enqueueTime: new Date(),
+    queueId: data.queueId,
+    askedById: req.session.user.id,
+  })
+
+  question.save().then((newQuestion) => {
+    res.status(201).send(newQuestion)
+  })
+})
+
+// Get all questions for a particular queue
+router.get('/', [
+  validateQueue,
+  failIfErrors,
+], (req, res, next) => {
+  const data = matchedData(req)
+
+  Question.findAll({
+    where: { id: data.queueId },
+  }).then(questions => res.send(questions))
+})
 
 //
 // Mark a question as being answered
@@ -50,8 +89,8 @@ router.delete("/:questionId/answering", function (req, res, next) {
 //
 // Mark the question as answered
 //
-router.post("/:questionId/answered", function (req, res, next) {
-  models.Question.findOne({
+router.post("/:questionId/answered", (req, res, next) => {
+  Question.findOne({
     where: {
       id: questionId,
     }
@@ -74,11 +113,11 @@ router.post("/:questionId/answered", function (req, res, next) {
 // it as answered; can only be done by the person
 // asking the question or course staff
 //
-router.delete("/:questionId", function (req, res, next) {
+router.delete("/:questionId", (req, res, next) => {
   var questionId = validator.toInt(questionId);
   // TODO: Course staff
 
-  models.Question.findOne({
+  Question.findOne({
     where: {
       id: questionId,
       inlclude: [

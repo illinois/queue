@@ -4,48 +4,85 @@ import {
   FETCH_COURSE_FAILURE,
   CREATE_QUEUE_REQUEST,
   CREATE_QUEUE_SUCCESS,
-  CREATE_QUEUE_FAILURE
+  CREATE_QUEUE_FAILURE,
+  FETCH_QUEUE_REQUEST,
+  FETCH_QUEUE_SUCCESS,
+  FETCH_QUEUE_FAILURE,
+  FETCH_QUESTIONS_SUCCESS,
+  CREATE_QUESTION_SUCCESS,
 } from '../constants/ActionTypes'
 
 const defaultState = {
   isFetching: true,
-  queues: {}
+  queues: {},
+}
+
+function normalizeQueue(queue) {
+  const newQueue = Object.assign({}, queue)
+  if (queue.questions) {
+    newQueue.questions = queue.questions.map(question => question.id)
+  }
+  return newQueue
+}
+
+function addQuestionToQueue(state, queueId, question) {
+  if (!(queueId in state.queues) || state.queues[queueId].questions.indexOf(question.id) !== -1) {
+    return state
+  }
+
+  const newState = Object.assign({}, state)
+  newState.queues[queueId].questions.push(question.id)
+  return newState
 }
 
 // We need to extract the queues from
 
 const queues = (state = defaultState, action) => {
   switch (action.type) {
-    case FETCH_COURSE_REQUEST:
+    case FETCH_COURSE_REQUEST: {
       return Object.assign({}, state, {
         isFetching: true,
       })
-    case FETCH_COURSE_SUCCESS:
+    }
+    case FETCH_COURSE_SUCCESS: {
       return Object.assign({}, state, {
         isFetching: false,
         queues: {
           ...state.queues,
           ...action.course.queues.reduce((obj, item) => {
-            obj[item.id] = item
+            obj[item.id] = normalizeQueue(item)
             return obj
-          }, {})
-        }
+          }, {}),
+        },
       })
-      return removeStaff(action.id, state)
-    case FETCH_COURSE_FAILURE:
+    }
+    case FETCH_COURSE_FAILURE: {
       return Object.assign({}, state, {
         isFetching: false,
-        error: true
+        error: true,
       })
-    case CREATE_QUEUE_SUCCESS:
-      const queue = action.data.queue
+    }
+    case CREATE_QUEUE_SUCCESS: {
+      const { queue } = action
       return Object.assign({}, state, {
         queues: {
           ...state.queues,
-          [queue.id]: queue
-        }
+          [queue.id]: normalizeQueue(queue),
+        },
       })
-
+    }
+    case FETCH_QUEUE_SUCCESS: {
+      const { queue } = action
+      return Object.assign({}, state, {
+        queues: {
+          ...state.queues,
+          [queue.id]: normalizeQueue(queue),
+        },
+      })
+    }
+    case CREATE_QUESTION_SUCCESS: {
+      return addQuestionToQueue(state, action.queueId, action.question)
+    }
     default:
       return state
   }

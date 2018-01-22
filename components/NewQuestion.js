@@ -1,7 +1,6 @@
 import {
   Card,
   CardBody,
-  CardTitle,
   CardHeader,
   Col,
   Button,
@@ -9,8 +8,8 @@ import {
   FormGroup,
   Label,
   Input,
-  FormText
-} from 'reactstrap';
+  FormText,
+} from 'reactstrap'
 
 export default class NewQuestion extends React.Component {
 
@@ -37,7 +36,7 @@ export default class NewQuestion extends React.Component {
     const question = {
       name: this.state.name,
       location: this.state.location,
-      topic: this.state.topic
+      topic: this.state.topic,
     }
 
     this.props.createQuestion(this.props.queueId, question)
