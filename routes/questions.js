@@ -4,32 +4,32 @@ const router = require('express').Router({
 
 const { check } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
+const jsonpatch = require('json-patch')
 
 const { Question } = require('../models/')
-const { validateQueue, failIfErrors } = require('./util')
+const { requireQueue, requireQuestion, failIfErrors } = require('./util')
 
 
-function modifyBeingAnsering(questionId, answering) {
-  return Question.findOne({
-    where: {
-      id: questionId,
-    }
-  }).then((question) => {
-    question.beingAnswered = answering;
-    if (answering) { question.answerStartTime = new Date(); }
+async function modifyBeingAnswered(questionId, answering) {
+  const question = await Question.findOne({ where: { id: questionId } })
+  question.beingAnswered = answering
+  if (answering) {
+    question.answerStartTime = new Date()
+  } else {
+    question.answerEndTime = new Date()
+  }
 
-    return question.save();
-  });
+  return question.save()
 }
 
 // Adds a question to a queue
 router.post('/', [
-  validateQueue,
+  requireQueue,
   check('name').isLength({ min: 1 }).trim(),
   check('location').isLength({ min: 1 }).trim(),
   check('topic').isLength({ min: 1 }).trim(),
   failIfErrors,
-], (req, res, next) => {
+], (req, res, _next) => {
   const data = matchedData(req)
 
   const question = Question.build({
@@ -48,88 +48,71 @@ router.post('/', [
 
 // Get all questions for a particular queue
 router.get('/', [
-  validateQueue,
+  requireQueue,
   failIfErrors,
-], (req, res, next) => {
+], async (req, res, _next) => {
   const data = matchedData(req)
-
-  Question.findAll({
-    where: { id: data.queueId },
-  }).then(questions => res.send(questions))
+  const questions = await Question.findAll({ where: { id: data.queueId } })
+  res.send(questions)
 })
 
-//
+
+// Update a particular question
+router.patch('/:questionId', [
+  requireQuestion,
+  failIfErrors,
+], async (req, res, _next) => {
+  const { question } = req
+  await jsonpatch.apply(question, req.body).save()
+  res.status(204).send()
+})
+
+
 // Mark a question as being answered
-//
-router.post("/:questionId/answering", function (req, res, next) {
-  // TODO: Require courseStaff
-  var questionId = validator.toInt(questionId);
+router.post('/:questionId/answering', [
+  requireQuestion,
+  failIfErrors,
+], async (req, res, _next) => {
+  const { questionId } = matchedData(req)
+  const question = await modifyBeingAnswered(questionId, true)
+  res.send(question)
+})
 
-  modifyBeingAnsering(questionId, true).then(() => {
-    res.send({ success: true, resultText: "Being Answered" })
-  });
-});
 
-//
 // Mark a question as no longer being answered
-//
-router.delete("/:questionId/answering", function (req, res, next) {
-  // TODO: Require courseStaff
-  var questionId = validator.toInt(questionId);
-
-  modifyBeingAnsering(questionId, false).then(() => {
-    res.send({ success: true, resultText: "No Longer Being Answered" })
-  });
-});
-
+router.delete('/:questionId/answering', [
+  requireQuestion,
+  failIfErrors,
+], async (req, res, _next) => {
+  const { questionId } = matchedData(req)
+  const question = await modifyBeingAnswered(questionId, true)
+  res.send(question)
+})
 
 
-
-
-//
 // Mark the question as answered
-//
-router.post("/:questionId/answered", (req, res, next) => {
-  Question.findOne({
-    where: {
-      id: questionId,
-    }
-  }).then(function (question) {
-    question.answerFinishTime = new Date();
-    question.dequeueTime = new Date();
-    return question.destroy();
-  }).then(function () {
-    res.send({ success: true, resultText: "Question Answered" })
-  });
-});
+router.post('/:questionId/answered', [
+  requireQuestion,
+  failIfErrors,
+], async (req, res, _next) => {
+  const { question } = req
+  question.answerFinishTime = new Date()
+  question.dequeueTime = new Date()
+  const updatedQuestion = await question.save()
+  res.send(updatedQuestion)
+})
 
 
-
-
-
-
-//
 // Deletes a question from a queue, without marking
 // it as answered; can only be done by the person
 // asking the question or course staff
-//
-router.delete("/:questionId", (req, res, next) => {
-  var questionId = validator.toInt(questionId);
-  // TODO: Course staff
+router.delete('/:questionId', [
+  requireQuestion,
+  failIfErrors,
+], async (req, res, _next) => {
+  const { question } = req
+  await question.destroy()
+  res.status(202).send()
+})
 
-  Question.findOne({
-    where: {
-      id: questionId,
-      inlclude: [
-        { model: User, as: "askedBy", where: { id: user.session.id } }
-      ]
-    }
-  }).then(function (question) {
-    question.dequeueTime = new Date();
-    return question.destroy();
-  }).then(function () {
-    res.send({ success: true, resultText: "Question Deleted" })
-  });
-});
-
-module.exports = router;
+module.exports = router

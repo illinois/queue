@@ -1,12 +1,13 @@
-"use strict"
-
-module.exports = function(sequelize, DataTypes) {
-  var obj = sequelize.define("question", {
+module.exports = (sequelize, DataTypes) => {
+  const obj = sequelize.define('question', {
     name: DataTypes.STRING,
     location: DataTypes.STRING,
     topic: DataTypes.TEXT,
 
-    beingAnswered: DataTypes.BOOLEAN,
+    beingAnswered: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
 
     answerStartTime: DataTypes.DATE,
     answerFinishTime: DataTypes.DATE,
@@ -14,10 +15,10 @@ module.exports = function(sequelize, DataTypes) {
     dequeueTime: DataTypes.DATE,
   })
 
-  obj.associate = function(models) {
+  obj.associate = (models) => {
     models.Question.belongsTo(models.Queue)
-    models.Question.belongsTo(models.User, {as: "askedBy"})
-    models.Question.belongsTo(models.User, {as: "answeredBy"})
+    models.Question.belongsTo(models.User, { as: 'askedBy' })
+    models.Question.belongsTo(models.User, { as: 'answeredBy' })
   }
 
   return obj

@@ -4,7 +4,18 @@ const { validationResult } = require('express-validator/check')
 const {
   Course,
   Queue,
+  Question,
 } = require('../models')
+
+const requireModel = (model, modelName) => (requestId, { req }) =>
+  model.findOne({ where: { id: requestId } }).then((entity) => {
+    if (entity === null) {
+      throw new Error(`${modelName} with ID ${requestId} does not exist`)
+    }
+    req[modelName] = entity
+    return true
+  })
+
 
 module.exports = {
   failIfErrors(req, res, next) {
@@ -17,29 +28,7 @@ module.exports = {
     next()
   },
 
-  validateCourse: check('courseId').custom((courseId) => {
-    return Course.findOne({
-      where: {
-        id: courseId,
-      },
-    }).then((course) => {
-      if (course === null) {
-        throw new Error(`course ${courseId} does not exist`)
-      }
-      return true
-    })
-  }),
-
-  validateQueue: check('queueId').custom((queueId) => {
-    return Queue.findOne({
-      where: {
-        id: queueId,
-      },
-    }).then((queue) => {
-      if (queue === null) {
-        throw new Error(`queue ${queueId} does not exist`)
-      }
-      return true
-    })
-  }),
+  requireCourse: check('courseId').custom(requireModel(Course, 'course')),
+  requireQueue: check('queueId').custom(requireModel(Queue, 'queue')),
+  requireQuestion: check('questionId').custom(requireModel(Question, 'question')),
 }

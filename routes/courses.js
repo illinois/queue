@@ -9,28 +9,28 @@ const {
   Course,
   Queue,
 } = require('../models')
-const { failIfErrors } = require('./util')
+const { requireCourse, failIfErrors } = require('./util')
 
 
 // Get all courses
-router.get('/', (req, res, next) => {
+router.get('/', (req, res, _next) => {
   Course.findAll().then(courses => res.send(courses))
 })
 
 
 // Get a specific course
 router.get('/:courseId', [
-  check('courseId').toInt(),
+  requireCourse,
   failIfErrors,
-], (req, res, next) => {
-  const data = matchedData(req)
-
-  Course.findOne({
-    where: { id: data.courseId },
+], async (req, res, _next) => {
+  const { courseId } = matchedData(req)
+  const course = await Course.findOne({
+    where: { id: courseId },
     include: [
       { model: Queue, recursive: true },
     ],
-  }).then(course => res.send(course))
+  })
+  res.send(course)
 })
 
 
@@ -38,14 +38,13 @@ router.get('/:courseId', [
 router.post('/', [
   check('name', 'name must be specified'),
   failIfErrors,
-], (req, res, next) => {
-  const data = matchedData(req)
-
+], async (req, res, _next) => {
+  const { name } = matchedData(req)
   const course = Course.build({
-    name: data.name,
+    name,
   })
-
-  course.save().then(newCourse => res.status(201).send(newCourse))
+  const newCourse = await course.save()
+  res.status(201).send(newCourse)
 })
 
 module.exports = router
