@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Table } from 'reactstrap'
 import { connect } from 'react-redux'
 
@@ -8,7 +9,6 @@ const QuestionList = (props) => {
   if (props.queue && props.queue.questions) {
     questions = props.queue.questions.map((questionId) => {
       const question = props.questions[questionId]
-      console.log(question)
       return (
         <tr key={question.id}>
           <td>{question.name}</td>
@@ -34,11 +34,25 @@ const QuestionList = (props) => {
   )
 }
 
-const mapStateToProps = (state, { queueId }) => {
-  return {
-    queue: state.queues.queues[queueId],
-    questions: state.questions.questions,
-  }
+QuestionList.propTypes = {
+  queue: PropTypes.shape({
+    questions: PropTypes.arrayOf(PropTypes.number),
+  }),
+  questions: PropTypes.objectOf(PropTypes.shape({
+    name: PropTypes.string,
+    location: PropTypes.string,
+    topic: PropTypes.string,
+  })),
 }
+
+QuestionList.defaultProps = {
+  queue: null,
+  questions: null,
+}
+
+const mapStateToProps = (state, { queueId }) => ({
+  queue: state.queues.queues[queueId],
+  questions: state.questions.questions,
+})
 
 export default connect(mapStateToProps)(QuestionList)

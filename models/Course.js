@@ -1,11 +1,9 @@
-"use strict"
-
-module.exports = function(sequelize, DataTypes) {
-  var obj = sequelize.define("course", {
+module.exports = (sequelize, DataTypes) => {
+  const obj = sequelize.define('course', {
     name: DataTypes.STRING,
   })
 
-  obj.associate = function(models) {
+  obj.associate = (models) => {
     models.Course.hasMany(models.Queue)
   }
 

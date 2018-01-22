@@ -1,4 +1,5 @@
-import {Link} from '../routes'
+import React from 'react'
+import PropTypes from 'prop-types'
 import {
   Container,
   ListGroup,
@@ -6,24 +7,19 @@ import {
   Card,
   CardBody,
   CardTitle,
-  CardSubtitle
+  CardSubtitle,
 } from 'reactstrap'
 import withRedux from 'next-redux-wrapper'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
 import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner'
 
-import dynamic from 'next/dynamic'
-
+import { Link } from '../routes'
 import makeStore from '../redux/makeStore'
 import Layout from '../components/Layout'
 import { fetchCourses, requestCourses } from '../actions/course'
 
 class Page extends React.Component {
-  componentDidMount() {
-    this.props.fetchCourses()
-  }
-
   static async getInitialProps({ store, isServer }) {
     if (isServer) {
       // We're going to start loading as soon as we're on the client
@@ -31,9 +27,13 @@ class Page extends React.Component {
     }
   }
 
+  componentDidMount() {
+    this.props.fetchCourses()
+  }
+
   render() {
     const courses = this.props.courses.map(course => (
-      <Link route='course' params={{id: course.id}} key={course.id} passHref>
+      <Link route="course" params={{ id: course.id }} key={course.id} passHref>
         <ListGroupItem tag="a" action>{course.name}</ListGroupItem>
       </Link>
     ))
@@ -55,7 +55,7 @@ class Page extends React.Component {
             <ListGroup flush>
               {!this.props.isFetching && courses}
               {this.props.isFetching && loadingSpinner}
-              <Link href="/course/create" passHref key="create">
+              <Link route="createCourse" passHref key="create">
                 <ListGroupItem tag="a" action className="text-muted">
                   <FontAwesomeIcon icon={faPlus} className="mr-2"/>
                   Create a course
@@ -76,17 +76,26 @@ class Page extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    courses: Object.keys(state.courses.courses).sort().map(id => state.courses.courses[id]),
-    isFetching: state.courses.isFetching
-  }
+Page.propTypes = {
+  isFetching: PropTypes.bool,
+  fetchCourses: PropTypes.func.isRequired,
+  courses: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+  })),
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchCourses: () => dispatch(fetchCourses())
-  }
+Page.defaultProps = {
+  isFetching: false,
+  courses: [],
 }
+
+const mapStateToProps = state => ({
+  courses: Object.keys(state.courses.courses).sort().map(id => state.courses.courses[id]),
+  isFetching: state.courses.isFetching,
+})
+
+const mapDispatchToProps = dispatch => ({
+  fetchCourses: () => dispatch(fetchCourses()),
+})
 
 export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(Page)

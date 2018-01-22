@@ -7,7 +7,6 @@ function mapStateToProps(state, ownProps) {
   return {
     queue: state.queues.queues[ownProps.queueId],
     questions: state.questions.questions,
-    queueId: ownProps.queueId,
   }
 }
 

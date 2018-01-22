@@ -33,11 +33,11 @@ export function createQueue(courseId, queue) {
     dispatch(createQueueRequest(courseId, queue))
 
     return axios.post(`/api/courses/${courseId}/queues`, queue)
-    .then(res => dispatch(createQueueSuccess(courseId, res.data)))
-    .catch(err => {
-      console.error(err)
-      dispatch(createQueueFailure(courseId))
-    })
+      .then(res => dispatch(createQueueSuccess(courseId, res.data)))
+      .catch((err) => {
+        console.error(err)
+        dispatch(createQueueFailure(courseId))
+      })
   }
 }
 
@@ -74,9 +74,9 @@ export function fetchQueue(queueId) {
 
     return axios.get(`/api/queues/${queueId}`)
       .then(res => dispatch(fetchQueueSuccess(queueId, res.data)))
-      .catch(err => {
+      .catch((err) => {
         console.error(err)
-        dispatch(fetchQueueFailure(queueId, data))
+        dispatch(fetchQueueFailure(queueId, err))
       })
   }
 }

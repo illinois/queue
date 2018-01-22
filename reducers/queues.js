@@ -2,13 +2,8 @@ import {
   FETCH_COURSE_REQUEST,
   FETCH_COURSE_SUCCESS,
   FETCH_COURSE_FAILURE,
-  CREATE_QUEUE_REQUEST,
   CREATE_QUEUE_SUCCESS,
-  CREATE_QUEUE_FAILURE,
-  FETCH_QUEUE_REQUEST,
   FETCH_QUEUE_SUCCESS,
-  FETCH_QUEUE_FAILURE,
-  FETCH_QUESTIONS_SUCCESS,
   CREATE_QUESTION_SUCCESS,
 } from '../constants/ActionTypes'
 
@@ -50,6 +45,7 @@ const queues = (state = defaultState, action) => {
         queues: {
           ...state.queues,
           ...action.course.queues.reduce((obj, item) => {
+            // eslint-disable-next-line no-param-reassign
             obj[item.id] = normalizeQueue(item)
             return obj
           }, {}),

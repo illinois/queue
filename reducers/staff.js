@@ -4,27 +4,22 @@ import {
 } from '../constants/ActionTypes'
 
 const defaultState = {
-  staff: []
+  staff: [],
 }
 
-const addStaff = (staff, state) => {
-  for (const member of state.staff) {
-    if (staff.id == member.id) {
-      // This member is already in the staff list
-      return state
-    }
+const addStaff = (newStaff, state) => {
+  if (Object.keys(state.staff).find(staff => staff.id === newStaff.id)) {
+    return state
   }
 
   return Object.assign({}, state, {
-    staff: [...state.staff, staff]
+    staff: [...state.staff, newStaff],
   })
 }
 
-const removeStaff = (id, state) => {
-  return Object.assign({}, state, {
-    staff: [...state.staff].filter(staff => staff.id != id)
-  })
-}
+const removeStaff = (id, state) => Object.assign({}, state, {
+  staff: [...state.staff].filter(staff => staff.id !== id),
+})
 
 const staff = (state = defaultState, action) => {
   switch (action.type) {

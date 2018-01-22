@@ -1,3 +1,5 @@
+import React from 'react'
+import PropTypes from 'prop-types'
 import {
   Card,
   CardBody,
@@ -12,14 +14,13 @@ import {
 } from 'reactstrap'
 
 export default class NewQuestion extends React.Component {
-
   constructor(props) {
     super(props)
 
     this.state = {
       name: '',
       topic: '',
-      location: ''
+      location: '',
     }
 
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -28,7 +29,7 @@ export default class NewQuestion extends React.Component {
 
   handleInputChange(event) {
     this.setState({
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     })
   }
 
@@ -56,7 +57,8 @@ export default class NewQuestion extends React.Component {
                   id="name"
                   placeholder="Enter your name"
                   value={this.state.name}
-                  onChange={this.handleInputChange} />
+                  onChange={this.handleInputChange}
+                />
                 <FormText color="muted">
                   Using a nickname is fine!
                 </FormText>
@@ -70,7 +72,8 @@ export default class NewQuestion extends React.Component {
                   id="topic"
                   placeholder="Enter a brief topic for your question"
                   value={this.state.topic}
-                  onChange={this.handleInputChange} />
+                  onChange={this.handleInputChange}
+                />
               </Col>
             </FormGroup>
             <FormGroup row>
@@ -81,13 +84,26 @@ export default class NewQuestion extends React.Component {
                   id="location"
                   placeholder="Enter your location"
                   value={this.state.location}
-                  onChange={this.handleInputChange}/>
+                  onChange={this.handleInputChange}
+                />
               </Col>
             </FormGroup>
-            <Button block color="primary" type="button" onClick={this.handleSubmit}>Add to queue</Button>
+            <Button
+              block
+              color="primary"
+              type="button"
+              onClick={this.handleSubmit}
+            >
+              Add to queue
+            </Button>
           </Form>
         </CardBody>
       </Card>
     )
   }
+}
+
+NewQuestion.propTypes = {
+  createQuestion: PropTypes.func.isRequired,
+  queueId: PropTypes.string.isRequired,
 }

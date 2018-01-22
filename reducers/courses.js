@@ -2,9 +2,7 @@ import {
   FETCH_COURSES_REQUEST,
   FETCH_COURSES_SUCCESS,
   FETCH_COURSES_FAILURE,
-  FETCH_COURSE_REQUEST,
   FETCH_COURSE_SUCCESS,
-  FETCH_COURSE_FAILURE,
   CREATE_QUEUE_SUCCESS,
 } from '../constants/ActionTypes'
 
@@ -34,35 +32,40 @@ function addQueueToCourse(state, courseId, queue) {
 
 const courses = (state = defaultState, action) => {
   switch (action.type) {
-    case FETCH_COURSES_REQUEST:
+    case FETCH_COURSES_REQUEST: {
       return Object.assign({}, state, {
         isFetching: true,
       })
-    case FETCH_COURSES_SUCCESS:
+    }
+    case FETCH_COURSES_SUCCESS: {
       return Object.assign({}, state, {
         isFetching: false,
         courses: action.courses.reduce((obj, item) => {
+          // eslint-disable-next-line no-param-reassign
           obj[item.id] = normalizeCourse(item)
           return obj
-        }, {})
+        }, {}),
       })
-    case FETCH_COURSES_FAILURE:
+    }
+    case FETCH_COURSES_FAILURE: {
       return Object.assign({}, state, {
         isFetching: false,
         courses: {},
-        error: true
+        error: true,
       })
-    case FETCH_COURSE_SUCCESS:
-      const course = action.course
+    }
+    case FETCH_COURSE_SUCCESS: {
+      const { course } = action
       return Object.assign({}, state, {
         courses: {
           ...state.courses,
-          [course.id]: normalizeCourse(course)
-        }
+          [course.id]: normalizeCourse(course),
+        },
       })
-    case CREATE_QUEUE_SUCCESS:
-      const queue = action.queue
-      return addQueueToCourse(state, action.courseId, queue)
+    }
+    case CREATE_QUEUE_SUCCESS: {
+      return addQueueToCourse(state, action.courseId, action.queue)
+    }
     default:
       return state
   }

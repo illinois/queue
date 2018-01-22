@@ -1,7 +1,8 @@
+import React from 'react'
 import {
   Navbar,
-  NavbarBrand
-} from 'reactstrap';
+  NavbarBrand,
+} from 'reactstrap'
 
 import Link from 'next/link'
 

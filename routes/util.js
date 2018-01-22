@@ -5,6 +5,7 @@ const {
   Course,
   Queue,
   Question,
+  User,
 } = require('../models')
 
 const requireModel = (model, modelName) => (requestId, { req }) =>
@@ -31,4 +32,5 @@ module.exports = {
   requireCourse: check('courseId').custom(requireModel(Course, 'course')),
   requireQueue: check('queueId').custom(requireModel(Queue, 'queue')),
   requireQuestion: check('questionId').custom(requireModel(Question, 'question')),
+  requireUser: check('userId').custom(requireModel(User, 'user')),
 }

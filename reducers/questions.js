@@ -26,6 +26,7 @@ const questions = (state = defaultState, action) => {
         questions: {
           ...state.questions,
           ...queue.questions.reduce((obj, item) => {
+            // eslint-disable-next-line no-param-reassign
             obj[item.id] = item
             return obj
           }, {}),

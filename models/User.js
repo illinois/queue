@@ -1,21 +1,16 @@
-"use strict";
+module.exports = (sequelize, DataTypes) => {
+  const obj = sequelize.define('user', {
+    netid: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
 
-module.exports = function(sequelize, DataTypes) {
-    var obj = sequelize.define("user", {
-      netid: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true
-      },
+    fname: DataTypes.STRING,
+    lname: DataTypes.STRING,
+    displayName: DataTypes.STRING,
 
-      fname: DataTypes.STRING,
-      lname: DataTypes.STRING,
-      displayName: DataTypes.STRING,
+  })
 
-    });
-
-    obj.associate = function(models) {
-    };
-
-    return obj;
-};
+  return obj
+}

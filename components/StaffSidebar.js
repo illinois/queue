@@ -1,14 +1,16 @@
+import React from 'react'
+import PropTypes from 'prop-types'
 import {
   Card,
   CardBody,
   CardTitle,
-  Button
+  Button,
 } from 'reactstrap'
 import { connect } from 'react-redux'
 
 import {
   addStaffMember,
-  removeStaffMember
+  removeStaffMember,
 } from '../actions'
 import StaffMember from './StaffMember'
 
@@ -37,11 +39,16 @@ const StaffSidebar = (props) => {
   )
 }
 
-const mapStateToProps = ({staff}) =>({staff: staff.staff})
+StaffSidebar.propTypes = {
+  joinStaff: PropTypes.func.isRequired,
+  removeStaff: PropTypes.func.isRequired,
+}
 
-const mapDispatchToProps = (dispatch) => ({
-  joinStaff: () => dispatch(addStaffMember({name: 'Nathan Walters', id: 6969})),
-  removeStaff: (id) => dispatch(removeStaffMember(id))
+const mapStateToProps = ({ staff }) => ({ staff: staff.staff })
+
+const mapDispatchToProps = dispatch => ({
+  joinStaff: () => dispatch(addStaffMember({ name: 'Nathan Walters', id: 6969 })),
+  removeStaff: id => dispatch(removeStaffMember(id)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(StaffSidebar)

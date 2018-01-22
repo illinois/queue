@@ -1,5 +1,5 @@
 import React from 'react'
-import Link from 'next/link'
+import PropTypes from 'prop-types'
 import Router from 'next/router'
 import {
   Container,
@@ -8,7 +8,7 @@ import {
   FormGroup,
   Label,
   Input,
-  Button
+  Button,
 } from 'reactstrap'
 import withRedux from 'next-redux-wrapper'
 
@@ -21,7 +21,7 @@ class Page extends React.Component {
     super(props)
 
     this.state = {
-      name: ''
+      name: '',
     }
 
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -30,16 +30,16 @@ class Page extends React.Component {
 
   handleInputChange(event) {
     this.setState({
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     })
   }
 
   handleSubmit() {
     const course = {
-      name: this.state.name
+      name: this.state.name,
     }
 
-    this.props.createCourse(course, () => {
+    this.props.createCourse(course).then(() => {
       Router.push('/')
     })
   }
@@ -58,10 +58,18 @@ class Page extends React.Component {
                   id="name"
                   placeholder="Enter the course name (e.g. CS 225)"
                   value={this.state.name}
-                  onChange={this.handleInputChange} />
+                  onChange={this.handleInputChange}
+                />
               </Col>
             </FormGroup>
-            <Button block color="primary" type="button" onClick={this.handleSubmit}>Create course</Button>
+            <Button
+              block
+              color="primary"
+              type="button"
+              onClick={this.handleSubmit}
+            >
+              Create course
+            </Button>
           </Form>
         </Container>
       </Layout>
@@ -69,14 +77,12 @@ class Page extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {}
+Page.propTypes = {
+  createCourse: PropTypes.func.isRequired,
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    createCourse: (course, callback) => dispatch(createCourse(course)).then(callback)
-  }
-}
+const mapDispatchToProps = dispatch => ({
+  createCourse: course => dispatch(createCourse(course)),
+})
 
-export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(Page)
+export default withRedux(makeStore, null, mapDispatchToProps)(Page)

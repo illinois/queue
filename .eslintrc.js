@@ -2,6 +2,13 @@ module.exports = {
     'extends': 'airbnb',
     'rules': {
         'semi': ['error', 'never'],
-         'no-unused-vars': ['error', {'args': 'after-used', 'argsIgnorePattern': '^_'}]
+         'no-unused-vars': ['error', {'args': 'after-used', 'argsIgnorePattern': '^_'}],
+         'react/jsx-filename-extension': ['error', { 'extensions': ['.js', '.jsx'] }],
+         'no-console': ['warn'],
+         'jsx-a11y/anchor-is-valid': ['error', {
+              components: ['Link'],
+              specialLink: ['to', 'route'],
+              aspects: ['noHref', 'invalidHref', 'preferButton'],
+          }],
     }
 };

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {
   Container,
   Row,
@@ -30,10 +31,10 @@ class Page extends React.Component {
       <Layout>
         <Container fluid>
           <Row>
-            <Col xs={{size: 12}} md={{size: 3}}>
+            <Col xs={{ size: 12 }} md={{ size: 3 }}>
               <StaffSidebar />
             </Col>
-            <Col xs={{size: 12}} md={{size: 9}}>
+            <Col xs={{ size: 12 }} md={{ size: 9 }}>
               <NewQuestionContainer queueId={this.props.queueId} />
               <QuestionListContainer queueId={this.props.queueId} />
             </Col>
@@ -42,6 +43,11 @@ class Page extends React.Component {
       </Layout>
     )
   }
+}
+
+Page.propTypes = {
+  fetchQueue: PropTypes.func.isRequired,
+  queueId: PropTypes.string.isRequired,
 }
 
 const mapDispatchToProps = dispatch => ({
