@@ -1,5 +1,8 @@
 import { connect } from 'react-redux'
-import { fetchQuestions } from '../actions/question'
+import {
+  fetchQuestions,
+  deleteQuestion,
+} from '../actions/question'
 
 import QuestionList from '../components/QuestionList'
 
@@ -10,8 +13,9 @@ function mapStateToProps(state, ownProps) {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  fetchQuestions: queueId => dispatch(fetchQuestions(queueId)),
+const mapDispatchToProps = (dispatch, { queueId }) => ({
+  fetchQuestions: () => dispatch(fetchQuestions(queueId)),
+  deleteQuestion: questionId => dispatch(deleteQuestion(queueId, questionId)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuestionList)

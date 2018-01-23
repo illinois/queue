@@ -11,6 +11,7 @@ import {
   Label,
   Input,
   FormText,
+  FormFeedback,
 } from 'reactstrap'
 
 export default class NewQuestion extends React.Component {
@@ -21,6 +22,7 @@ export default class NewQuestion extends React.Component {
       name: '',
       topic: '',
       location: '',
+      isFieldValid: {},
     }
 
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -34,12 +36,23 @@ export default class NewQuestion extends React.Component {
   }
 
   handleSubmit() {
+    const isFieldValid = {}
+    let valid = true;
+    ['name', 'topic', 'location'].forEach((field) => {
+      if (!this.state[field]) {
+        isFieldValid[field] = false
+        valid = false
+      }
+    })
+    this.setState({
+      isFieldValid,
+    })
+    if (!valid) return
     const question = {
       name: this.state.name,
       location: this.state.location,
       topic: this.state.topic,
     }
-
     this.props.createQuestion(this.props.queueId, question)
   }
 
@@ -48,7 +61,7 @@ export default class NewQuestion extends React.Component {
       <Card color="light">
         <CardHeader sm={2}>New question</CardHeader>
         <CardBody>
-          <Form onSubmit={this.handleSubmit}>
+          <Form onSubmit={this.handleSubmit} autoComplete="off">
             <FormGroup row>
               <Label for="name" sm={2}>Name</Label>
               <Col sm={10}>
@@ -58,7 +71,9 @@ export default class NewQuestion extends React.Component {
                   placeholder="Enter your name"
                   value={this.state.name}
                   onChange={this.handleInputChange}
+                  valid={this.state.isFieldValid.name}
                 />
+                <FormFeedback>A name is required</FormFeedback>
                 <FormText color="muted">
                   Using a nickname is fine!
                 </FormText>
@@ -73,7 +88,9 @@ export default class NewQuestion extends React.Component {
                   placeholder="Enter a brief topic for your question"
                   value={this.state.topic}
                   onChange={this.handleInputChange}
+                  valid={this.state.isFieldValid.topic}
                 />
+                <FormFeedback>A topic is required</FormFeedback>
               </Col>
             </FormGroup>
             <FormGroup row>
@@ -85,7 +102,9 @@ export default class NewQuestion extends React.Component {
                   placeholder="Enter your location"
                   value={this.state.location}
                   onChange={this.handleInputChange}
+                  valid={this.state.isFieldValid.location}
                 />
+                <FormFeedback>A location is required</FormFeedback>
               </Col>
             </FormGroup>
             <Button

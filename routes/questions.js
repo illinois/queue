@@ -2,6 +2,7 @@ const router = require('express').Router({
   mergeParams: true,
 })
 
+const Sequelize = require('sequelize')
 const { check } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 const jsonpatch = require('json-patch')
@@ -52,8 +53,20 @@ router.get('/', [
   failIfErrors,
 ], async (req, res, _next) => {
   const data = matchedData(req)
-  const questions = await Question.findAll({ where: { id: data.queueId } })
+  const questions = await Question.findAll({
+    where: {
+      id: data.queueId,
+      dequeueTime: null,
+    },
+  })
   res.send(questions)
+})
+
+router.get('/:questionId', [
+  requireQuestion,
+  failIfErrors,
+], (req, res, _next) => {
+  res.send(req.question)
 })
 
 
@@ -111,7 +124,9 @@ router.delete('/:questionId', [
   failIfErrors,
 ], async (req, res, _next) => {
   const { question } = req
-  await question.destroy()
+  await question.update({
+    dequeueTime: new Date(),
+  })
   res.status(202).send()
 })
 

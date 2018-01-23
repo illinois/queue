@@ -2,6 +2,7 @@ const router = require('express').Router({
   mergeParams: true,
 })
 
+const { Op } = require('sequelize')
 const { check } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 
@@ -48,12 +49,21 @@ router.get('/:queueId', [
   const data = matchedData(req)
 
   const queue = await Queue.findOne({
-    where: { id: data.queueId },
+    where: {
+      id: data.queueId,
+    },
     include: [
       { model: ActiveStaff, recursive: true },
-      { model: Question, recursive: true },
+      {
+        model: Question,
+        required: false,
+        where: {
+          dequeueTime: null,
+        },
+      },
     ],
   })
+  console.log(queue)
   res.send(queue)
 })
 

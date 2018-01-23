@@ -1,6 +1,7 @@
 import {
   CREATE_QUESTION_SUCCESS,
   FETCH_QUEUE_SUCCESS,
+  DELETE_QUESTION_SUCCESS,
 } from '../constants/ActionTypes'
 
 const defaultState = {
@@ -30,6 +31,15 @@ const questions = (state = defaultState, action) => {
             obj[item.id] = item
             return obj
           }, {}),
+        },
+      })
+    }
+    case DELETE_QUESTION_SUCCESS: {
+      const { questionId } = action
+      return Object.assign({}, state, {
+        questions: {
+          ...state.questions,
+          [questionId]: undefined,
         },
       })
     }

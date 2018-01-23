@@ -5,6 +5,7 @@ import {
   CREATE_QUEUE_SUCCESS,
   FETCH_QUEUE_SUCCESS,
   CREATE_QUESTION_SUCCESS,
+  DELETE_QUESTION_SUCCESS,
 } from '../constants/ActionTypes'
 
 const defaultState = {
@@ -20,13 +21,24 @@ function normalizeQueue(queue) {
   return newQueue
 }
 
-function addQuestionToQueue(state, queueId, question) {
-  if (!(queueId in state.queues) || state.queues[queueId].questions.indexOf(question.id) !== -1) {
+function addQuestionToQueue(state, queueId, questionId) {
+  if (!(queueId in state.queues) || state.queues[queueId].questions.indexOf(questionId) !== -1) {
     return state
   }
 
   const newState = Object.assign({}, state)
-  newState.queues[queueId].questions.push(question.id)
+  newState.queues[queueId].questions.push(questionId)
+  return newState
+}
+
+function removeQuestionFromQueue(state, queueId, questionId) {
+  if (!(queueId in state.queues) || state.queues[queueId].questions.indexOf(questionId) === -1) {
+    return state
+  }
+
+  const newState = Object.assign({}, state)
+  const queue = newState.queues[queueId]
+  queue.questions = queue.questions.filter(id => id !== questionId)
   return newState
 }
 
@@ -77,7 +89,10 @@ const queues = (state = defaultState, action) => {
       })
     }
     case CREATE_QUESTION_SUCCESS: {
-      return addQuestionToQueue(state, action.queueId, action.question)
+      return addQuestionToQueue(state, action.queueId, action.question.id)
+    }
+    case DELETE_QUESTION_SUCCESS: {
+      return removeQuestionFromQueue(state, action.queueId, action.questionId)
     }
     default:
       return state

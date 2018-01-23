@@ -31,10 +31,10 @@ class Page extends React.Component {
       <Layout>
         <Container fluid>
           <Row>
-            <Col xs={{ size: 12 }} md={{ size: 3 }}>
+            <Col xs={{ size: 12 }} md={{ size: 3 }} className="mb-3 mb-md-0">
               <StaffSidebar />
             </Col>
-            <Col xs={{ size: 12 }} md={{ size: 9 }}>
+            <Col xs={{ size: 12 }} md={{ size: 9 }} className="mb-3">
               <NewQuestionContainer queueId={this.props.queueId} />
               <QuestionListContainer queueId={this.props.queueId} />
             </Col>
