@@ -8,6 +8,7 @@ import {
   CREATE_QUESTION_SUCCESS,
   DELETE_QUESTION_SUCCESS,
   DELETE_QUEUE_SUCCESS,
+  UPDATE_QUESTIONS,
 } from '../constants/ActionTypes'
 
 const defaultState = {
@@ -111,9 +112,22 @@ const queues = (state = defaultState, action) => {
     }
     case DELETE_QUEUE_SUCCESS: {
       return Object.assign({}, state, {
-        quques: {
+        queues: {
           ...state.queues,
           [action.queueId]: undefined,
+        },
+      })
+    }
+    case UPDATE_QUESTIONS: {
+      const { queueId, questions } = action
+      const currentQueue = state.queues[queueId]
+      return Object.assign({}, state, {
+        queues: {
+          ...state.queues,
+          [action.queueId]: {
+            ...currentQueue,
+            questions: questions.map(q => q.id),
+          },
         },
       })
     }

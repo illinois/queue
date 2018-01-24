@@ -63,3 +63,8 @@ export function deleteQuestion(queueId, questionId) {
       )
   }
 }
+
+/**
+ * Update all questions for a queue
+ */
+export const updateQuestions = makeActionCreator(types.UPDATE_QUESTIONS, 'queueId', 'questions')

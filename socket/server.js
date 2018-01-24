@@ -1,9 +1,41 @@
-let socket = null
+const sequelizeStream = require('sequelize-stream')
+const {
+  sequelize,
+  Question,
+} = require('../models')
 
-export function questionsUpdated() {
-  if (socket) {
-    socket.emit('questions.update')
-  }
+let io = null
+let queueNamespace = null
+
+const handleQuestionsUpdated = (queueId) => {
+  Question.findAll({
+    where: {
+      queueId,
+      dequeueTime: null,
+    },
+  }).then((questions) => {
+    queueNamespace.to(`queue-${queueId}`).emit('questions:update', { questions })
+  })
 }
 
-export default (io) => io.on('connection', newSocket => socket = newSocket)
+const stream = sequelizeStream(sequelize)
+stream.on('data', (data) => {
+  const { instance } = data
+  if (instance instanceof Question) {
+    // Questions changed!
+    handleQuestionsUpdated(instance.queueId)
+  }
+})
+
+
+module.exports = (newIo) => {
+  io = newIo
+  queueNamespace = io.of('/queue')
+  queueNamespace.on('connection', (socket) => {
+    socket.on('join', (msg) => {
+      if ('queueId' in msg) {
+        socket.join(`queue-${msg.queueId}`)
+      }
+    })
+  })
+}

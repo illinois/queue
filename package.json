@@ -41,6 +41,7 @@
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "sequelize": "^4.31.2",
+    "sequelize-stream": "^1.0.2",
     "socket.io": "^2.0.4",
     "socket.io-client": "^2.0.4",
     "sqlite3": "^3.1.13",

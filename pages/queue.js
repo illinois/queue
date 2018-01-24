@@ -14,6 +14,7 @@ import NewQuestionContainer from '../containers/NewQuestionContainer'
 import QuestionListContainer from '../containers/QuestionListContainer'
 
 import { fetchQueue } from '../actions/queue'
+import { connectToQueue, disconnectFromQueue } from '../socket/client'
 
 class Page extends React.Component {
   static getInitialProps({ query }) {
@@ -24,6 +25,11 @@ class Page extends React.Component {
 
   componentDidMount() {
     this.props.fetchQueue(this.props.queueId)
+    connectToQueue(this.props.dispatch, this.props.queueId)
+  }
+
+  componentWillUnmount() {
+    disconnectFromQueue(this.props.queueId)
   }
 
   render() {
@@ -48,10 +54,12 @@ class Page extends React.Component {
 Page.propTypes = {
   fetchQueue: PropTypes.func.isRequired,
   queueId: PropTypes.string.isRequired,
+  dispatch: PropTypes.func.isRequired,
 }
 
 const mapDispatchToProps = dispatch => ({
   fetchQueue: queueId => dispatch(fetchQueue(queueId)),
+  dispatch,
 })
 
 export default withRedux(makeStore, null, mapDispatchToProps)(Page)

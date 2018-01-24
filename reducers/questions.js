@@ -3,6 +3,7 @@ import {
   FETCH_QUEUE_REQUEST,
   FETCH_QUEUE_SUCCESS,
   DELETE_QUESTION_SUCCESS,
+  UPDATE_QUESTIONS,
 } from '../constants/ActionTypes'
 
 const defaultState = {
@@ -10,6 +11,12 @@ const defaultState = {
   error: false,
   questions: {},
 }
+
+const reduceQuestions = questions => questions.reduce((obj, item) => {
+  // eslint-disable-next-line no-param-reassign
+  obj[item.id] = item
+  return obj
+}, {})
 
 const questions = (state = defaultState, action) => {
   switch (action.type) {
@@ -33,11 +40,7 @@ const questions = (state = defaultState, action) => {
         isFetching: false,
         questions: {
           ...state.questions,
-          ...queue.questions.reduce((obj, item) => {
-            // eslint-disable-next-line no-param-reassign
-            obj[item.id] = item
-            return obj
-          }, {}),
+          ...reduceQuestions(queue.questions),
         },
       })
     }
@@ -47,6 +50,15 @@ const questions = (state = defaultState, action) => {
         questions: {
           ...state.questions,
           [questionId]: undefined,
+        },
+      })
+    }
+    case UPDATE_QUESTIONS: {
+      console.log(action)
+      return Object.assign({}, state, {
+        questions: {
+          ...state.questions,
+          ...reduceQuestions(action.questions),
         },
       })
     }

@@ -55,7 +55,7 @@ router.get('/', [
   const data = matchedData(req)
   const questions = await Question.findAll({
     where: {
-      id: data.queueId,
+      queueId: data.queueId,
       dequeueTime: null,
     },
   })
