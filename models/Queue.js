@@ -5,6 +5,8 @@ module.exports = (sequelize, DataTypes) => {
 
     startTime: DataTypes.DATE,
     endTime: DataTypes.DATE,
+  }, {
+    paranoid: true, // Don't actually delete
   })
 
   obj.associate = (models) => {

@@ -1,29 +1,13 @@
 import axios from 'axios'
 import * as types from '../constants/ActionTypes'
+import { makeActionCreator } from './util'
 
 /**
  * Creating a new course
  */
-function createCourseRequest(course) {
-  return {
-    type: types.CREATE_COURSE_REQUEST,
-    course,
-  }
-}
-
-function createCourseSuccess(course) {
-  return {
-    type: types.CREATE_COURSE_SUCCESS,
-    course,
-  }
-}
-
-function createCourseFailure(data) {
-  return {
-    type: types.CREATE_COURSE_FAILURE,
-    data,
-  }
-}
+const createCourseRequest = makeActionCreator(types.CREATE_COURSE_REQUEST, 'course')
+const createCourseSuccess = makeActionCreator(types.CREATE_COURSE_SUCCESS, 'course')
+const createCourseFailure = makeActionCreator(types.CREATE_COURSE_FAILURE, 'data')
 
 export function createCourse(course) {
   return (dispatch) => {
@@ -31,82 +15,56 @@ export function createCourse(course) {
 
     return axios.post('/api/courses', {
       name: course.name,
-    }).then(res => dispatch(createCourseSuccess(res.data)))
-      .catch((err) => {
+    }).then(
+      res => dispatch(createCourseSuccess(res.data)),
+      (err) => {
         console.error(err)
         dispatch(createCourseFailure(err))
-      })
+      },
+    )
   }
 }
 
 /**
  * Loading all courses
  */
-export function requestCourses() {
-  return {
-    type: types.FETCH_COURSES_REQUEST,
-  }
-}
-
-function requestCoursesSuccess(courses) {
-  return {
-    type: types.FETCH_COURSES_SUCCESS,
-    courses,
-  }
-}
-
-function requestCoursesFailure() {
-  return {
-    type: types.FETCH_COURSES_FAILURE,
-  }
-}
+const fetchCoursesRequest = makeActionCreator(types.FETCH_COURSES_REQUEST)
+const fetchCoursesSuccess = makeActionCreator(types.FETCH_COURSES_SUCCESS, 'courses')
+const fetchCoursesFailure = makeActionCreator(types.FETCH_COURSES_FAILURE, 'data')
 
 export function fetchCourses() {
   return (dispatch) => {
-    dispatch(requestCourses())
+    dispatch(fetchCoursesRequest())
 
     return axios.get('/api/courses')
-      .then(res => dispatch(requestCoursesSuccess(res.data)))
-      .catch((err) => {
-        console.error(err)
-        dispatch(requestCoursesFailure())
-      })
+      .then(
+        res => dispatch(fetchCoursesSuccess(res.data)),
+        (err) => {
+          console.error(err)
+          dispatch(fetchCoursesFailure(err))
+        },
+      )
   }
 }
 
 /**
- * Loading all courses
+ * Loading a specific course
  */
-export function requestCourse(courseId) {
-  return {
-    type: types.FETCH_COURSE_REQUEST,
-    courseId,
-  }
-}
-
-function requestCourseSuccess(courseId, course) {
-  return {
-    type: types.FETCH_COURSE_SUCCESS,
-    courseId,
-    course,
-  }
-}
-
-function requestCourseFailure() {
-  return {
-    type: types.FETCH_COURSE_FAILURE,
-  }
-}
+const fetchCourseRequest = makeActionCreator(types.FETCH_COURSE_REQUEST, 'courseId')
+const fetchCourseSuccess = makeActionCreator(types.FETCH_COURSE_SUCCESS, 'courseId', 'course')
+const fetchCourseFailure = makeActionCreator(types.FETCH_COURSE_FAILURE, 'data')
 
 export function fetchCourse(courseId) {
   return (dispatch) => {
-    dispatch(requestCourse(courseId))
+    dispatch(fetchCourseRequest(courseId))
 
     return axios.get(`/api/courses/${courseId}`)
-      .then(res => dispatch(requestCourseSuccess(courseId, res.data)))
-      .catch((err) => {
-        console.error(err)
-        dispatch(requestCourseFailure())
-      })
+      .then(
+        res => dispatch(fetchCourseSuccess(courseId, res.data)),
+        (err) => {
+          console.error(Err)
+          dispatch(fetchCourseFailure(err))
+        },
+      )
   }
 }

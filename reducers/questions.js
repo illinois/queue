@@ -1,11 +1,12 @@
 import {
   CREATE_QUESTION_SUCCESS,
+  FETCH_QUEUE_REQUEST,
   FETCH_QUEUE_SUCCESS,
   DELETE_QUESTION_SUCCESS,
 } from '../constants/ActionTypes'
 
 const defaultState = {
-  isFetching: true,
+  isFetching: false,
   error: false,
   questions: {},
 }
@@ -21,9 +22,15 @@ const questions = (state = defaultState, action) => {
         },
       })
     }
+    case FETCH_QUEUE_REQUEST: {
+      return Object.assign({}, state, {
+        isFetching: true,
+      })
+    }
     case FETCH_QUEUE_SUCCESS: {
       const { queue } = action
       return Object.assign({}, state, {
+        isFetching: false,
         questions: {
           ...state.questions,
           ...queue.questions.reduce((obj, item) => {

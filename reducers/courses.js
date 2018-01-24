@@ -2,12 +2,15 @@ import {
   FETCH_COURSES_REQUEST,
   FETCH_COURSES_SUCCESS,
   FETCH_COURSES_FAILURE,
+  FETCH_COURSE_REQUEST,
   FETCH_COURSE_SUCCESS,
+  CREATE_COURSE_SUCCESS,
   CREATE_QUEUE_SUCCESS,
+  DELETE_QUEUE_SUCCESS,
 } from '../constants/ActionTypes'
 
 const defaultState = {
-  isFetching: true,
+  isFetching: false,
   error: false,
   courses: {},
 }
@@ -27,6 +30,24 @@ function addQueueToCourse(state, courseId, queue) {
 
   const newState = Object.assign({}, state)
   newState.courses[courseId].queues.push(queue.id)
+  return newState
+}
+
+function removeQueueFromCourse(state, courseId, queueId) {
+  if (!(courseId in state.courses) || state.courses[courseId].queues.indexOf(queueId) === -1) {
+    return state
+  }
+
+  const course = state.courses[courseId]
+  const newState = Object.assign({}, state, {
+    courses: {
+      ...state.courses,
+      [courseId]: {
+        ...course,
+        queues: course.queues.filter(id => id !== queueId),
+      },
+    },
+  })
   return newState
 }
 
@@ -54,7 +75,22 @@ const courses = (state = defaultState, action) => {
         error: true,
       })
     }
+    case FETCH_COURSE_REQUEST: {
+      return Object.assign({}, state, {
+        isFetching: true,
+      })
+    }
     case FETCH_COURSE_SUCCESS: {
+      const { course } = action
+      return Object.assign({}, state, {
+        isFetching: false,
+        courses: {
+          ...state.courses,
+          [course.id]: normalizeCourse(course),
+        },
+      })
+    }
+    case CREATE_COURSE_SUCCESS: {
       const { course } = action
       return Object.assign({}, state, {
         courses: {
@@ -66,6 +102,8 @@ const courses = (state = defaultState, action) => {
     case CREATE_QUEUE_SUCCESS: {
       return addQueueToCourse(state, action.courseId, action.queue)
     }
+    case DELETE_QUEUE_SUCCESS:
+      return removeQueueFromCourse(state, action.courseId, action.queueId)
     default:
       return state
   }

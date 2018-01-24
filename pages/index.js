@@ -5,6 +5,7 @@ import {
   ListGroup,
   ListGroupItem,
   Card,
+  CardHeader,
   CardBody,
   CardTitle,
   CardSubtitle,
@@ -17,7 +18,8 @@ import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner'
 import { Link } from '../routes'
 import makeStore from '../redux/makeStore'
 import Layout from '../components/Layout'
-import { fetchCourses, requestCourses } from '../actions/course'
+import NewCourse from '../components/NewCourse'
+import { fetchCourses, requestCourses, createCourse } from '../actions/course'
 
 class Page extends React.Component {
   static async getInitialProps({ store, isServer }) {
@@ -27,8 +29,32 @@ class Page extends React.Component {
     }
   }
 
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      showCreateCoursePanel: false,
+    }
+  }
+
   componentDidMount() {
     this.props.fetchCourses()
+  }
+
+  showCreateCoursePanel() {
+    this.setState({
+      showCreateCoursePanel: true,
+    })
+  }
+
+  hideCreateCoursePanel() {
+    this.setState({
+      showCreateCoursePanel: false,
+    })
+  }
+
+  createCourse(course) {
+    this.props.createCourse(course).then(() => this.hideCreateCoursePanel())
   }
 
   render() {
@@ -44,23 +70,33 @@ class Page extends React.Component {
       </ListGroupItem>
     )
 
+    const createCoursePanel = (
+      <NewCourse
+        onCreateCourse={course => this.createCourse(course)}
+        onCancel={() => this.hideCreateCoursePanel()}
+      />
+    )
+
+    const createCourseButton = (
+      <ListGroupItem action className="text-muted" onClick={() => this.showCreateCoursePanel()}>
+        <FontAwesomeIcon icon={faPlus} className="mr-2" />
+        Create a course
+      </ListGroupItem>
+    )
+
     return (
       <Layout>
         <Container>
           <Card className="courses-card">
-            <CardBody>
+            <CardHeader className="bg-primary text-white">
               <CardTitle tag="h3">Hey there!</CardTitle>
               <CardSubtitle>Please select your course from the list below.</CardSubtitle>
-            </CardBody>
+            </CardHeader>
             <ListGroup flush>
               {!this.props.isFetching && courses}
               {this.props.isFetching && loadingSpinner}
-              <Link route="createCourse" passHref key="create">
-                <ListGroupItem tag="a" action className="text-muted">
-                  <FontAwesomeIcon icon={faPlus} className="mr-2"/>
-                  Create a course
-                </ListGroupItem>
-              </Link>
+              {!this.state.showCreateCoursePanel && createCourseButton}
+              {this.state.showCreateCoursePanel && createCoursePanel}
             </ListGroup>
           </Card>
         </Container>
@@ -78,10 +114,11 @@ class Page extends React.Component {
 
 Page.propTypes = {
   isFetching: PropTypes.bool,
-  fetchCourses: PropTypes.func.isRequired,
   courses: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string,
   })),
+  fetchCourses: PropTypes.func.isRequired,
+  createCourse: PropTypes.func.isRequired,
 }
 
 Page.defaultProps = {
@@ -96,6 +133,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchCourses: () => dispatch(fetchCourses()),
+  createCourse: course => dispatch(createCourse(course)),
 })
 
 export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(Page)

@@ -63,7 +63,6 @@ router.get('/:queueId', [
       },
     ],
   })
-  console.log(queue)
   res.send(queue)
 })
 

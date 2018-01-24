@@ -5,23 +5,23 @@ import {
   ListGroupItem,
   Form,
   FormGroup,
-  FormText,
+  FormFeedback,
   Label,
   Input,
   Button,
 } from 'reactstrap'
 
-class NewQueue extends React.Component {
+class NewCourse extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
       name: '',
-      location: '',
+      isFieldValid: {},
     }
 
     this.handleInputChange = this.handleInputChange.bind(this)
-    this.handleCreateQueue = this.handleCreateQueue.bind(this)
+    this.handleCreateCourse = this.handleCreateCourse.bind(this)
   }
 
   handleInputChange(event) {
@@ -30,13 +30,20 @@ class NewQueue extends React.Component {
     })
   }
 
-  handleCreateQueue() {
-    const queue = {
-      name: this.state.name,
-      location: this.state.location,
-    }
+  handleCreateCourse() {
+    if (!this.state.name) {
+      this.setState({
+        isFieldValid: {
+          name: false,
+        }
+      })
+    } else {
+      const course = {
+        name: this.state.name,
+      }
 
-    this.props.onCreateQueue(queue)
+      this.props.onCreateCourse(course)
+    }
   }
 
   render() {
@@ -44,30 +51,17 @@ class NewQueue extends React.Component {
       <ListGroupItem>
         <Form autoComplete="off">
           <FormGroup row>
-            <Label for="name" sm={3}>Name</Label>
-            <Col sm={9}>
+            <Label for="name" sm={2}>Name</Label>
+            <Col sm={10}>
               <Input
-                type="text"
                 name="name"
-                placeholder="Office Hours"
-                onChange={this.handleInputChange}
+                id="name"
+                placeholder="Enter the course name (e.g. CS 225)"
                 value={this.state.name}
-              />
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Label for="location" sm={3}>Location</Label>
-            <Col sm={9}>
-              <Input
-                type="text"
-                name="location"
-                placeholder="Siebel 0222"
                 onChange={this.handleInputChange}
-                value={this.state.location}
+                valid={this.state.isFieldValid.name}
               />
-              <FormText color="muted">
-                Setting a location is optional!
-              </FormText>
+              <FormFeedback>A name is required</FormFeedback>
             </Col>
           </FormGroup>
           <FormGroup row className="mb-0">
@@ -86,7 +80,7 @@ class NewQueue extends React.Component {
                 block
                 color="primary"
                 type="button"
-                onClick={() => this.handleCreateQueue()}
+                onClick={() => this.handleCreateCourse()}
               >
                 Create
               </Button>
@@ -98,9 +92,9 @@ class NewQueue extends React.Component {
   }
 }
 
-NewQueue.propTypes = {
-  onCreateQueue: PropTypes.func.isRequired,
+NewCourse.propTypes = {
+  onCreateCourse: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
 }
 
-export default NewQueue
+export default NewCourse

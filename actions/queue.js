@@ -1,32 +1,13 @@
 import axios from 'axios'
 import * as types from '../constants/ActionTypes'
+import { makeActionCreator } from './util'
 
-/*
+/**
  * Creating a new queue
  */
-function createQueueRequest(courseId, queue) {
-  return {
-    type: types.CREATE_QUEUE_REQUEST,
-    courseId,
-    queue,
-  }
-}
-
-function createQueueSuccess(courseId, queue) {
-  return {
-    type: types.CREATE_QUEUE_SUCCESS,
-    courseId,
-    queue,
-  }
-}
-
-function createQueueFailure(courseId, data) {
-  return {
-    type: types.CREATE_QUEUE_FAILURE,
-    courseId,
-    data,
-  }
-}
+const createQueueRequest = makeActionCreator(types.CREATE_QUEUE_REQUEST, 'courseId', 'queue')
+const createQueueSuccess = makeActionCreator(types.CREATE_QUEUE_SUCCESS, 'courseId', 'queue')
+const createQueueFailure = makeActionCreator(types.CREATE_QUEUE_FAILURE, 'courseId', 'data')
 
 export function createQueue(courseId, queue) {
   return (dispatch) => {
@@ -42,31 +23,13 @@ export function createQueue(courseId, queue) {
 }
 
 
-/*
+/**
  * Fetch a queue
  */
-function fetchQueueRequest(queueId) {
-  return {
-    type: types.FETCH_QUEUE_REQUEST,
-    queueId,
-  }
-}
 
-function fetchQueueSuccess(queueId, queue) {
-  return {
-    type: types.FETCH_QUEUE_SUCCESS,
-    queueId,
-    queue,
-  }
-}
-
-function fetchQueueFailure(queueId, data) {
-  return {
-    type: types.FETCH_QUEUE_FAILURE,
-    queueId,
-    data,
-  }
-}
+const fetchQueueRequest = makeActionCreator(types.FETCH_QUEUE_REQUEST, 'queueId')
+const fetchQueueSuccess = makeActionCreator(types.FETCH_QUEUE_SUCCESS, 'queueId', 'queue')
+const fetchQueueFailure = makeActionCreator(types.FETCH_QUEUE_FAILURE, 'queueId', 'data')
 
 export function fetchQueue(queueId) {
   return (dispatch) => {
@@ -78,5 +41,27 @@ export function fetchQueue(queueId) {
         console.error(err)
         dispatch(fetchQueueFailure(queueId, err))
       })
+  }
+}
+
+/**
+ * Delete a queue
+ */
+const deleteQueueRequest = makeActionCreator(types.DELETE_QUEUE_REQUEST, 'courseId', 'queueId')
+const deleteQueueSuccess = makeActionCreator(types.DELETE_QUEUE_SUCCESS, 'courseId', 'queueId')
+const deleteQueueFailure = makeActionCreator(types.DELETE_QUEUE_FAILURE, 'courseId', 'queueId')
+
+export function deleteQueue(courseId, queueId) {
+  return (dispatch) => {
+    dispatch(deleteQueueRequest(courseId, queueId))
+
+    return axios.delete(`/api/queues/${queueId}`)
+      .then(
+        () => dispatch(deleteQueueSuccess(courseId, queueId)),
+        (err) => {
+          console.error(err)
+          dispatch(deleteQueueFailure(courseId, queueId))
+        },
+      )
   }
 }

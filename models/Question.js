@@ -13,6 +13,8 @@ module.exports = (sequelize, DataTypes) => {
     answerFinishTime: DataTypes.DATE,
     enqueueTime: DataTypes.DATE,
     dequeueTime: DataTypes.DATE,
+  }, {
+    paranoid: true,
   })
 
   obj.associate = (models) => {
