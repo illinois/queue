@@ -13,6 +13,9 @@ const handleQuestionsUpdated = (queueId) => {
       queueId,
       dequeueTime: null,
     },
+    order: [
+      ['id', 'ASC'],
+    ],
   }).then((questions) => {
     queueNamespace.to(`queue-${queueId}`).emit('questions:update', { questions })
   })

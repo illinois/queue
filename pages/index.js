@@ -19,13 +19,13 @@ import { Link } from '../routes'
 import makeStore from '../redux/makeStore'
 import Layout from '../components/Layout'
 import NewCourse from '../components/NewCourse'
-import { fetchCourses, requestCourses, createCourse } from '../actions/course'
+import { fetchCoursesRequest, fetchCourses, createCourse } from '../actions/course'
 
 class Page extends React.Component {
   static async getInitialProps({ store, isServer }) {
     if (isServer) {
       // We're going to start loading as soon as we're on the client
-      store.dispatch(requestCourses())
+      store.dispatch(fetchCoursesRequest())
     }
   }
 

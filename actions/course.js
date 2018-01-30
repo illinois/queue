@@ -28,7 +28,7 @@ export function createCourse(course) {
 /**
  * Loading all courses
  */
-const fetchCoursesRequest = makeActionCreator(types.FETCH_COURSES_REQUEST)
+export const fetchCoursesRequest = makeActionCreator(types.FETCH_COURSES_REQUEST)
 const fetchCoursesSuccess = makeActionCreator(types.FETCH_COURSES_SUCCESS, 'courses')
 const fetchCoursesFailure = makeActionCreator(types.FETCH_COURSES_FAILURE, 'data')
 
@@ -50,7 +50,7 @@ export function fetchCourses() {
 /**
  * Loading a specific course
  */
-const fetchCourseRequest = makeActionCreator(types.FETCH_COURSE_REQUEST, 'courseId')
+export const fetchCourseRequest = makeActionCreator(types.FETCH_COURSE_REQUEST, 'courseId')
 const fetchCourseSuccess = makeActionCreator(types.FETCH_COURSE_SUCCESS, 'courseId', 'course')
 const fetchCourseFailure = makeActionCreator(types.FETCH_COURSE_FAILURE, 'data')
 

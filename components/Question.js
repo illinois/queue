@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import {
   ListGroupItem,
@@ -7,49 +7,85 @@ import {
 } from 'reactstrap'
 import Moment from 'react-moment'
 
+/* eslint-disable react/prefer-stateless-function */
+class Question extends React.Component {
+  render() {
+    const {
+      id,
+      name,
+      location,
+      topic,
+      beingAnswered,
+      enqueueTime,
+    } = this.props
+    const badgeColor = beingAnswered ? 'success' : 'secondary'
+    const badgeLabel = beingAnswered ? 'TA Answering' : 'Waiting'
 
-const Question = (props) => {
-  const {
-    id,
-    name,
-    location,
-    topic,
-    beingAnswered,
-    enqueueTime,
-  } = props
-  const badgeColor = beingAnswered ? 'success' : 'secondary'
-  const badgeLabel = beingAnswered ? 'TA Answering' : 'Waiting'
+    let buttonCluster
+    if (beingAnswered) {
+      buttonCluster = (
+        <Fragment>
+          <Button
+            color="primary"
+            className="mr-2"
+            onClick={() => this.props.onDeleteQuestion(id)}
+          >
+            Finish Answering
+          </Button>
+          <Button
+            color="light"
+            onClick={() => this.props.onUpdateQuestionBeingAnswered(id, false)}
+          >
+            Cancel
+          </Button>
+        </Fragment>
+      )
+    } else {
+      buttonCluster = (
+        <Fragment>
+          <Button
+            color="primary"
+            outline
+            className="mr-2"
+            onClick={() => this.props.onUpdateQuestionBeingAnswered(id, true)}
+          >
+            Start Answering!
+          </Button>
+          <Button
+            color="danger"
+            outline
+            onClick={() => this.props.onDeleteQuestion(id)}
+          >
+            Delete
+          </Button>
+        </Fragment>
+      )
+    }
 
-  return (
-    <ListGroupItem key={id} className="d-sm-flex align-items-center">
-      <div>
+    return (
+      <ListGroupItem key={id} className="d-sm-flex align-items-center">
         <div>
-          <Badge color={badgeColor} className="mr-2">{badgeLabel}</Badge>
-          <strong>{name}</strong>
+          <div>
+            <Badge color={badgeColor} className="mr-2">{badgeLabel}</Badge>
+            <strong>{name}</strong>
+          </div>
+          <div className="text-muted">
+            <span className="text-muted">
+              <Moment fromNow>{enqueueTime}</Moment>
+              <span className="mr-2 ml-2">&bull;</span>
+              {location}
+            </span>
+          </div>
+          <div>
+            {topic}
+          </div>
         </div>
-        <div className="text-muted">
-          <span className="text-muted">
-            <Moment fromNow>{enqueueTime}</Moment>
-            <span className="mr-2 ml-2">&bull;</span>
-            {location}
-          </span>
+        <div className="ml-auto">
+          {buttonCluster}
         </div>
-        <div>
-          {topic}
-        </div>
-      </div>
-      <div className="ml-auto">
-        <Button color="primary" outline className="mr-2">Start Answering!</Button>
-        <Button
-          color="danger"
-          outline
-          onClick={() => props.onDeleteQuestion(id)}
-        >
-          Delete
-        </Button>
-      </div>
-    </ListGroupItem>
-  )
+      </ListGroupItem>
+    )
+  }
 }
 
 Question.propTypes = {
@@ -59,6 +95,7 @@ Question.propTypes = {
   topic: PropTypes.string.isRequired,
   beingAnswered: PropTypes.bool.isRequired,
   enqueueTime: PropTypes.string.isRequired,
+  onUpdateQuestionBeingAnswered: PropTypes.func.isRequired,
   onDeleteQuestion: PropTypes.func.isRequired,
 }
 

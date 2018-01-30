@@ -4,6 +4,7 @@ import {
   FETCH_QUEUE_SUCCESS,
   DELETE_QUESTION_SUCCESS,
   UPDATE_QUESTIONS,
+  UPDATE_QUESTION_ANSWERING_SUCCESS,
 } from '../constants/ActionTypes'
 
 const defaultState = {
@@ -54,11 +55,23 @@ const questions = (state = defaultState, action) => {
       })
     }
     case UPDATE_QUESTIONS: {
-      console.log(action)
       return Object.assign({}, state, {
         questions: {
           ...state.questions,
           ...reduceQuestions(action.questions),
+        },
+      })
+    }
+    case UPDATE_QUESTION_ANSWERING_SUCCESS: {
+      const { questionId, beingAnswered } = action
+      const oldQuestion = state.questions[questionId]
+      return Object.assign({}, state, {
+        questions: {
+          ...state.questions,
+          [questionId]: {
+            ...oldQuestion,
+            beingAnswered,
+          },
         },
       })
     }

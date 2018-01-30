@@ -2,7 +2,6 @@ const router = require('express').Router({
   mergeParams: true,
 })
 
-const Sequelize = require('sequelize')
 const { check } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 const jsonpatch = require('json-patch')
@@ -58,6 +57,9 @@ router.get('/', [
       queueId: data.queueId,
       dequeueTime: null,
     },
+    order: [
+      ['id', 'ASC'],
+    ],
   })
   res.send(questions)
 })

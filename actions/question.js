@@ -43,6 +43,30 @@ export function createQuestion(queueId, question) {
 }
 
 /**
+ * Update if a question is being answered.
+ */
+const updateQuestionAnsweringRequest = makeActionCreator(types.UPDATE_QUESTION_ANSWERING_REQUEST, 'questionId', 'beingAnswered')
+const updateQuestionAnsweringSuccess = makeActionCreator(types.UPDATE_QUESTION_ANSWERING_SUCCESS, 'questionId', 'beingAnswered')
+const updateQuestionAnsweringFailure = makeActionCreator(types.UPDATE_QUESTION_ANSWERING_FAILURE, 'questionId', 'beingAnswered')
+
+export function updateQuestionAnswering(questionId, beingAnswered) {
+  return (dispatch) => {
+    dispatch(updateQuestionAnsweringRequest(questionId, beingAnswered))
+
+    const patch = [{ op: 'add', path: '/beingAnswered', value: beingAnswered }]
+
+    return axios.patch(`/api/questions/${questionId}`, patch).then(
+      () => dispatch(updateQuestionAnsweringSuccess(questionId, beingAnswered)),
+      (err) => {
+        console.error(err)
+        dispatch(updateQuestionAnsweringFailure(questionId, beingAnswered))
+      },
+    )
+  }
+}
+
+
+/**
  * Delete a question
  */
 const deleteQuestionRequest = makeActionCreator(types.DELETE_QUESTION_REQUEST, 'queueId', 'questionId')

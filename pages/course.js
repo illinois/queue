@@ -18,7 +18,7 @@ import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner'
 
 import { Link } from '../routes'
 import makeStore from '../redux/makeStore'
-import { requestCourse, fetchCourse } from '../actions/course'
+import { fetchCourseRequest, fetchCourse } from '../actions/course'
 import { createQueue, deleteQueue } from '../actions/queue'
 import Layout from '../components/Layout'
 import NewQueue from '../components/NewQueue'
@@ -26,7 +26,7 @@ import NewQueue from '../components/NewQueue'
 class Page extends React.Component {
   static async getInitialProps({ isServer, store, query }) {
     if (isServer) {
-      store.dispatch(requestCourse())
+      store.dispatch(fetchCourseRequest())
     }
     return {
       courseId: query.id,

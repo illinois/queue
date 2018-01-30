@@ -62,6 +62,9 @@ router.get('/:queueId', [
         },
       },
     ],
+    order: [
+      [Question, 'id', 'ASC'],
+    ],
   })
   res.send(queue)
 })

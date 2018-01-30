@@ -4,7 +4,7 @@ import {
   ListGroup,
   ListGroupItem,
 } from 'reactstrap'
-import { connect } from 'react-redux'
+import FlipMove from 'react-flip-move'
 
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner'
@@ -19,31 +19,38 @@ const QuestionList = (props) => {
         const question = props.questions[questionId]
         return (
           <Question
-            onDeleteQuestion={props.deleteQuestion}
             key={questionId}
+            onDeleteQuestion={props.deleteQuestion}
+            onUpdateQuestionBeingAnswered={props.updateQuestionBeingAnswered}
             {...question}
           />
         )
       })
     } else {
       questions = (
-        <ListGroupItem className="text-center text-muted pt-4 pb-4">
-          The queue is empty!
-        </ListGroupItem>
+        <div>
+          <ListGroupItem className="text-center text-muted pt-4 pb-4">
+            The queue is empty!
+          </ListGroupItem>
+        </div>
       )
     }
   } else {
     questions = (
-      <ListGroupItem className="text-center pt-4 pb-4">
-        <FontAwesomeIcon icon={faSpinner} pulse />
-      </ListGroupItem>
+      <div>
+        <ListGroupItem className="text-center pt-4 pb-4">
+          <FontAwesomeIcon icon={faSpinner} pulse />
+        </ListGroupItem>
+      </div>
     )
   }
 
   return (
     <div>
       <ListGroup className="mt-3">
-        {questions}
+        <FlipMove enterAnimation="accordionVertical" leaveAnimation="accordionVertical" duration={200}>
+          {questions}
+        </FlipMove>
       </ListGroup>
     </div>
   )
@@ -59,6 +66,7 @@ QuestionList.propTypes = {
     topic: PropTypes.string,
   })),
   deleteQuestion: PropTypes.func.isRequired,
+  updateQuestionBeingAnswered: PropTypes.func.isRequired,
 }
 
 QuestionList.defaultProps = {
@@ -66,9 +74,4 @@ QuestionList.defaultProps = {
   questions: null,
 }
 
-const mapStateToProps = (state, { queueId }) => ({
-  queue: state.queues.queues[queueId],
-  questions: state.questions.questions,
-})
-
-export default connect(mapStateToProps)(QuestionList)
+export default QuestionList
