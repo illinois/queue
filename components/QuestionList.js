@@ -10,50 +10,95 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner'
 
 import Question from './Question'
+import QuestionFeedback from './QuestionFeedback'
 
-const QuestionList = (props) => {
-  let questions
-  if (props.queue && props.queue.questions) {
-    if (props.queue.questions.length > 0) {
-      questions = props.queue.questions.map((questionId) => {
-        const question = props.questions[questionId]
-        return (
-          <Question
-            key={questionId}
-            onDeleteQuestion={props.deleteQuestion}
-            onUpdateQuestionBeingAnswered={props.updateQuestionBeingAnswered}
-            {...question}
-          />
-        )
+class QuestionList extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      showFeedbackModal: false,
+      feedbackId: null,
+    }
+  }
+
+  handleFinishedAnswering(feedbackId) {
+    this.setState({
+      showFeedbackModal: true,
+      feedbackId,
+    })
+  }
+
+  handleSubmitFeedback(feedback) {
+    this.props.finishAnsweringQuestion(this.state.feedbackId, feedback).then(() => {
+      this.setState({
+        showFeedbackModal: false,
       })
+    })
+  }
+
+  handleFeedbackCancel() {
+    this.setState({
+      showFeedbackModal: false,
+      feedbackId: null,
+    })
+  }
+
+  render() {
+    let questions
+    if (this.props.queue && this.props.queue.questions) {
+      if (this.props.queue.questions.length > 0) {
+        questions = this.props.queue.questions.map((questionId) => {
+          const question = this.props.questions[questionId]
+          return (
+            <Question
+              key={questionId}
+              onDeleteQuestion={this.props.deleteQuestion}
+              onUpdateQuestionBeingAnswered={this.props.updateQuestionBeingAnswered}
+              onFinishedAnswering={() => this.handleFinishedAnswering(questionId)}
+              {...question}
+            />
+          )
+        })
+      } else {
+        questions = (
+          <div>
+            <ListGroupItem className="text-center text-muted pt-4 pb-4">
+              The queue is empty!
+            </ListGroupItem>
+          </div>
+        )
+      }
     } else {
       questions = (
         <div>
-          <ListGroupItem className="text-center text-muted pt-4 pb-4">
-            The queue is empty!
+          <ListGroupItem className="text-center pt-4 pb-4">
+            <FontAwesomeIcon icon={faSpinner} pulse />
           </ListGroupItem>
         </div>
       )
     }
-  } else {
-    questions = (
+
+    return (
       <div>
-        <ListGroupItem className="text-center pt-4 pb-4">
-          <FontAwesomeIcon icon={faSpinner} pulse />
-        </ListGroupItem>
+        <ListGroup className="mt-3">
+          <FlipMove
+            enterAnimation="accordionVertical"
+            leaveAnimation="accordionVertical"
+            duration={200}
+          >
+            {questions}
+          </FlipMove>
+        </ListGroup>
+        <QuestionFeedback
+          id={this.state.feedbackId}
+          isOpen={this.state.showFeedbackModal}
+          onSubmitFeedback={feedback => this.handleSubmitFeedback(feedback)}
+          onCancel={() => this.handleFeedbackCancel()}
+        />
       </div>
     )
   }
-
-  return (
-    <div>
-      <ListGroup className="mt-3">
-        <FlipMove enterAnimation="accordionVertical" leaveAnimation="accordionVertical" duration={200}>
-          {questions}
-        </FlipMove>
-      </ListGroup>
-    </div>
-  )
 }
 
 QuestionList.propTypes = {
@@ -67,6 +112,7 @@ QuestionList.propTypes = {
   })),
   deleteQuestion: PropTypes.func.isRequired,
   updateQuestionBeingAnswered: PropTypes.func.isRequired,
+  finishAnsweringQuestion: PropTypes.func.isRequired,
 }
 
 QuestionList.defaultProps = {

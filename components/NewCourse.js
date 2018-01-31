@@ -35,7 +35,7 @@ class NewCourse extends React.Component {
       this.setState({
         isFieldValid: {
           name: false,
-        }
+        },
       })
     } else {
       const course = {

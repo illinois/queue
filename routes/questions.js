@@ -108,11 +108,17 @@ router.delete('/:questionId/answering', [
 // Mark the question as answered
 router.post('/:questionId/answered', [
   requireQuestion,
+  check('preparedness').isIn(['bad', 'average', 'well']),
+  check('comments').optional({ nullable: true }).trim(),
   failIfErrors,
 ], async (req, res, _next) => {
+  const data = matchedData(req)
+
   const { question } = req
   question.answerFinishTime = new Date()
   question.dequeueTime = new Date()
+  question.preparedness = data.preparedness
+  question.comments = data.comments
   const updatedQuestion = await question.save()
   res.send(updatedQuestion)
 })

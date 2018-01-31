@@ -65,6 +65,27 @@ export function updateQuestionAnswering(questionId, beingAnswered) {
   }
 }
 
+/**
+ * Finishes answering a question and submits feedback for it
+ */
+const finishAnsweringQuestionRequest = makeActionCreator(types.FINISH_ANSWERING_QUESTION_REQUEST, 'queueId', 'questionId', 'feedback')
+const finishAnsweringQuestionSuccess = makeActionCreator(types.FINISH_ANSWERING_QUESTION_SUCCESS, 'queueId', 'questionId', 'feedback')
+const finishAnsweringQuestionFailure = makeActionCreator(types.FINISH_ANSWERING_QUESTION_FAILURE, 'queueId', 'questionId', 'feedback')
+
+export function finishAnsweringQuestion(queueId, questionId, feedback) {
+  return (dispatch) => {
+    dispatch(finishAnsweringQuestionRequest(queueId, questionId, feedback))
+
+    return axios.post(`/api/questions/${questionId}/answered`, feedback)
+      .then(
+        () => dispatch(finishAnsweringQuestionSuccess(queueId, questionId, feedback)),
+        (err) => {
+          console.error(err)
+          dispatch(finishAnsweringQuestionFailure(queueId, questionId))
+        },
+      )
+  }
+}
 
 /**
  * Delete a question

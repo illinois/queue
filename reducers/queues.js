@@ -10,6 +10,7 @@ import {
   DELETE_QUEUE_SUCCESS,
   UPDATE_QUESTIONS,
   UPDATE_QUEUES,
+  FINISH_ANSWERING_QUESTION_SUCCESS,
 } from '../constants/ActionTypes'
 
 const defaultState = {
@@ -145,6 +146,9 @@ const queues = (state = defaultState, action) => {
           ...reduceQueues(action.queues),
         },
       })
+    }
+    case FINISH_ANSWERING_QUESTION_SUCCESS: {
+      return removeQuestionFromQueue(state, action.queueId, action.questionId)
     }
     default:
       return state

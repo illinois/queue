@@ -28,7 +28,7 @@ class Question extends React.Component {
           <Button
             color="primary"
             className="mr-2"
-            onClick={() => this.props.onDeleteQuestion(id)}
+            onClick={() => this.props.onFinishedAnswering(id)}
           >
             Finish Answering
           </Button>
@@ -80,7 +80,7 @@ class Question extends React.Component {
             {topic}
           </div>
         </div>
-        <div className="ml-auto">
+        <div className="ml-auto pt-3 pt-sm-0">
           {buttonCluster}
         </div>
       </ListGroupItem>
@@ -96,6 +96,7 @@ Question.propTypes = {
   beingAnswered: PropTypes.bool.isRequired,
   enqueueTime: PropTypes.string.isRequired,
   onUpdateQuestionBeingAnswered: PropTypes.func.isRequired,
+  onFinishedAnswering: PropTypes.func.isRequired,
   onDeleteQuestion: PropTypes.func.isRequired,
 }
 

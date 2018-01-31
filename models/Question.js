@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const obj = sequelize.define('question', {
-    name: DataTypes.STRING,
-    location: DataTypes.STRING,
+    name: DataTypes.TEXT,
+    location: DataTypes.TEXT,
     topic: DataTypes.TEXT,
 
     beingAnswered: {
@@ -13,7 +13,12 @@ module.exports = (sequelize, DataTypes) => {
     answerFinishTime: DataTypes.DATE,
     enqueueTime: DataTypes.DATE,
     dequeueTime: DataTypes.DATE,
+
+    // Feedback
+    comments: DataTypes.TEXT,
+    preparedness: DataTypes.ENUM('not', 'average', 'well'),
   }, {
+    // Don't actually delete, so that we can save feedback
     paranoid: true,
   })
 
