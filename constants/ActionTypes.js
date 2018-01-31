@@ -46,3 +46,4 @@ export const DELETE_QUESTION_FAILURE = 'DELETE_QUESTION_FAILURE'
 
 /* These events will be fired on websocket messages */
 export const UPDATE_QUESTIONS = 'UPDATE_QUESTIONS'
+export const UPDATE_QUEUES = 'UPDATE_QUEUES'

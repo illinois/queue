@@ -65,3 +65,8 @@ export function deleteQueue(courseId, queueId) {
       )
   }
 }
+
+/**
+ * Update all queues for a course
+ */
+export const updateQueues = makeActionCreator(types.UPDATE_QUEUES, 'courseId', 'queues')

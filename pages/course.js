@@ -11,6 +11,7 @@ import {
   Button,
 } from 'reactstrap'
 import withRedux from 'next-redux-wrapper'
+import FlipMove from 'react-flip-move'
 
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
@@ -22,6 +23,9 @@ import { fetchCourseRequest, fetchCourse } from '../actions/course'
 import { createQueue, deleteQueue } from '../actions/queue'
 import Layout from '../components/Layout'
 import NewQueue from '../components/NewQueue'
+import Queue from '../components/Queue'
+
+import { connectToCourse, disconnectFromCourse } from '../socket/client'
 
 class Page extends React.Component {
   static async getInitialProps({ isServer, store, query }) {
@@ -44,6 +48,11 @@ class Page extends React.Component {
 
   componentDidMount() {
     this.props.fetchCourse(this.props.courseId)
+    connectToCourse(this.props.dispatch, this.props.courseId)
+  }
+
+  componentWillUnmount() {
+    disconnectFromCourse(this.props.courseId)
   }
 
   showCreateQueuePanel() {
@@ -62,9 +71,7 @@ class Page extends React.Component {
     this.props.createQueue(this.props.courseId, queue).then(() => this.hideCreateQueuePanel())
   }
 
-  deleteQueue(e, queueId) {
-    e.stopPropagation()
-    e.preventDefault()
+  deleteQueue(queueId) {
     this.props.deleteQueue(this.props.courseId, queueId)
   }
 
@@ -84,29 +91,20 @@ class Page extends React.Component {
         queues = this.props.course.queues.map((id) => {
           const queue = this.props.queues[id]
           return (
-            <Link route="queue" params={{ id }} key={id} passHref>
-              <ListGroupItem action tag="a" className="d-flex align-items-center">
-                <div>
-                  <div className="h5">{queue.name}</div>
-                  <div className="text-muted">Location: {queue.location}</div>
-                </div>
-                <Button
-                  color="danger"
-                  tag="div"
-                  className="ml-auto"
-                  onClick={e => this.deleteQueue(e, id)}
-                >
-                  Delete
-                </Button>
-              </ListGroupItem>
-            </Link>
+            <Queue
+              key={id}
+              onDeleteQueue={queueId => this.deleteQueue(queueId)}
+              {...queue}
+            />
           )
         }, this)
       } else {
         queues = (
-          <ListGroupItem className="text-center text-muted pt-4 pb-4">
-            There aren't any queues right now
-          </ListGroupItem>
+          <div>
+            <ListGroupItem className="text-center text-muted pt-4 pb-4">
+              There aren't any queues right now
+            </ListGroupItem>
+          </div>
         )
       }
 
@@ -132,7 +130,9 @@ class Page extends React.Component {
             </CardTitle>
           </CardHeader>
           <ListGroup flush>
-            {queues}
+            <FlipMove enterAnimation="accordionVertical" leaveAnimation="accordionVertical" duration={200}>
+              {queues}
+            </FlipMove>
             {!this.state.showCreateQueuePanel && createQueueButton}
             {this.state.showCreateQueuePanel && createQueuePanel}
           </ListGroup>
@@ -171,6 +171,7 @@ Page.propTypes = {
   createQueue: PropTypes.func.isRequired,
   fetchCourse: PropTypes.func.isRequired,
   deleteQueue: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
 }
 
 Page.defaultProps = {
@@ -192,6 +193,7 @@ const mapDispatchToProps = dispatch => ({
   fetchCourse: courseId => dispatch(fetchCourse(courseId)),
   createQueue: (courseId, queue) => dispatch(createQueue(courseId, queue)),
   deleteQueue: (courseId, queueId) => dispatch(deleteQueue(courseId, queueId)),
+  dispatch,
 })
 
 export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(Page)

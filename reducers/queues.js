@@ -9,6 +9,7 @@ import {
   DELETE_QUESTION_SUCCESS,
   DELETE_QUEUE_SUCCESS,
   UPDATE_QUESTIONS,
+  UPDATE_QUEUES,
 } from '../constants/ActionTypes'
 
 const defaultState = {
@@ -23,6 +24,12 @@ function normalizeQueue(queue) {
   }
   return newQueue
 }
+
+const reduceQueues = queues => queues.reduce((obj, item) => {
+  // eslint-disable-next-line no-param-reassign
+  obj[item.id] = normalizeQueue(item)
+  return obj
+}, {})
 
 function addQuestionToQueue(state, queueId, questionId) {
   if (!(queueId in state.queues) || state.queues[queueId].questions.indexOf(questionId) !== -1) {
@@ -128,6 +135,14 @@ const queues = (state = defaultState, action) => {
             ...currentQueue,
             questions: questions.map(q => q.id),
           },
+        },
+      })
+    }
+    case UPDATE_QUEUES: {
+      return Object.assign({}, state, {
+        queues: {
+          ...state.queues,
+          ...reduceQueues(action.queues),
         },
       })
     }

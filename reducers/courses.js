@@ -7,6 +7,7 @@ import {
   CREATE_COURSE_SUCCESS,
   CREATE_QUEUE_SUCCESS,
   DELETE_QUEUE_SUCCESS,
+  UPDATE_QUEUES,
 } from '../constants/ActionTypes'
 
 const defaultState = {
@@ -104,6 +105,20 @@ const courses = (state = defaultState, action) => {
     }
     case DELETE_QUEUE_SUCCESS:
       return removeQueueFromCourse(state, action.courseId, action.queueId)
+    case UPDATE_QUEUES: {
+      const { courseId, queues } = action
+      const originalCourse = state.courses[courseId]
+      return {
+        ...state,
+        courses: {
+          ...state.courses,
+          [courseId]: {
+            ...originalCourse,
+            queues: queues.map(queue => queue.id),
+          },
+        },
+      }
+    }
     default:
       return state
   }
