@@ -8,6 +8,7 @@ const { matchedData } = require('express-validator/filter')
 const {
   Course,
   Queue,
+  User,
 } = require('../models')
 const { requireCourse, failIfErrors } = require('./util')
 
@@ -27,7 +28,15 @@ router.get('/:courseId', [
   const course = await Course.findOne({
     where: { id: courseId },
     include: [
-      { model: Queue, recursive: true },
+      { model: Queue },
+      {
+        model: User,
+        as: 'staff',
+        attributes: ['id', 'netid', 'displayName'],
+        through: {
+          attributes: [],
+        },
+      },
     ],
   })
   res.send(course)
@@ -36,7 +45,7 @@ router.get('/:courseId', [
 
 // Create a new course
 router.post('/', [
-  check('name', 'name must be specified'),
+  check('name', 'name must be specified').exists(),
   failIfErrors,
 ], async (req, res, _next) => {
   const { name } = matchedData(req)
@@ -45,6 +54,19 @@ router.post('/', [
   })
   const newCourse = await course.save()
   res.status(201).send(newCourse)
+})
+
+// Add someone to course staff
+router.post('/:courseId/staff', [
+  requireCourse,
+  check('netid', 'netid must be specified').exists(),
+  failIfErrors,
+], async (req, res, _next) => {
+  const { netid } = matchedData(req)
+  const [user] = await User.findOrCreate({ where: { netid } })
+  user.addCourse(req.course)
+  const newUser = await user.save()
+  res.status(201).send(newUser)
 })
 
 module.exports = router

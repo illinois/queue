@@ -77,7 +77,7 @@ class Page extends React.Component {
 
   render() {
     let content
-    if (this.props.isFetching) {
+    if (this.props.isFetching || !this.props.course) {
       content = (
         <Card className="courses-card">
           <CardBody className="text-center">
@@ -124,13 +124,20 @@ class Page extends React.Component {
 
       content = (
         <Card className="courses-card">
-          <CardHeader className="bg-primary text-white">
+          <CardHeader className="bg-primary text-white d-flex align-items-center">
             <CardTitle tag="h4" className="mb-0">
               {this.props.course && this.props.course.name} Queues
             </CardTitle>
+            <Link route="courseStaff" params={{ id: this.props.courseId }} passHref>
+              <Button tag="a" color="light" size="sm" className="ml-auto">Manage Staff</Button>
+            </Link>
           </CardHeader>
           <ListGroup flush>
-            <FlipMove enterAnimation="accordionVertical" leaveAnimation="accordionVertical" duration={200}>
+            <FlipMove
+              enterAnimation="accordionVertical"
+              leaveAnimation="accordionVertical"
+              duration={200}
+            >
               {queues}
             </FlipMove>
             {!this.state.showCreateQueuePanel && createQueueButton}

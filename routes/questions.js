@@ -38,7 +38,7 @@ router.post('/', [
     topic: data.topic,
     enqueueTime: new Date(),
     queueId: data.queueId,
-    askedById: req.session.user.id,
+    askedById: res.locals.user.id,
   })
 
   question.save().then((newQuestion) => {

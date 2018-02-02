@@ -6,7 +6,6 @@ const nextJs = require('next')
 const co = require('co')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
-const session = require('express-session')
 
 const routes = require('./routes')
 const { User } = require('./models')
@@ -27,40 +26,22 @@ co(function* () {
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use(cookieParser())
-  app.use(session({
-    secret: 'jkf94u8ui35gknchFJKHEJOHEF)*3f',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: true },
-  }))
 
   // Websocket stuff
-  io.on('connection', () => console.log('connection!!'))
   serverSocket(io)
 
   // Shibboleth auth
   app.use((req, res, next) => {
     // Get the user's NetID based on the "eppn" field
     // Temporarily disable this in dev
-    let netid
-    if (DEV) {
-      netid = 'dev'
-    } else {
-      const email = req.get('eppn')
-      if (email.indexOf('@') === -1) { throw new Error('No login found.') }
-      [netid] = email.split('@')
-    }
+    const email = DEV ? 'dev@illinois.edu' : req.get('eppn')
+    if (email.indexOf('@') === -1) { throw new Error('No login found.') }
+    const [netid] = email.split('@')
 
-    // Check if the user has a session, and verify the netid in the session;
-    // otherwise, create the session
-    if (req.session.user && req.session.user.netid === netid) {
+    User.findOrCreate({ where: { netid } }).spread((user) => {
+      res.locals.user = user
       next()
-    } else {
-      User.findOrCreate({ where: { netid } }).spread((user) => {
-        req.session.user = user
-        next()
-      })
-    }
+    })
   })
 
   // API routes

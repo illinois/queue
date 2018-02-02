@@ -5,12 +5,16 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
     },
-
-    fname: DataTypes.STRING,
-    lname: DataTypes.STRING,
-    displayName: DataTypes.STRING,
-
+    name: DataTypes.STRING,
+    admin: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   })
+
+  obj.associate = (models) => {
+    models.User.belongsToMany(models.Course, { through: 'staffAssignment' })
+  }
 
   return obj
 }
