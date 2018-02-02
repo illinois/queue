@@ -5,9 +5,9 @@ import { makeActionCreator } from './util'
 /**
  * Creating a new queue
  */
-const createQueueRequest = makeActionCreator(types.CREATE_QUEUE_REQUEST, 'courseId', 'queue')
-const createQueueSuccess = makeActionCreator(types.CREATE_QUEUE_SUCCESS, 'courseId', 'queue')
-const createQueueFailure = makeActionCreator(types.CREATE_QUEUE_FAILURE, 'courseId', 'data')
+const createQueueRequest = makeActionCreator(types.CREATE_QUEUE.REQUEST, 'courseId', 'queue')
+const createQueueSuccess = makeActionCreator(types.CREATE_QUEUE.SUCCESS, 'courseId', 'queue')
+const createQueueFailure = makeActionCreator(types.CREATE_QUEUE.FAILURE, 'courseId', 'data')
 
 export function createQueue(courseId, queue) {
   return (dispatch) => {
@@ -27,9 +27,9 @@ export function createQueue(courseId, queue) {
  * Fetch a queue
  */
 
-const fetchQueueRequest = makeActionCreator(types.FETCH_QUEUE_REQUEST, 'queueId')
-const fetchQueueSuccess = makeActionCreator(types.FETCH_QUEUE_SUCCESS, 'queueId', 'queue')
-const fetchQueueFailure = makeActionCreator(types.FETCH_QUEUE_FAILURE, 'queueId', 'data')
+const fetchQueueRequest = makeActionCreator(types.FETCH_QUEUE.REQUEST, 'queueId')
+const fetchQueueSuccess = makeActionCreator(types.FETCH_QUEUE.SUCCESS, 'queueId', 'queue')
+const fetchQueueFailure = makeActionCreator(types.FETCH_QUEUE.FAILURE, 'queueId', 'data')
 
 export function fetchQueue(queueId) {
   return (dispatch) => {
@@ -47,9 +47,9 @@ export function fetchQueue(queueId) {
 /**
  * Delete a queue
  */
-const deleteQueueRequest = makeActionCreator(types.DELETE_QUEUE_REQUEST, 'courseId', 'queueId')
-const deleteQueueSuccess = makeActionCreator(types.DELETE_QUEUE_SUCCESS, 'courseId', 'queueId')
-const deleteQueueFailure = makeActionCreator(types.DELETE_QUEUE_FAILURE, 'courseId', 'queueId')
+const deleteQueueRequest = makeActionCreator(types.DELETE_QUEUE.REQUEST, 'courseId', 'queueId')
+const deleteQueueSuccess = makeActionCreator(types.DELETE_QUEUE.SUCCESS, 'courseId', 'queueId')
+const deleteQueueFailure = makeActionCreator(types.DELETE_QUEUE.FAILURE, 'courseId', 'queueId')
 
 export function deleteQueue(courseId, queueId) {
   return (dispatch) => {

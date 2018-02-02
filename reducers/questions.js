@@ -1,10 +1,9 @@
 import {
-  CREATE_QUESTION_SUCCESS,
-  FETCH_QUEUE_REQUEST,
-  FETCH_QUEUE_SUCCESS,
-  DELETE_QUESTION_SUCCESS,
+  CREATE_QUESTION,
+  FETCH_QUEUE,
+  DELETE_QUESTION,
   UPDATE_QUESTIONS,
-  UPDATE_QUESTION_ANSWERING_SUCCESS,
+  UPDATE_QUESTION_ANSWERING,
 } from '../constants/ActionTypes'
 
 const defaultState = {
@@ -21,7 +20,7 @@ const reduceQuestions = questions => questions.reduce((obj, item) => {
 
 const questions = (state = defaultState, action) => {
   switch (action.type) {
-    case CREATE_QUESTION_SUCCESS: {
+    case CREATE_QUESTION.SUCCESS: {
       const { question } = action
       return Object.assign({}, state, {
         questions: {
@@ -30,12 +29,12 @@ const questions = (state = defaultState, action) => {
         },
       })
     }
-    case FETCH_QUEUE_REQUEST: {
+    case FETCH_QUEUE.REQUEST: {
       return Object.assign({}, state, {
         isFetching: true,
       })
     }
-    case FETCH_QUEUE_SUCCESS: {
+    case FETCH_QUEUE.SUCCESS: {
       const { queue } = action
       return Object.assign({}, state, {
         isFetching: false,
@@ -45,7 +44,7 @@ const questions = (state = defaultState, action) => {
         },
       })
     }
-    case DELETE_QUESTION_SUCCESS: {
+    case DELETE_QUESTION.SUCCESS: {
       const { questionId } = action
       return Object.assign({}, state, {
         questions: {
@@ -62,7 +61,7 @@ const questions = (state = defaultState, action) => {
         },
       })
     }
-    case UPDATE_QUESTION_ANSWERING_SUCCESS: {
+    case UPDATE_QUESTION_ANSWERING.SUCCESS: {
       const { questionId, beingAnswered } = action
       const oldQuestion = state.questions[questionId]
       return Object.assign({}, state, {

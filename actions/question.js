@@ -5,9 +5,9 @@ import { makeActionCreator } from './util'
 /**
  * Getting all questions for a certain queue
  */
-const requestQuestionsRequest = makeActionCreator(types.FETCH_QUESTIONS_REQUEST, 'queueId')
-const requestQuestionsSuccess = makeActionCreator(types.FETCH_QUESTIONS_SUCCESS, 'queueId', 'questions')
-const requestQuestionsFailure = makeActionCreator(types.FETCH_QUESTIONS_FAILURE, 'queueId')
+const requestQuestionsRequest = makeActionCreator(types.FETCH_QUESTIONS.REQUEST, 'queueId')
+const requestQuestionsSuccess = makeActionCreator(types.FETCH_QUESTIONS.SUCCESS, 'queueId', 'questions')
+const requestQuestionsFailure = makeActionCreator(types.FETCH_QUESTIONS.FAILURE, 'queueId')
 
 export function fetchQuestions(queueId) {
   return (dispatch) => {
@@ -25,9 +25,9 @@ export function fetchQuestions(queueId) {
 /**
  * Creating a new question
  */
-const createQuestionRequest = makeActionCreator(types.CREATE_QUESTION_REQUEST, 'queueId', 'question')
-const createQuestionSuccess = makeActionCreator(types.CREATE_QUESTION_SUCCESS, 'queueId', 'question')
-const createQuestionFailure = makeActionCreator(types.CREATE_QUESTION_FAILURE, 'queueId', 'question')
+const createQuestionRequest = makeActionCreator(types.CREATE_QUESTION.REQUEST, 'queueId', 'question')
+const createQuestionSuccess = makeActionCreator(types.CREATE_QUESTION.SUCCESS, 'queueId', 'question')
+const createQuestionFailure = makeActionCreator(types.CREATE_QUESTION.FAILURE, 'queueId', 'question')
 
 export function createQuestion(queueId, question) {
   return (dispatch) => {
@@ -45,9 +45,9 @@ export function createQuestion(queueId, question) {
 /**
  * Update if a question is being answered.
  */
-const updateQuestionAnsweringRequest = makeActionCreator(types.UPDATE_QUESTION_ANSWERING_REQUEST, 'questionId', 'beingAnswered')
-const updateQuestionAnsweringSuccess = makeActionCreator(types.UPDATE_QUESTION_ANSWERING_SUCCESS, 'questionId', 'beingAnswered')
-const updateQuestionAnsweringFailure = makeActionCreator(types.UPDATE_QUESTION_ANSWERING_FAILURE, 'questionId', 'beingAnswered')
+const updateQuestionAnsweringRequest = makeActionCreator(types.UPDATE_QUESTION_ANSWERING.REQUEST, 'questionId', 'beingAnswered')
+const updateQuestionAnsweringSuccess = makeActionCreator(types.UPDATE_QUESTION_ANSWERING.SUCCESS, 'questionId', 'beingAnswered')
+const updateQuestionAnsweringFailure = makeActionCreator(types.UPDATE_QUESTION_ANSWERING.FAILURE, 'questionId', 'beingAnswered')
 
 export function updateQuestionAnswering(questionId, beingAnswered) {
   return (dispatch) => {
@@ -68,9 +68,9 @@ export function updateQuestionAnswering(questionId, beingAnswered) {
 /**
  * Finishes answering a question and submits feedback for it
  */
-const finishAnsweringQuestionRequest = makeActionCreator(types.FINISH_ANSWERING_QUESTION_REQUEST, 'queueId', 'questionId', 'feedback')
-const finishAnsweringQuestionSuccess = makeActionCreator(types.FINISH_ANSWERING_QUESTION_SUCCESS, 'queueId', 'questionId', 'feedback')
-const finishAnsweringQuestionFailure = makeActionCreator(types.FINISH_ANSWERING_QUESTION_FAILURE, 'queueId', 'questionId', 'feedback')
+const finishAnsweringQuestionRequest = makeActionCreator(types.FINISH_ANSWERING_QUESTION.REQUEST, 'queueId', 'questionId', 'feedback')
+const finishAnsweringQuestionSuccess = makeActionCreator(types.FINISH_ANSWERING_QUESTION.SUCCESS, 'queueId', 'questionId', 'feedback')
+const finishAnsweringQuestionFailure = makeActionCreator(types.FINISH_ANSWERING_QUESTION.FAILURE, 'queueId', 'questionId', 'feedback')
 
 export function finishAnsweringQuestion(queueId, questionId, feedback) {
   return (dispatch) => {
@@ -90,9 +90,9 @@ export function finishAnsweringQuestion(queueId, questionId, feedback) {
 /**
  * Delete a question
  */
-const deleteQuestionRequest = makeActionCreator(types.DELETE_QUESTION_REQUEST, 'queueId', 'questionId')
-const deleteQuestionSuccess = makeActionCreator(types.DELETE_QUESTION_SUCCESS, 'queueId', 'questionId')
-const deleteQuestionFailure = makeActionCreator(types.DELETE_QUESTION_FAILURE, 'queueId', 'questionId')
+const deleteQuestionRequest = makeActionCreator(types.DELETE_QUESTION.REQUEST, 'queueId', 'questionId')
+const deleteQuestionSuccess = makeActionCreator(types.DELETE_QUESTION.SUCCESS, 'queueId', 'questionId')
+const deleteQuestionFailure = makeActionCreator(types.DELETE_QUESTION.FAILURE, 'queueId', 'questionId')
 
 export function deleteQuestion(queueId, questionId) {
   return (dispatch) => {

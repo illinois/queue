@@ -1,16 +1,13 @@
 import {
-  FETCH_COURSE_REQUEST,
-  FETCH_COURSE_SUCCESS,
-  FETCH_COURSE_FAILURE,
-  CREATE_QUEUE_SUCCESS,
-  FETCH_QUEUE_REQUEST,
-  FETCH_QUEUE_SUCCESS,
-  CREATE_QUESTION_SUCCESS,
-  DELETE_QUESTION_SUCCESS,
-  DELETE_QUEUE_SUCCESS,
+  FETCH_COURSE,
+  FETCH_QUEUE,
+  CREATE_QUEUE,
+  CREATE_QUESTION,
+  DELETE_QUESTION,
+  DELETE_QUEUE,
   UPDATE_QUESTIONS,
   UPDATE_QUEUES,
-  FINISH_ANSWERING_QUESTION_SUCCESS,
+  FINISH_ANSWERING_QUESTION,
 } from '../constants/ActionTypes'
 
 const defaultState = {
@@ -64,12 +61,12 @@ function removeQuestionFromQueue(state, queueId, questionId) {
 
 const queues = (state = defaultState, action) => {
   switch (action.type) {
-    case FETCH_COURSE_REQUEST: {
+    case FETCH_COURSE.REQUEST: {
       return Object.assign({}, state, {
         isFetching: true,
       })
     }
-    case FETCH_COURSE_SUCCESS: {
+    case FETCH_COURSE.SUCCESS: {
       return Object.assign({}, state, {
         isFetching: false,
         queues: {
@@ -82,13 +79,13 @@ const queues = (state = defaultState, action) => {
         },
       })
     }
-    case FETCH_COURSE_FAILURE: {
+    case FETCH_COURSE.FAILURE: {
       return Object.assign({}, state, {
         isFetching: false,
         error: true,
       })
     }
-    case CREATE_QUEUE_SUCCESS: {
+    case CREATE_QUEUE.SUCCESS: {
       const { queue } = action
       return Object.assign({}, state, {
         queues: {
@@ -97,12 +94,12 @@ const queues = (state = defaultState, action) => {
         },
       })
     }
-    case FETCH_QUEUE_REQUEST: {
+    case FETCH_QUEUE.REQUEST: {
       return Object.assign({}, state, {
         isFetching: true,
       })
     }
-    case FETCH_QUEUE_SUCCESS: {
+    case FETCH_QUEUE.SUCCESS: {
       const { queue } = action
       return Object.assign({}, state, {
         isFetching: false,
@@ -112,13 +109,13 @@ const queues = (state = defaultState, action) => {
         },
       })
     }
-    case CREATE_QUESTION_SUCCESS: {
+    case CREATE_QUESTION.SUCCESS: {
       return addQuestionToQueue(state, action.queueId, action.question.id)
     }
-    case DELETE_QUESTION_SUCCESS: {
+    case DELETE_QUESTION.SUCCESS: {
       return removeQuestionFromQueue(state, action.queueId, action.questionId)
     }
-    case DELETE_QUEUE_SUCCESS: {
+    case DELETE_QUEUE.SUCCESS: {
       return Object.assign({}, state, {
         queues: {
           ...state.queues,
@@ -147,7 +144,7 @@ const queues = (state = defaultState, action) => {
         },
       })
     }
-    case FINISH_ANSWERING_QUESTION_SUCCESS: {
+    case FINISH_ANSWERING_QUESTION.SUCCESS: {
       return removeQuestionFromQueue(state, action.queueId, action.questionId)
     }
     default:

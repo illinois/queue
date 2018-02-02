@@ -5,9 +5,9 @@ import { makeActionCreator } from './util'
 /**
  * Creating a new course
  */
-const createCourseRequest = makeActionCreator(types.CREATE_COURSE_REQUEST, 'course')
-const createCourseSuccess = makeActionCreator(types.CREATE_COURSE_SUCCESS, 'course')
-const createCourseFailure = makeActionCreator(types.CREATE_COURSE_FAILURE, 'data')
+const createCourseRequest = makeActionCreator(types.CREATE_COURSE.REQUEST, 'course')
+const createCourseSuccess = makeActionCreator(types.CREATE_COURSE.SUCCESS, 'course')
+const createCourseFailure = makeActionCreator(types.CREATE_COURSE.FAILURE, 'data')
 
 export function createCourse(course) {
   return (dispatch) => {
@@ -50,9 +50,9 @@ export function fetchCourses() {
 /**
  * Loading a specific course
  */
-export const fetchCourseRequest = makeActionCreator(types.FETCH_COURSE_REQUEST, 'courseId')
-const fetchCourseSuccess = makeActionCreator(types.FETCH_COURSE_SUCCESS, 'courseId', 'course')
-const fetchCourseFailure = makeActionCreator(types.FETCH_COURSE_FAILURE, 'data')
+export const fetchCourseRequest = makeActionCreator(types.FETCH_COURSE.REQUEST, 'courseId')
+const fetchCourseSuccess = makeActionCreator(types.FETCH_COURSE.SUCCESS, 'courseId', 'course')
+const fetchCourseFailure = makeActionCreator(types.FETCH_COURSE.FAILURE, 'data')
 
 export function fetchCourse(courseId) {
   return (dispatch) => {

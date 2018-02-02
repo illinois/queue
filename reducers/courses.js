@@ -1,10 +1,9 @@
 import {
   FETCH_COURSES,
-  FETCH_COURSE_REQUEST,
-  FETCH_COURSE_SUCCESS,
-  CREATE_COURSE_SUCCESS,
-  CREATE_QUEUE_SUCCESS,
-  DELETE_QUEUE_SUCCESS,
+  FETCH_COURSE,
+  CREATE_COURSE,
+  CREATE_QUEUE,
+  DELETE_QUEUE,
   UPDATE_QUEUES,
   ADD_COURSE_STAFF,
 } from '../constants/ActionTypes'
@@ -88,12 +87,12 @@ const courses = (state = defaultState, action) => {
         error: true,
       })
     }
-    case FETCH_COURSE_REQUEST: {
+    case FETCH_COURSE.REQUEST: {
       return Object.assign({}, state, {
         isFetching: true,
       })
     }
-    case FETCH_COURSE_SUCCESS: {
+    case FETCH_COURSE.SUCCESS: {
       const { course } = action
       return Object.assign({}, state, {
         isFetching: false,
@@ -103,7 +102,7 @@ const courses = (state = defaultState, action) => {
         },
       })
     }
-    case CREATE_COURSE_SUCCESS: {
+    case CREATE_COURSE.SUCCESS: {
       const { course } = action
       return Object.assign({}, state, {
         courses: {
@@ -112,10 +111,10 @@ const courses = (state = defaultState, action) => {
         },
       })
     }
-    case CREATE_QUEUE_SUCCESS: {
+    case CREATE_QUEUE.SUCCESS: {
       return addQueueToCourse(state, action.courseId, action.queue)
     }
-    case DELETE_QUEUE_SUCCESS:
+    case DELETE_QUEUE.SUCCESS:
       return removeQueueFromCourse(state, action.courseId, action.queueId)
     case UPDATE_QUEUES: {
       const { courseId, queues } = action

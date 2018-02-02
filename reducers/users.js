@@ -1,7 +1,5 @@
 import {
-  FETCH_COURSE_REQUEST,
-  FETCH_COURSE_SUCCESS,
-  FETCH_COURSE_FAILURE,
+  FETCH_COURSE,
   ADD_COURSE_STAFF,
 } from '../constants/ActionTypes'
 
@@ -18,17 +16,17 @@ const reduceUsers = users => users.reduce((obj, item) => {
 
 const users = (state = defaultState, action) => {
   switch (action.type) {
-    case FETCH_COURSE_REQUEST:
+    case FETCH_COURSE.REQUEST:
       return {
         ...state,
         isFetching: true,
       }
-    case FETCH_COURSE_FAILURE:
+    case FETCH_COURSE.FAILURE:
       return {
         ...state,
         isFetching: false,
       }
-    case FETCH_COURSE_SUCCESS:
+    case FETCH_COURSE.SUCCESS:
       return {
         ...state,
         isFetching: false,
