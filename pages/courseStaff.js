@@ -22,6 +22,7 @@ import makeStore from '../redux/makeStore'
 import PageWithUser from '../components/PageWithUser'
 import Layout from '../components/Layout'
 import AddStaff from '../components/AddStaff'
+import CourseStaffMember from '../components/CourseStaffMember'
 
 
 class CourseStaff extends React.Component {
@@ -76,9 +77,7 @@ class CourseStaff extends React.Component {
       const users = this.props.course.staff.map((id) => {
         const user = this.props.users[id]
         return (
-          <ListGroupItem key={user.netid}>
-            {user.netid}
-          </ListGroupItem>
+          <CourseStaffMember key={user.id} {...user} />
         )
       })
 
@@ -153,7 +152,7 @@ const mapStateToProps = (state, { courseId }) => {
 
 const mapDispatchToProps = dispatch => ({
   fetchCourse: courseId => dispatch(fetchCourse(courseId)),
-  addCourseStaff: (netid, name) => dispatch(addCourseStaff(netid, name)),
+  addCourseStaff: (courseId, netid, name) => dispatch(addCourseStaff(courseId, netid, name)),
   dispatch,
 })
 

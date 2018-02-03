@@ -49,6 +49,7 @@ class AddStaff extends React.Component {
               <Input
                 type="text"
                 name="netid"
+                placeholder="nwalter2"
                 onChange={this.handleInputChange}
                 value={this.state.netid}
               />
@@ -61,6 +62,7 @@ class AddStaff extends React.Component {
               <Input
                 type="text"
                 name="name"
+                placeholder="Nathan Walters"
                 onChange={this.handleInputChange}
                 value={this.state.name}
               />

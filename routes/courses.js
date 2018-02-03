@@ -60,10 +60,14 @@ router.post('/', [
 router.post('/:courseId/staff', [
   requireCourse,
   check('netid', 'netid must be specified').exists(),
+  check('name').optional(),
   failIfErrors,
 ], async (req, res, _next) => {
-  const { netid } = matchedData(req)
-  const [user] = await User.findOrCreate({ where: { netid } })
+  const { netid, name } = matchedData(req)
+  const [user, created] = await User.findOrCreate({ where: { netid } })
+  if (created && name) {
+    user.name = name
+  }
   user.addCourse(req.course)
   const newUser = await user.save()
   res.status(201).send(newUser)
