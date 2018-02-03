@@ -6,7 +6,6 @@ import {
   ListGroupItem,
   Card,
   CardHeader,
-  CardBody,
   CardTitle,
   CardSubtitle,
 } from 'reactstrap'
@@ -17,11 +16,13 @@ import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner'
 
 import { Link } from '../routes'
 import makeStore from '../redux/makeStore'
+
+import PageWithUser from '../components/PageWithUser'
 import Layout from '../components/Layout'
 import NewCourse from '../components/NewCourse'
 import { fetchCoursesRequest, fetchCourses, createCourse } from '../actions/course'
 
-class Page extends React.Component {
+class Index extends React.Component {
   static async getInitialProps({ store, isServer }) {
     if (isServer) {
       // We're going to start loading as soon as we're on the client
@@ -90,7 +91,7 @@ class Page extends React.Component {
           <Card className="courses-card">
             <CardHeader className="bg-primary text-white">
               <CardTitle tag="h3">Hey there!</CardTitle>
-              <CardSubtitle>Please select your course from the list below.</CardSubtitle>
+              <CardSubtitle>Select your course from the list below.</CardSubtitle>
             </CardHeader>
             <ListGroup flush>
               {!this.props.isFetching && courses}
@@ -112,7 +113,7 @@ class Page extends React.Component {
   }
 }
 
-Page.propTypes = {
+Index.propTypes = {
   isFetching: PropTypes.bool,
   courses: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string,
@@ -121,7 +122,7 @@ Page.propTypes = {
   createCourse: PropTypes.func.isRequired,
 }
 
-Page.defaultProps = {
+Index.defaultProps = {
   isFetching: false,
   courses: [],
 }
@@ -136,4 +137,4 @@ const mapDispatchToProps = dispatch => ({
   createCourse: course => dispatch(createCourse(course)),
 })
 
-export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(Page)
+export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(PageWithUser(Index))

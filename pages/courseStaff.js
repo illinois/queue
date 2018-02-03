@@ -18,6 +18,8 @@ import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
 
 import { fetchCourse, addCourseStaff } from '../actions/course'
 import makeStore from '../redux/makeStore'
+
+import PageWithUser from '../components/PageWithUser'
 import Layout from '../components/Layout'
 import AddStaff from '../components/AddStaff'
 
@@ -155,4 +157,4 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 })
 
-export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(CourseStaff)
+export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(PageWithUser(CourseStaff))

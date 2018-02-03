@@ -30,6 +30,8 @@ export const UPDATE_QUESTION_ANSWERING = makeActionStrings('UPDATE_QUESTION_ANSW
 export const FINISH_ANSWERING_QUESTION = makeActionStrings('FINISH_ANSWERING_QUESTION')
 export const DELETE_QUESTION = makeActionStrings('DELETE_QUESTION')
 
+export const FETCH_CURRENT_USER = makeActionStrings('FETCH_CURRENT_USER')
+
 
 /* These events will be fired on websocket messages */
 export const UPDATE_QUESTIONS = 'UPDATE_QUESTIONS'

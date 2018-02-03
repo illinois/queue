@@ -8,15 +8,17 @@ import {
 import withRedux from 'next-redux-wrapper'
 
 import makeStore from '../redux/makeStore'
+import { fetchQueue } from '../actions/queue'
+import { connectToQueue, disconnectFromQueue } from '../socket/client'
+
+import PageWithUser from '../components/PageWithUser'
 import Layout from '../components/Layout'
 import StaffSidebar from '../components/StaffSidebar'
 import NewQuestionContainer from '../containers/NewQuestionContainer'
 import QuestionListContainer from '../containers/QuestionListContainer'
 
-import { fetchQueue } from '../actions/queue'
-import { connectToQueue, disconnectFromQueue } from '../socket/client'
 
-class Page extends React.Component {
+class Queue extends React.Component {
   static getInitialProps({ query }) {
     return {
       queueId: query.id,
@@ -51,7 +53,7 @@ class Page extends React.Component {
   }
 }
 
-Page.propTypes = {
+Queue.propTypes = {
   fetchQueue: PropTypes.func.isRequired,
   queueId: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired,
@@ -62,4 +64,4 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 })
 
-export default withRedux(makeStore, null, mapDispatchToProps)(Page)
+export default withRedux(makeStore, null, mapDispatchToProps)(PageWithUser(Queue))

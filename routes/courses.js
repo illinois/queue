@@ -32,7 +32,7 @@ router.get('/:courseId', [
       {
         model: User,
         as: 'staff',
-        attributes: ['id', 'netid', 'displayName'],
+        attributes: ['id', 'netid', 'name'],
         through: {
           attributes: [],
         },

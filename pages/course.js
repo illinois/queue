@@ -21,13 +21,15 @@ import { Link } from '../routes'
 import makeStore from '../redux/makeStore'
 import { fetchCourseRequest, fetchCourse } from '../actions/course'
 import { createQueue, deleteQueue } from '../actions/queue'
+
+import PageWithUser from '../components/PageWithUser'
 import Layout from '../components/Layout'
 import NewQueue from '../components/NewQueue'
 import Queue from '../components/Queue'
 
 import { connectToCourse, disconnectFromCourse } from '../socket/client'
 
-class Page extends React.Component {
+class Course extends React.Component {
   static async getInitialProps({ isServer, store, query }) {
     if (isServer) {
       store.dispatch(fetchCourseRequest())
@@ -164,7 +166,7 @@ class Page extends React.Component {
   }
 }
 
-Page.propTypes = {
+Course.propTypes = {
   courseId: PropTypes.string.isRequired,
   course: PropTypes.shape({
     name: PropTypes.string,
@@ -181,7 +183,7 @@ Page.propTypes = {
   dispatch: PropTypes.func.isRequired,
 }
 
-Page.defaultProps = {
+Course.defaultProps = {
   course: null,
   queues: null,
   isFetching: true,
@@ -203,4 +205,4 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 })
 
-export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(Page)
+export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(PageWithUser(Course))
