@@ -6,6 +6,7 @@ import {
   DELETE_QUEUE,
   UPDATE_QUEUES,
   ADD_COURSE_STAFF,
+  REMOVE_COURSE_STAFF,
 } from '../constants/ActionTypes'
 
 const defaultState = {
@@ -32,6 +33,24 @@ function addStaffToCourse(state, courseId, userId) {
 
   const newState = { ...state }
   newState.courses[courseId].staff.push(userId)
+  return newState
+}
+
+function removeStaffFromCourse(state, courseId, userId) {
+  if (!(courseId in state.courses) || state.courses[courseId].staff.indexOf(userId) === -1) {
+    return state
+  }
+
+  const course = state.courses[courseId]
+  const newState = Object.assign({}, state, {
+    courses: {
+      ...state.courses,
+      [courseId]: {
+        ...course,
+        staff: course.staff.filter(id => id !== userId),
+      },
+    },
+  })
   return newState
 }
 
@@ -132,6 +151,8 @@ const courses = (state = defaultState, action) => {
     }
     case ADD_COURSE_STAFF.SUCCESS:
       return addStaffToCourse(state, action.courseId, action.user.id)
+    case REMOVE_COURSE_STAFF.SUCCESS:
+      return removeStaffFromCourse(state, action.courseId, action.userId)
     default:
       return state
   }

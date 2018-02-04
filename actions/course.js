@@ -92,3 +92,25 @@ export function addCourseStaff(courseId, netid, name) {
     )
   }
 }
+
+
+/**
+ * Add a user as staff for a course
+ */
+const removeCourseStaffRequest = makeActionCreator(types.REMOVE_COURSE_STAFF.REQUEST, 'courseId', 'userId')
+const removeCourseStaffSuccess = makeActionCreator(types.REMOVE_COURSE_STAFF.SUCCESS, 'courseId', 'userId')
+const removeCourseStaffFailure = makeActionCreator(types.REMOVE_COURSE_STAFF.FAILURE, 'data')
+
+export function removeCourseStaff(courseId, userId) {
+  return (dispatch) => {
+    dispatch(removeCourseStaffRequest(courseId, userId))
+
+    return axios.delete(`/api/courses/${courseId}/staff/${userId}`).then(
+      () => dispatch(removeCourseStaffSuccess(courseId, userId)),
+      (err) => {
+        console.error(err)
+        dispatch(removeCourseStaffFailure(err))
+      },
+    )
+  }
+}

@@ -5,6 +5,7 @@
   "main": "node server.js",
   "scripts": {
     "dev": "node server.js",
+    "dev-watch": "nodemon server.js",
     "build": "next build",
     "start": "NODE_ENV=production node server.js",
     "lint-js": "eslint --ext js ."
@@ -53,6 +54,7 @@
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-react": "^7.5.1"
+    "eslint-plugin-react": "^7.5.1",
+    "nodemon": "^1.14.12"
   }
 }

@@ -16,7 +16,11 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner'
 import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
 
-import { fetchCourse, addCourseStaff } from '../actions/course'
+import {
+  fetchCourse,
+  addCourseStaff,
+  removeCourseStaff,
+} from '../actions/course'
 import makeStore from '../redux/makeStore'
 
 import PageWithUser from '../components/PageWithUser'
@@ -64,6 +68,8 @@ class CourseStaff extends React.Component {
   }
 
   render() {
+    const { courseId } = this.props
+
     let content
     if (this.props.isFetching || !this.props.course || !this.props.course.staff) {
       content = (
@@ -74,12 +80,27 @@ class CourseStaff extends React.Component {
         </Card>
       )
     } else {
-      const users = this.props.course.staff.map((id) => {
-        const user = this.props.users[id]
-        return (
-          <CourseStaffMember key={user.id} {...user} />
+      let users
+      if (this.props.course.staff && this.props.course.staff.length > 0) {
+        users = this.props.course.staff.map((id) => {
+          const user = this.props.users[id]
+          return (
+            <CourseStaffMember
+              key={user.id}
+              removeCourseStaff={userId => this.props.removeCourseStaff(courseId, userId)}
+              {...user}
+            />
+          )
+        })
+      } else {
+        users = (
+          <div>
+            <ListGroupItem className="text-center text-muted pt-4 pb-4">
+              This course doesn't have any staff yet
+            </ListGroupItem>
+          </div>
         )
-      })
+      }
 
       const addStaffButton = (
         <ListGroupItem action className="text-muted" onClick={() => this.showAddStaffPanel()}>
@@ -139,6 +160,16 @@ CourseStaff.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   fetchCourse: PropTypes.func.isRequired,
   addCourseStaff: PropTypes.func.isRequired,
+  removeCourseStaff: PropTypes.func.isRequired,
+  course: PropTypes.shape({
+    name: PropTypes.string,
+    staff: PropTypes.arrayOf(PropTypes.number),
+  }).isRequired,
+  users: PropTypes.objectOf(PropTypes.shape({
+    id: PropTypes.number,
+    netid: PropTypes.string,
+    name: PropTypes.string,
+  })).isRequired,
 }
 
 const mapStateToProps = (state, { courseId }) => {
@@ -153,6 +184,7 @@ const mapStateToProps = (state, { courseId }) => {
 const mapDispatchToProps = dispatch => ({
   fetchCourse: courseId => dispatch(fetchCourse(courseId)),
   addCourseStaff: (courseId, netid, name) => dispatch(addCourseStaff(courseId, netid, name)),
+  removeCourseStaff: (courseId, userId) => dispatch(removeCourseStaff(courseId, userId)),
   dispatch,
 })
 

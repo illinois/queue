@@ -17,40 +17,55 @@ class Question extends React.Component {
       topic,
       beingAnswered,
       enqueueTime,
+      isUserCourseStaff,
     } = this.props
     const badgeColor = beingAnswered ? 'success' : 'secondary'
     const badgeLabel = beingAnswered ? 'TA Answering' : 'Waiting'
 
     let buttonCluster
     if (beingAnswered) {
-      buttonCluster = (
-        <Fragment>
+      if (isUserCourseStaff) {
+        buttonCluster = (
+          <Fragment>
+            <Button
+              color="primary"
+              className="mr-2"
+              onClick={() => this.props.onFinishedAnswering(id)}
+            >
+              Finish Answering
+            </Button>
+            <Button
+              color="light"
+              onClick={() => this.props.onUpdateQuestionBeingAnswered(id, false)}
+            >
+              Cancel
+            </Button>
+          </Fragment>
+        )
+      } else {
+        buttonCluster = (
           <Button
-            color="primary"
-            className="mr-2"
-            onClick={() => this.props.onFinishedAnswering(id)}
+            color="danger"
+            outline
+            onClick={() => this.props.onDeleteQuestion(id)}
           >
-            Finish Answering
+            Delete
           </Button>
-          <Button
-            color="light"
-            onClick={() => this.props.onUpdateQuestionBeingAnswered(id, false)}
-          >
-            Cancel
-          </Button>
-        </Fragment>
-      )
+        )
+      }
     } else {
       buttonCluster = (
         <Fragment>
-          <Button
-            color="primary"
-            outline
-            className="mr-2"
-            onClick={() => this.props.onUpdateQuestionBeingAnswered(id, true)}
-          >
-            Start Answering!
-          </Button>
+          {isUserCourseStaff &&
+            <Button
+              color="primary"
+              outline
+              className="mr-2"
+              onClick={() => this.props.onUpdateQuestionBeingAnswered(id, true)}
+            >
+              Start Answering!
+            </Button>
+          }
           <Button
             color="danger"
             outline
@@ -95,6 +110,7 @@ Question.propTypes = {
   topic: PropTypes.string.isRequired,
   beingAnswered: PropTypes.bool.isRequired,
   enqueueTime: PropTypes.string.isRequired,
+  isUserCourseStaff: PropTypes.bool.isRequired,
   onUpdateQuestionBeingAnswered: PropTypes.func.isRequired,
   onFinishedAnswering: PropTypes.func.isRequired,
   onDeleteQuestion: PropTypes.func.isRequired,

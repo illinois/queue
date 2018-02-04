@@ -10,7 +10,11 @@ const {
   Queue,
   User,
 } = require('../models')
-const { requireCourse, failIfErrors } = require('./util')
+const {
+  requireCourse,
+  requireUser,
+  failIfErrors,
+} = require('./util')
 
 
 // Get all courses
@@ -64,13 +68,26 @@ router.post('/:courseId/staff', [
   failIfErrors,
 ], async (req, res, _next) => {
   const { netid, name } = matchedData(req)
-  const [user, created] = await User.findOrCreate({ where: { netid } })
-  if (created && name) {
+  const [user] = await User.findOrCreate({ where: { netid } })
+  if (name) {
     user.name = name
   }
-  user.addCourse(req.course)
+  user.addStaffAssignment(req.course)
   const newUser = await user.save()
   res.status(201).send(newUser)
+})
+
+// Remove someone from course staff
+router.delete('/:courseId/staff/:userId', [
+  requireCourse,
+  requireUser,
+  failIfErrors,
+], async (req, res, _next) => {
+  const { user, course } = req
+  const oldStaffAssignments = user.getStaffAssignments()
+  user.setStaffAssignments(oldStaffAssignments.filter(c => c.id !== course.id))
+  await user.save()
+  res.status(202).send()
 })
 
 module.exports = router

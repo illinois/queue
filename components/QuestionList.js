@@ -53,6 +53,7 @@ class QuestionList extends React.Component {
           return (
             <Question
               key={questionId}
+              isUserCourseStaff={this.props.isUserCourseStaff}
               onDeleteQuestion={this.props.deleteQuestion}
               onUpdateQuestionBeingAnswered={this.props.updateQuestionBeingAnswered}
               onFinishedAnswering={() => this.handleFinishedAnswering(questionId)}
@@ -110,6 +111,7 @@ QuestionList.propTypes = {
     location: PropTypes.string,
     topic: PropTypes.string,
   })),
+  isUserCourseStaff: PropTypes.bool.isRequired,
   deleteQuestion: PropTypes.func.isRequired,
   updateQuestionBeingAnswered: PropTypes.func.isRequired,
   finishAnsweringQuestion: PropTypes.func.isRequired,

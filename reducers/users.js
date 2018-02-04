@@ -4,7 +4,7 @@ import {
 } from '../constants/ActionTypes'
 
 const defaultState = {
-  users: [],
+  users: {},
   isFetching: false,
 }
 
