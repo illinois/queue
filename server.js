@@ -12,7 +12,7 @@ const { User } = require('./models')
 const serverSocket = require('./socket/server')
 
 const DEV = process.env.NODE_ENV !== 'production'
-const PORT = 3000
+const PORT = process.env.PORT || 3000
 
 const nextApp = nextJs({ dev: DEV })
 const handler = routes.getRequestHandler(nextApp)
