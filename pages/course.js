@@ -21,6 +21,7 @@ import { Link } from '../routes'
 import makeStore from '../redux/makeStore'
 import { fetchCourseRequest, fetchCourse } from '../actions/course'
 import { createQueue, deleteQueue } from '../actions/queue'
+import { isUserCourseStaff, isUserAdmin } from '../selectors'
 
 import PageWithUser from '../components/PageWithUser'
 import Layout from '../components/Layout'
@@ -96,6 +97,7 @@ class Course extends React.Component {
             <Queue
               key={id}
               onDeleteQueue={queueId => this.deleteQueue(queueId)}
+              isUserCourseStaff={this.props.isUserCourseStaff}
               {...queue}
             />
           )
@@ -130,9 +132,11 @@ class Course extends React.Component {
             <CardTitle tag="h4" className="mb-0">
               {this.props.course && this.props.course.name} Queues
             </CardTitle>
-            <Link route="courseStaff" params={{ id: this.props.courseId }} passHref>
-              <Button tag="a" color="light" size="sm" className="ml-auto">Manage Staff</Button>
-            </Link>
+            {(this.props.isUserCourseStaff || this.props.isUserAdmin) &&
+              <Link route="courseStaff" params={{ id: this.props.courseId }} passHref>
+                <Button tag="a" color="light" size="sm" className="ml-auto">Manage Staff</Button>
+              </Link>
+            }
           </CardHeader>
           <ListGroup flush>
             <FlipMove
@@ -142,7 +146,7 @@ class Course extends React.Component {
             >
               {queues}
             </FlipMove>
-            {!this.state.showCreateQueuePanel && createQueueButton}
+            {this.props.isUserCourseStaff && !this.state.showCreateQueuePanel && createQueueButton}
             {this.state.showCreateQueuePanel && createQueuePanel}
           </ListGroup>
         </Card>
@@ -180,6 +184,8 @@ Course.propTypes = {
   createQueue: PropTypes.func.isRequired,
   fetchCourse: PropTypes.func.isRequired,
   deleteQueue: PropTypes.func.isRequired,
+  isUserCourseStaff: PropTypes.bool,
+  isUserAdmin: PropTypes.bool,
   dispatch: PropTypes.func.isRequired,
 }
 
@@ -187,6 +193,8 @@ Course.defaultProps = {
   course: null,
   queues: null,
   isFetching: true,
+  isUserCourseStaff: false,
+  isUserAdmin: false,
 }
 
 const mapStateToProps = (state, ownProps) => {
@@ -195,6 +203,8 @@ const mapStateToProps = (state, ownProps) => {
     course,
     queues: state.queues.queues,
     isFetching: state.courses.isFetching || state.queues.isFetching,
+    isUserCourseStaff: isUserCourseStaff(state, ownProps),
+    isUserAdmin: isUserAdmin(state),
   }
 }
 

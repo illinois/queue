@@ -9,18 +9,6 @@ import { isUserActiveStaffForQueue } from '../selectors'
 
 import QuestionList from '../components/QuestionList'
 
-function isUserCourseStaff(state, queueId) {
-  try {
-    // Blindly assume we can walk deep into objects, and fail if we can't
-    // access any required properties
-    // eslint-disable-next-line prefer-destructuring
-    const courseId = state.queues.queues[queueId].courseId
-    return state.user.user.staffAssignments.indexOf(courseId) !== -1
-  } catch (e) {
-    return false
-  }
-}
-
 function mapStateToProps(state, props) {
   return {
     queue: state.queues.queues[props.queueId],

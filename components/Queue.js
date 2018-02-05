@@ -18,6 +18,7 @@ class Queue extends React.Component {
       id,
       name,
       location,
+      isUserCourseStaff,
     } = this.props
 
     return (
@@ -27,14 +28,16 @@ class Queue extends React.Component {
             <div className="h5">{name}</div>
             <div className="text-muted">Location: {location}</div>
           </div>
-          <Button
-            color="danger"
-            tag="div"
-            className="ml-auto"
-            onClick={e => this.deleteQueue(e)}
-          >
-            Delete
-          </Button>
+          {isUserCourseStaff &&
+            <Button
+              color="danger"
+              tag="div"
+              className="ml-auto"
+              onClick={e => this.deleteQueue(e)}
+            >
+              Delete
+            </Button>
+          }
         </ListGroupItem>
       </Link>
     )
@@ -46,6 +49,7 @@ Queue.propTypes = {
   name: PropTypes.string.isRequired,
   location: PropTypes.string.isRequired,
   onDeleteQueue: PropTypes.func.isRequired,
+  isUserCourseStaff: PropTypes.bool.isRequired,
 }
 
 export default Queue

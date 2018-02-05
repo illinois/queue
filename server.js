@@ -5,7 +5,7 @@ const io = require('socket.io')(server)
 const nextJs = require('next')
 const co = require('co')
 const bodyParser = require('body-parser')
-const cookieParser = require('cookie-parser')
+const session = require('express-session')
 
 const routes = require('./routes')
 const { User } = require('./models')
@@ -22,10 +22,27 @@ co(function* () {
   // Initialize the Next.js app
   yield nextApp.prepare()
 
+  // In production, all concepts of "sessions" will be handled by checking the
+  // eppn header from Shib. In dev, to support multiple users for testing, we
+  // use session middleware.
+  if (DEV) {
+    app.use(session({
+      secret: 'this is not a secret',
+    }))
+    app.use(async (req, res, next) => {
+      if (req.query.forceuser) {
+        const netid = req.query.forceuser
+        const [user] = await User.findOrCreate({ where: { netid } })
+        req.session.user = user
+        res.locals.user = user
+      }
+      next()
+    })
+  }
+
   // Configure express to expose a REST API
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: false }))
-  app.use(cookieParser())
 
   // Prettify all json by default
   app.use((req, res, next) => {
@@ -42,17 +59,37 @@ co(function* () {
   serverSocket(io)
 
   // Shibboleth auth
-  app.use((req, res, next) => {
+  app.use(async (req, res, next) => {
     // Get the user's NetID based on the "eppn" field
     // Temporarily disable this in dev
-    const email = DEV ? 'dev@illinois.edu' : req.get('eppn')
-    if (email.indexOf('@') === -1) { throw new Error('No login found.') }
-    const [netid] = email.split('@')
-
-    User.findOrCreate({ where: { netid } }).spread((user) => {
+    if (DEV && req.session.user) {
+      res.locals.user = req.session.user
+      next()
+    } else if (DEV) {
+      // By default, create or find admin user "dev"
+      const [user] = await User.findOrCreate({
+        where: {
+          netid: 'dev',
+        },
+        defaults: {
+          isAdmin: true,
+        },
+      })
+      req.session.user = user
       res.locals.user = user
       next()
-    })
+    } else {
+      const email = req.get('eppn') || ''
+      if (email.indexOf('@') === -1) {
+        throw new Error('No login found.')
+      }
+      const [netid] = email.split('@')
+
+      const [user] = await User.findOrCreate({ where: { netid } })
+      req.session.user = user
+      res.locals.user = user
+      next()
+    }
   })
 
   // API routes

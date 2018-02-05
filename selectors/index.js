@@ -31,7 +31,7 @@ export const isUserActiveStaffForQueue = createSelector([
   return idx !== -1
 })
 
-export const isUserCourseStaff = createSelector([
+export const isUserCourseStaffForQueue = createSelector([
   userSelector,
   courseIdForQueueSelector,
 ], (user, courseId) => {
@@ -44,5 +44,21 @@ export const isUserCourseStaff = createSelector([
     return false
   }
 })
+
+export const isUserCourseStaff = createSelector([
+  userSelector,
+  courseSelector,
+], (user, course) => {
+  try {
+    // Blindly assume we can walk deep into objects, and fail if we can't
+    // access any required properties
+    // eslint-disable-next-line prefer-destructuring
+    return user.staffAssignments.indexOf(course.id) !== -1
+  } catch (e) {
+    return false
+  }
+})
+
+export const isUserAdmin = createSelector([userSelector], user => user && user.isAdmin)
 
 export const NULL = 'NULL'

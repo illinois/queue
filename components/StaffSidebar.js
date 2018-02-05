@@ -10,7 +10,7 @@ import { connect } from 'react-redux'
 import FlipMove from 'react-flip-move'
 
 import { addQueueStaff, removeQueueStaff } from '../actions/queue'
-import { isUserCourseStaff, isUserActiveStaffForQueue } from '../selectors'
+import { isUserCourseStaffForQueue, isUserActiveStaffForQueue } from '../selectors'
 import StaffMember from './StaffMember'
 
 const StaffSidebar = (props) => {
@@ -128,7 +128,7 @@ const mapStateToProps = (state, props) => ({
   users: state.users.users,
   activeStaff: state.activeStaff.activeStaff,
   queue: state.queues.queues[props.queueId],
-  isUserCourseStaff: isUserCourseStaff(state, props),
+  isUserCourseStaff: isUserCourseStaffForQueue(state, props),
   isUserActiveStaff: isUserActiveStaffForQueue(state, props),
 })
 
