@@ -33,7 +33,7 @@ class CourseStaff extends React.Component {
   static async getInitialProps({ isServer, query }) {
     return {
       isFetching: isServer,
-      courseId: query.id,
+      courseId: Number.parseInt(query.id, 10),
     }
   }
 
@@ -156,7 +156,7 @@ class CourseStaff extends React.Component {
 }
 
 CourseStaff.propTypes = {
-  courseId: PropTypes.string.isRequired,
+  courseId: PropTypes.number.isRequired,
   isFetching: PropTypes.bool.isRequired,
   fetchCourse: PropTypes.func.isRequired,
   addCourseStaff: PropTypes.func.isRequired,

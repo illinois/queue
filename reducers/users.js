@@ -1,7 +1,11 @@
 import {
   FETCH_COURSE,
+  FETCH_QUEUE,
   ADD_COURSE_STAFF,
+  ADD_QUEUE_STAFF,
+  UPDATE_ACTIVE_STAFF,
 } from '../constants/ActionTypes'
+import { normalizeQueue, normalizeActiveStaffList } from './normalize'
 
 const defaultState = {
   users: {},
@@ -43,6 +47,38 @@ const users = (state = defaultState, action) => {
           [action.user.id]: action.user,
         },
       }
+    case FETCH_QUEUE.SUCCESS: {
+      const queue = normalizeQueue(action.queue)
+      return {
+        ...state,
+        users: {
+          ...state.users,
+          ...queue.entities.users,
+        },
+      }
+    }
+    case ADD_QUEUE_STAFF.SUCCESS: {
+      const { activeStaff, normalized } = action
+      const user = normalized.entities.users[activeStaff.user]
+      return {
+        ...state,
+        users: {
+          ...state.users,
+          [activeStaff.user]: user,
+        },
+      }
+    }
+    case UPDATE_ACTIVE_STAFF: {
+      const { activeStaff } = action
+      const normalized = normalizeActiveStaffList(activeStaff)
+      return {
+        ...state,
+        users: {
+          ...state.users,
+          ...normalized.entities.users,
+        },
+      }
+    }
     default:
       return state
   }

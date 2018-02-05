@@ -1,6 +1,7 @@
 import axios from 'axios'
 import * as types from '../constants/ActionTypes'
 import { makeActionCreator } from './util'
+import { normalizeActiveStaff } from '../reducers/normalize'
 
 /**
  * Creating a new queue
@@ -61,6 +62,54 @@ export function deleteQueue(courseId, queueId) {
         (err) => {
           console.error(err)
           dispatch(deleteQueueFailure(courseId, queueId))
+        },
+      )
+  }
+}
+
+/**
+ * Adds a user to queue's active staff
+ */
+const addQueueStaffRequest = makeActionCreator(types.ADD_QUEUE_STAFF.REQUEST, 'queueId', 'userId')
+const addQueueStaffSuccess = makeActionCreator(types.ADD_QUEUE_STAFF.SUCCESS, 'queueId', 'userId', 'activeStaff', 'normalized')
+const addQueueStaffFailure = makeActionCreator(types.ADD_QUEUE_STAFF.FAILURE, 'queueId', 'userId', 'data')
+
+export function addQueueStaff(queueId, userId) {
+  return (dispatch) => {
+    dispatch(addQueueStaffRequest(queueId, userId))
+
+    return axios.post(`/api/queues/${queueId}/staff/${userId}`)
+      .then(
+        (res) => {
+          const normalized = normalizeActiveStaff(res.data)
+          const activeStaff = normalized.entities.activeStaff[normalized.result]
+          return dispatch(addQueueStaffSuccess(queueId, userId, activeStaff, normalized))
+        },
+        (err) => {
+          console.error(err)
+          dispatch(addQueueStaffFailure(queueId, userId))
+        },
+      )
+  }
+}
+
+/**
+ * Removes a user from a queue's active staff
+ */
+const removeQueueStaffRequest = makeActionCreator(types.REMOVE_QUEUE_STAFF.REQUEST, 'queueId', 'userId', 'activeStaffId')
+const removeQueueStaffSuccess = makeActionCreator(types.REMOVE_QUEUE_STAFF.SUCCESS, 'queueId', 'userId', 'activeStaffId')
+const removeQueueStaffFailure = makeActionCreator(types.REMOVE_QUEUE_STAFF.FAILURE, 'queueId', 'userId', 'activeStaffId', 'data')
+
+export function removeQueueStaff(queueId, userId, activeStaffId) {
+  return (dispatch) => {
+    dispatch(removeQueueStaffRequest(queueId, userId, activeStaffId))
+
+    return axios.delete(`/api/queues/${queueId}/staff/${userId}`)
+      .then(
+        () => dispatch(removeQueueStaffSuccess(queueId, userId, activeStaffId)),
+        (err) => {
+          console.error(err)
+          dispatch(removeQueueStaffFailure(queueId, userId, activeStaffId, err))
         },
       )
   }

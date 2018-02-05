@@ -27,6 +27,17 @@ co(function* () {
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use(cookieParser())
 
+  // Prettify all json by default
+  app.use((req, res, next) => {
+    res.json = function (body) {
+      if (!res.get('Content-Type')) {
+        res.set('Content-Type', 'application/json')
+      }
+      res.send(JSON.stringify(body, null, 2))
+    }
+    next()
+  })
+
   // Websocket stuff
   serverSocket(io)
 

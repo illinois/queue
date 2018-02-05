@@ -20,6 +20,11 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     // Don't actually delete, so that we can save feedback
     paranoid: true,
+    defaultScope: {
+      attributes: {
+        include: ['askedById', 'answeredById', 'queueId'],
+      },
+    },
   })
 
   obj.associate = (models) => {

@@ -3,7 +3,8 @@ const {
   sequelize,
   Question,
   Queue,
-  Course
+  User,
+  ActiveStaff,
 } = require('../models')
 
 let io = null
@@ -37,15 +38,36 @@ const handleQueuesUpdated = (courseId) => {
   })
 }
 
+const handleActiveStaffUpdated = (queueId) => {
+  ActiveStaff.findAll({
+    where: {
+      endTime: null,
+      queueId,
+    },
+    include: [User],
+  }).then((activeStaff) => {
+    queueNamespace.to(`queue-${queueId}`).emit('activeStaff:update', { activeStaff })
+  })
+}
+
 const stream = sequelizeStream(sequelize)
 stream.on('data', (data) => {
   const { instance } = data
   if (instance instanceof Question) {
     // Questions changed!
-    handleQuestionsUpdated(instance.queueId)
+    if ('queueId' in instance) {
+      handleQuestionsUpdated(instance.queueId)
+    }
   } else if (instance instanceof Queue) {
     // Queues changed!
-    handleQueuesUpdated(instance.courseId)
+    if ('courseId' in instance) {
+      handleQueuesUpdated(instance.courseId)
+    }
+  } else if (instance instanceof ActiveStaff) {
+    // Active staff changed!
+    if ('queueId' in instance) {
+      handleActiveStaffUpdated(instance.queueId)
+    }
   }
 })
 

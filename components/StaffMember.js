@@ -3,13 +3,17 @@ import PropTypes from 'prop-types'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faTimes from '@fortawesome/fontawesome-free-solid/faTimes'
 
-const StaffMember = ({ name, id, removeStaff }) => (
+const StaffMember = ({
+  name,
+  netid,
+  removeStaff,
+}) => (
   <div className="pt-2 pb-2 d-flex align-items-center">
-    {name}
+    {name || netid}
     <span className="btn-remove-staff ml-auto">
       <FontAwesomeIcon
         icon={faTimes}
-        onClick={() => removeStaff(id)}
+        onClick={() => removeStaff()}
       />
     </span>
     <style jsx>{`
@@ -26,9 +30,13 @@ const StaffMember = ({ name, id, removeStaff }) => (
   </div>
 )
 
+StaffMember.defaultProps = {
+  name: null,
+}
+
 StaffMember.propTypes = {
-  name: PropTypes.string.isRequired,
-  id: PropTypes.number.isRequired,
+  name: PropTypes.string,
+  netid: PropTypes.string.isRequired,
   removeStaff: PropTypes.func.isRequired,
 }
 

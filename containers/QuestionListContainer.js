@@ -5,6 +5,7 @@ import {
   updateQuestionAnswering,
   finishAnsweringQuestion,
 } from '../actions/question'
+import { isUserActiveStaffForQueue } from '../selectors'
 
 import QuestionList from '../components/QuestionList'
 
@@ -20,11 +21,12 @@ function isUserCourseStaff(state, queueId) {
   }
 }
 
-function mapStateToProps(state, { queueId }) {
+function mapStateToProps(state, props) {
   return {
-    queue: state.queues.queues[queueId],
+    queue: state.queues.queues[props.queueId],
     questions: state.questions.questions,
-    isUserCourseStaff: isUserCourseStaff(state, queueId),
+    // isUserCourseStaff: isUserCourseStaff(state, queueId),
+    isUserCourseStaff: isUserActiveStaffForQueue(state, props),
   }
 }
 

@@ -7,48 +7,134 @@ import {
   Button,
 } from 'reactstrap'
 import { connect } from 'react-redux'
+import FlipMove from 'react-flip-move'
 
-import {
-  addStaffMember,
-  removeStaffMember,
-} from '../actions'
+import { addQueueStaff, removeQueueStaff } from '../actions/queue'
+import { isUserCourseStaff, isUserActiveStaffForQueue } from '../selectors'
 import StaffMember from './StaffMember'
 
 const StaffSidebar = (props) => {
-  let staffList
+  let staffList = null
 
-  if (props.staff.length == 0) {
-    staffList = (<div className="text-muted pb-2 pt-2">No on-duty staff</div>)
-  } else {
-    staffList = props.staff.map((staff) => {
-      return (
-        <StaffMember {...staff} key={staff.id} removeStaff={props.removeStaff} />
-      )
-    })
+  if (props.queue) {
+    const { removeStaff, queue } = props
+    const activeStaffIds = queue.activeStaff
+    if (activeStaffIds && activeStaffIds.length > 0) {
+      staffList = activeStaffIds.map((id) => {
+        const activeStaffId = id
+        const user = props.users[props.activeStaff[id].user]
+        return (
+          <div key={user.id} >
+            <StaffMember
+              {...user}
+              removeStaff={() => removeStaff(user.id, activeStaffId)}
+            />
+          </div>
+        )
+      })
+    } else {
+      staffList = (<div className="text-muted pb-2 pt-2">No on-duty staff</div>)
+    }
   }
+
+  function removeCurrentUser() {
+    const activeStaffId = Object.values(props.activeStaff).find((as) => {
+      return props.activeStaff[as.id].user === props.user.id
+    })
+    if (activeStaffId) {
+      props.removeStaff(props.user.id, activeStaffId.id)
+    }
+  }
+
+  let button = null
+  if (props.isUserCourseStaff) {
+    if (props.isUserActiveStaff) {
+      button = (
+        <Button
+          block
+          color="danger"
+          onClick={() => removeCurrentUser()}
+        >
+          Leave
+        </Button>
+      )
+    } else {
+      button = (
+        <Button
+          block
+          color="primary"
+          onClick={() => props.joinStaff(props.user.id)}
+        >
+          Join
+        </Button>
+      )
+    }
+  }
+
   return (
     <Card>
       <CardBody>
         <CardTitle tag="h5">On-Duty Staff</CardTitle>
         <div className="mb-3">
-          {staffList}
+          <FlipMove
+            enterAnimation="accordionVertical"
+            leaveAnimation="accordionVertical"
+            duration={200}
+          >
+            {staffList}
+          </FlipMove>
         </div>
-        <Button block color="primary" onClick={() => props.joinStaff()}>Join</Button>
+        {button}
       </CardBody>
     </Card>
   )
 }
 
-StaffSidebar.propTypes = {
-  joinStaff: PropTypes.func.isRequired,
-  removeStaff: PropTypes.func.isRequired,
+StaffSidebar.defaultProps = {
+  user: null,
+  queue: null,
+  users: {},
+  activeStaff: {},
+  isUserCourseStaff: false,
+  isUserActiveStaff: false,
 }
 
-const mapStateToProps = ({ staff }) => ({ staff: staff.staff })
+StaffSidebar.propTypes = {
+  // eslint-disable-next-line react/no-unused-prop-types
+  queueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.number,
+  }),
+  queue: PropTypes.shape({
+    activeStaff: PropTypes.arrayOf(PropTypes.number),
+  }),
+  users: PropTypes.objectOf(PropTypes.shape({
+    id: PropTypes.number,
+    netid: PropTypes.string,
+    name: PropTypes.string,
+  })),
+  activeStaff: PropTypes.objectOf(PropTypes.shape({
+    id: PropTypes.number,
+    user: PropTypes.number,
+  })),
+  joinStaff: PropTypes.func.isRequired,
+  removeStaff: PropTypes.func.isRequired,
+  isUserCourseStaff: PropTypes.bool,
+  isUserActiveStaff: PropTypes.bool,
+}
 
-const mapDispatchToProps = dispatch => ({
-  joinStaff: () => dispatch(addStaffMember({ name: 'Nathan Walters', id: 6969 })),
-  removeStaff: id => dispatch(removeStaffMember(id)),
+const mapStateToProps = (state, props) => ({
+  user: state.user.user,
+  users: state.users.users,
+  activeStaff: state.activeStaff.activeStaff,
+  queue: state.queues.queues[props.queueId],
+  isUserCourseStaff: isUserCourseStaff(state, props),
+  isUserActiveStaff: isUserActiveStaffForQueue(state, props),
+})
+
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  joinStaff: (...args) => dispatch(addQueueStaff(ownProps.queueId, ...args)),
+  removeStaff: (...args) => dispatch(removeQueueStaff(ownProps.queueId, ...args)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(StaffSidebar)

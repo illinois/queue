@@ -2,7 +2,6 @@ const router = require('express').Router({
   mergeParams: true,
 })
 
-const { Op } = require('sequelize')
 const { check } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 
@@ -10,15 +9,21 @@ const {
   Queue,
   ActiveStaff,
   Question,
+  User,
 } = require('../models')
 
-const { requireCourse, requireQueue, failIfErrors } = require('./util')
+const {
+  requireCourse,
+  requireQueue,
+  requireUser,
+  failIfErrors,
+} = require('./util')
 
 
 // Get a list of all queues
 router.get('/', async (req, res, _next) => {
   const queues = await Queue.findAll()
-  res.send(queues)
+  res.json(queues)
 })
 
 
@@ -35,9 +40,10 @@ router.post('/', [
     name: data.name,
     location: data.location,
     courseId: data.courseId,
+    createdByUserId: res.locals.user.id,
   })
 
-  queue.save().then(newQueue => res.status(201).send(newQueue))
+  queue.save().then(newQueue => res.status(201).json(newQueue))
 })
 
 
@@ -53,7 +59,15 @@ router.get('/:queueId', [
       id: data.queueId,
     },
     include: [
-      { model: ActiveStaff, recursive: true },
+      {
+        model: ActiveStaff,
+        where: {
+          queueId: data.queueId,
+          endTime: null,
+        },
+        required: false,
+        include: [User],
+      },
       {
         model: Question,
         required: false,
@@ -66,7 +80,85 @@ router.get('/:queueId', [
       [Question, 'id', 'ASC'],
     ],
   })
-  res.send(queue)
+  res.json(queue)
+})
+
+
+// Gets the on-duty staff list for a specific queue
+router.get('/:queueId/staff', [
+  requireQueue,
+  failIfErrors,
+], async (req, res, _next) => {
+  const { queue } = req
+  const staff = await ActiveStaff.findAll({
+    where: {
+      endTime: null,
+      queueId: queue.id,
+    },
+    include: [User],
+  })
+  res.json(staff)
+})
+
+
+// Joins the specified user to the specified queue
+router.post('/:queueId/staff/:userId', [
+  requireQueue,
+  requireUser,
+  failIfErrors,
+], async (req, res, _next) => {
+  const { id: userId } = req.user
+  const { id: queueId } = req.queue
+  const [staff, created] = await ActiveStaff.findOrCreate({
+    where: {
+      userId,
+      queueId,
+      endTime: null,
+    },
+    defaults: {
+      startTime: new Date(),
+    },
+    include: [User],
+  })
+  if (created) {
+    // We have to redo the query to load the associted user properly
+    const newStaff = await ActiveStaff.findOne({
+      where: {
+        userId,
+        queueId,
+        endTime: null,
+      },
+      include: [User],
+    })
+    res.status(202).json(newStaff)
+  } else {
+    res.status(202).json(staff)
+  }
+})
+
+
+// Removes the specified user from the specified queue
+router.delete('/:queueId/staff/:userId', [
+  requireQueue,
+  requireUser,
+  failIfErrors,
+], async (req, res, _next) => {
+  const { id: userId } = req.user
+  const { id: queueId } = req.queue
+  const staff = await ActiveStaff.find({
+    where: {
+      userId,
+      queueId,
+      endTime: null,
+    },
+  })
+
+  if (staff) {
+    staff.endTime = new Date()
+    await staff.save()
+  }
+
+  res.status(202).send()
 })
 
 
