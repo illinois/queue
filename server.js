@@ -86,7 +86,6 @@ co(function* () {
       const [netid] = email.split('@')
 
       const [user] = await User.findOrCreate({ where: { netid } })
-      req.session.user = user
       res.locals.user = user
       next()
     }
