@@ -21,7 +21,7 @@ import QuestionListContainer from '../containers/QuestionListContainer'
 class Queue extends React.Component {
   static getInitialProps({ query }) {
     return {
-      queueId: query.id,
+      queueId: Number.parseInt(query.id, 10),
     }
   }
 
@@ -40,7 +40,7 @@ class Queue extends React.Component {
         <Container fluid>
           <Row>
             <Col xs={{ size: 12 }} md={{ size: 3 }} className="mb-3 mb-md-0">
-              <StaffSidebar />
+              <StaffSidebar queueId={this.props.queueId} />
             </Col>
             <Col xs={{ size: 12 }} md={{ size: 9 }} className="mb-3">
               <NewQuestionContainer queueId={this.props.queueId} />
@@ -55,7 +55,7 @@ class Queue extends React.Component {
 
 Queue.propTypes = {
   fetchQueue: PropTypes.func.isRequired,
-  queueId: PropTypes.string.isRequired,
+  queueId: PropTypes.number.isRequired,
   dispatch: PropTypes.func.isRequired,
 }
 

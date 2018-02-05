@@ -7,13 +7,18 @@ module.exports = (sequelize, DataTypes) => {
     endTime: DataTypes.DATE,
   }, {
     paranoid: true, // Don't actually delete
+    defaultScope: {
+      attributes: {
+        include: ['courseId', 'createdByUserId'],
+      },
+    },
   })
 
   obj.associate = (models) => {
     models.Queue.belongsTo(models.Course)
     models.Queue.hasMany(models.ActiveStaff)
     models.Queue.hasMany(models.Question)
-    models.Queue.belongsTo(models.User, { as: 'CreatedByUser' })
+    models.Queue.belongsTo(models.User, { as: 'createdByUser' })
   }
 
   return obj

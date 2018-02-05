@@ -124,5 +124,5 @@ export default class NewQuestion extends React.Component {
 
 NewQuestion.propTypes = {
   createQuestion: PropTypes.func.isRequired,
-  queueId: PropTypes.string.isRequired,
+  queueId: PropTypes.number.isRequired,
 }

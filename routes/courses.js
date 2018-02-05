@@ -71,10 +71,10 @@ router.post('/:courseId/staff', [
   const [user] = await User.findOrCreate({ where: { netid } })
   if (name) {
     user.name = name
+    await user.save()
   }
-  user.addStaffAssignment(req.course)
-  const newUser = await user.save()
-  res.status(201).send(newUser)
+  await user.addStaffAssignment(req.course.id)
+  res.status(201).send(user)
 })
 
 // Remove someone from course staff
