@@ -1,3 +1,4 @@
 module.exports = {
-  useFileSystemPublicRoutes: false
+  useFileSystemPublicRoutes: false,
+  assetPrefix: process.env.ASSET_PREFIX || '',
 }
