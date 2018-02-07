@@ -2,6 +2,7 @@ import io from 'socket.io-client'
 import { updateQuestions } from '../actions/question'
 import { updateQueues } from '../actions/queue'
 import { updateActiveStaff } from '../actions/activeStaff'
+import { baseUrl } from '../util'
 
 /* Queue-scoped sockets that receive question updates */
 const handleQuestionsUpdate = (dispatch, queueId, questions) => {
@@ -15,7 +16,7 @@ const handleActiveStaffUpdate = (dispatch, queueId, activeStaff) => {
 const queueSockets = {}
 
 export const connectToQueue = (dispatch, queueId) => {
-  const socket = io('/queue')
+  const socket = io(`${baseUrl}queue`)
   queueSockets[queueId] = socket
   socket.emit('join', { queueId })
   socket.on('questions:update', ({ questions }) => handleQuestionsUpdate(dispatch, queueId, questions))
@@ -38,7 +39,7 @@ const handleQueuesUpdate = (dispatch, courseId, queues) => {
 const courseSockets = {}
 
 export const connectToCourse = (dispatch, courseId) => {
-  const socket = io('/course')
+  const socket = io(`${baseUrl}course`)
   courseSockets[courseId] = socket
   socket.emit('join', { courseId })
   socket.on('queues:update', ({ queues }) => handleQueuesUpdate(dispatch, courseId, queues))
