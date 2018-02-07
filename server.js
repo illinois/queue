@@ -97,13 +97,13 @@ co(function* () {
   })
 
   // API routes
-  app.use('/api/users', require('./routes/users'))
-  app.use('/api/courses', require('./routes/courses'))
-  app.use('/api/queues', require('./routes/queues'))
-  app.use('/api/questions', require('./routes/questions'))
-  app.use('/api/courses/:courseId/queues', require('./routes/queues'))
-  app.use('/api/courses/:courseId/queues/:queueId/questions', require('./routes/questions'))
-  app.use('/api/queues/:queueId/questions', require('./routes/questions'))
+  app.use(`${baseUrl}/api/users`, require('./routes/users'))
+  app.use(`${baseUrl}/api/courses`, require('./routes/courses'))
+  app.use(`${baseUrl}/api/queues`, require('./routes/queues'))
+  app.use(`${baseUrl}/api/questions`, require('./routes/questions'))
+  app.use(`${baseUrl}/api/courses/:courseId/queues`, require('./routes/queues'))
+  app.use(`${baseUrl}/api/courses/:courseId/queues/:queueId/questions`, require('./routes/questions'))
+  app.use(`${baseUrl}/api/queues/:queueId/questions`, require('./routes/questions'))
 
   app.use(handler)
 
