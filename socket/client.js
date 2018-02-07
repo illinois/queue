@@ -4,6 +4,10 @@ import { updateQueues } from '../actions/queue'
 import { updateActiveStaff } from '../actions/activeStaff'
 import { baseUrl } from '../util'
 
+const socketOpts = {
+  path: `${baseUrl}/socket.io`,
+}
+
 /* Queue-scoped sockets that receive question updates */
 const handleQuestionsUpdate = (dispatch, queueId, questions) => {
   dispatch(updateQuestions(queueId, questions))
@@ -16,7 +20,7 @@ const handleActiveStaffUpdate = (dispatch, queueId, activeStaff) => {
 const queueSockets = {}
 
 export const connectToQueue = (dispatch, queueId) => {
-  const socket = io(`${baseUrl}/queue`)
+  const socket = io('/queue', socketOpts)
   queueSockets[queueId] = socket
   socket.emit('join', { queueId })
   socket.on('questions:update', ({ questions }) => handleQuestionsUpdate(dispatch, queueId, questions))
@@ -39,7 +43,7 @@ const handleQueuesUpdate = (dispatch, courseId, queues) => {
 const courseSockets = {}
 
 export const connectToCourse = (dispatch, courseId) => {
-  const socket = io(`${baseUrl}/course`)
+  const socket = io('/course', socketOpts)
   courseSockets[courseId] = socket
   socket.emit('join', { courseId })
   socket.on('queues:update', ({ queues }) => handleQueuesUpdate(dispatch, courseId, queues))
