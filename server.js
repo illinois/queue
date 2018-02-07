@@ -1,7 +1,7 @@
 /* eslint global-require: "off", no-console: "off" */
 const app = require('express')()
 const server = require('http').Server(app)
-const io = require('socket.io')(server)
+const io = require('socket.io')
 const nextJs = require('next')
 const co = require('co')
 const bodyParser = require('body-parser')
@@ -61,7 +61,8 @@ co(function* () {
   })
 
   // Websocket stuff
-  serverSocket(io)
+  const socket = io(server, { path: `${baseUrl}/socket.io` })
+  serverSocket(socket)
 
   // Shibboleth auth
   app.use(async (req, res, next) => {
