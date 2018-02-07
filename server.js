@@ -6,10 +6,12 @@ const nextJs = require('next')
 const co = require('co')
 const bodyParser = require('body-parser')
 const session = require('express-session')
+const rewrite = require('express-urlrewrite')
 
 const routes = require('./routes')
 const { User } = require('./models')
 const serverSocket = require('./socket/server')
+const { baseUrl } = require('./util')
 
 const DEV = process.env.NODE_ENV !== 'production'
 const PORT = process.env.PORT || 3000
@@ -43,6 +45,9 @@ co(function* () {
   // Configure express to expose a REST API
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: false }))
+
+  // Forward next requests to the right URL
+  app.use(rewrite(`${baseUrl}/_next/*`, '/_next/$1'))
 
   // Prettify all json by default
   app.use((req, res, next) => {
