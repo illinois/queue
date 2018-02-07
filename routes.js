@@ -1,9 +1,7 @@
 const routes = require('next-routes')()
 const { baseUrl } = require('./util')
 
-const baseUrl1 = `whoa/`
-
-const withBaseUrl = url => `${baseUrl1}${url}`
+const withBaseUrl = url => `${baseUrl}${url}`
 
 routes
   .add('index', withBaseUrl(''))
