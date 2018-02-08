@@ -1,5 +1,5 @@
 /* eslint-env browser */
 
-module.exports.baseUrl = (typeof window !== 'undefined' && window.API_BASE)
-                      || (typeof process !== 'undefined' && process.env.ASSET_PREFIX)
+module.exports.baseUrl = (typeof window !== 'undefined' && window.BASE_URL)
+                      || (typeof process !== 'undefined' && process.env.BASE_URL)
                       || ''
