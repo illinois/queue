@@ -41,3 +41,6 @@ jspm_packages
 
 # Dev database
 dev.sqlite
+
+# Machine-specific dotenv
+.env
