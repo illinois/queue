@@ -1,6 +1,9 @@
+/* eslint-disable react/no-danger */
 import React from 'react'
 import Document, { Head, Main, NextScript } from 'next/document'
 import flush from 'styled-jsx/server'
+
+import { baseUrl } from '../util'
 
 export default class MyDocument extends Document {
   static getInitialProps({ renderPage }) {
@@ -23,14 +26,13 @@ export default class MyDocument extends Document {
   render() {
     // If we're deployed to anywhere other than the server root, we'll have to
     // store our root path that here so that the client can access it.
-    const apiBase = (process && process.env && process.env.ASSET_PREFIX) || '/'
     const script = {
-      __html: `window.API_BASE = '${apiBase}';`,
+      __html: `window.BASE_URL = '${baseUrl}';`,
     }
     return (
       <html lang="en">
         <Head>
-          <script dangerouslySetInnerHTML={script} />
+          {baseUrl && <script dangerouslySetInnerHTML={script} />}
         </Head>
         <body className="custom_class">
           {this.props.customValue}

@@ -22,3 +22,15 @@ user, and you can add it to course staff, etc. like a normal user.
 
 To test with multiple users at the same time, you can open up multiple browsers, or use
 multiple incognito windows.
+
+### Production config
+Several configuration options are exposed via environment variables:
+
+* `PORT`: controls which port the app will be served from.
+* `BASE_URL`: allows the app to be served from somewhere other than the server
+  root. This affects asset and API routes, websocket endpoints, generated links,
+  and more. Note that for this to work effectively, the app must still receive
+  the base URL as part of the request; this is important if the app is
+  reverse-proxied behind Apache. For instance, if the queue is served from
+  `/my/path/`, then you should run with `BASE_URL=/my/path` (note the lack of
+  trailing slash), and a request for queue 1 should be received as `/my/path/queue/1`.
