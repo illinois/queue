@@ -35,15 +35,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(rewrite(`${baseUrl}/_next/*`, '/_next/$1'))
 
 // Prettify all json by default
-app.use((req, res, next) => {
-  res.json = (body) => {
-    if (!res.get('Content-Type')) {
-      res.set('Content-Type', 'application/json')
-    }
-    res.send(JSON.stringify(body, null, 2))
-  }
-  next()
-})
+app.use(require('./middleware/prettyPrintJson'))
 
 // Shibboleth auth
 app.use(require('./middleware/authn'))
