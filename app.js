@@ -9,6 +9,9 @@ const { baseUrl } = require('./util')
 
 const DEV = process.env.NODE_ENV !== 'production'
 
+// In production, all concepts of "sessions" will be handled by checking the
+// eppn header from Shib. In dev, to support multiple users for testing, we
+// use session middleware.
 if (DEV) {
   app.use(session({
     secret: 'this is not a secret',
