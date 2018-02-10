@@ -8,6 +8,7 @@
     "dev-watch": "nodemon server.js",
     "build": "next build",
     "start": "NODE_ENV=production node server.js",
+    "test": "jest",
     "lint-js": "eslint --ext js ."
   },
   "keywords": [],
@@ -59,7 +60,9 @@
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.5.1",
+    "jest": "^22.2.2",
     "nodemon": "^1.14.12",
-    "sqlite3": "^3.1.13"
+    "sqlite3": "^3.1.13",
+    "supertest": "^3.0.0"
   }
 }

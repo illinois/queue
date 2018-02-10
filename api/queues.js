@@ -19,9 +19,14 @@ const {
   failIfErrors,
 } = require('./util')
 
+const requireAdmin = require('../middleware/requireAdmin')
+const requireCourseStaffForQueue = require('../middleware/requireCourseStaffForQueue')
+
 
 // Get a list of all queues
-router.get('/', async (req, res, _next) => {
+router.get('/', [
+  requireAdmin,
+], async (req, res, _next) => {
   const queues = await Queue.findAll()
   res.json(queues)
 })
@@ -29,6 +34,7 @@ router.get('/', async (req, res, _next) => {
 
 // Create a queue for a course
 router.post('/', [
+  requireCourseStaffForQueue,
   requireCourse,
   check('name').isLength({ min: 1 }),
   check('location').optional({ nullable: true }),
@@ -103,6 +109,7 @@ router.get('/:queueId/staff', [
 
 // Joins the specified user to the specified queue
 router.post('/:queueId/staff/:userId', [
+  requireCourseStaffForQueue,
   requireQueue,
   requireUser,
   failIfErrors,
@@ -139,6 +146,7 @@ router.post('/:queueId/staff/:userId', [
 
 // Removes the specified user from the specified queue
 router.delete('/:queueId/staff/:userId', [
+  requireCourseStaffForQueue,
   requireQueue,
   requireUser,
   failIfErrors,
@@ -164,6 +172,7 @@ router.delete('/:queueId/staff/:userId', [
 
 // Deletes the queue
 router.delete('/:queueId', [
+  requireCourseStaffForQueue,
   requireQueue,
   failIfErrors,
 ], async (req, res, _next) => {

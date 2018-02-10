@@ -1,4 +1,3 @@
-
 {
   "development": {
     "dialect": "sqlite",
@@ -8,7 +7,8 @@
   },
   "test": {
     "dialect": "sqlite",
-    "storage": ":memory:"
+    "storage": ":memory:",
+    "logging": true
   },
   "production": {
     "username": "root",

@@ -17,11 +17,11 @@ import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner'
 import { Link } from '../routes'
 import makeStore from '../redux/makeStore'
 import { fetchCoursesRequest, fetchCourses, createCourse } from '../actions/course'
-import { isUserAdmin } from '../selectors'
 
 import PageWithUser from '../components/PageWithUser'
 import Layout from '../components/Layout'
 import NewCourse from '../components/NewCourse'
+import ShowForAdmin from '../components/ShowForAdmin'
 
 
 class Index extends React.Component {
@@ -72,7 +72,7 @@ class Index extends React.Component {
       courses = (
         <div>
           <ListGroupItem className="text-center text-muted pt-4 pb-4">
-            There aren't any courses yet
+            There aren&apos;t any courses yet
           </ListGroupItem>
         </div>
       )
@@ -92,10 +92,12 @@ class Index extends React.Component {
     )
 
     const createCourseButton = (
-      <ListGroupItem action className="text-muted" onClick={() => this.showCreateCoursePanel()}>
-        <FontAwesomeIcon icon={faPlus} className="mr-2" />
-        Create a course
-      </ListGroupItem>
+      <ShowForAdmin>
+        <ListGroupItem action className="text-muted" onClick={() => this.showCreateCoursePanel()}>
+          <FontAwesomeIcon icon={faPlus} className="mr-2" />
+          Create a course
+        </ListGroupItem>
+      </ShowForAdmin>
     )
 
     return (
@@ -109,7 +111,7 @@ class Index extends React.Component {
             <ListGroup flush>
               {!this.props.isFetching && courses}
               {this.props.isFetching && loadingSpinner}
-              {this.props.isUserAdmin && !this.state.showCreateCoursePanel && createCourseButton}
+              {!this.state.showCreateCoursePanel && createCourseButton}
               {this.state.showCreateCoursePanel && createCoursePanel}
             </ListGroup>
           </Card>
@@ -133,19 +135,16 @@ Index.propTypes = {
   })),
   fetchCourses: PropTypes.func.isRequired,
   createCourse: PropTypes.func.isRequired,
-  isUserAdmin: PropTypes.bool,
 }
 
 Index.defaultProps = {
   isFetching: false,
   courses: [],
-  isUserAdmin: false,
 }
 
 const mapStateToProps = state => ({
   courses: Object.keys(state.courses.courses).sort().map(id => state.courses.courses[id]),
   isFetching: state.courses.isFetching,
-  isUserAdmin: isUserAdmin(state),
 })
 
 const mapDispatchToProps = dispatch => ({
