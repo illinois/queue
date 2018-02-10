@@ -8,6 +8,7 @@ const jsonpatch = require('json-patch')
 
 const { Question } = require('../models/')
 const { requireQueue, requireQuestion, failIfErrors } = require('./util')
+const requireCourseStaffForQueue = require('../middleware/requireCourseStaffForQueue')
 
 
 async function modifyBeingAnswered(questionId, answering) {
@@ -85,6 +86,7 @@ router.patch('/:questionId', [
 
 // Mark a question as being answered
 router.post('/:questionId/answering', [
+  requireCourseStaffForQueue,
   requireQuestion,
   failIfErrors,
 ], async (req, res, _next) => {
@@ -96,6 +98,7 @@ router.post('/:questionId/answering', [
 
 // Mark a question as no longer being answered
 router.delete('/:questionId/answering', [
+  requireCourseStaffForQueue,
   requireQuestion,
   failIfErrors,
 ], async (req, res, _next) => {
@@ -107,6 +110,7 @@ router.delete('/:questionId/answering', [
 
 // Mark the question as answered
 router.post('/:questionId/answered', [
+  requireCourseStaffForQueue,
   requireQuestion,
   check('preparedness').isIn(['bad', 'average', 'well']),
   check('comments').optional({ nullable: true }).trim(),

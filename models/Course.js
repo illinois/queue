@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
 
   obj.associate = (models) => {
     models.Course.hasMany(models.Queue)
-    models.Course.belongsToMany(models.User, { as: 'staff', through: 'staffAssignment' })
+    models.Course.belongsToMany(models.User, { as: 'staff', through: models.CourseStaff })
   }
 
   return obj

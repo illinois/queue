@@ -10,8 +10,12 @@ const {
   Course,
 } = require('../models')
 
+const requireAdmin = require('../middleware/requireAdmin')
+
 // Get list of all users
-router.get('/', (req, res, _next) => User.findAll().then(users => res.send(users)))
+router.get('/', [
+  requireAdmin,
+], (req, res, _next) => User.findAll().then(users => res.send(users)))
 
 // Get the currently authenticated user
 router.get('/me', async (req, res, _next) => {
@@ -33,6 +37,7 @@ router.get('/me', async (req, res, _next) => {
 
 // Get a specific user
 router.get('/:userId', [
+  requireAdmin,
   requireUser,
   failIfErrors,
 ], (req, res, _next) => {

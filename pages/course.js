@@ -27,6 +27,7 @@ import PageWithUser from '../components/PageWithUser'
 import Layout from '../components/Layout'
 import NewQueue from '../components/NewQueue'
 import Queue from '../components/Queue'
+import ShowForCourseStaff from '../components/ShowForCourseStaff'
 
 import { connectToCourse, disconnectFromCourse } from '../socket/client'
 
@@ -36,7 +37,7 @@ class Course extends React.Component {
       store.dispatch(fetchCourseRequest())
     }
     return {
-      courseId: query.id,
+      courseId: Number.parseInt(query.id, 10),
       isFetching: isServer,
     }
   }
@@ -106,7 +107,7 @@ class Course extends React.Component {
         queues = (
           <div>
             <ListGroupItem className="text-center text-muted pt-4 pb-4">
-              There aren't any queues right now
+              There aren&apos;t any queues right now
             </ListGroupItem>
           </div>
         )
@@ -120,10 +121,12 @@ class Course extends React.Component {
       )
 
       const createQueueButton = (
-        <ListGroupItem action className="text-muted" onClick={() => this.showCreateQueuePanel()}>
-          <FontAwesomeIcon icon={faPlus} className="mr-2" />
-          Create a queue
-        </ListGroupItem>
+        <ShowForCourseStaff courseId={this.props.courseId}>
+          <ListGroupItem action className="text-muted" onClick={() => this.showCreateQueuePanel()}>
+            <FontAwesomeIcon icon={faPlus} className="mr-2" />
+            Create a queue
+          </ListGroupItem>
+        </ShowForCourseStaff>
       )
 
       content = (
@@ -132,11 +135,11 @@ class Course extends React.Component {
             <CardTitle tag="h4" className="mb-0">
               {this.props.course && this.props.course.name} Queues
             </CardTitle>
-            {(this.props.isUserCourseStaff || this.props.isUserAdmin) &&
+            <ShowForCourseStaff courseId={this.props.courseId}>
               <Link route="courseStaff" params={{ id: this.props.courseId }} passHref>
                 <Button tag="a" color="light" size="sm" className="ml-auto">Manage Staff</Button>
               </Link>
-            }
+            </ShowForCourseStaff>
           </CardHeader>
           <ListGroup flush>
             <FlipMove
@@ -146,7 +149,7 @@ class Course extends React.Component {
             >
               {queues}
             </FlipMove>
-            {this.props.isUserCourseStaff && !this.state.showCreateQueuePanel && createQueueButton}
+            {!this.state.showCreateQueuePanel && createQueueButton}
             {this.state.showCreateQueuePanel && createQueuePanel}
           </ListGroup>
         </Card>
@@ -171,7 +174,7 @@ class Course extends React.Component {
 }
 
 Course.propTypes = {
-  courseId: PropTypes.string.isRequired,
+  courseId: PropTypes.number.isRequired,
   course: PropTypes.shape({
     name: PropTypes.string,
     queues: PropTypes.arrayOf(PropTypes.number),
@@ -185,7 +188,6 @@ Course.propTypes = {
   fetchCourse: PropTypes.func.isRequired,
   deleteQueue: PropTypes.func.isRequired,
   isUserCourseStaff: PropTypes.bool,
-  isUserAdmin: PropTypes.bool,
   dispatch: PropTypes.func.isRequired,
 }
 
@@ -194,7 +196,6 @@ Course.defaultProps = {
   queues: null,
   isFetching: true,
   isUserCourseStaff: false,
-  isUserAdmin: false,
 }
 
 const mapStateToProps = (state, ownProps) => {
@@ -204,7 +205,6 @@ const mapStateToProps = (state, ownProps) => {
     queues: state.queues.queues,
     isFetching: state.courses.isFetching || state.queues.isFetching,
     isUserCourseStaff: isUserCourseStaff(state, ownProps),
-    isUserAdmin: isUserAdmin(state),
   }
 }
 

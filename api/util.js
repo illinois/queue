@@ -17,7 +17,6 @@ const requireModel = (model, modelName) => (requestId, { req }) =>
     return true
   })
 
-
 module.exports = {
   failIfErrors(req, res, next) {
     const errors = validationResult(req)
@@ -29,8 +28,8 @@ module.exports = {
     next()
   },
 
-  requireCourse: check('courseId').custom(requireModel(Course, 'course')),
-  requireQueue: check('queueId').custom(requireModel(Queue, 'queue')),
-  requireQuestion: check('questionId').custom(requireModel(Question, 'question')),
-  requireUser: check('userId').custom(requireModel(User, 'user')),
+  requireCourse: check('courseId').toInt().custom(requireModel(Course, 'course')),
+  requireQueue: check('queueId').toInt().custom(requireModel(Queue, 'queue')),
+  requireQuestion: check('questionId').toInt().custom(requireModel(Question, 'question')),
+  requireUser: check('userId').toInt().custom(requireModel(User, 'user')),
 }

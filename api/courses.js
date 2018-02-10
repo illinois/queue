@@ -15,6 +15,8 @@ const {
   requireUser,
   failIfErrors,
 } = require('./util')
+const requireAdmin = require('../middleware/requireAdmin')
+const requireCourseStaff = require('../middleware/requireCourseStaff')
 
 
 // Get all courses
@@ -29,19 +31,24 @@ router.get('/:courseId', [
   failIfErrors,
 ], async (req, res, _next) => {
   const { courseId } = matchedData(req)
+  const { locals: { userAuthz } } = res
+
+  const includes = [{ model: Queue }]
+  // Only include list of course staff for other course staff or admins
+  if (userAuthz.isAdmin || userAuthz.staffedCourseIds.indexOf(courseId) !== -1) {
+    includes.push({
+      model: User,
+      as: 'staff',
+      attributes: ['id', 'netid', 'name'],
+      through: {
+        attributes: [],
+      },
+    })
+  }
+
   const course = await Course.findOne({
     where: { id: courseId },
-    include: [
-      { model: Queue },
-      {
-        model: User,
-        as: 'staff',
-        attributes: ['id', 'netid', 'name'],
-        through: {
-          attributes: [],
-        },
-      },
-    ],
+    include: includes,
   })
   res.send(course)
 })
@@ -49,6 +56,7 @@ router.get('/:courseId', [
 
 // Create a new course
 router.post('/', [
+  requireAdmin,
   check('name', 'name must be specified').exists(),
   failIfErrors,
 ], async (req, res, _next) => {
@@ -62,6 +70,7 @@ router.post('/', [
 
 // Add someone to course staff
 router.post('/:courseId/staff', [
+  requireCourseStaff,
   requireCourse,
   check('netid', 'netid must be specified').exists(),
   check('name').optional(),
@@ -79,6 +88,7 @@ router.post('/:courseId/staff', [
 
 // Remove someone from course staff
 router.delete('/:courseId/staff/:userId', [
+  requireCourseStaff,
   requireCourse,
   requireUser,
   failIfErrors,

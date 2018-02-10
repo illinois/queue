@@ -96,7 +96,7 @@ class CourseStaff extends React.Component {
         users = (
           <div>
             <ListGroupItem className="text-center text-muted pt-4 pb-4">
-              This course doesn't have any staff yet
+              This course doesn&apos;t have any staff yet
             </ListGroupItem>
           </div>
         )
@@ -155,6 +155,10 @@ class CourseStaff extends React.Component {
   }
 }
 
+CourseStaff.defaultProps = {
+  course: null,
+}
+
 CourseStaff.propTypes = {
   courseId: PropTypes.number.isRequired,
   isFetching: PropTypes.bool.isRequired,
@@ -164,7 +168,7 @@ CourseStaff.propTypes = {
   course: PropTypes.shape({
     name: PropTypes.string,
     staff: PropTypes.arrayOf(PropTypes.number),
-  }).isRequired,
+  }),
   users: PropTypes.objectOf(PropTypes.shape({
     id: PropTypes.number,
     netid: PropTypes.string,
@@ -172,14 +176,11 @@ CourseStaff.propTypes = {
   })).isRequired,
 }
 
-const mapStateToProps = (state, { courseId }) => {
-  const course = state.courses.courses[courseId]
-  return {
-    course,
-    users: state.users.users,
-    isFetching: state.courses.isFetching || state.users.isFetching,
-  }
-}
+const mapStateToProps = (state, { courseId }) => ({
+  course: state.courses.courses[courseId],
+  users: state.users.users,
+  isFetching: state.courses.isFetching || state.users.isFetching,
+})
 
 const mapDispatchToProps = dispatch => ({
   fetchCourse: courseId => dispatch(fetchCourse(courseId)),
@@ -188,4 +189,5 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 })
 
-export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(PageWithUser(CourseStaff))
+const permissions = { requireCourseStaff: true }
+export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(PageWithUser(CourseStaff, permissions))

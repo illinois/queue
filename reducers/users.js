@@ -31,13 +31,20 @@ const users = (state = defaultState, action) => {
         isFetching: false,
       }
     case FETCH_COURSE.SUCCESS:
+      // Course requests won't contain users for non-course staff
+      if (action.course.staff) {
+        return {
+          ...state,
+          isFetching: false,
+          users: {
+            ...state.users,
+            ...reduceUsers(action.course.staff),
+          },
+        }
+      }
       return {
         ...state,
         isFetching: false,
-        users: {
-          ...state.users,
-          ...reduceUsers(action.course.staff),
-        },
       }
     case ADD_COURSE_STAFF.SUCCESS:
       return {
