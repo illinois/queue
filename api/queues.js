@@ -21,7 +21,7 @@ const {
 
 const requireAdmin = require('../middleware/requireAdmin')
 const requireCourseStaffForQueue = require('../middleware/requireCourseStaffForQueue')
-
+const requireCourseStaff = require('../middleware/requireCourseStaff')
 
 // Get a list of all queues
 router.get('/', [
@@ -34,7 +34,7 @@ router.get('/', [
 
 // Create a queue for a course
 router.post('/', [
-  requireCourseStaffForQueue,
+  requireCourseStaff,
   requireCourse,
   check('name').isLength({ min: 1 }),
   check('location').optional({ nullable: true }),
