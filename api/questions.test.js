@@ -89,11 +89,6 @@ describe('Questions API', () => {
 
     })
 
-    test('fails if question does not exist with queue', async () => {
-      const res = await request(app).get('/api/queues/2/questions/1')
-      expect(res.statusCode).toBe(404)
-    })
-
   })
 
   describe('POST /api/queues/:queueId/questions/:questionId/answering', () => {
