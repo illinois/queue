@@ -30,7 +30,7 @@ router.get('/:courseId', [
   requireCourse,
   failIfErrors,
 ], async (req, res, _next) => {
-  const { courseId } = matchedData(req)
+  const { id: courseId } = res.locals.course
   const { locals: { userAuthz } } = res
 
   const includes = [{ model: Queue }]
@@ -82,7 +82,7 @@ router.post('/:courseId/staff', [
     user.name = name
     await user.save()
   }
-  await user.addStaffAssignment(req.course.id)
+  await user.addStaffAssignment(res.locals.course.id)
   res.status(201).send(user)
 })
 
@@ -93,10 +93,10 @@ router.delete('/:courseId/staff/:userId', [
   requireUser,
   failIfErrors,
 ], async (req, res, _next) => {
-  const { user, course } = req
-  const oldStaffAssignments = user.getStaffAssignments()
-  user.setStaffAssignments(oldStaffAssignments.filter(c => c.id !== course.id))
-  await user.save()
+  const { userAuthn, course } = res.locals
+  const oldStaffAssignments = userAuthn.getStaffAssignments()
+  userAuthn.setStaffAssignments(oldStaffAssignments.filter(c => c.id !== course.id))
+  await userAuthn.save()
   res.status(202).send()
 })
 

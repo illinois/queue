@@ -39,7 +39,7 @@ describe('Users API', () => {
     test('returns all users for admin', async () => {
       const res = await request(app).get('/api/users?forceuser=admin')
       expect(res.statusCode).toBe(200)
-      expect(res.body).toHaveLength(4)
+      expect(res.body).toHaveLength(5)
     })
 
     test('returns 403 for 225staff', async () => {
