@@ -25,6 +25,7 @@ module.exports.createTestUsers = async () => {
     { netid: '225staff', isAdmin: false },
     { netid: '241staff', isAdmin: false },
     { netid: 'student', isAdmin: false },
+    { netid: 'otherstudent', isAdmin: false },
   ])
 }
 
@@ -42,6 +43,25 @@ module.exports.createTestQueues = async () => {
   ])
 }
 
+module.exports.createTestQuestions = async () => {
+  await models.Question.bulkCreate([
+    {
+      queueId: 1,
+      name: 'Nathan',
+      location: 'Siebel',
+      topic: 'Queue',
+      askedById: 1,
+    },
+    {
+      queueId: 1,
+      name: 'Jordi',
+      location: 'ECEB',
+      topic: 'Canada',
+      askedById: 4,
+    },
+  ])
+}
+
 module.exports.populateTestDb = async () => {
   await module.exports.createTestUsers()
   await module.exports.createTestCourses()
@@ -53,4 +73,5 @@ module.exports.populateTestDb = async () => {
   await staff241.addStaffAssignment(2)
 
   await module.exports.createTestQueues()
+  await module.exports.createTestQuestions()
 }
