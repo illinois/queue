@@ -186,7 +186,7 @@ describe('Queues API', () => {
   })
 
   describe('DELETE /api/queues/1/staff', () => {
-    test('should succeed for course staff', async () => {
+   test('should succeed for course staff', async () => {
       const res = await request(app).post('/api/queues/1/staff/2?forceuser=225staff')
       expect(res.statusCode).toBe(202)
       const res1 = await request(app).delete('/api/queues/1/staff/2?forceuser=225staff')
