@@ -5,8 +5,7 @@ const testutil = require('../testutil')
 
 beforeEach(async () => {
   await testutil.setupTestDb()
-  await testutil.createTestUsers()
-  await testutil.createTestCourses()
+  await testutil.populateTestDb()
 })
 afterEach(() => testutil.destroyTestDb())
 
@@ -41,6 +40,7 @@ describe('Courses API', () => {
       const course = { name: 'CS423' }
       const res = await request(app).post('/api/courses?forceuser=student').send(course)
       expect(res.statusCode).toBe(403)
+      expect(res.body).toEqual({})
     })
   })
 })
