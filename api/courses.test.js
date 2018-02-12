@@ -23,9 +23,14 @@ describe('Courses API', () => {
     expect(res.statusCode).toBe(200)
     expect(res.body.id).toBe(2)
     expect(res.body.name).toBe('CS241')
-    // TODO verify these properties are populated correctly
     expect(res.body).toHaveProperty('queues')
+    expect(res.body.queues).toHaveLength(1)
+    expect(res.body.queues[0].id).toBe(2)
+    expect(res.body.queues[0].location).toBe('There')
     expect(res.body).toHaveProperty('staff')
+    expect(res.body.staff).toHaveLength(1)
+    expect(res.body.staff[0].netid).toBe('241staff')
+    expect(res.body.staff[0].id).toBe(3)
   })
 
   describe('POST /api/courses', () => {
@@ -40,7 +45,6 @@ describe('Courses API', () => {
       const course = { name: 'CS423' }
       const res = await request(app).post('/api/courses?forceuser=student').send(course)
       expect(res.statusCode).toBe(403)
-      expect(res.body).toEqual({})
     })
   })
 })
