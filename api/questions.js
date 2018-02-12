@@ -103,7 +103,7 @@ router.delete('/:questionId/answering', [
   failIfErrors,
 ], async (req, res, _next) => {
   const { questionId } = matchedData(req)
-  const question = await modifyBeingAnswered(questionId, true)
+  const question = await modifyBeingAnswered(questionId, false)
   res.send(question)
 })
 
@@ -123,6 +123,8 @@ router.post('/:questionId/answered', [
   question.dequeueTime = new Date()
   question.preparedness = data.preparedness
   question.comments = data.comments
+  question.answeredById = res.locals.user.id
+
   const updatedQuestion = await question.save()
   res.send(updatedQuestion)
 })
@@ -138,6 +140,7 @@ router.delete('/:questionId', [
   const { question } = req
   await question.update({
     dequeueTime: new Date(),
+    deletedAt: new Date(),
   })
   res.status(202).send()
 })

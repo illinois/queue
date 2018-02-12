@@ -42,6 +42,13 @@ module.exports.createTestQueues = async () => {
   ])
 }
 
+module.exports.createTestQuestions = async () => {
+  await models.Question.bulkCreate([
+    { name: '225 test student', location: 'Here', topic: 'question', courseId: 1, queueId: 1, askedById: 4},
+    { name: '241 test student', location: 'There', topic: 'question',  courseId: 2, queueId: 2, askedById: 4},
+  ])
+}
+
 module.exports.populateTestDb = async () => {
   await module.exports.createTestUsers()
   await module.exports.createTestCourses()
@@ -53,4 +60,5 @@ module.exports.populateTestDb = async () => {
   await staff241.addStaffAssignment(2)
 
   await module.exports.createTestQueues()
+  await module.exports.createTestQuestions()
 }
