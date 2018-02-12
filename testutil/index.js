@@ -25,6 +25,7 @@ module.exports.createTestUsers = async () => {
     { netid: '225staff', isAdmin: false },
     { netid: '241staff', isAdmin: false },
     { netid: 'student', isAdmin: false },
+    { netid: 'otherstudent', isAdmin: false },
   ])
 }
 
@@ -44,8 +45,20 @@ module.exports.createTestQueues = async () => {
 
 module.exports.createTestQuestions = async () => {
   await models.Question.bulkCreate([
-    { name: '225 test student', location: 'Here', topic: 'question', courseId: 1, queueId: 1, askedById: 4},
-    { name: '241 test student', location: 'There', topic: 'question',  courseId: 2, queueId: 2, askedById: 4},
+    {
+      queueId: 1,
+      name: 'Nathan',
+      location: 'Siebel',
+      topic: 'Queue',
+      askedById: 1,
+    },
+    {
+      queueId: 1,
+      name: 'Jordi',
+      location: 'ECEB',
+      topic: 'Canada',
+      askedById: 4,
+    },
   ])
 }
 

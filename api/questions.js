@@ -4,9 +4,8 @@ const router = require('express').Router({
 
 const { check } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
-const jsonpatch = require('json-patch')
 
-const { Question } = require('../models/')
+const { Course, Queue, Question } = require('../models/')
 const { requireQueue, requireQuestion, failIfErrors } = require('./util')
 const requireCourseStaffForQueue = require('../middleware/requireCourseStaffForQueue')
 
@@ -32,14 +31,15 @@ router.post('/', [
   failIfErrors,
 ], (req, res, _next) => {
   const data = matchedData(req)
+  const { id: queueId } = res.locals.queue
 
   const question = Question.build({
     name: data.name,
     location: data.location,
     topic: data.topic,
     enqueueTime: new Date(),
-    queueId: data.queueId,
-    askedById: res.locals.user.id,
+    queueId,
+    askedById: res.locals.userAuthn.id,
   })
 
   question.save().then((newQuestion) => {
@@ -52,10 +52,10 @@ router.get('/', [
   requireQueue,
   failIfErrors,
 ], async (req, res, _next) => {
-  const data = matchedData(req)
+  const { id: queueId } = res.locals.queue
   const questions = await Question.findAll({
     where: {
-      queueId: data.queueId,
+      queueId,
       dequeueTime: null,
     },
     order: [
@@ -69,18 +69,7 @@ router.get('/:questionId', [
   requireQuestion,
   failIfErrors,
 ], (req, res, _next) => {
-  res.send(req.question)
-})
-
-
-// Update a particular question
-router.patch('/:questionId', [
-  requireQuestion,
-  failIfErrors,
-], async (req, res, _next) => {
-  const { question } = req
-  await jsonpatch.apply(question, req.body).save()
-  res.status(204).send()
+  res.send(res.locals.question)
 })
 
 
@@ -90,7 +79,7 @@ router.post('/:questionId/answering', [
   requireQuestion,
   failIfErrors,
 ], async (req, res, _next) => {
-  const { questionId } = matchedData(req)
+  const { id: questionId } = res.locals.question
   const question = await modifyBeingAnswered(questionId, true)
   res.send(question)
 })
@@ -102,7 +91,7 @@ router.delete('/:questionId/answering', [
   requireQuestion,
   failIfErrors,
 ], async (req, res, _next) => {
-  const { questionId } = matchedData(req)
+  const { id: questionId } = res.locals.question
   const question = await modifyBeingAnswered(questionId, false)
   res.send(question)
 })
@@ -118,7 +107,7 @@ router.post('/:questionId/answered', [
 ], async (req, res, _next) => {
   const data = matchedData(req)
 
-  const { question } = req
+  const { question } = res.locals
   question.answerFinishTime = new Date()
   question.dequeueTime = new Date()
   question.preparedness = data.preparedness
@@ -137,12 +126,28 @@ router.delete('/:questionId', [
   requireQuestion,
   failIfErrors,
 ], async (req, res, _next) => {
-  const { question } = req
-  await question.update({
-    dequeueTime: new Date(),
-    deletedAt: new Date(),
+  const { userAuthn, userAuthz, question } = res.locals
+  const { queueId } = question
+
+  const course = await Course.findOne({
+    attributes: ['id'],
+    include: [{
+      model: Queue,
+      attributes: [],
+      where: { id: queueId },
+    }],
+    raw: true,
   })
-  res.status(202).send()
+
+  if (question.askedById === userAuthn.id || userAuthz.staffedCourseIds.indexOf(course.id) !== -1) {
+    await question.update({
+      dequeueTime: new Date(),
+      deletedAt: new Date(),
+    })
+    res.status(204).send()
+  } else {
+    res.status(403).send()
+  }
 })
 
 module.exports = router

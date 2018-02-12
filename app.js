@@ -15,6 +15,8 @@ const DEV = process.env.NODE_ENV !== 'production'
 if (DEV) {
   app.use(session({
     secret: 'this is not a secret',
+    resave: false,
+    saveUninitialized: true,
   }))
   app.use(async (req, res, next) => {
     if (req.query.forceuser) {

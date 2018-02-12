@@ -5,11 +5,21 @@ const Sequelize = require('sequelize')
 const env = process.env.NODE_ENV || 'development'
 const config = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'config', 'config.json')))[env]
 
+const sequelizeConfig = {
+  operatorsAliases: Sequelize.Op,
+}
+
 let sequelize
 if (process.env.DATABASE_URL) {
-  sequelize = new Sequelize(process.env.DATABASE_URL, config)
+  sequelize = new Sequelize(process.env.DATABASE_URL, {
+    ...config,
+    ...sequelizeConfig,
+  })
 } else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config)
+  sequelize = new Sequelize(config.database, config.username, config.password, {
+    ...config,
+    ...sequelizeConfig,
+  })
 }
 
 const models = {}

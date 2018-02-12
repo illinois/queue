@@ -19,7 +19,7 @@ router.get('/', [
 
 // Get the currently authenticated user
 router.get('/me', async (req, res, _next) => {
-  const { id } = res.locals.user
+  const { id } = res.locals.userAuthn
   const user = await User.findOne({
     where: { id },
     include: [
@@ -41,7 +41,7 @@ router.get('/:userId', [
   requireUser,
   failIfErrors,
 ], (req, res, _next) => {
-  res.send(req.user)
+  res.send(res.locals.user)
 })
 
 module.exports = router

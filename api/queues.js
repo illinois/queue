@@ -40,13 +40,14 @@ router.post('/', [
   check('location').optional({ nullable: true }),
   failIfErrors,
 ], (req, res, _next) => {
+  const { id: courseId } = res.locals.course
   const data = matchedData(req)
 
   const queue = Queue.build({
     name: data.name,
     location: data.location,
-    courseId: data.courseId,
-    createdByUserId: res.locals.user.id,
+    courseId,
+    createdByUserId: res.locals.userAuthn.id,
   })
 
   queue.save().then(newQueue => res.status(201).json(newQueue))
@@ -58,17 +59,17 @@ router.get('/:queueId', [
   requireQueue,
   failIfErrors,
 ], async (req, res, _next) => {
-  const data = matchedData(req)
+  const { id: queueId } = res.locals.queue
 
   const queue = await Queue.findOne({
     where: {
-      id: data.queueId,
+      id: queueId,
     },
     include: [
       {
         model: ActiveStaff,
         where: {
-          queueId: data.queueId,
+          queueId,
           endTime: null,
         },
         required: false,
@@ -95,7 +96,7 @@ router.get('/:queueId/staff', [
   requireQueue,
   failIfErrors,
 ], async (req, res, _next) => {
-  const { queue } = req
+  const { queue } = res.locals
   const staff = await ActiveStaff.findAll({
     where: {
       endTime: null,
@@ -114,8 +115,8 @@ router.post('/:queueId/staff/:userId', [
   requireUser,
   failIfErrors,
 ], async (req, res, _next) => {
-  const { id: userId } = req.user
-  const { id: queueId } = req.queue
+  const { id: userId } = res.locals.userAuthn
+  const { id: queueId } = res.locals.queue
   const [staff, created] = await ActiveStaff.findOrCreate({
     where: {
       userId,
@@ -151,8 +152,8 @@ router.delete('/:queueId/staff/:userId', [
   requireUser,
   failIfErrors,
 ], async (req, res, _next) => {
-  const { id: userId } = req.user
-  const { id: queueId } = req.queue
+  const { id: userId } = res.locals.userAuthn
+  const { id: queueId } = res.locals.queue
   const staff = await ActiveStaff.find({
     where: {
       userId,
