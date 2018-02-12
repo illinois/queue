@@ -1,4 +1,5 @@
 /* eslint-env jest */
+
 const request = require('supertest')
 const app = require('../app')
 const testutil = require('../testutil')
@@ -7,10 +8,7 @@ beforeEach(async () => {
   await testutil.setupTestDb()
   await testutil.populateTestDb()
 })
-
-afterEach(async () => {
-  await testutil.destroyTestDb()
-})
+afterEach(() => testutil.destroyTestDb())
 
 describe('Questions API', () => {
   describe('POST /api/queues/:queueId/questions', () => {
@@ -59,12 +57,52 @@ describe('Questions API', () => {
       const res = await request(app).get('/api/queues/50/questions')
       expect(res.statusCode).toBe(404)
     })
+
+    test('succeeds with valid response for non admin', async () => {
+      const res = await request(app).get('/api/queues/1/questions?forceuser=student')
+      expect(res.statusCode).toBe(200)
+      expect(res.body).toHaveLength(2)
+      // Ensure the questions are ordered correctly
+      expect(res.body[0].id).toBe(1)
+      expect(res.body[1].id).toBe(2)
+    })
+
+  })
+
+  describe('GET /api/queues/:queueId/questions/:questionId', () => {
+    test('should succeed for admin', async () => {
+      const res = await request(app).get('/api/queues/1/questions/1')
+      expect(res.statusCode).toBe(200)
+      expect(res.body.name).toBe('Nathan')
+      expect(res.body.location).toBe('Siebel')
+      expect(res.body.topic).toBe('Queue')
+      expect(res.body.id).toBe(1)
+    })
+
+    test('should succeed for non admin', async () => {
+      const res = await request(app).get('/api/queues/1/questions/1?forceuser=student')
+      expect(res.statusCode).toBe(200)
+      expect(res.body.name).toBe('Nathan')
+      expect(res.body.location).toBe('Siebel')
+      expect(res.body.topic).toBe('Queue')
+      expect(res.body.id).toBe(1)
+
+    })
+
   })
 
   describe('POST /api/queues/:queueId/questions/:questionId/answering', () => {
-    test('succeeds for course staff', async () => {
-      const res = await request(app).post('/api/queues/1/questions/1/answering')
+
+    test('succeeds for admin', async () => {
+      const res = await request(app).post('/api/queues/1/questions/1/answering?forceuser=admin')
       expect(res.statusCode).toBe(200)
+      expect(res.body.beingAnswered).toBe(true)
+    })
+
+    test('succeeds for course staff', async () => {
+      const res = await request(app).post('/api/queues/1/questions/1/answering?forceuser=225staff')
+      expect(res.statusCode).toBe(200)
+      expect(res.body.beingAnswered).toBe(true)
     })
 
     test('fails for student', async () => {
@@ -74,9 +112,17 @@ describe('Questions API', () => {
   })
 
   describe('DELETE /api/queues/:queueId/questions/:questionId/answering', () => {
-    test('succeeds for course staff', async () => {
-      const res = await request(app).delete('/api/queues/1/questions/1/answering')
+
+    test('succeeds for admin', async () => {
+      const res = await request(app).delete('/api/queues/1/questions/1/answering?forceuser=admin')
       expect(res.statusCode).toBe(200)
+      expect(res.body.beingAnswered).toBe(false)
+    })
+
+    test('succeeds for course staff', async () => {
+      const res = await request(app).delete('/api/queues/1/questions/1/answering?forceuser=225staff')
+      expect(res.statusCode).toBe(200)
+      expect(res.body.beingAnswered).toBe(false)
     })
 
     test('fails for student', async () => {
@@ -86,13 +132,27 @@ describe('Questions API', () => {
   })
 
   describe('POST /api/queues/:queueId/questions/:questionId/answered', () => {
+
+    test('succeeds for admin', async () => {
+      const feedback = {
+        preparedness: 'well',
+        comments: 'Nice Good Job A+',
+      }
+      const res = await request(app).post('/api/queues/1/questions/1/answered?forceuser=admin').send(feedback)
+      expect(res.statusCode).toBe(200)
+      expect(res.body.beingAnswered).toBe(false)
+      expect(res.body.answeredById).toBe(1)
+    })
+
     test('succeeds for course staff', async () => {
       const feedback = {
         preparedness: 'well',
         comments: 'Nice Good Job A+',
       }
-      const res = await request(app).post('/api/queues/1/questions/1/answered').send(feedback)
+      const res = await request(app).post('/api/queues/1/questions/1/answered?forceuser=225staff').send(feedback)
       expect(res.statusCode).toBe(200)
+      expect(res.body.beingAnswered).toBe(false)
+      expect(res.body.answeredById).toBe(2)
     })
 
     test('fails if preparedness is missing', async () => {
@@ -125,7 +185,7 @@ describe('Questions API', () => {
       expect(res.statusCode).toBe(204)
     })
 
-    test('succeeds for course staff of another course', async () => {
+    test('fails for course staff of another course', async () => {
       const res = await request(app).delete('/api/queues/2/questions/1?forceuser=241staff')
       expect(res.statusCode).toBe(403)
     })

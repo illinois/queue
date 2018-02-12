@@ -92,7 +92,7 @@ router.delete('/:questionId/answering', [
   failIfErrors,
 ], async (req, res, _next) => {
   const { id: questionId } = res.locals.question
-  const question = await modifyBeingAnswered(questionId, true)
+  const question = await modifyBeingAnswered(questionId, false)
   res.send(question)
 })
 
@@ -112,6 +112,8 @@ router.post('/:questionId/answered', [
   question.dequeueTime = new Date()
   question.preparedness = data.preparedness
   question.comments = data.comments
+  question.answeredById = res.locals.user.id
+
   const updatedQuestion = await question.save()
   res.send(updatedQuestion)
 })
@@ -140,6 +142,7 @@ router.delete('/:questionId', [
   if (question.askedById === userAuthn.id || userAuthz.staffedCourseIds.indexOf(course.id) !== -1) {
     await question.update({
       dequeueTime: new Date(),
+      deletedAt: new Date(),
     })
     res.status(204).send()
   } else {
