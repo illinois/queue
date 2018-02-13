@@ -7,7 +7,7 @@ const { matchedData } = require('express-validator/filter')
 
 const { Course, Queue, Question } = require('../models/')
 const { requireQueue, requireQuestion, failIfErrors } = require('./util')
-const requireCourseStaffForQueue = require('../middleware/requireCourseStaffForQueue')
+const requireCourseStaffForQueueForQuestion = require('../middleware/requireCourseStaffForQueueForQuestion')
 
 
 async function modifyBeingAnswered(questionId, answering) {
@@ -75,7 +75,7 @@ router.get('/:questionId', [
 
 // Mark a question as being answered
 router.post('/:questionId/answering', [
-  requireCourseStaffForQueue,
+  requireCourseStaffForQueueForQuestion,
   requireQuestion,
   failIfErrors,
 ], async (req, res, _next) => {
@@ -87,7 +87,7 @@ router.post('/:questionId/answering', [
 
 // Mark a question as no longer being answered
 router.delete('/:questionId/answering', [
-  requireCourseStaffForQueue,
+  requireCourseStaffForQueueForQuestion,
   requireQuestion,
   failIfErrors,
 ], async (req, res, _next) => {
@@ -99,7 +99,7 @@ router.delete('/:questionId/answering', [
 
 // Mark the question as answered
 router.post('/:questionId/answered', [
-  requireCourseStaffForQueue,
+  requireCourseStaffForQueueForQuestion,
   requireQuestion,
   check('preparedness').isIn(['bad', 'average', 'well']),
   check('comments').optional({ nullable: true }).trim(),
@@ -112,7 +112,7 @@ router.post('/:questionId/answered', [
   question.dequeueTime = new Date()
   question.preparedness = data.preparedness
   question.comments = data.comments
-  question.answeredById = res.locals.user.id
+  question.answeredById = res.locals.userAuthn.id
 
   const updatedQuestion = await question.save()
   res.send(updatedQuestion)

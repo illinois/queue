@@ -1,17 +1,21 @@
-const { Course, Queue } = require('../models')
+const { Course, Queue, Question } = require('../models')
 
 module.exports = async (req, res, next) => {
-  if (res.locals.userAuthz.isAdmin) {
-    // Admins can do anything course staff can!
-    next()
-  } else if (!req.params.queueId) {
+  if (!req.params.questionId) {
     res.status(500).send()
   } else {
-    const queueId = Number.parseInt(req.params.queueId, 10)
-    if (Number.isNaN(queueId)) {
+    const questionId = Number.parseInt(req.params.questionId, 10)
+    if (Number.isNaN(questionId)) {
       res.status(500).send()
       return
     }
+
+    const question = await Question.findById(questionId)
+    if (!question) {
+      res.status(404).send()
+      return
+    }
+    const { queueId } = question
 
     const course = await Course.findOne({
       attributes: ['id'],
@@ -24,9 +28,9 @@ module.exports = async (req, res, next) => {
     })
 
     if (!course) {
-      // Let's 404?
       res.status(404).send()
     } else if (res.locals.userAuthz.isAdmin) {
+      // Admins can do anything course staff can!
       next()
     } else if (res.locals.userAuthz.staffedCourseIds.indexOf(course.id) === -1) {
       res.status(403).send()
