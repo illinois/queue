@@ -130,7 +130,7 @@ describe('Questions API', () => {
   describe('POST /api/queues/:queueId/questions/:questionId/answered', () => {
     test('succeeds for admin', async () => {
       const feedback = {
-        preparedness: 'well',
+        preparedness: 'good',
         comments: 'Nice Good Job A+',
       }
       const res = await request(app).post('/api/queues/1/questions/1/answered?forceuser=admin').send(feedback)
@@ -141,7 +141,7 @@ describe('Questions API', () => {
 
     test('succeeds for course staff', async () => {
       const feedback = {
-        preparedness: 'well',
+        preparedness: 'bad',
         comments: 'Nice Good Job A+',
       }
       const res = await request(app).post('/api/queues/1/questions/1/answered?forceuser=225staff').send(feedback)
@@ -152,6 +152,15 @@ describe('Questions API', () => {
 
     test('fails if preparedness is missing', async () => {
       const feedback = {
+        comments: 'Nice Good Job A+',
+      }
+      const res = await request(app).post('/api/queues/1/questions/1/answered').send(feedback)
+      expect(res.statusCode).toBe(422)
+    })
+
+    test('fails if preparedness is invalid', async () => {
+      const feedback = {
+        preparedness: 'idk bruh',
         comments: 'Nice Good Job A+',
       }
       const res = await request(app).post('/api/queues/1/questions/1/answered').send(feedback)
