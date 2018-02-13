@@ -46,7 +46,7 @@ module.exports = {
 
   requireCourse: requireModel(Course, 'course', 'courseId'),
   requireQueue: requireModel(Queue, 'queue', 'queueId'),
-  requireQuestion: requireModel(Question, 'question', 'queueId'),
+  requireQuestion: requireModel(Question, 'question', 'questionId'),
   requireUser: requireModel(User, 'user', 'userId'),
 
   // These have to be exported for testing

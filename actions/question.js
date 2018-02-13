@@ -53,9 +53,9 @@ export function updateQuestionAnswering(questionId, beingAnswered) {
   return (dispatch) => {
     dispatch(updateQuestionAnsweringRequest(questionId, beingAnswered))
 
-    const patch = [{ op: 'add', path: '/beingAnswered', value: beingAnswered }]
+    const action = beingAnswered ? 'post' : 'delete'
 
-    return axios.patch(`/api/questions/${questionId}`, patch).then(
+    return axios[action](`/api/questions/${questionId}/answering`).then(
       () => dispatch(updateQuestionAnsweringSuccess(questionId, beingAnswered)),
       (err) => {
         console.error(err)

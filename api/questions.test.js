@@ -8,6 +8,7 @@ beforeEach(async () => {
   await testutil.setupTestDb()
   await testutil.populateTestDb()
 })
+
 afterEach(() => testutil.destroyTestDb())
 
 describe('Questions API', () => {
@@ -66,7 +67,6 @@ describe('Questions API', () => {
       expect(res.body[0].id).toBe(1)
       expect(res.body[1].id).toBe(2)
     })
-
   })
 
   describe('GET /api/queues/:queueId/questions/:questionId', () => {
@@ -86,13 +86,10 @@ describe('Questions API', () => {
       expect(res.body.location).toBe('Siebel')
       expect(res.body.topic).toBe('Queue')
       expect(res.body.id).toBe(1)
-
     })
-
   })
 
   describe('POST /api/queues/:queueId/questions/:questionId/answering', () => {
-
     test('succeeds for admin', async () => {
       const res = await request(app).post('/api/queues/1/questions/1/answering?forceuser=admin')
       expect(res.statusCode).toBe(200)
@@ -112,7 +109,6 @@ describe('Questions API', () => {
   })
 
   describe('DELETE /api/queues/:queueId/questions/:questionId/answering', () => {
-
     test('succeeds for admin', async () => {
       const res = await request(app).delete('/api/queues/1/questions/1/answering?forceuser=admin')
       expect(res.statusCode).toBe(200)
@@ -132,7 +128,6 @@ describe('Questions API', () => {
   })
 
   describe('POST /api/queues/:queueId/questions/:questionId/answered', () => {
-
     test('succeeds for admin', async () => {
       const feedback = {
         preparedness: 'well',
@@ -176,22 +171,22 @@ describe('Questions API', () => {
 
   describe('DELETE /api/queues/:queueId/questions/:questionId', () => {
     test('succeeds for course staff', async () => {
-      const res = await request(app).delete('/api/queues/2/questions/1?forceuser=225staff')
+      const res = await request(app).delete('/api/queues/2/questions/2?forceuser=225staff')
       expect(res.statusCode).toBe(204)
     })
 
     test('succeeds for the student that asked the question', async () => {
-      const res = await request(app).delete('/api/queues/2/questions/1?forceuser=student')
+      const res = await request(app).delete('/api/queues/2/questions/2?forceuser=student')
       expect(res.statusCode).toBe(204)
     })
 
     test('fails for course staff of another course', async () => {
-      const res = await request(app).delete('/api/queues/2/questions/1?forceuser=241staff')
+      const res = await request(app).delete('/api/queues/2/questions/2?forceuser=241staff')
       expect(res.statusCode).toBe(403)
     })
 
     test('fails for random student', async () => {
-      const res = await request(app).delete('/api/queues/2/questions/1?forceuser=otherstudent')
+      const res = await request(app).delete('/api/queues/2/questions/2?forceuser=otherstudent')
       expect(res.statusCode).toBe(403)
     })
   })
