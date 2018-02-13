@@ -87,10 +87,10 @@ class QuestionFeedback extends React.Component {
                 <ButtonGroup>
                   <Button
                     color="primary"
-                    onClick={() => this.handlePreparednessChange('not')}
-                    active={this.state.preparedness === 'not'}
+                    onClick={() => this.handlePreparednessChange('bad')}
+                    active={this.state.preparedness === 'bad'}
                   >
-                    Not
+                    Bad
                   </Button>
                   <Button
                     color="primary"
@@ -101,10 +101,10 @@ class QuestionFeedback extends React.Component {
                   </Button>
                   <Button
                     color="primary"
-                    onClick={() => this.handlePreparednessChange('well')}
-                    active={this.state.preparedness === 'well'}
+                    onClick={() => this.handlePreparednessChange('good')}
+                    active={this.state.preparedness === 'good'}
                   >
-                    Well
+                    Good
                   </Button>
                 </ButtonGroup>
                 {preparednessWarning}

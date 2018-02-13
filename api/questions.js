@@ -101,7 +101,7 @@ router.delete('/:questionId/answering', [
 router.post('/:questionId/answered', [
   requireCourseStaffForQueueForQuestion,
   requireQuestion,
-  check('preparedness').isIn(['bad', 'average', 'well']),
+  check('preparedness').isIn(['bad', 'average', 'good']),
   check('comments').optional({ nullable: true }).trim(),
   failIfErrors,
 ], async (req, res, _next) => {
