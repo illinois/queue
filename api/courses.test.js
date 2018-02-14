@@ -78,7 +78,7 @@ describe('Courses API', () => {
       expect(res2.body.staff).toHaveLength(0)
     })
     test('should fail for a student', async () => {
-      const res = await request(app).delete('/api/courses/1/staff/1?forceuser=student')
+      const res = await request(app).delete('/api/courses/1/staff/2?forceuser=student')
       expect(res.statusCode).toBe(403)
       const res2 = await request(app).get('/api/courses/1')
       expect(res2.statusCode).toBe(200)
@@ -94,7 +94,7 @@ describe('Courses API', () => {
       expect(res2.body.staff[0].id).toBe(2)
     })
     test('should fail for a different course staff', async () => {
-      const res = await request(app).delete('/api/courses/1/staff/1?forceuser=241staff')
+      const res = await request(app).delete('/api/courses/1/staff/2?forceuser=241staff')
       expect(res.statusCode).toBe(403)
       const res2 = await request(app).get('/api/courses/1')
       expect(res2.statusCode).toBe(200)
