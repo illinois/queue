@@ -15,6 +15,7 @@ function mapStateToProps(state, props) {
     questions: state.questions.questions,
     // isUserCourseStaff: isUserCourseStaff(state, queueId),
     isUserCourseStaff: isUserActiveStaffForQueue(state, props),
+    userId: state.user.user.id,
   }
 }
 
