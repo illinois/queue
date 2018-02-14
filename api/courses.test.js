@@ -47,4 +47,27 @@ describe('Courses API', () => {
       expect(res.statusCode).toBe(403)
     })
   })
+
+  describe('DELETE /api/courses/1/staff/1', () => {
+    test('should succeed for an admin', async () => {
+      const res = await request(app).delete('/api/courses/1/staff/2?forceuser=admin')
+      expect(res.statusCode).toBe(202)
+      console.log(res.body)
+      const res2 = await request(app).get('/api/courses/1')
+      expect(res2.statusCode).toBe(200)
+      expect(res2.body.id).toBe(1)
+      expect(res2.body.name).toBe('CS225')
+      expect(res2.body).toHaveProperty('queues')
+      expect(res2.body.queues).toHaveLength(1)
+      expect(res2.body.queues[0].id).toBe(1)
+      expect(res2.body.queues[0].location).toBe('Here')
+      expect(res2.body).toHaveProperty('staff')
+      expect(res2.body.staff).toHaveLength(0)
+    })
+    test('should fail for a non-admin', async () => {
+      const res = await request(app).delete('/api/courses/1/staff/1?forceuser=student')
+      expect(res.statusCode).toBe(403)
+    })
+  })
+
 })
