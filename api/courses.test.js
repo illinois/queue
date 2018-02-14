@@ -48,7 +48,7 @@ describe('Courses API', () => {
     })
   })
 
-  describe('DELETE /api/courses/1/staff/1', () => {
+  describe('DELETE /api/courses/1/staff/2', () => {
     test('should succeed for an admin', async () => {
       const res = await request(app).delete('/api/courses/1/staff/2?forceuser=admin')
       expect(res.statusCode).toBe(202)
