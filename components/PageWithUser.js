@@ -36,7 +36,6 @@ export default function (AuthedComponent, permissions) {
         // Perform authz if required
         let authzed = true
         // Admins can do everything and see everything, of course
-        console.log(user)
         if (permissions && !user.isAdmin) {
           const {
             requireAdmin,

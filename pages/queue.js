@@ -14,7 +14,7 @@ import { connectToQueue, disconnectFromQueue } from '../socket/client'
 import PageWithUser from '../components/PageWithUser'
 import Layout from '../components/Layout'
 import StaffSidebar from '../components/StaffSidebar'
-import NewQuestionContainer from '../containers/NewQuestionContainer'
+import QuestionPanel from '../components/QuestionPanel'
 import QuestionListContainer from '../containers/QuestionListContainer'
 
 
@@ -43,7 +43,7 @@ class Queue extends React.Component {
               <StaffSidebar queueId={this.props.queueId} />
             </Col>
             <Col xs={{ size: 12 }} md={{ size: 9 }} className="mb-3">
-              <NewQuestionContainer queueId={this.props.queueId} />
+              <QuestionPanel queueId={this.props.queueId} />
               <QuestionListContainer queueId={this.props.queueId} />
             </Col>
           </Row>

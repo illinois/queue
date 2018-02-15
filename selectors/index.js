@@ -8,6 +8,7 @@ const courseIdForQueueSelector = (state, props) => {
 }
 const queueSelector = (state, props) => state.queues.queues[props.queueId]
 const activeStaffSelector = state => state.activeStaff.activeStaff
+const questionsSelector = state => state.questions.questions
 
 export const getActiveStaff = createSelector([
   queueSelector,
@@ -59,6 +60,20 @@ export const isUserCourseStaff = createSelector([
   }
 })
 
-export const isUserAdmin = createSelector([userSelector], user => user && user.isAdmin)
+export const getUserActiveQuestionIdForQueue = createSelector([
+  userSelector,
+  queueSelector,
+  questionsSelector,
+], (user, queue, questions) => {
+  if (!queue || !queue.questions) {
+    return -1
+  }
+  const userQuestionId = queue.questions.find((qid) => {
+    const belongsToQueue = questions[qid].queueId === queue.id
+    const belongsToUser = questions[qid].askedById === user.id
+    return belongsToQueue && belongsToUser
+  })
+  return Number.parseInt(userQuestionId, 10) || -1
+})
 
-export const NULL = 'NULL'
+export const isUserAdmin = createSelector([userSelector], user => user && user.isAdmin)
