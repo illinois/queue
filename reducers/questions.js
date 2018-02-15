@@ -22,49 +22,54 @@ const questions = (state = defaultState, action) => {
   switch (action.type) {
     case CREATE_QUESTION.SUCCESS: {
       const { question } = action
-      return Object.assign({}, state, {
+      return {
+        ...state,
         questions: {
           ...state.questions,
           [question.id]: question,
         },
-      })
+      }
     }
     case FETCH_QUEUE.REQUEST: {
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: true,
-      })
+      }
     }
     case FETCH_QUEUE.SUCCESS: {
       const { queue } = action
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: false,
         questions: {
           ...state.questions,
           ...reduceQuestions(queue.questions),
         },
-      })
+      }
     }
     case DELETE_QUESTION.SUCCESS: {
       const { questionId } = action
-      return Object.assign({}, state, {
-        questions: {
-          ...state.questions,
-          [questionId]: undefined,
-        },
-      })
+      const newQuestions = { ...state.questions }
+      delete newQuestions[questionId]
+      return {
+        ...state,
+        questions: newQuestions,
+      }
     }
     case UPDATE_QUESTIONS: {
-      return Object.assign({}, state, {
+      return {
+        ...state,
         questions: {
           ...state.questions,
           ...reduceQuestions(action.questions),
         },
-      })
+      }
     }
     case UPDATE_QUESTION_ANSWERING.SUCCESS: {
       const { questionId, beingAnswered } = action
       const oldQuestion = state.questions[questionId]
-      return Object.assign({}, state, {
+      return {
+        ...state,
         questions: {
           ...state.questions,
           [questionId]: {
@@ -72,7 +77,7 @@ const questions = (state = defaultState, action) => {
             beingAnswered,
           },
         },
-      })
+      }
     }
     default:
       return state

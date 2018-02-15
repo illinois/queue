@@ -33,13 +33,13 @@ class Question extends React.Component {
             <Button
               color="primary"
               className="mr-2"
-              onClick={() => this.props.onFinishedAnswering(id)}
+              onClick={() => this.props.finishedAnswering(id)}
             >
               Finish Answering
             </Button>
             <Button
               color="light"
-              onClick={() => this.props.onUpdateQuestionBeingAnswered(id, false)}
+              onClick={() => this.props.updateQuestionBeingAnswered(id, false)}
             >
               Cancel
             </Button>
@@ -50,7 +50,7 @@ class Question extends React.Component {
           <Button
             color="danger"
             outline
-            onClick={() => this.props.onDeleteQuestion(id)}
+            onClick={() => this.props.deleteQuestion()}
           >
             Delete
           </Button>
@@ -64,7 +64,7 @@ class Question extends React.Component {
               color="primary"
               outline
               className="mr-2"
-              onClick={() => this.props.onUpdateQuestionBeingAnswered(id, true)}
+              onClick={() => this.props.updateQuestionBeingAnswered(id, true)}
             >
               Start Answering!
             </Button>
@@ -73,7 +73,7 @@ class Question extends React.Component {
             <Button
               color="danger"
               outline
-              onClick={() => this.props.onDeleteQuestion(id)}
+              onClick={() => this.props.deleteQuestion()}
             >
               Delete
             </Button>
@@ -83,27 +83,41 @@ class Question extends React.Component {
     }
 
     return (
-      <ListGroupItem key={id} className="d-sm-flex align-items-center">
-        <div>
+      <Fragment>
+        <ListGroupItem key={id} className="d-sm-flex align-items-center">
+          {didUserAskQuestion &&
+            <div
+              style={{
+                height: '100%',
+                width: '5px',
+                position: 'absolute',
+                top: '0',
+                left: '0',
+              }}
+              className="bg-primary"
+            />
+          }
           <div>
-            <Badge color={badgeColor} className="mr-2">{badgeLabel}</Badge>
-            <strong>{name}</strong>
+            <div>
+              <Badge color={badgeColor} className="mr-2">{badgeLabel}</Badge>
+              <strong>{name}</strong>
+            </div>
+            <div className="text-muted">
+              <span className="text-muted">
+                <Moment fromNow>{enqueueTime}</Moment>
+                <span className="mr-2 ml-2">&bull;</span>
+                {location}
+              </span>
+            </div>
+            <div>
+              {topic}
+            </div>
           </div>
-          <div className="text-muted">
-            <span className="text-muted">
-              <Moment fromNow>{enqueueTime}</Moment>
-              <span className="mr-2 ml-2">&bull;</span>
-              {location}
-            </span>
+          <div className="ml-auto pt-3 pt-sm-0">
+            {buttonCluster}
           </div>
-          <div>
-            {topic}
-          </div>
-        </div>
-        <div className="ml-auto pt-3 pt-sm-0">
-          {buttonCluster}
-        </div>
-      </ListGroupItem>
+        </ListGroupItem>
+      </Fragment>
     )
   }
 }
@@ -117,9 +131,9 @@ Question.propTypes = {
   enqueueTime: PropTypes.string.isRequired,
   didUserAskQuestion: PropTypes.bool.isRequired,
   isUserCourseStaff: PropTypes.bool.isRequired,
-  onUpdateQuestionBeingAnswered: PropTypes.func.isRequired,
-  onFinishedAnswering: PropTypes.func.isRequired,
-  onDeleteQuestion: PropTypes.func.isRequired,
+  updateQuestionBeingAnswered: PropTypes.func.isRequired,
+  finishedAnswering: PropTypes.func.isRequired,
+  deleteQuestion: PropTypes.func.isRequired,
 }
 
 export default Question

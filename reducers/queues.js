@@ -128,12 +128,13 @@ const queues = (state = defaultState, action) => {
       return removeQuestionFromQueue(state, action.queueId, action.questionId)
     }
     case DELETE_QUEUE.SUCCESS: {
-      return Object.assign({}, state, {
-        queues: {
-          ...state.queues,
-          [action.queueId]: undefined,
-        },
-      })
+      const { queueId } = action
+      const newQueues = { ...state.queues }
+      delete newQueues[queueId]
+      return {
+        ...state,
+        queues: newQueues,
+      }
     }
     case UPDATE_QUESTIONS: {
       const { queueId, questions } = action

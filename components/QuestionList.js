@@ -11,6 +11,7 @@ import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner'
 
 import Question from './Question'
 import QuestionFeedback from './QuestionFeedback'
+import ConfirmLeaveQueueModal from './ConfirmLeaveQueueModal'
 
 class QuestionList extends React.Component {
   constructor(props) {
@@ -18,7 +19,9 @@ class QuestionList extends React.Component {
 
     this.state = {
       showFeedbackModal: false,
+      showDeleteModal: false,
       feedbackId: null,
+      deleteId: null,
     }
   }
 
@@ -44,6 +47,33 @@ class QuestionList extends React.Component {
     })
   }
 
+  deleteQuestion(questionId) {
+    const question = this.props.questions[questionId]
+    if (this.props.userId === question.askedById) {
+      // This user asked the question; confirm with them
+      this.setState({
+        showDeleteModal: true,
+        deleteId: questionId,
+      })
+    } else {
+      // We're probably course staff, don't confirm
+      this.props.deleteQuestion(questionId)
+    }
+  }
+
+  toggleDeleteModal() {
+    this.setState({
+      showDeleteModal: !this.state.showDeleteModal,
+    })
+  }
+
+  handleConfirmedDeletion() {
+    this.props.deleteQuestion(this.state.deleteId)
+    this.setState({
+      showDeleteModal: false,
+    })
+  }
+
   render() {
     let questions
     if (this.props.queue && this.props.queue.questions) {
@@ -55,9 +85,9 @@ class QuestionList extends React.Component {
               key={questionId}
               isUserCourseStaff={this.props.isUserCourseStaff}
               didUserAskQuestion={this.props.userId === question.askedById}
-              onDeleteQuestion={this.props.deleteQuestion}
-              onUpdateQuestionBeingAnswered={this.props.updateQuestionBeingAnswered}
-              onFinishedAnswering={() => this.handleFinishedAnswering(questionId)}
+              deleteQuestion={() => this.deleteQuestion(questionId)}
+              updateQuestionBeingAnswered={this.props.updateQuestionBeingAnswered}
+              finishedAnswering={() => this.handleFinishedAnswering(questionId)}
               {...question}
             />
           )
@@ -97,6 +127,11 @@ class QuestionList extends React.Component {
           isOpen={this.state.showFeedbackModal}
           onSubmitFeedback={feedback => this.handleSubmitFeedback(feedback)}
           onCancel={() => this.handleFeedbackCancel()}
+        />
+        <ConfirmLeaveQueueModal
+          isOpen={this.state.showDeleteModal}
+          toggle={() => this.toggleDeleteModal()}
+          confirm={() => this.handleConfirmedDeletion()}
         />
       </div>
     )
