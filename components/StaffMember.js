@@ -6,16 +6,19 @@ import faTimes from '@fortawesome/fontawesome-free-solid/faTimes'
 const StaffMember = ({
   name,
   netid,
+  isUserCourseStaff,
   removeStaff,
 }) => (
   <div className="pt-2 pb-2 d-flex align-items-center">
     {name || netid}
-    <span className="btn-remove-staff ml-auto">
-      <FontAwesomeIcon
-        icon={faTimes}
-        onClick={() => removeStaff()}
-      />
-    </span>
+    {isUserCourseStaff &&
+      <span className="btn-remove-staff ml-auto">
+        <FontAwesomeIcon
+          icon={faTimes}
+          onClick={() => removeStaff()}
+        />
+      </span>
+    }
     <style jsx>{`
         .btn-remove-staff {
           color: #aaa;
@@ -37,6 +40,7 @@ StaffMember.defaultProps = {
 StaffMember.propTypes = {
   name: PropTypes.string,
   netid: PropTypes.string.isRequired,
+  isUserCourseStaff: PropTypes.bool.isRequired,
   removeStaff: PropTypes.func.isRequired,
 }
 

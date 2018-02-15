@@ -27,6 +27,7 @@ const StaffSidebar = (props) => {
           <div key={user.id} >
             <StaffMember
               {...user}
+              isUserCourseStaff={props.isUserCourseStaff}
               removeStaff={() => removeStaff(user.id, activeStaffId)}
             />
           </div>
@@ -71,11 +72,13 @@ const StaffSidebar = (props) => {
     }
   }
 
+  const containerClass = props.isUserCourseStaff ? 'mb-3' : null
+
   return (
     <Card>
       <CardBody>
         <CardTitle tag="h5">On-Duty Staff</CardTitle>
-        <div className="mb-3">
+        <div className={containerClass}>
           <FlipMove
             enterAnimation="accordionVertical"
             leaveAnimation="accordionVertical"
