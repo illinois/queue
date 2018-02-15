@@ -18,9 +18,12 @@ class Question extends React.Component {
       beingAnswered,
       enqueueTime,
       isUserCourseStaff,
+      didUserAskQuestion,
     } = this.props
     const badgeColor = beingAnswered ? 'success' : 'secondary'
     const badgeLabel = beingAnswered ? 'TA Answering' : 'Waiting'
+
+    const userCanDelete = didUserAskQuestion || isUserCourseStaff
 
     let buttonCluster
     if (beingAnswered) {
@@ -43,7 +46,7 @@ class Question extends React.Component {
           </Fragment>
         )
       } else {
-        buttonCluster = (
+        buttonCluster = userCanDelete ? (
           <Button
             color="danger"
             outline
@@ -51,7 +54,7 @@ class Question extends React.Component {
           >
             Delete
           </Button>
-        )
+        ) : null
       }
     } else {
       buttonCluster = (
@@ -66,13 +69,15 @@ class Question extends React.Component {
               Start Answering!
             </Button>
           }
-          <Button
-            color="danger"
-            outline
-            onClick={() => this.props.onDeleteQuestion(id)}
-          >
-            Delete
-          </Button>
+          {userCanDelete &&
+            <Button
+              color="danger"
+              outline
+              onClick={() => this.props.onDeleteQuestion(id)}
+            >
+              Delete
+            </Button>
+          }
         </Fragment>
       )
     }
@@ -110,6 +115,7 @@ Question.propTypes = {
   topic: PropTypes.string.isRequired,
   beingAnswered: PropTypes.bool.isRequired,
   enqueueTime: PropTypes.string.isRequired,
+  didUserAskQuestion: PropTypes.bool.isRequired,
   isUserCourseStaff: PropTypes.bool.isRequired,
   onUpdateQuestionBeingAnswered: PropTypes.func.isRequired,
   onFinishedAnswering: PropTypes.func.isRequired,
