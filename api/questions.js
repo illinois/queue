@@ -29,9 +29,22 @@ router.post('/', [
   check('location').isLength({ min: 1 }).trim(),
   check('topic').isLength({ min: 1 }).trim(),
   failIfErrors,
-], (req, res, _next) => {
+], async (req, res, _next) => {
   const data = matchedData(req)
   const { id: queueId } = res.locals.queue
+
+  // Let's check if the user already has a question for this queue
+  const existingQuestion = await Question.findOne({
+    where: {
+      queueId,
+      askedById: res.locals.userAuthn.id,
+      deletedAt: null,
+    },
+  })
+  if (existingQuestion) {
+    res.status(422).send('You already have a question on this queue')
+    return
+  }
 
   const question = Question.build({
     name: data.name,
