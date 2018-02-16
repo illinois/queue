@@ -42,6 +42,12 @@ describe('Questions API', () => {
       const res = await request(app).post('/api/queues/50/questions').send(question)
       expect(res.statusCode).toBe(404)
     })
+
+    test('fails if user already has a question on the queue', async () => {
+      const question = { name: 'a', location: 'b', topic: 'c' }
+      const res = await request(app).post('/api/queues/1/questions?forceuser=admin').send(question)
+      expect(res.statusCode).toBe(422)
+    })
   })
 
   describe('GET /api/queues/:queueId/questions', () => {
