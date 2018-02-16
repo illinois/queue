@@ -38,7 +38,7 @@ router.post('/', [
     where: {
       queueId,
       askedById: res.locals.userAuthn.id,
-      deletedAt: null,
+      dequeueTime: null,
     },
   })
   if (existingQuestion) {
@@ -155,7 +155,6 @@ router.delete('/:questionId', [
   if (question.askedById === userAuthn.id || userAuthz.staffedCourseIds.indexOf(course.id) !== -1) {
     await question.update({
       dequeueTime: new Date(),
-      deletedAt: new Date(),
     })
     res.status(204).send()
   } else {
