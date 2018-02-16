@@ -110,5 +110,4 @@ describe('Courses API', () => {
       expect(res2.body.staff[0].id).toBe(2)
     })
   })
-
 })

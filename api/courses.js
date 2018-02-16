@@ -94,9 +94,8 @@ router.delete('/:courseId/staff/:userId', [
   failIfErrors,
 ], async (req, res, _next) => {
   const { user, course } = res.locals
-  const oldStaffAssignments = user.getStaffAssignments()
-  user.setStaffAssignments(oldStaffAssignments.filter(c => c.id !== course.id))
-  await user.save()
+  const oldStaffAssignments = await user.getStaffAssignments()
+  await user.setStaffAssignments(oldStaffAssignments.filter(c => c.id !== course.id))
   res.status(202).send()
 })
 
