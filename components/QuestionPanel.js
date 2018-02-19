@@ -9,23 +9,27 @@ import {
 import ActiveQuestionPanel from './ActiveQuestionPanel'
 import NewQuestionContainer from '../containers/NewQuestionContainer'
 
-const QuestionPanel = ({ queueId, userActiveQuestionId }) => {
+const QuestionPanel = ({ queueId, user, userActiveQuestionId }) => {
   if (userActiveQuestionId !== -1) {
     return (
       <ActiveQuestionPanel queueId={queueId} questionId={userActiveQuestionId} />
     )
   }
   return (
-    <NewQuestionContainer queueId={queueId} />
+    <NewQuestionContainer queueId={queueId} user={user} />
   )
 }
 
 QuestionPanel.propTypes = {
   queueId: PropTypes.number.isRequired,
+  user: PropTypes.shape({
+    name: PropTypes.string,
+  }).isRequired,
   userActiveQuestionId: PropTypes.number.isRequired,
 }
 
 const mapStateToProps = (state, ownProps) => ({
+  user: state.user.user,
   userActiveQuestionId: getUserActiveQuestionIdForQueue(state, ownProps),
 })
 

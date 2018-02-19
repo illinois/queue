@@ -19,7 +19,7 @@ export default class NewQuestion extends React.Component {
     super(props)
 
     this.state = {
-      name: '',
+      name: props.user.name || '',
       topic: '',
       location: '',
       isFieldValid: {},
@@ -123,6 +123,9 @@ export default class NewQuestion extends React.Component {
 }
 
 NewQuestion.propTypes = {
-  createQuestion: PropTypes.func.isRequired,
   queueId: PropTypes.number.isRequired,
+  user: PropTypes.shape({
+    name: PropTypes.string,
+  }).isRequired,
+  createQuestion: PropTypes.func.isRequired,
 }
