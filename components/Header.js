@@ -8,7 +8,7 @@ import {
 } from 'reactstrap'
 import { connect } from 'react-redux'
 
-import Link from 'next/link'
+import { Link } from '../routes'
 
 const Header = ({ user }) => {
   let userName
@@ -22,7 +22,7 @@ const Header = ({ user }) => {
   }
   return (
     <Navbar color="dark" dark className="mb-3">
-      <Link href="/" passHref>
+      <Link route="index" passHref>
         <NavbarBrand>
             CS@Illinois Queues
         </NavbarBrand>
