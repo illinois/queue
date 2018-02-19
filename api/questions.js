@@ -5,6 +5,7 @@ const router = require('express').Router({
 const { check } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 
+const constants = require('../constants')
 const { Course, Queue, Question } = require('../models/')
 const { requireQueue, requireQuestion, failIfErrors } = require('./util')
 const requireCourseStaffForQueueForQuestion = require('../middleware/requireCourseStaffForQueueForQuestion')
@@ -25,9 +26,9 @@ async function modifyBeingAnswered(questionId, answering) {
 // Adds a question to a queue
 router.post('/', [
   requireQueue,
-  check('name').isLength({ min: 1 }).trim(),
-  check('location').isLength({ min: 1 }).trim(),
-  check('topic').isLength({ min: 1 }).trim(),
+  check('name').isLength({ min: 1, max: constants.QUESTION_NAME_MAX_LENGTH }).trim(),
+  check('topic').isLength({ min: 1, max: constants.QUESTION_TOPIC_MAX_LENGTH }).trim(),
+  check('location').isLength({ min: 1, max: constants.QUESTION_LOCATION_MAX_LENGTH }).trim(),
   failIfErrors,
 ], async (req, res, _next) => {
   const data = matchedData(req)
