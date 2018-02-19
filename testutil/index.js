@@ -21,6 +21,7 @@ module.exports.clearTestDbTables = async () => {
 
 module.exports.createTestUsers = async () => {
   await models.User.bulkCreate([
+    { netid: 'dev', isAdmin: true },
     { netid: 'admin', isAdmin: true },
     { netid: '225staff', isAdmin: false },
     { netid: '241staff', isAdmin: false },
@@ -50,14 +51,14 @@ module.exports.createTestQuestions = async () => {
       name: 'Nathan',
       location: 'Siebel',
       topic: 'Queue',
-      askedById: 1,
+      askedById: 2,
     },
     {
       queueId: 1,
       name: 'Jordi',
       location: 'ECEB',
       topic: 'Canada',
-      askedById: 4,
+      askedById: 5,
     },
   ])
 }

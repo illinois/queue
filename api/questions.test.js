@@ -76,7 +76,7 @@ describe('Questions API', () => {
   })
 
   describe('GET /api/queues/:queueId/questions/:questionId', () => {
-    test('should succeed for admin', async () => {
+    test('succeeds for admin', async () => {
       const res = await request(app).get('/api/queues/1/questions/1')
       expect(res.statusCode).toBe(200)
       expect(res.body.name).toBe('Nathan')
@@ -85,7 +85,7 @@ describe('Questions API', () => {
       expect(res.body.id).toBe(1)
     })
 
-    test('should succeed for non admin', async () => {
+    test('succeeds for non admin', async () => {
       const res = await request(app).get('/api/queues/1/questions/1?forceuser=student')
       expect(res.statusCode).toBe(200)
       expect(res.body.name).toBe('Nathan')
@@ -142,7 +142,7 @@ describe('Questions API', () => {
       const res = await request(app).post('/api/queues/1/questions/1/answered?forceuser=admin').send(feedback)
       expect(res.statusCode).toBe(200)
       expect(res.body.beingAnswered).toBe(false)
-      expect(res.body.answeredById).toBe(1)
+      expect(res.body.answeredById).toBe(2)
     })
 
     test('succeeds for course staff', async () => {
@@ -153,7 +153,7 @@ describe('Questions API', () => {
       const res = await request(app).post('/api/queues/1/questions/1/answered?forceuser=225staff').send(feedback)
       expect(res.statusCode).toBe(200)
       expect(res.body.beingAnswered).toBe(false)
-      expect(res.body.answeredById).toBe(2)
+      expect(res.body.answeredById).toBe(3)
     })
 
     test('fails if preparedness is missing', async () => {
@@ -173,7 +173,7 @@ describe('Questions API', () => {
       expect(res.statusCode).toBe(422)
     })
 
-    test('fails for course staff of other course', async () => {
+    test('fails for course staff of different course', async () => {
       const res = await request(app).post('/api/queues/1/questions/1/answered?forceuser=241staff')
       expect(res.statusCode).toBe(403)
     })
@@ -195,7 +195,7 @@ describe('Questions API', () => {
       expect(res.statusCode).toBe(204)
     })
 
-    test('fails for course staff of another course', async () => {
+    test('fails for course staff of andifferent course', async () => {
       const res = await request(app).delete('/api/queues/2/questions/2?forceuser=241staff')
       expect(res.statusCode).toBe(403)
     })

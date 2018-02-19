@@ -76,7 +76,8 @@ router.post('/:courseId/staff', [
   check('name').optional(),
   failIfErrors,
 ], async (req, res, _next) => {
-  const { netid, name } = matchedData(req)
+  const { netid: originalNetid, name } = matchedData(req)
+  const [netid] = originalNetid.split('@')
   const [user] = await User.findOrCreate({ where: { netid } })
   if (name) {
     user.name = name
