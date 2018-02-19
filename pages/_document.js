@@ -35,10 +35,9 @@ export default class MyDocument extends Document {
         <Head>
           <meta name="viewport" content="initial-scale=1.0, width=device-width" />
           <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossOrigin="anonymous" />
-          {/* <script defer src="https://use.fontawesome.com/releases/v5.0.4/js/all.js"></script> */}
           <style>{FontAwesome.dom.css()}</style>
           <title>CS@Illinois Queues</title>
-          <link rel="icon" href="/static/favicon.ico" type="image/png"></link>
+          <link rel="icon" href="/static/favicon.ico" type="image/png" />
           {baseUrl && <script dangerouslySetInnerHTML={script} />}
         </Head>
         <body className="custom_class">
