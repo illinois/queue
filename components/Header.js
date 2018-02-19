@@ -13,11 +13,7 @@ import { Link } from '../routes'
 const Header = ({ user }) => {
   let userName
   if (user) {
-    const { name } = user
-    let { netid } = user
-    if (netid.indexOf('@illinois.edu') === -1) {
-      netid = `${netid}@illinois.edu`
-    }
+    const { name, netid } = user
     userName = name ? `${name} (${netid})` : `${netid}`
   }
   return (
