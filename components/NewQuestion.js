@@ -14,6 +14,21 @@ import {
   FormFeedback,
 } from 'reactstrap'
 
+import constants from '../constants'
+
+const fields = [{
+  name: 'name',
+  maxLength: constants.QUESTION_NAME_MAX_LENGTH,
+}, {
+  name: 'topic',
+  maxLength: constants.QUESTION_TOPIC_MAX_LENGTH,
+}, {
+  name: 'location',
+  maxLength: constants.QUESTION_LOCATION_MAX_LENGTH,
+}]
+
+const isValid = error => (error === undefined ? undefined : error === '')
+
 export default class NewQuestion extends React.Component {
   constructor(props) {
     super(props)
@@ -22,7 +37,7 @@ export default class NewQuestion extends React.Component {
       name: props.user.name || '',
       topic: '',
       location: '',
-      isFieldValid: {},
+      fieldErrors: {},
     }
 
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -36,16 +51,21 @@ export default class NewQuestion extends React.Component {
   }
 
   handleSubmit() {
-    const isFieldValid = {}
-    let valid = true;
-    ['name', 'topic', 'location'].forEach((field) => {
-      if (!this.state[field]) {
-        isFieldValid[field] = false
+    const fieldErrors = {}
+    let valid = true
+
+    fields.forEach(({ name, maxLength }) => {
+      if (!this.state[name]) {
+        fieldErrors[name] = 'This field is required!'
+        valid = false
+      } else if (this.state[name].length > maxLength) {
+        fieldErrors[name] = `This field has a maximum length of ${maxLength} characters`
         valid = false
       }
     })
+
     this.setState({
-      isFieldValid,
+      fieldErrors,
     })
     if (!valid) return
     const question = {
@@ -71,9 +91,9 @@ export default class NewQuestion extends React.Component {
                   placeholder="Enter your name"
                   value={this.state.name}
                   onChange={this.handleInputChange}
-                  valid={this.state.isFieldValid.name}
+                  valid={isValid(this.state.fieldErrors.name)}
                 />
-                <FormFeedback>A name is required</FormFeedback>
+                <FormFeedback>{this.state.fieldErrors.name}</FormFeedback>
                 <FormText color="muted">
                   Using a nickname is fine!
                 </FormText>
@@ -88,9 +108,9 @@ export default class NewQuestion extends React.Component {
                   placeholder="Enter a brief topic for your question"
                   value={this.state.topic}
                   onChange={this.handleInputChange}
-                  valid={this.state.isFieldValid.topic}
+                  valid={isValid(this.state.fieldErrors.topic)}
                 />
-                <FormFeedback>A topic is required</FormFeedback>
+                <FormFeedback>{this.state.fieldErrors.topic}</FormFeedback>
               </Col>
             </FormGroup>
             <FormGroup row>
@@ -102,9 +122,9 @@ export default class NewQuestion extends React.Component {
                   placeholder="Enter your location"
                   value={this.state.location}
                   onChange={this.handleInputChange}
-                  valid={this.state.isFieldValid.location}
+                  valid={isValid(this.state.fieldErrors.location)}
                 />
-                <FormFeedback>A location is required</FormFeedback>
+                <FormFeedback>{this.state.fieldErrors.location}</FormFeedback>
               </Col>
             </FormGroup>
             <Button

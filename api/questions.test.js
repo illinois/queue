@@ -3,6 +3,7 @@
 const request = require('supertest')
 const app = require('../app')
 const testutil = require('../testutil')
+const constants = require('../constants')
 
 beforeEach(async () => {
   await testutil.setupTestDb()
@@ -25,14 +26,32 @@ describe('Questions API', () => {
       expect(res.statusCode).toBe(422)
     })
 
+    test('fails if name is too long', async () => {
+      const question = { name: 'a'.repeat(constants.QUESTION_NAME_MAX_LENGTH + 1), location: 'a', topic: 'b' }
+      const res = await request(app).post('/api/queues/1/questions').send(question)
+      expect(res.statusCode).toBe(422)
+    })
+
     test('fails if location is missing', async () => {
       const question = { name: 'a', topic: 'b' }
       const res = await request(app).post('/api/queues/1/questions').send(question)
       expect(res.statusCode).toBe(422)
     })
 
+    test('fails if location is too long', async () => {
+      const question = { name: 'a', location: 'a'.repeat(constants.QUESTION_LOCATION_MAX_LENGTH + 1), topic: 'b' }
+      const res = await request(app).post('/api/queues/1/questions').send(question)
+      expect(res.statusCode).toBe(422)
+    })
+
     test('fails if topic is missing', async () => {
       const question = { name: 'a', location: 'b' }
+      const res = await request(app).post('/api/queues/1/questions').send(question)
+      expect(res.statusCode).toBe(422)
+    })
+
+    test('fails if topic is too long', async () => {
+      const question = { name: 'a', location: 'b', topic: 'a'.repeat(constants.QUESTION_TOPIC_MAX_LENGTH + 1) }
       const res = await request(app).post('/api/queues/1/questions').send(question)
       expect(res.statusCode).toBe(422)
     })
