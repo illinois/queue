@@ -136,7 +136,7 @@ class Course extends React.Component {
               {this.props.course && this.props.course.name} Queues
             </CardTitle>
             <ShowForCourseStaff courseId={this.props.courseId}>
-              <Link route="courseStaff" params={{ id: this.props.courseId }} passHref>
+              <Link route="courseStaff" params={{ id: this.props.courseId }} prefetch passHref>
                 <Button tag="a" color="light" size="sm" className="ml-auto">Manage Staff</Button>
               </Link>
             </ShowForCourseStaff>

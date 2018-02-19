@@ -22,7 +22,7 @@ class Queue extends React.Component {
     } = this.props
 
     return (
-      <Link route="queue" params={{ id }} passHref>
+      <Link route="queue" params={{ id }} prefetch passHref>
         <ListGroupItem action tag="a" className="d-flex align-items-center">
           <div>
             <div className="h5">{name}</div>
