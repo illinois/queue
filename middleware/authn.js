@@ -10,7 +10,7 @@ module.exports = async (req, res, next) => {
   const [netid] = email.split('@')
   const [user] = await User.findOrCreate({ where: { netid } })
 
-  const name = req.get('displayName')
+  const name = req.get('displayname')
   if (name) {
     user.name = name
     await user.save()

@@ -15,7 +15,7 @@ const makeReq = (eppn, displayName) => {
     switch (header) {
       case 'eppn':
         return eppn
-      case 'displayName':
+      case 'displayname':
         return displayName
       default:
         return undefined
@@ -65,7 +65,7 @@ describe('authn', () => {
     expect(res.locals.userAuthn.isAdmin).toBe(true)
   })
 
-  test('updates name given a displayName header', async () => {
+  test('updates name given a displayname header', async () => {
     const name = 'My Cool New Name'
     const req = makeReq('admin@illinois.edu', name)
     const { res, status } = makeRes()
