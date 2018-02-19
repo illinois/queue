@@ -4,7 +4,6 @@ const bodyParser = require('body-parser')
 const session = require('express-session')
 const rewrite = require('express-urlrewrite')
 
-const { User } = require('./models')
 const { baseUrl } = require('./util')
 
 const DEV = process.env.NODE_ENV !== 'production'
@@ -18,15 +17,6 @@ if (DEV) {
     resave: false,
     saveUninitialized: true,
   }))
-  app.use(async (req, res, next) => {
-    if (req.query.forceuser) {
-      const netid = req.query.forceuser
-      const [user] = await User.findOrCreate({ where: { netid } })
-      req.session.user = user
-      res.locals.user = user
-    }
-    next()
-  })
 }
 
 // Configure express to expose a REST API
@@ -39,8 +29,8 @@ app.use(rewrite(`${baseUrl}/_next/*`, '/_next/$1'))
 // Prettify all json by default
 app.use(require('./middleware/prettyPrintJson'))
 
-// Shibboleth auth
-app.use(require('./middleware/authn'))
+// We use Shibboleth auth in production, session middleware in dev
+app.use(DEV ? require('./middleware/authnDev') : require('./middleware/authn'))
 app.use(require('./middleware/authz'))
 
 // API routes
