@@ -71,6 +71,16 @@ describe('requireCourseStaffForQueueForQuestion middleware', () => {
     expect(next).not.toBeCalled()
   })
 
+  test('returns 500 status if questionId is missing', async () => {
+    const req = makeReq(undefined)
+    const { res, status, send } = makeRes([1])
+    const next = jest.fn()
+    await requireCourseStaffForQueueForQuestion(req, res, next)
+    expect(status).toBeCalledWith(500)
+    expect(send).toBeCalled()
+    expect(next).not.toBeCalled()
+  })
+
   test('returns 500 status if questionId is invalid', async () => {
     const req = makeReq('hello')
     const { res, status, send } = makeRes([1])

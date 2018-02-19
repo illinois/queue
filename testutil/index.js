@@ -8,17 +8,6 @@ module.exports.destroyTestDb = async () => {
   await models.sequelize.drop()
 }
 
-module.exports.clearTestDbTables = async () => {
-  const deletionTasks = []
-  Object.keys(models.models).forEach(async (model) => {
-    deletionTasks.push(models[model].destroy({
-      where: {},
-      truncate: false,
-    }))
-  })
-  await Promise.all(deletionTasks)
-}
-
 module.exports.createTestUsers = async () => {
   await models.User.bulkCreate([
     { netid: 'dev', isAdmin: true },

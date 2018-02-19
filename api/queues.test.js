@@ -107,6 +107,16 @@ describe('Queues API', () => {
       expect(res2.body).toHaveLength(1)
       expect(res2.body[0].user.netid).toBe('225staff')
     })
+    test('succeeds if user is already active course staff', async () => {
+      const res = await request(app).post('/api/queues/1/staff/2?forceuser=225staff')
+      expect(res.statusCode).toBe(202)
+      const res2 = await request(app).post('/api/queues/1/staff/2?forceuser=225staff')
+      expect(res2.statusCode).toBe(202)
+      const res3 = await request(app).get('/api/queues/1/staff')
+      expect(res3.statusCode).toBe(200)
+      expect(res3.body).toHaveLength(1)
+      expect(res3.body[0].user.netid).toBe('225staff')
+    })
     test('succeeds for admin to add admin', async () => {
       const res = await request(app).post('/api/courses/1/queues/1/staff/1?forceuser=admin')
       expect(res.statusCode).toBe(202)
@@ -123,7 +133,7 @@ describe('Queues API', () => {
       expect(res2.statusCode).toBe(200)
       expect(res2.body).toHaveLength(0)
     })
-    test('fails forstudent to add admin', async () => {
+    test('fails for student to add admin', async () => {
       const res = await request(app).post('/api/courses/1/queues/1/staff/1?forceuser=student')
       expect(res.statusCode).toBe(403)
       expect(res.body).toEqual({})
@@ -131,7 +141,7 @@ describe('Queues API', () => {
       expect(res2.statusCode).toBe(200)
       expect(res2.body).toHaveLength(0)
     })
-    test('fails for staff of different course', async () => {
+    test('fails for course staff of different course', async () => {
       const res = await request(app).post('/api/courses/1/queues/1/staff/3?forceuser=241staff')
       expect(res.statusCode).toBe(403)
       expect(res.body).toEqual({})

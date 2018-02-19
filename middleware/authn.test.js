@@ -83,7 +83,18 @@ describe('authn', () => {
     expect(user.name).toBe(name)
   })
 
-  test('rejects request if no valid eppn header', async () => {
+  test('rejects request if no eppn header is missing', async () => {
+    const req = makeReq(undefined)
+    const { res, status, send } = makeRes()
+    const next = jest.fn()
+    await authn(req, res, next)
+    expect(req.get).toHaveBeenCalledWith('eppn')
+    expect(status).toHaveBeenCalledWith(400)
+    expect(send).toHaveBeenCalled()
+    expect(next).not.toHaveBeenCalled()
+  })
+
+  test('rejects request if no eppn header is invalid', async () => {
     const req = makeReq('thisisnotvalid')
     const { res, status, send } = makeRes()
     const next = jest.fn()

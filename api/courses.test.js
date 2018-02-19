@@ -19,19 +19,48 @@ describe('Courses API', () => {
     expect(res.body[1].name).toBe('CS241')
   })
 
-  test('GET /api/courses/:courseId', async () => {
-    const res = await request(app).get('/api/courses/2')
-    expect(res.statusCode).toBe(200)
-    expect(res.body.id).toBe(2)
-    expect(res.body.name).toBe('CS241')
-    expect(res.body).toHaveProperty('queues')
-    expect(res.body.queues).toHaveLength(1)
-    expect(res.body.queues[0].id).toBe(2)
-    expect(res.body.queues[0].location).toBe('There')
-    expect(res.body).toHaveProperty('staff')
-    expect(res.body.staff).toHaveLength(1)
-    expect(res.body.staff[0].netid).toBe('241staff')
-    expect(res.body.staff[0].id).toBe(4)
+  describe('GET /api/courses/:courseId', () => {
+    test('succeeds for admin', async () => {
+      const res = await request(app).get('/api/courses/2')
+      expect(res.statusCode).toBe(200)
+      expect(res.body.id).toBe(2)
+      expect(res.body.name).toBe('CS241')
+      expect(res.body).toHaveProperty('queues')
+      expect(res.body.queues).toHaveLength(1)
+      expect(res.body.queues[0].id).toBe(2)
+      expect(res.body.queues[0].location).toBe('There')
+      expect(res.body).toHaveProperty('staff')
+      expect(res.body.staff).toHaveLength(1)
+      expect(res.body.staff[0].netid).toBe('241staff')
+      expect(res.body.staff[0].id).toBe(4)
+    })
+
+    test('succeeds for admin', async () => {
+      const res = await request(app).get('/api/courses/2?forceuser=241staff')
+      expect(res.statusCode).toBe(200)
+      expect(res.body.id).toBe(2)
+      expect(res.body.name).toBe('CS241')
+      expect(res.body).toHaveProperty('queues')
+      expect(res.body.queues).toHaveLength(1)
+      expect(res.body.queues[0].id).toBe(2)
+      expect(res.body.queues[0].location).toBe('There')
+      expect(res.body).toHaveProperty('staff')
+      expect(res.body.staff).toHaveLength(1)
+      expect(res.body.staff[0].netid).toBe('241staff')
+      expect(res.body.staff[0].id).toBe(4)
+    })
+
+    test('excludes user list for student', async () => {
+      const res = await request(app).get('/api/courses/2?forceuser=student')
+      expect(res.statusCode).toBe(200)
+      expect(res.body.id).toBe(2)
+      expect(res.body.name).toBe('CS241')
+      expect(res.body).toHaveProperty('queues')
+      expect(res.body.queues).toHaveLength(1)
+      expect(res.body.queues[0].id).toBe(2)
+      expect(res.body.queues[0].location).toBe('There')
+      expect(res.body).not.toHaveProperty('staff')
+    })
   })
 
   describe('POST /api/courses', () => {
@@ -51,7 +80,7 @@ describe('Courses API', () => {
 
   describe('POST /api/course/:courseId/staff', async () => {
     test('succeeds for admin', async () => {
-      const newUser = { netid: 'newnetid' }
+      const newUser = { netid: 'newnetid', name: 'New Name' }
       const res = await request(app).post('/api/courses/1/staff').send(newUser)
       expect(res.statusCode).toBe(201)
     })
@@ -60,6 +89,12 @@ describe('Courses API', () => {
       const newUser = { netid: 'newnetid' }
       const res = await request(app).post('/api/courses/1/staff?forceuser=225staff').send(newUser)
       expect(res.statusCode).toBe(201)
+    })
+
+    test('fails if netid is missing', async () => {
+      const newUser = { }
+      const res = await request(app).post('/api/courses/1/staff').send(newUser)
+      expect(res.statusCode).toBe(422)
     })
 
     test('fails for course staff of different course', async () => {
