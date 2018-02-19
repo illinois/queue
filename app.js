@@ -29,9 +29,10 @@ app.use(rewrite(`${baseUrl}/_next/*`, '/_next/$1'))
 // Prettify all json by default
 app.use(require('./middleware/prettyPrintJson'))
 
-// We use Shibboleth auth in production, session middleware in dev
-app.use(DEV ? require('./middleware/authnDev') : require('./middleware/authn'))
-app.use(require('./middleware/authz'))
+// Shibboleth auth
+// We only need this for the API routes; everything else is just statics.
+app.use(`${baseUrl}/api`, DEV ? require('./middleware/authnDev') : require('./middleware/authn'))
+app.use(`${baseUrl}/api`, require('./middleware/authz'))
 
 // API routes
 app.use(`${baseUrl}/api/users`, require('./api/users'))
