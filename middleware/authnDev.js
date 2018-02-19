@@ -1,8 +1,9 @@
 const { User } = require('../models')
 
 module.exports = async (req, res, next) => {
-  // In Dev, we allow
-  if (req.session.user) {
+  // In Dev, we allow users to force themselves to authenticate as a different
+  // user to make testing multiple-user things possible.
+  if (req.session.user && !req.query.forceuser) {
     res.locals.userAuthn = req.session.user
     next()
   } else {

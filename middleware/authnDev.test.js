@@ -31,7 +31,8 @@ describe('authnDev middleware', () => {
   })
 
   test('can override user with forceuser query param', async () => {
-    const req = { query: { forceuser: 'testuser' }, session: {} }
+    const user = Symbol('dev')
+    const req = { query: { forceuser: 'testuser' }, session: { user } }
     const res = { locals: {} }
     const next = jest.fn()
     await authnDev(req, res, next)
