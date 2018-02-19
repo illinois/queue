@@ -35,7 +35,7 @@ describe('Courses API', () => {
       expect(res.body.staff[0].id).toBe(4)
     })
 
-    test('succeeds for admin', async () => {
+    test('succeeds for course staff', async () => {
       const res = await request(app).get('/api/courses/2?forceuser=241staff')
       expect(res.statusCode).toBe(200)
       expect(res.body.id).toBe(2)
@@ -50,7 +50,7 @@ describe('Courses API', () => {
       expect(res.body.staff[0].id).toBe(4)
     })
 
-    test('excludes user list for student', async () => {
+    test('excludes staff list for student', async () => {
       const res = await request(app).get('/api/courses/2?forceuser=student')
       expect(res.statusCode).toBe(200)
       expect(res.body.id).toBe(2)

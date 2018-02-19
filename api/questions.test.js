@@ -195,7 +195,7 @@ describe('Questions API', () => {
       expect(res.statusCode).toBe(204)
     })
 
-    test('fails for course staff of andifferent course', async () => {
+    test('fails for course staff of different course', async () => {
       const res = await request(app).delete('/api/queues/2/questions/2?forceuser=241staff')
       expect(res.statusCode).toBe(403)
     })
