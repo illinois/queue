@@ -21,7 +21,7 @@ import { Link } from '../routes'
 import makeStore from '../redux/makeStore'
 import { fetchCourseRequest, fetchCourse } from '../actions/course'
 import { createQueue, deleteQueue } from '../actions/queue'
-import { isUserCourseStaff, isUserAdmin } from '../selectors'
+import { isUserCourseStaff } from '../selectors'
 
 import PageWithUser from '../components/PageWithUser'
 import Layout from '../components/Layout'
