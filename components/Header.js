@@ -22,7 +22,7 @@ const Header = ({ user }) => {
   }
   return (
     <Navbar color="dark" dark className="mb-3">
-      <Link route="index" passHref>
+      <Link route="index" prefetch passHref>
         <NavbarBrand>
             CS@Illinois Queues
         </NavbarBrand>

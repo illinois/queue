@@ -64,7 +64,7 @@ class Index extends React.Component {
     let courses
     if (this.props.courses && this.props.courses.length > 0) {
       courses = this.props.courses.map(course => (
-        <Link route="course" params={{ id: course.id }} key={course.id} passHref>
+        <Link route="course" params={{ id: course.id }} key={course.id} prefetch passHref>
           <ListGroupItem tag="a" action>{course.name}</ListGroupItem>
         </Link>
       ))
