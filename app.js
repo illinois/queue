@@ -23,8 +23,9 @@ if (DEV) {
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
-// Forward next requests to the right URL
+// Forward next + statics requests to the right route handlers
 app.use(rewrite(`${baseUrl}/_next/*`, '/_next/$1'))
+app.use(rewrite(`${baseUrl}/static/*`, '/static/$1'))
 
 // Prettify all json by default
 app.use(require('./middleware/prettyPrintJson'))
