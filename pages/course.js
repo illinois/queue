@@ -29,8 +29,6 @@ import NewQueue from '../components/NewQueue'
 import Queue from '../components/Queue'
 import ShowForCourseStaff from '../components/ShowForCourseStaff'
 
-import { connectToCourse, disconnectFromCourse } from '../socket/client'
-
 class Course extends React.Component {
   static async getInitialProps({ isServer, store, query }) {
     if (isServer) {
@@ -52,11 +50,6 @@ class Course extends React.Component {
 
   componentDidMount() {
     this.props.fetchCourse(this.props.courseId)
-    connectToCourse(this.props.dispatch, this.props.courseId)
-  }
-
-  componentWillUnmount() {
-    disconnectFromCourse(this.props.courseId)
   }
 
   showCreateQueuePanel() {
