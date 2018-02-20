@@ -6,6 +6,7 @@ import {
   Badge,
 } from 'reactstrap'
 import Moment from 'react-moment'
+import moment from 'moment'
 
 /* eslint-disable react/prefer-stateless-function */
 class Question extends React.Component {
@@ -103,10 +104,12 @@ class Question extends React.Component {
               <strong>{name}</strong>
             </div>
             <div className="text-muted">
-              <span className="text-muted">
-                <Moment fromNow>{enqueueTime}</Moment>
+              <span className="text-muted" style={{ fontSize: '0.9rem' }}>
+                <span title="Location">{location}</span>
                 <span className="mr-2 ml-2">&bull;</span>
-                {location}
+                <span title={moment(enqueueTime).calendar()}>
+                  <Moment fromNow>{enqueueTime}</Moment>
+                </span>
               </span>
             </div>
             <div>

@@ -19,7 +19,6 @@ if (DEV) {
   }))
 }
 
-// Configure express to expose a REST API
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
@@ -31,8 +30,14 @@ app.use(rewrite(`${baseUrl}/static/*`, '/static/$1'))
 app.use(require('./middleware/prettyPrintJson'))
 
 // Shibboleth auth
-// We only need this for the API routes; everything else is just statics.
-app.use(`${baseUrl}/api`, DEV ? require('./middleware/authnDev') : require('./middleware/authn'))
+// In dev, we need all requests to flow through the authn middleware so that
+// we can properly handle a forceuser query param on a page load.
+// In production, we only need this for the API routes; everything else is just statics.
+if (DEV) {
+  app.use(baseUrl, require('./middleware/authnDev'))
+} else {
+  app.use(`${baseUrl}/api`, require('./middleware/authn'))
+}
 app.use(`${baseUrl}/api`, require('./middleware/authz'))
 
 // API routes
