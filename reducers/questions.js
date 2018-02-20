@@ -2,6 +2,7 @@ import {
   CREATE_QUESTION,
   FETCH_QUEUE,
   DELETE_QUESTION,
+  UPDATE_QUESTION,
   REPLACE_QUESTIONS,
   UPDATE_QUESTION_ANSWERING,
 } from '../constants/ActionTypes'
@@ -62,6 +63,16 @@ const questions = (state = defaultState, action) => {
         questions: {
           ...state.questions,
           ...reduceQuestions(action.questions),
+        },
+      }
+    }
+    case UPDATE_QUESTION: {
+      const { question } = action
+      return {
+        ...state,
+        questions: {
+          ...state.questions,
+          [question.id]: question,
         },
       }
     }

@@ -31,6 +31,7 @@ export const FETCH_CURRENT_USER = makeActionStrings('FETCH_CURRENT_USER')
 
 
 /* These events will be fired on websocket messages */
+export const UPDATE_QUESTION = 'UPDATE_QUESTION'
 export const REPLACE_QUESTIONS = 'REPLACE_QUESTIONS'
 export const UPDATE_QUEUES = 'UPDATE_QUEUES'
 export const REPLACE_ACTIVE_STAFF = 'REPLACE_ACTIVE_STAFF'

@@ -34,8 +34,38 @@ const sendInitialState = (queueId, callback) => {
   })
 }
 
+const handleQuestionCreate = (id, queueId) => {
+  Question.findOne({ where: { id } }).then((question) => {
+    queueNamespace.to(`queue-${queueId}`).emit('question:create', { id, question })
+  })
+}
+
+const handleQuestionUpdate = (id, queueId) => {
+  Question.findOne({ where: { id } }).then((question) => {
+    queueNamespace.to(`queue-${queueId}`).emit('question:update', { id, question })
+  })
+}
+
+const handleQuestionDelete = (id, queueId) => {
+  queueNamespace.to(`queue-${queueId}`).emit('question:delete', { id })
+}
+
 const handleQuestionEvent = (event, instance) => {
-  // Do nothing, for now
+  switch (event) {
+    case 'create':
+      handleQuestionCreate(instance.id, instance.queueId)
+      break
+    case 'update':
+      if (instance.dequeueTime !== null) {
+        // Treat this as a delete
+        handleQuestionDelete(instance.id, instance.queueId)
+      } else {
+        handleQuestionUpdate(instance.id, instance.queueId)
+      }
+      break
+    default:
+      // Do nothing
+  }
 }
 
 const handleActiveStaffCreate = (id) => {

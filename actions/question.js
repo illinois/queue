@@ -26,7 +26,7 @@ export function fetchQuestions(queueId) {
  * Creating a new question
  */
 const createQuestionRequest = makeActionCreator(types.CREATE_QUESTION.REQUEST, 'queueId', 'question')
-const createQuestionSuccess = makeActionCreator(types.CREATE_QUESTION.SUCCESS, 'queueId', 'question')
+export const createQuestionSuccess = makeActionCreator(types.CREATE_QUESTION.SUCCESS, 'queueId', 'question')
 const createQuestionFailure = makeActionCreator(types.CREATE_QUESTION.FAILURE, 'queueId', 'question')
 
 export function createQuestion(queueId, question) {
@@ -91,7 +91,7 @@ export function finishAnsweringQuestion(queueId, questionId, feedback) {
  * Delete a question
  */
 const deleteQuestionRequest = makeActionCreator(types.DELETE_QUESTION.REQUEST, 'queueId', 'questionId')
-const deleteQuestionSuccess = makeActionCreator(types.DELETE_QUESTION.SUCCESS, 'queueId', 'questionId')
+export const deleteQuestionSuccess = makeActionCreator(types.DELETE_QUESTION.SUCCESS, 'queueId', 'questionId')
 const deleteQuestionFailure = makeActionCreator(types.DELETE_QUESTION.FAILURE, 'queueId', 'questionId')
 
 export function deleteQuestion(queueId, questionId) {
@@ -112,4 +112,5 @@ export function deleteQuestion(queueId, questionId) {
 /**
  * Update all questions for a queue
  */
+export const updateQuestion = makeActionCreator(types.UPDATE_QUESTION, 'question')
 export const replaceQuestions = makeActionCreator(types.REPLACE_QUESTIONS, 'queueId', 'questions')
