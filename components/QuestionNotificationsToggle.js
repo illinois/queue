@@ -10,8 +10,11 @@ class QuestionNotificationsToggle extends React.Component {
     super(props)
 
     const supported = (typeof window !== 'undefined' && 'Notification' in window)
-    const enabled = (typeof window !== 'undefined' && window.localStorage.getItem('notificationsEnabled') === 'true')
     const permission = (supported && Notification.permission) || null
+    const enabled = (supported && permission === 'granted' && window.localStorage.getItem('notificationsEnabled') === 'true')
+
+    // Sync the notifications state to local storage
+    localStorage.setItem('notificationsEnabled', enabled ? 'true' : 'false')
 
     this.state = {
       supported,
@@ -31,21 +34,22 @@ class QuestionNotificationsToggle extends React.Component {
     }
   }
 
+  setNotificationsEnabled(enabled) {
+    localStorage.setItem('notificationsEnabled', enabled ? 'true' : 'false')
+    this.setState({ enabled })
+  }
+
   toggleNotificationsEnabled() {
     const hasBeenGranted = (Notification.permission === 'denied' || Notification.permission === 'granted')
     if (!hasBeenGranted) {
       // Request permissions first
       this.promptNotificationPermission((permission) => {
         if (permission === 'granted') {
-          localStorage.setItem('notifications_enabled', 'true')
-        } else if (permission === 'denied') {
-          localStorage.setItem('notifications_enabled', 'false')
+          this.setNotificationsEnabled(true)
         }
       })
     } else {
-      const enabled = this.state.enabled ? 'false' : 'true'
-      localStorage.setItem('notificationsEnabled', enabled)
-      this.setState({ enabled: !this.state.enabled })
+      this.setNotificationsEnabled(!this.state.enabled)
     }
   }
 
@@ -81,11 +85,12 @@ class QuestionNotificationsToggle extends React.Component {
         color={color}
         block
         disabled={disabled}
-        className="mb-3"
+        className="mb-3 d-flex flex-row justify-content-center align-items-center"
+        style={{ whiteSpace: 'normal' }}
         onClick={() => this.toggleNotificationsEnabled()}
       >
         <FontAwesomeIcon icon={faBell} className="mr-3" />
-        {text}
+        <span>{text}</span>
       </Button>
     )
   }
