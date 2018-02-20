@@ -70,10 +70,10 @@ class QuestionNotificationsToggle extends React.Component {
       disabled = true
     } else if (this.state.permission !== 'granted') {
       text = 'Enable notifications'
-      color = 'primary'
+      color = 'info'
     } else {
       text = this.state.enabled ? 'Disable notifications' : 'Enable notifications'
-      color = this.state.enabled ? 'secondary' : 'primary'
+      color = this.state.enabled ? 'secondary' : 'info'
     }
 
     return (
