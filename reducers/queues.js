@@ -5,12 +5,12 @@ import {
   CREATE_QUESTION,
   DELETE_QUESTION,
   DELETE_QUEUE,
-  UPDATE_QUESTIONS,
+  REPLACE_QUESTIONS,
   UPDATE_QUEUES,
   FINISH_ANSWERING_QUESTION,
   ADD_QUEUE_STAFF,
   REMOVE_QUEUE_STAFF,
-  UPDATE_ACTIVE_STAFF,
+  REPLACE_ACTIVE_STAFF,
 } from '../constants/ActionTypes'
 
 import { normalizeQueue as normalizeQueueHelper, normalizeActiveStaffList } from './normalize'
@@ -136,7 +136,7 @@ const queues = (state = defaultState, action) => {
         queues: newQueues,
       }
     }
-    case UPDATE_QUESTIONS: {
+    case REPLACE_QUESTIONS: {
       const { queueId, questions } = action
       const currentQueue = state.queues[queueId]
       return Object.assign({}, state, {
@@ -178,7 +178,7 @@ const queues = (state = defaultState, action) => {
         },
       }
     }
-    case UPDATE_ACTIVE_STAFF: {
+    case REPLACE_ACTIVE_STAFF: {
       const { queueId, activeStaff } = action
       const normalized = normalizeActiveStaffList(activeStaff)
       const originalQueue = state.queues[queueId]

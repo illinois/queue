@@ -3,7 +3,7 @@ import {
   FETCH_QUEUE,
   ADD_COURSE_STAFF,
   ADD_QUEUE_STAFF,
-  UPDATE_ACTIVE_STAFF,
+  REPLACE_ACTIVE_STAFF,
 } from '../constants/ActionTypes'
 import { normalizeQueue, normalizeActiveStaffList } from './normalize'
 
@@ -75,7 +75,7 @@ const users = (state = defaultState, action) => {
         },
       }
     }
-    case UPDATE_ACTIVE_STAFF: {
+    case REPLACE_ACTIVE_STAFF: {
       const { activeStaff } = action
       const normalized = normalizeActiveStaffList(activeStaff)
       return {
