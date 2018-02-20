@@ -41,7 +41,7 @@ class Queue extends React.Component {
       <Layout>
         <Container fluid>
           <Row>
-            <Col xs={{ size: 12 }} md={{ size: 4 }}  lg={{ size: 3 }} className="mb-3 mb-md-0">
+            <Col xs={{ size: 12 }} md={{ size: 4 }} lg={{ size: 3 }} className="mb-3 mb-md-0">
               <ShowForCourseStaff queueId={this.props.queueId}>
                 <QuestionNotificationsToggle />
               </ShowForCourseStaff>
