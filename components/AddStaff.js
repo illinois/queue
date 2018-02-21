@@ -25,7 +25,8 @@ class AddStaff extends React.Component {
     })
   }
 
-  handleAddStaff() {
+  handleAddStaff(e) {
+    if (e) e.preventDefault()
     const staff = {
       netid: this.state.netid,
     }
@@ -39,7 +40,12 @@ class AddStaff extends React.Component {
   render() {
     return (
       <ListGroupItem>
-        <Form autoComplete="off" className="d-flex align-items-center" style={{ flexWrap: 'nowrap' }}>
+        <Form
+          autoComplete="off"
+          className="d-flex align-items-center"
+          style={{ flexWrap: 'nowrap' }}
+          onSubmit={e => this.handleAddStaff(e)}
+        >
           <Input
             type="text"
             name="netid"
