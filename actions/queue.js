@@ -71,7 +71,7 @@ export function deleteQueue(courseId, queueId) {
  * Adds a user to queue's active staff
  */
 const addQueueStaffRequest = makeActionCreator(types.ADD_QUEUE_STAFF.REQUEST, 'queueId', 'userId')
-const addQueueStaffSuccess = makeActionCreator(types.ADD_QUEUE_STAFF.SUCCESS, 'queueId', 'userId', 'activeStaff', 'normalized')
+export const addQueueStaffSuccess = makeActionCreator(types.ADD_QUEUE_STAFF.SUCCESS, 'queueId', 'userId', 'activeStaff', 'normalized')
 const addQueueStaffFailure = makeActionCreator(types.ADD_QUEUE_STAFF.FAILURE, 'queueId', 'userId', 'data')
 
 export function addQueueStaff(queueId, userId) {
@@ -97,7 +97,7 @@ export function addQueueStaff(queueId, userId) {
  * Removes a user from a queue's active staff
  */
 const removeQueueStaffRequest = makeActionCreator(types.REMOVE_QUEUE_STAFF.REQUEST, 'queueId', 'userId', 'activeStaffId')
-const removeQueueStaffSuccess = makeActionCreator(types.REMOVE_QUEUE_STAFF.SUCCESS, 'queueId', 'userId', 'activeStaffId')
+export const removeQueueStaffSuccess = makeActionCreator(types.REMOVE_QUEUE_STAFF.SUCCESS, 'queueId', 'userId', 'activeStaffId')
 const removeQueueStaffFailure = makeActionCreator(types.REMOVE_QUEUE_STAFF.FAILURE, 'queueId', 'userId', 'activeStaffId', 'data')
 
 export function removeQueueStaff(queueId, userId, activeStaffId) {
