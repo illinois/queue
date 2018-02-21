@@ -45,7 +45,7 @@ export const connectToQueue = (dispatch, queueId) => {
     })
   })
   socket.on('question:create', ({ question }) => handleQuestionCreate(dispatch, queueId, question))
-  socket.on('question:update', ({ question }) => handleQuestionUpdate(dispatch, queueId, question))
+  socket.on('question:update', ({ question }) => handleQuestionUpdate(dispatch, question))
   socket.on('question:delete', ({ id }) => handleQuestionDelete(dispatch, queueId, id))
   socket.on('activeStaff:create', ({ activeStaff }) => handleActiveStaffCreate(dispatch, queueId, activeStaff))
   socket.on('activeStaff:delete', ({ id }) => handleActiveStaffDelete(dispatch, queueId, id))
