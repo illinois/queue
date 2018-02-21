@@ -35,6 +35,31 @@ router.get('/me', async (req, res, _next) => {
   res.send(user)
 })
 
+// Updates the information for a given user
+router.patch('/me', async (req, res, _next) => {
+  const { id } = res.locals.userAuthn
+  const user = await User.findOne({
+    where: { id },
+    include: [
+      {
+        model: Course,
+        as: 'staffAssignments',
+        through: {
+          attributes: [],
+        },
+      },
+    ],
+  })
+
+  // Right now, we only allow preferredName to be updated
+  if (req.body.preferredName) {
+    user.preferredName = req.body.preferredName
+    await user.save()
+  }
+
+  res.send(user)
+})
+
 // Get a specific user
 router.get('/:userId', [
   requireAdmin,

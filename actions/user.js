@@ -21,4 +21,21 @@ export function fetchCurrentUser() {
   }
 }
 
-export const PLACEHOLDER = 'null'
+const updateUserPreferredNameRequest = makeActionCreator(types.UPDATE_USER_PREFERRED_NAME.REQUEST)
+const updateUserPreferredNameSuccess = makeActionCreator(types.UPDATE_USER_PREFERRED_NAME.SUCCESS, 'user')
+const updateUserPreferredNameFailure = makeActionCreator(types.UPDATE_USER_PREFERRED_NAME.FAILURE, 'data')
+
+export function updateUserPreferredName(preferredName) {
+  return (dispatch) => {
+    dispatch(updateUserPreferredNameRequest())
+
+    return axios.patch('/api/users/me', { preferredName })
+      .then(
+        res => dispatch(updateUserPreferredNameSuccess(res.data)),
+        (err) => {
+          console.error(err)
+          dispatch(updateUserPreferredNameFailure(err))
+        },
+      )
+  }
+}
