@@ -1,5 +1,6 @@
 import {
   FETCH_CURRENT_USER,
+  UPDATE_USER_PREFERRED_NAME,
 } from '../constants/ActionTypes'
 
 const defaultState = {
@@ -16,6 +17,7 @@ function normalizeUser(user) {
 const user = (state = defaultState, action) => {
   switch (action.type) {
     case FETCH_CURRENT_USER.SUCCESS:
+    case UPDATE_USER_PREFERRED_NAME.SUCCESS:
       return {
         ...state,
         user: normalizeUser(action.user),

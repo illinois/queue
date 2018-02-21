@@ -5,7 +5,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
     },
-    name: DataTypes.STRING,
+    universityName: DataTypes.STRING,
+    preferredName: DataTypes.STRING,
+    name: {
+      type: DataTypes.VIRTUAL(DataTypes.STRING, ['universityName', 'preferredName']),
+      get() {
+        return this.get('preferredName') || this.get('universityName')
+      },
+    },
     isAdmin: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
