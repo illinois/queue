@@ -14,7 +14,6 @@ import FlipMove from 'react-flip-move'
 
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner'
-import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
 
 import {
   fetchCourse,
@@ -37,14 +36,6 @@ class CourseStaff extends React.Component {
     }
   }
 
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      showAddStaffPanel: false,
-    }
-  }
-
   componentDidMount() {
     this.props.fetchCourse(this.props.courseId)
   }
@@ -52,19 +43,7 @@ class CourseStaff extends React.Component {
   addStaff(staff) {
     const { netid, name } = staff
     const { courseId } = this.props
-    this.props.addCourseStaff(courseId, netid, name).then(() => this.hideAddStaffPanel())
-  }
-
-  showAddStaffPanel() {
-    this.setState({
-      showAddStaffPanel: true,
-    })
-  }
-
-  hideAddStaffPanel() {
-    this.setState({
-      showAddStaffPanel: false,
-    })
+    this.props.addCourseStaff(courseId, netid, name)
   }
 
   render() {
@@ -102,20 +81,6 @@ class CourseStaff extends React.Component {
         )
       }
 
-      const addStaffButton = (
-        <ListGroupItem action className="text-muted" onClick={() => this.showAddStaffPanel()}>
-          <FontAwesomeIcon icon={faPlus} className="mr-2" />
-          Add staff
-        </ListGroupItem>
-      )
-
-      const addStaffPanel = (
-        <AddStaff
-          onAddStaff={staff => this.addStaff(staff)}
-          onCancel={() => this.hideAddStaffPanel()}
-        />
-      )
-
       content = (
         <Card className="staff-card">
           <CardHeader className="bg-primary text-white d-flex align-items-center">
@@ -123,16 +88,18 @@ class CourseStaff extends React.Component {
               {this.props.course && this.props.course.name} Staff
             </CardTitle>
           </CardHeader>
-          <ListGroup flush>
+          <ListGroup flush className="position-relative">
+            <AddStaff
+              onAddStaff={staff => this.addStaff(staff)}
+            />
             <FlipMove
               enterAnimation="accordionVertical"
               leaveAnimation="accordionVertical"
               duration={200}
+              typeName={null}
             >
               {users}
             </FlipMove>
-            {!this.state.showAddStaffPanel && addStaffButton}
-            {this.state.showAddStaffPanel && addStaffPanel}
           </ListGroup>
         </Card>
       )

@@ -47,7 +47,7 @@ class Queue extends React.Component {
               </ShowForCourseStaff>
               <StaffSidebar queueId={this.props.queueId} />
             </Col>
-            <Col xs={{ size: 12 }} md={{ size: 8 }} lg={{ size: 9 }} className="mb-3">
+            <Col xs={{ size: 12 }} md={{ size: 8 }} lg={{ size: 9 }}>
               <QuestionPanel queueId={this.props.queueId} />
               <QuestionListContainer queueId={this.props.queueId} />
             </Col>

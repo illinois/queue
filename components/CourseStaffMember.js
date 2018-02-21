@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import {
   ListGroupItem,
   Button,
@@ -8,29 +9,19 @@ import {
 // eslint-disable-next-line react/prefer-stateless-function
 class CourseStaffMember extends React.Component {
   render() {
-    let namePanel
-    if (this.props.name) {
-      namePanel = (
-        <div>
-          <div>{this.props.name}</div>
-          <div className="text-muted text-small">{this.props.netid}</div>
-        </div>
-      )
-    } else {
-      namePanel = (
-        <div>
-          <div>{this.props.netid}</div>
-        </div>
-      )
-    }
+    const netidClasses = classNames('text-muted', 'small', { 'ml-2': this.props.name })
 
     return (
       <ListGroupItem className="d-flex align-items-center">
-        {namePanel}
+        <div>
+          {this.props.name}
+          <span className={netidClasses}>({this.props.netid})</span>
+        </div>
         <Button
           color="danger"
           tag="div"
           className="ml-auto"
+          size="sm"
           onClick={() => this.props.removeCourseStaff(this.props.id)}
         >
           Remove
