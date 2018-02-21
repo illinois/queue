@@ -119,7 +119,7 @@ export default class NewQuestion extends React.Component {
                 <Input
                   name="location"
                   id="location"
-                  placeholder="Enter your location"
+                  placeholder="Enter your location (eg. Basement Tables or 0224)"
                   value={this.state.location}
                   onChange={this.handleInputChange}
                   valid={isValid(this.state.fieldErrors.location)}
