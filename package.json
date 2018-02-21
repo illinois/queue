@@ -20,6 +20,7 @@
     "@fortawesome/react-fontawesome": "0.0.17",
     "axios": "^0.17.1",
     "body-parser": "^1.18.2",
+    "classnames": "^2.2.5",
     "co": "^4.6.0",
     "dotenv": "^5.0.0",
     "express": "^4.16.2",

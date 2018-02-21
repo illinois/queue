@@ -1,12 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
-  Col,
   ListGroupItem,
   Form,
-  FormGroup,
-  FormText,
-  Label,
   Input,
   Button,
 } from 'reactstrap'
@@ -16,7 +12,6 @@ class AddStaff extends React.Component {
     super(props)
 
     this.state = {
-      name: '',
       netid: '',
     }
 
@@ -32,67 +27,35 @@ class AddStaff extends React.Component {
 
   handleAddStaff() {
     const staff = {
-      name: this.state.name,
       netid: this.state.netid,
     }
 
     this.props.onAddStaff(staff)
+
+    // Wipe the netid so more staff can be added
+    this.setState({ netid: '' })
   }
 
   render() {
     return (
       <ListGroupItem>
-        <Form autoComplete="off">
-          <FormGroup row>
-            <Label for="netid" sm={3}>Net ID</Label>
-            <Col sm={9}>
-              <Input
-                type="text"
-                name="netid"
-                placeholder="nwalter2"
-                onChange={this.handleInputChange}
-                value={this.state.netid}
-              />
+        <Form autoComplete="off" className="d-flex align-items-center" style={{ flexWrap: 'nowrap' }}>
+          <Input
+            type="text"
+            name="netid"
+            placeholder="Enter a NetID"
+            className="mr-3"
+            onChange={this.handleInputChange}
+            value={this.state.netid}
+          />
 
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Label for="name" sm={3}>Name</Label>
-            <Col sm={9}>
-              <Input
-                type="text"
-                name="name"
-                placeholder="Nathan Walters"
-                onChange={this.handleInputChange}
-                value={this.state.name}
-              />
-              <FormText color="muted">
-                (optional)
-              </FormText>
-            </Col>
-          </FormGroup>
-          <FormGroup row className="mb-0">
-            <Col md={6}>
-              <Button
-                block
-                color="secondary"
-                type="button"
-                onClick={() => this.props.onCancel()}
-              >
-                Cancel
-              </Button>
-            </Col>
-            <Col md={6}>
-              <Button
-                block
-                color="primary"
-                type="button"
-                onClick={() => this.handleAddStaff()}
-              >
-                Create
-              </Button>
-            </Col>
-          </FormGroup>
+          <Button
+            color="primary"
+            type="button"
+            onClick={() => this.handleAddStaff()}
+          >
+            Add staff
+          </Button>
         </Form>
       </ListGroupItem>
     )
@@ -101,7 +64,6 @@ class AddStaff extends React.Component {
 
 AddStaff.propTypes = {
   onAddStaff: PropTypes.func.isRequired,
-  onCancel: PropTypes.func.isRequired,
 }
 
 export default AddStaff
