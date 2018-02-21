@@ -75,7 +75,7 @@ describe('authn', () => {
     expect(next).toHaveBeenCalled()
     expect(res.locals).toHaveProperty('userAuthn')
     expect(res.locals.userAuthn.netid).toBe('admin')
-    expect(res.locals.userAuthn.name).toBe(name)
+    expect(res.locals.userAuthn.universityName).toBe(name)
     expect(res.locals.userAuthn.isAdmin).toBe(true)
 
     // Verify the change was actually persisted in the database

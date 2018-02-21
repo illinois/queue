@@ -12,7 +12,7 @@ module.exports = async (req, res, next) => {
 
   const name = req.get('displayname')
   if (name) {
-    user.name = name
+    user.universityName = name
     await user.save()
   }
 
