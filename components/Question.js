@@ -8,6 +8,8 @@ import {
 import Moment from 'react-moment'
 import moment from 'moment'
 
+import ParrotText from './ParrotText'
+
 /* eslint-disable react/prefer-stateless-function */
 class Question extends React.Component {
   render() {
@@ -113,7 +115,7 @@ class Question extends React.Component {
               </span>
             </div>
             <div>
-              {topic}
+              <ParrotText text={topic} />
             </div>
           </div>
           <div className="ml-auto pt-3 pt-sm-0">
