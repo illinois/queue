@@ -70,7 +70,7 @@ export function updateQuestionAnswering(questionId, beingAnswered) {
  */
 const updateQuestionAttributesRequest = makeActionCreator(types.UPDATE_QUESTION_ATTRIBUTES.REQUEST, 'questionId', 'attributes')
 const updateQuestionAttributesSuccess = makeActionCreator(types.UPDATE_QUESTION_ATTRIBUTES.SUCCESS, 'questionId', 'attributes')
-const updateQuestionAttributesFailure = makeActionCreator(types.UPDATE_QUESTION_ATTRIBUTES.FAILURE, 'questionId', 'attributes')
+const updateQuestionAttributesFailure = makeActionCreator(types.UPDATE_QUESTION_ATTRIBUTES.FAILURE, 'questionId')
 
 export function updateQuestionAttributes(questionId, attributes) {
   return (dispatch) => {
