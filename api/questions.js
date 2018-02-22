@@ -133,18 +133,21 @@ router.post('/:questionId/answered', [
 })
 
 // updates a question's location
-router.post('/:questionId', [
+router.patch('/:questionId', [
   requireQuestion,
+  check('location').isLength({ min: 1, max: constants.QUESTION_LOCATION_MAX_LENGTH }).trim(),
   failIfErrors,
 ], async (req, res, _next) => {
   const { userAuthn, userAuthz, question } = res.locals
+  const data = matchedData(req)
+
   if (question.askedById === userAuthn.id) {
     await question.update({
-      location: req.body.location
+      location: data.location
     })
     res.status(201).send(question)
   } else {
-    res.status(404).send()
+    res.status(403).send()
   }
 })
 

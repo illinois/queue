@@ -68,18 +68,18 @@ export function updateQuestionAnswering(questionId, beingAnswered) {
 /**
  * Update a question's attributes (just location for now).
  */
-const updateQuestionAttributesRequest = makeActionCreator(types.UPDATE_QUESTION_ATTRIBUTES.REQUEST, 'questionId', 'attributes')
-const updateQuestionAttributesSuccess = makeActionCreator(types.UPDATE_QUESTION_ATTRIBUTES.SUCCESS, 'questionId', 'attributes')
-const updateQuestionAttributesFailure = makeActionCreator(types.UPDATE_QUESTION_ATTRIBUTES.FAILURE, 'questionId')
+const editQuestionRequest = makeActionCreator(types.EDIT_QUESTION.REQUEST, 'questionId', 'attributes')
+const editQuestionSuccess = makeActionCreator(types.EDIT_QUESTION.SUCCESS, 'questionId', 'attributes')
+const editQuestionFailure = makeActionCreator(types.EDIT_QUESTION.FAILURE, 'questionId')
 
-export function updateQuestionAttributes(questionId, attributes) {
+export function editQuestion(questionId, attributes) {
   return (dispatch) => {
-    dispatch(updateQuestionAttributesRequest(questionId, attributes))
-    return axios.post(`/api/questions/${questionId}`, attributes).then(
-      res => dispatch(updateQuestionAttributesSuccess(questionId, res)),
+    dispatch(editQuestionRequest(questionId, attributes))
+    return axios.patch(`/api/questions/${questionId}`, attributes).then(
+      res => dispatch(editQuestionSuccess(questionId, res.data)),
       (err) => {
         console.error(err)
-        dispatch(updateQuestionAttributesFailure(questionId))
+        dispatch(editQuestionFailure(questionId))
       },
     )
   }

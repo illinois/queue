@@ -51,7 +51,7 @@ class QuestionList extends React.Component {
     })
   }
 
-  handleUpdateQuestionAttributes(attributeId) {
+  handleEditQuestion(attributeId) {
     this.setState({
       showQuestionEditModal: true,
       attributeId,
@@ -59,7 +59,7 @@ class QuestionList extends React.Component {
   }
 
   handleSubmitQuestionEdit(attributes) {
-    this.props.updateQuestionAttributes(this.state.attributeId, attributes).then(() => {
+    this.props.editQuestion(this.state.attributeId, attributes).then(() => {
       this.setState({
         showQuestionEditModal: false,
       })
@@ -114,7 +114,7 @@ class QuestionList extends React.Component {
               deleteQuestion={() => this.deleteQuestion(questionId)}
               updateQuestionBeingAnswered={this.props.updateQuestionBeingAnswered}
               finishedAnswering={() => this.handleFinishedAnswering(questionId)}
-              updateQuestionAttributes={() => this.handleUpdateQuestionAttributes(questionId)}
+              editQuestion={() => this.handleEditQuestion(questionId)}
               {...question}
             />
           )
@@ -185,7 +185,7 @@ QuestionList.propTypes = {
   deleteQuestion: PropTypes.func.isRequired,
   updateQuestionBeingAnswered: PropTypes.func.isRequired,
   finishAnsweringQuestion: PropTypes.func.isRequired,
-  finishEditingQuestion: PropTypes.func.isRequired,
+  editQuestion: PropTypes.func.isRequired,
 }
 
 QuestionList.defaultProps = {

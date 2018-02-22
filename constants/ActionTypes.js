@@ -24,7 +24,7 @@ export const REMOVE_QUEUE_STAFF = makeActionStrings('REMOVE_QUEUE_STAFF')
 export const FETCH_QUESTIONS = makeActionStrings('FETCH_QUESTIONS')
 export const CREATE_QUESTION = makeActionStrings('CREATE_QUESTION')
 export const UPDATE_QUESTION_ANSWERING = makeActionStrings('UPDATE_QUESTION_ANSWERING')
-export const UPDATE_QUESTION_ATTRIBUTES = makeActionStrings('UPDATE_QUESTION_ATTRIBUTES')
+export const EDIT_QUESTION = makeActionStrings('EDIT_QUESTION')
 export const FINISH_ANSWERING_QUESTION = makeActionStrings('FINISH_ANSWERING_QUESTION')
 export const DELETE_QUESTION = makeActionStrings('DELETE_QUESTION')
 
