@@ -116,23 +116,32 @@ describe('Questions API', () => {
 
   describe('PATCH /api/queues/:queueId/questions/:questionId', () => {
     test('succeeds for student with well-formed request who asked question', async () => {
-      const attributes = { location: 'bx' }
+      const attributes = { location: 'bx', topic: 'cs' }
       const res = await request(app).patch('/api/queues/1/questions/1?forceuser=admin').send(attributes)
       expect(res.statusCode).toBe(201)
       expect(res.body.location).toBe('bx')
+      expect(res.body.topic).toBe('cs')
+
     })
 
     test('fails for student with well-formed request who didnt ask question', async () => {
-      const attributes = { location: 'bx' }
+      const attributes = { location: 'bx', topic: 'cs' }
       const res = await request(app).patch('/api/queues/1/questions/1?forceuser=student').send(attributes)
       expect(res.statusCode).toBe(403)
     })
 
-    test('fails for student with ill-formed request who asked question', async () => {
-      const attributes = { location: '' }
+    test('fails for student with ill-formed request who asked question (no topic)', async () => {
+      const attributes = { location: 'bx',  topic: '' }
       const res = await request(app).patch('/api/queues/1/questions/1?forceuser=student').send(attributes)
       expect(res.statusCode).toBe(422)
     })
+
+    test('fails for student with ill-formed request who asked question (no location)', async () => {
+      const attributes = { location: '',  topic: 'cs' }
+      const res = await request(app).patch('/api/queues/1/questions/1?forceuser=student').send(attributes)
+      expect(res.statusCode).toBe(422)
+    })
+
 
   })
 

@@ -20,7 +20,8 @@ class QuestionEdit extends React.Component {
     super(props)
 
     this.state = {
-      location: '',
+      location: '', //props.question.location ||
+      topic:  '', // props.question.topic ||
       isFieldValid: {},
     }
 
@@ -41,15 +42,29 @@ class QuestionEdit extends React.Component {
   }
 
   handleSubmitEdit() {
-    if (this.state.location == '') { // == ''
+    if (this.state.location == '' && this.state.topic == '') { // == ''
+      this.setState({
+        isFieldValid: {
+          location: false,
+          topic: false,
+        },
+      })
+    } else if (this.state.topic == '') { // == ''
+      this.setState({
+        isFieldValid: {
+          topic: false,
+        },
+      })
+    } else if (this.state.location == '') { // == ''
       this.setState({
         isFieldValid: {
           location: false,
         },
       })
-    } else {
+    }else {
       const attributes = {
         location: this.state.location,
+        topic: this.state.topic
        }
       this.props.onSubmitQuestionEdit(attributes)
     }
@@ -59,12 +74,16 @@ class QuestionEdit extends React.Component {
     // Wipe feedback for the next time the modal is opened
     this.setState({
       location: '',
+      topic: '',
       isFieldValid: {},
     })
   }
 
   render() {
     const locationWarning = (this.state.isFieldValid.location === false) ? (
+      <div className="invalid-feedback d-block">This is required!</div>
+    ) : null
+    const topicWarning = (this.state.isFieldValid.topic === false) ? (
       <div className="invalid-feedback d-block">This is required!</div>
     ) : null
 
@@ -74,7 +93,7 @@ class QuestionEdit extends React.Component {
         <ModalBody>
           <Form autoComplete="off">
             <FormGroup row>
-              <Label for="location" sm={4}>New Location</Label>
+              <Label for="location" sm={4}>Location</Label>
               <Col sm={8}>
                 <Input
                   type="text"
@@ -86,6 +105,21 @@ class QuestionEdit extends React.Component {
                 <FormText color="muted">
                 </FormText>
                 {locationWarning}
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label for="topic" sm={4}>Topic</Label>
+              <Col sm={8}>
+                <Input
+                  type="text"
+                  name="topic"
+                  id="topic"
+                  value={this.state.name}
+                  onChange={this.handleInputChange}
+                />
+                <FormText color="muted">
+                </FormText>
+                {topicWarning}
               </Col>
             </FormGroup>
           </Form>

@@ -136,6 +136,7 @@ router.post('/:questionId/answered', [
 router.patch('/:questionId', [
   requireQuestion,
   check('location').isLength({ min: 1, max: constants.QUESTION_LOCATION_MAX_LENGTH }).trim(),
+  check('topic').isLength({ min: 1, max: constants.QUESTION_TOPIC_MAX_LENGTH }).trim(),
   failIfErrors,
 ], async (req, res, _next) => {
   const { userAuthn, userAuthz, question } = res.locals
@@ -143,7 +144,8 @@ router.patch('/:questionId', [
 
   if (question.askedById === userAuthn.id) {
     await question.update({
-      location: data.location
+      location: data.location,
+      topic: data.topic
     })
     res.status(201).send(question)
   } else {
