@@ -70,6 +70,16 @@ class Question extends React.Component {
               Start Answering!
             </Button>
           }
+          {didUserAskQuestion &&
+            <Button
+              color="primary"
+              outline
+              className="mr-2"
+              onClick={() => this.props.updateQuestionAttributes(id)}
+            >
+              Edit
+            </Button>
+          }
           {userCanDelete &&
             <Button
               color="danger"
@@ -135,6 +145,7 @@ Question.propTypes = {
   didUserAskQuestion: PropTypes.bool.isRequired,
   isUserCourseStaff: PropTypes.bool.isRequired,
   updateQuestionBeingAnswered: PropTypes.func.isRequired,
+  updateQuestionAttributes: PropTypes.func.isRequired,
   finishedAnswering: PropTypes.func.isRequired,
   deleteQuestion: PropTypes.func.isRequired,
 }

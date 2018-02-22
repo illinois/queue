@@ -114,6 +114,28 @@ describe('Questions API', () => {
     })
   })
 
+  describe('POST /api/queues/:queueId/questions/:questionId', () => {
+    test('succeeds for student with well-formed request who asked question', async () => {
+      const attributes = { location: 'b' }
+      const res = await request(app).post('/api/queues/1/questions/1?forceuser=admin').send(attributes)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.location).toBe('b')
+    })
+
+    test('fails for student with well-formed request who didnt ask question', async () => {
+      const attributes = { location: 'b' }
+      const res = await request(app).post('/api/queues/1/questions/1?forceuser=student').send(attributes)
+      expect(res.statusCode).toBe(404)
+    })
+
+    test('fails for student with ill-formed request who asked question', async () => {
+      const attributes = { location: '' }
+      const res = await request(app).post('/api/queues/1/questions/1?forceuser=student').send(attributes)
+      expect(res.statusCode).toBe(404)
+    })
+
+  })
+
   describe('POST /api/queues/:queueId/questions/:questionId/answering', () => {
     test('succeeds for admin', async () => {
       const res = await request(app).post('/api/queues/1/questions/1/answering?forceuser=admin')

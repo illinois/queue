@@ -66,6 +66,26 @@ export function updateQuestionAnswering(questionId, beingAnswered) {
 }
 
 /**
+ * Update a question's attributes (just location for now).
+ */
+const updateQuestionAttributesRequest = makeActionCreator(types.UPDATE_QUESTION_ATTRIBUTES.REQUEST, 'questionId', 'attributes')
+const updateQuestionAttributesSuccess = makeActionCreator(types.UPDATE_QUESTION_ATTRIBUTES.SUCCESS, 'questionId', 'attributes')
+const updateQuestionAttributesFailure = makeActionCreator(types.UPDATE_QUESTION_ATTRIBUTES.FAILURE, 'questionId', 'attributes')
+
+export function updateQuestionAttributes(questionId, attributes) {
+  return (dispatch) => {
+    dispatch(updateQuestionAttributesRequest(questionId, attributes))
+    return axios.post(`/api/questions/${questionId}`, attributes).then(
+      res => dispatch(updateQuestionAttributesSuccess(questionId, res)),
+      (err) => {
+        console.error(err)
+        dispatch(updateQuestionAttributesFailure(questionId))
+      },
+    )
+  }
+}
+
+/**
  * Finishes answering a question and submits feedback for it
  */
 const finishAnsweringQuestionRequest = makeActionCreator(types.FINISH_ANSWERING_QUESTION.REQUEST, 'queueId', 'questionId', 'feedback')
