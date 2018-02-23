@@ -33,7 +33,7 @@ router.get('/:courseId', [
   const { id: courseId } = res.locals.course
   const { locals: { userAuthz } } = res
 
-  const includes = [{ model: Queue }]
+  const includes = []
   // Only include list of course staff for other course staff or admins
   if (userAuthz.isAdmin || userAuthz.staffedCourseIds.indexOf(courseId) !== -1) {
     includes.push({
@@ -46,10 +46,18 @@ router.get('/:courseId', [
     })
   }
 
-  const course = await Course.findOne({
+  const course = (await Course.findOne({
     where: { id: courseId },
     include: includes,
+  })).toJSON()
+
+  // It turns out that sequelize can only generate queries that include the
+  // question count if we query for queues separately from the course
+  const queues = await Queue.scope('questionCount').findAll({
+    where: { courseId },
   })
+
+  course.queues = queues.map(q => q.toJSON())
   res.send(course)
 })
 
