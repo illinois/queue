@@ -6,12 +6,17 @@ import {
   Col,
 } from 'reactstrap'
 import withRedux from 'next-redux-wrapper'
+import Error from 'next/error'
+
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner'
 
 import makeStore from '../redux/makeStore'
-import { fetchQueue } from '../actions/queue'
+import { fetchQueue, fetchQueueRequest } from '../actions/queue'
 import { connectToQueue, disconnectFromQueue } from '../socket/client'
 
 import PageWithUser from '../components/PageWithUser'
+import Loading from '../components/Loading'
 import Layout from '../components/Layout'
 import StaffSidebar from '../components/StaffSidebar'
 import QuestionPanel from '../components/QuestionPanel'
@@ -21,15 +26,27 @@ import QuestionNotificationsToggle from '../components/QuestionNotificationsTogg
 
 
 class Queue extends React.Component {
-  static getInitialProps({ query }) {
+  static getInitialProps({ isServer, store, query }) {
+    const queueId = Number.parseInt(query.id, 10)
+    if (isServer) {
+      store.dispatch(fetchQueueRequest(queueId))
+    }
     return {
-      queueId: Number.parseInt(query.id, 10),
+      queueId,
+      isFetching: isServer,
     }
   }
 
   componentDidMount() {
     this.props.fetchQueue(this.props.queueId)
-    connectToQueue(this.props.dispatch, this.props.queueId)
+  }
+
+  componentDidUpdate(prevProps) {
+    if ((prevProps.isFetching && !this.props.isFetching) && this.props.hasQueue) {
+      // We have finished fetching the queue and the queue exists (was not a 404)
+      // It's now safe to connect to the websocket
+      connectToQueue(this.props.dispatch, this.props.queueId)
+    }
   }
 
   componentWillUnmount() {
@@ -37,6 +54,13 @@ class Queue extends React.Component {
   }
 
   render() {
+    const { isFetching, hasQueue } = this.props
+    if (isFetching) {
+      return <Loading />
+    }
+    if (!isFetching && !hasQueue) {
+      return <Error statusCode={404} />
+    }
     return (
       <Layout>
         <Container fluid>
@@ -59,14 +83,21 @@ class Queue extends React.Component {
 }
 
 Queue.propTypes = {
+  isFetching: PropTypes.bool.isRequired,
+  hasQueue: PropTypes.bool.isRequired,
   fetchQueue: PropTypes.func.isRequired,
   queueId: PropTypes.number.isRequired,
   dispatch: PropTypes.func.isRequired,
 }
+
+const mapStateToProps = (state, ownProps) => ({
+  isFetching: state.queues.isFetching,
+  hasQueue: !!state.queues.queues[ownProps.queueId],
+})
 
 const mapDispatchToProps = dispatch => ({
   fetchQueue: queueId => dispatch(fetchQueue(queueId)),
   dispatch,
 })
 
-export default withRedux(makeStore, null, mapDispatchToProps)(PageWithUser(Queue))
+export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(PageWithUser(Queue))
