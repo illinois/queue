@@ -12,6 +12,7 @@ import { Link } from '../routes'
 
 class Queue extends React.Component {
   deleteQueue(e) {
+    // Needed to prevent click from propagating to parent element
     e.stopPropagation()
     e.preventDefault()
     this.props.onDeleteQueue(this.props.id)
@@ -35,9 +36,10 @@ class Queue extends React.Component {
           <div>
             <div className="h5">{name}</div>
             <div className="text-muted">
-              <FontAwesomeIcon icon={faMapMarker} className="mr-1" />
+              <FontAwesomeIcon icon={faMapMarker} fixedWidth className="mr-2" />
               {locationText}
-              <FontAwesomeIcon icon={faQuestion} className="ml-3 mr-1" />
+              <br />
+              <FontAwesomeIcon icon={faQuestion} fixedWidth className="mr-2" />
               {questionCountText}
             </div>
           </div>
