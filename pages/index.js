@@ -89,6 +89,7 @@ class Index extends React.Component {
     )
 
     let queues
+    console.log(this.props.queues)
     if (this.props.queues && this.props.queues.length > 0) {
       const handleQueueClick = (id) => {
         Router.pushRoute('queue', { id })
@@ -197,11 +198,17 @@ Index.defaultProps = {
   queues: [],
 }
 
+const mapObjectToArray = (o) => {
+  const keys = Object.keys(o).map(id => Number.parseInt(id, 10))
+  const sortKeys = keys.sort((a, b) => (a < b ? -1 : 1))
+  return sortKeys.map(id => o[id])
+}
+
 const mapStateToProps = state => ({
   coursesById: state.courses.courses,
-  courses: Object.keys(state.courses.courses).sort().map(id => state.courses.courses[id]),
+  courses: mapObjectToArray(state.courses.courses),
   queuesById: state.queues.queues,
-  queues: Object.keys(state.queues.queues).sort().map(id => state.queues.queues[id]),
+  queues: mapObjectToArray(state.queues.queues),
 })
 
 const mapDispatchToProps = dispatch => ({
