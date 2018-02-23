@@ -5,34 +5,37 @@ import {
   Card,
   CardHeader,
   CardTitle,
-  CardBody,
   ListGroup,
   ListGroupItem,
 } from 'reactstrap'
 import withRedux from 'next-redux-wrapper'
 import FlipMove from 'react-flip-move'
-
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner'
+import Error from 'next/error'
 
 import {
   fetchCourse,
+  fetchCourseRequest,
   addCourseStaff,
   removeCourseStaff,
 } from '../actions/course'
 import makeStore from '../redux/makeStore'
 
 import PageWithUser from '../components/PageWithUser'
+import Loading from '../components/Loading'
 import Layout from '../components/Layout'
 import AddStaff from '../components/AddStaff'
 import CourseStaffMember from '../components/CourseStaffMember'
 
 
 class CourseStaff extends React.Component {
-  static async getInitialProps({ isServer, query }) {
+  static async getInitialProps({ isServer, store, query }) {
+    const courseId = Number.parseInt(query.id, 10)
+    if (isServer) {
+      store.dispatch(fetchCourseRequest(courseId))
+    }
     return {
+      courseId,
       isFetching: isServer,
-      courseId: Number.parseInt(query.id, 10),
     }
   }
 
@@ -47,68 +50,60 @@ class CourseStaff extends React.Component {
   }
 
   render() {
+    if (this.props.isFetching) {
+      return <Loading />
+    }
+    if (!this.props.isFetching && !this.props.course) {
+      return <Error statusCode={404} />
+    }
+
     const { courseId } = this.props
 
-    let content
-    if (this.props.isFetching || !this.props.course || !this.props.course.staff) {
-      content = (
-        <Card className="staff-card">
-          <CardBody className="text-center">
-            <FontAwesomeIcon icon={faSpinner} pulse />
-          </CardBody>
-        </Card>
-      )
-    } else {
-      let users
-      if (this.props.course.staff && this.props.course.staff.length > 0) {
-        users = this.props.course.staff.map((id) => {
-          const user = this.props.users[id]
-          return (
-            <CourseStaffMember
-              key={user.id}
-              removeCourseStaff={userId => this.props.removeCourseStaff(courseId, userId)}
-              {...user}
-            />
-          )
-        })
-      } else {
-        users = (
-          <div>
-            <ListGroupItem className="text-center text-muted pt-4 pb-4">
-              This course doesn&apos;t have any staff yet
-            </ListGroupItem>
-          </div>
+    let users
+    if (this.props.course.staff && this.props.course.staff.length > 0) {
+      users = this.props.course.staff.map((id) => {
+        const user = this.props.users[id]
+        return (
+          <CourseStaffMember
+            key={user.id}
+            removeCourseStaff={userId => this.props.removeCourseStaff(courseId, userId)}
+            {...user}
+          />
         )
-      }
-
-      content = (
-        <Card className="staff-card">
-          <CardHeader className="bg-primary text-white d-flex align-items-center">
-            <CardTitle tag="h4" className="mb-0">
-              {this.props.course && this.props.course.name} Staff
-            </CardTitle>
-          </CardHeader>
-          <ListGroup flush className="position-relative">
-            <AddStaff
-              onAddStaff={staff => this.addStaff(staff)}
-            />
-            <FlipMove
-              enterAnimation="accordionVertical"
-              leaveAnimation="accordionVertical"
-              duration={200}
-              typeName={null}
-            >
-              {users}
-            </FlipMove>
-          </ListGroup>
-        </Card>
+      })
+    } else {
+      users = (
+        <div>
+          <ListGroupItem className="text-center text-muted pt-4 pb-4">
+            This course doesn&apos;t have any staff yet
+          </ListGroupItem>
+        </div>
       )
     }
 
     return (
       <Layout>
         <Container fluid>
-          {content}
+          <Card className="staff-card">
+            <CardHeader className="bg-primary text-white d-flex align-items-center">
+              <CardTitle tag="h4" className="mb-0">
+                {this.props.course && this.props.course.name} Staff
+              </CardTitle>
+            </CardHeader>
+            <ListGroup flush className="position-relative">
+              <AddStaff
+                onAddStaff={staff => this.addStaff(staff)}
+              />
+              <FlipMove
+                enterAnimation="accordionVertical"
+                leaveAnimation="accordionVertical"
+                duration={200}
+                typeName={null}
+              >
+                {users}
+              </FlipMove>
+            </ListGroup>
+          </Card>
         </Container>
         <style jsx>{`
           :global(.staff-card) {

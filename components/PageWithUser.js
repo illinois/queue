@@ -1,13 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Container } from 'reactstrap'
+import Error from 'next/error'
 
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner'
-
-import Layout from './Layout'
 import { fetchCurrentUser } from '../actions/user'
+import Loading from './Loading'
 
 export default function (AuthedComponent, permissions) {
   class PageWithUser extends React.Component {
@@ -72,28 +69,13 @@ export default function (AuthedComponent, permissions) {
 
       if (!this.state.isLoading) {
         if (this.state.isAuthed) {
-          return (
-            <AuthedComponent {...restProps} />
-          )
+          return <AuthedComponent {...restProps} />
         }
 
-        return (
-          <Layout>
-            <Container fluid className="text-center">
-              <h3>Wow, you really tried that...</h3>
-              <p>A valiant effort, but you aren&apos;t permitted to acces this page.</p>
-            </Container>
-          </Layout>
-        )
+        return <Error statusCode={403} />
       }
 
-      return (
-        <Layout>
-          <Container fluid className="text-center">
-            <FontAwesomeIcon icon={faSpinner} pulse size="lg" className="mt-4" />
-          </Container>
-        </Layout>
-      )
+      return <Loading />
     }
   }
 

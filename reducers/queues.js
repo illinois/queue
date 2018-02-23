@@ -36,7 +36,7 @@ function addQuestionToQueue(state, queueId, questionId) {
     return state
   }
 
-  const newState = Object.assign({}, state)
+  const newState = { ...state }
   newState.queues[queueId].questions.push(questionId)
   return newState
 }
@@ -47,7 +47,8 @@ function removeQuestionFromQueue(state, queueId, questionId) {
   }
 
   const queue = state.queues[queueId]
-  const newState = Object.assign({}, state, {
+  return {
+    ...state,
     queues: {
       ...state.queues,
       [queueId]: {
@@ -55,8 +56,7 @@ function removeQuestionFromQueue(state, queueId, questionId) {
         questions: queue.questions.filter(id => id !== questionId),
       },
     },
-  })
-  return newState
+  }
 }
 
 function addActiveStaffToQueue(state, queueId, activeStaffId) {
@@ -74,12 +74,14 @@ function addActiveStaffToQueue(state, queueId, activeStaffId) {
 const queues = (state = defaultState, action) => {
   switch (action.type) {
     case FETCH_COURSE.REQUEST: {
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: true,
-      })
+      }
     }
     case FETCH_COURSE.SUCCESS: {
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: false,
         queues: {
           ...state.queues,
@@ -89,37 +91,46 @@ const queues = (state = defaultState, action) => {
             return obj
           }, {}),
         },
-      })
+      }
     }
     case FETCH_COURSE.FAILURE: {
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: false,
-        error: true,
-      })
+      }
     }
     case CREATE_QUEUE.SUCCESS: {
       const { queue } = action
-      return Object.assign({}, state, {
+      return {
+        ...state,
         queues: {
           ...state.queues,
           [queue.id]: normalizeQueue(queue),
         },
-      })
+      }
     }
     case FETCH_QUEUE.REQUEST: {
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: true,
-      })
+      }
     }
     case FETCH_QUEUE.SUCCESS: {
       const { queue } = action
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: false,
         queues: {
           ...state.queues,
           [queue.id]: normalizeQueue(queue),
         },
-      })
+      }
+    }
+    case FETCH_QUEUE.FAILURE: {
+      return {
+        ...state,
+        isFetching: false,
+      }
     }
     case CREATE_QUESTION.SUCCESS: {
       return addQuestionToQueue(state, action.queueId, action.question.id)
@@ -139,7 +150,8 @@ const queues = (state = defaultState, action) => {
     case REPLACE_QUESTIONS: {
       const { queueId, questions } = action
       const currentQueue = state.queues[queueId]
-      return Object.assign({}, state, {
+      return {
+        ...state,
         queues: {
           ...state.queues,
           [action.queueId]: {
@@ -147,15 +159,16 @@ const queues = (state = defaultState, action) => {
             questions: questions.map(q => q.id),
           },
         },
-      })
+      }
     }
     case UPDATE_QUEUES: {
-      return Object.assign({}, state, {
+      return {
+        ...state,
         queues: {
           ...state.queues,
           ...reduceQueues(action.queues),
         },
-      })
+      }
     }
     case FINISH_ANSWERING_QUESTION.SUCCESS: {
       return removeQuestionFromQueue(state, action.queueId, action.questionId)
