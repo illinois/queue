@@ -8,20 +8,31 @@ import {
   ModalFooter,
   Form,
   FormGroup,
-  FormText,
   Input,
   Label,
-  ButtonGroup,
   Button,
+  FormFeedback,
 } from 'reactstrap'
+
+import constants from '../constants'
+
+const fields = [{
+  name: 'topic',
+  maxLength: constants.QUESTION_TOPIC_MAX_LENGTH,
+}, {
+  name: 'location',
+  maxLength: constants.QUESTION_LOCATION_MAX_LENGTH,
+}]
+
+const isValid = error => (error === undefined ? undefined : error === '')
 
 class QuestionEdit extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      location: '', //props.question.location ||
-      topic:  '', // props.question.topic ||
+      location: '', // props.question.location ||
+      topic: '', // props.question.topic ||
       isFieldValid: {},
     }
 
@@ -42,36 +53,32 @@ class QuestionEdit extends React.Component {
   }
 
   handleSubmitEdit() {
-    if (this.state.location == '' && this.state.topic == '') { // == ''
-      this.setState({
-        isFieldValid: {
-          location: false,
-          topic: false,
-        },
-      })
-    } else if (this.state.topic == '') { // == ''
-      this.setState({
-        isFieldValid: {
-          topic: false,
-        },
-      })
-    } else if (this.state.location == '') { // == ''
-      this.setState({
-        isFieldValid: {
-          location: false,
-        },
-      })
-    }else {
-      const attributes = {
-        location: this.state.location,
-        topic: this.state.topic
-       }
-      this.props.onSubmitQuestionEdit(attributes)
+    const isFieldValid = {}
+    let valid = true
+
+    fields.forEach(({ name, maxLength }) => {
+      if (!this.state[name]) {
+        isFieldValid[name] = 'This field is required!'
+        valid = false
+      } else if (this.state[name].length > maxLength) {
+        isFieldValid[name] = `This field has a maximum length of ${maxLength} characters`
+        valid = false
+      }
+    })
+
+    this.setState({
+      isFieldValid,
+    })
+    if (!valid) return
+
+    const attributes = {
+      location: this.state.location,
+      topic: this.state.topic,
     }
+    this.props.onSubmitQuestionEdit(attributes)
   }
 
   handleModalExit() {
-    // Wipe feedback for the next time the modal is opened
     this.setState({
       location: '',
       topic: '',
@@ -80,13 +87,6 @@ class QuestionEdit extends React.Component {
   }
 
   render() {
-    const locationWarning = (this.state.isFieldValid.location === false) ? (
-      <div className="invalid-feedback d-block">This is required!</div>
-    ) : null
-    const topicWarning = (this.state.isFieldValid.topic === false) ? (
-      <div className="invalid-feedback d-block">This is required!</div>
-    ) : null
-
     return (
       <Modal isOpen={this.props.isOpen} onClosed={this.handleModalExit}>
         <ModalHeader>Edit Question</ModalHeader>
@@ -101,10 +101,9 @@ class QuestionEdit extends React.Component {
                   id="location"
                   value={this.state.name}
                   onChange={this.handleInputChange}
+                  valid={isValid(this.state.isFieldValid.location)}
                 />
-                <FormText color="muted">
-                </FormText>
-                {locationWarning}
+                <FormFeedback>{this.state.isFieldValid.location}</FormFeedback>
               </Col>
             </FormGroup>
             <FormGroup row>
@@ -116,10 +115,9 @@ class QuestionEdit extends React.Component {
                   id="topic"
                   value={this.state.name}
                   onChange={this.handleInputChange}
+                  valid={isValid(this.state.isFieldValid.topic)}
                 />
-                <FormText color="muted">
-                </FormText>
-                {topicWarning}
+                <FormFeedback>{this.state.isFieldValid.topic}</FormFeedback>
               </Col>
             </FormGroup>
           </Form>

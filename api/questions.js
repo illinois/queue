@@ -139,13 +139,13 @@ router.patch('/:questionId', [
   check('topic').isLength({ min: 1, max: constants.QUESTION_TOPIC_MAX_LENGTH }).trim(),
   failIfErrors,
 ], async (req, res, _next) => {
-  const { userAuthn, userAuthz, question } = res.locals
+  const { userAuthn, question } = res.locals
   const data = matchedData(req)
 
   if (question.askedById === userAuthn.id) {
     await question.update({
       location: data.location,
-      topic: data.topic
+      topic: data.topic,
     })
     res.status(201).send(question)
   } else {
