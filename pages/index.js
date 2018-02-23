@@ -22,6 +22,7 @@ import faQuestion from '@fortawesome/fontawesome-free-solid/faQuestionCircle'
 import { Link, Router } from '../routes'
 import makeStore from '../redux/makeStore'
 import { fetchCoursesRequest, fetchCourses, createCourse } from '../actions/course'
+import { fetchQueues } from '../actions/queue'
 
 import PageWithUser from '../components/PageWithUser'
 import Loading from '../components/Loading'
@@ -49,6 +50,7 @@ class Index extends React.Component {
 
   componentDidMount() {
     this.props.fetchCourses()
+    this.props.fetchQueues()
   }
 
   showCreateCoursePanel() {
@@ -179,12 +181,16 @@ Index.defaultProps = {
 }
 
 const mapStateToProps = state => ({
+  coursesByKey: state.courses.courses,
   courses: Object.keys(state.courses.courses).sort().map(id => state.courses.courses[id]),
+  queuesById: state.queues.queues,
+  queues: Object.keys(state.queues.queues).sort().map(id => state.queues.queues[id])
   isFetching: state.courses.isFetching,
 })
 
 const mapDispatchToProps = dispatch => ({
   fetchCourses: () => dispatch(fetchCourses()),
+  fetchQueues: () => dispatch(fetchQueues()),
   createCourse: course => dispatch(createCourse(course)),
 })
 

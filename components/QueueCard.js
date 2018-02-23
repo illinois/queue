@@ -10,7 +10,7 @@ import faMapMarker from '@fortawesome/fontawesome-free-solid/faMapMarker'
 import faQuestion from '@fortawesome/fontawesome-free-solid/faQuestionCircle'
 
 const QueueCard = ({ queue, ...rest }) => {
-  const { name: queueName, location, questionCount } = queue
+  // const { name: queueName, location, questionCount } = queue
   return (
     <Card className="mb-3 queue-card" {...rest}>
       <CardBody>

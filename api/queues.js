@@ -22,6 +22,7 @@ const {
 const requireCourseStaffForQueue = require('../middleware/requireCourseStaffForQueue')
 const requireCourseStaff = require('../middleware/requireCourseStaff')
 
+
 // Get all open queues
 router.get('/', async (req, res, _next) => {
   const queues = await Queue.scope('questionCount').findAll()
