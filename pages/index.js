@@ -4,20 +4,13 @@ import {
   Container,
   Row,
   Col,
-  ListGroup,
-  ListGroupItem,
   Card,
   CardBody,
-  CardHeader,
-  CardTitle,
-  CardSubtitle,
+  Button,
 } from 'reactstrap'
 import withRedux from 'next-redux-wrapper'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
-import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner'
-import faMapMarker from '@fortawesome/fontawesome-free-solid/faMapMarker'
-import faQuestion from '@fortawesome/fontawesome-free-solid/faQuestionCircle'
 
 import { Link, Router } from '../routes'
 import makeStore from '../redux/makeStore'
@@ -44,13 +37,19 @@ class Index extends React.Component {
     super(props)
 
     this.state = {
+      finishedLoading: false,
       showCreateCoursePanel: false,
     }
   }
 
   componentDidMount() {
-    this.props.fetchCourses()
-    this.props.fetchQueues()
+    // We need to wait for multiple network requests to complete, so we can't
+    // use the usual isFetching property from the state blob
+    Promise.all([this.props.fetchCourses(), this.props.fetchQueues()]).then(() => {
+      this.setState({
+        finishedLoading: true,
+      })
+    })
   }
 
   showCreateCoursePanel() {
@@ -69,79 +68,90 @@ class Index extends React.Component {
     this.props.createCourse(course).then(() => this.hideCreateCoursePanel())
   }
 
-  handleQueueClick(id) {
-    Router.pushRoute('queue', { id })
-  }
-
   render() {
-    if (this.props.isFetching) {
+    if (!this.state.finishedLoading) {
       return <Loading />
     }
-    let courses
+
+    let courseButtons
     if (this.props.courses && this.props.courses.length > 0) {
-      courses = this.props.courses.map(course => (
+      courseButtons = this.props.courses.map(course => (
         <Link route="course" params={{ id: course.id }} key={course.id} prefetch passHref>
-          <ListGroupItem tag="a" action>{course.name}</ListGroupItem>
+          <Button color="primary" tag="a" className="mr-3" outline>{course.name}</Button>
         </Link>
       ))
-    } else {
-      courses = (
-        <div>
-          <ListGroupItem className="text-center text-muted pt-4 pb-4">
-            There aren&apos;t any courses yet
-          </ListGroupItem>
-        </div>
-      )
     }
 
-    const loadingSpinner = (
-      <ListGroupItem className="text-center">
-        <FontAwesomeIcon icon={faSpinner} pulse />
-      </ListGroupItem>
+    const CardCol = ({ children, ...rest }) => (
+      <Col xs={{ size: 12 }} md={{ size: 6 }} lg={{ size: 4 }} className="mb-3" {...rest} >
+        {children}
+      </Col>
     )
 
-    const createCoursePanel = (
-      <NewCourse
-        onCreateCourse={course => this.createCourse(course)}
-        onCancel={() => this.hideCreateCoursePanel()}
-      />
-    )
-
-    const createCourseButton = (
-      <ShowForAdmin>
-        <ListGroupItem action className="text-muted" onClick={() => this.showCreateCoursePanel()}>
-          <FontAwesomeIcon icon={faPlus} className="mr-2" />
-          Create a course
-        </ListGroupItem>
-      </ShowForAdmin>
-    )
+    let queues
+    if (this.props.queues && this.props.queues.length > 0) {
+      const handleQueueClick = (id) => {
+        Router.pushRoute('queue', { id })
+      }
+      queues = this.props.queues.map((queue) => {
+        const courseName = this.props.coursesById[queue.courseId].name
+        return (
+          <CardCol key={queue.id}>
+            <QueueCard
+              queue={queue}
+              courseName={courseName}
+              onClick={() => handleQueueClick(queue.id)}
+            />
+          </CardCol>
+        )
+      })
+    } else {
+      queues = (
+        <Col>
+          <Card className="bg-light">
+            <CardBody className="text-center">There aren&apos;t any open queues right now</CardBody>
+          </Card>
+        </Col>
+      )
+    }
 
     return (
       <Layout>
         <Container>
-          <h1 className="display-4 mb-4">Open queues</h1>
-          <Row className="equal-height">
-            <Col xs={{ size: 12 }} md={{ size: 6 }} lg={{ size: 4 }}>
-              <QueueCard onClick={id => this.handleQueueClick(1)} />
-            </Col>
-            <Col xs={{ size: 12 }} md={{ size: 6 }} lg={{ size: 4 }}>
-              <QueueCard />
-            </Col>
+          <div className="d-sm-flex align-items-center mb-4">
+            <h1 className="display-4 d-block d-sm-inline-block">Open queues</h1>
+            <Button color="primary" className="ml-auto mt-3 mt-sm-0">
+              <FontAwesomeIcon icon={faPlus} className="mr-2" />
+              Create queue
+            </Button>
+          </div>
+          <Row className="equal-height mb-5">
+            {queues}
           </Row>
-        </Container>
-        <Container className="d-none">
-          <Card className="courses-card">
-            <CardHeader className="bg-primary text-white">
-              <CardTitle tag="h3">Hey there!</CardTitle>
-              <CardSubtitle>Select your course from the list below.</CardSubtitle>
-            </CardHeader>
-            <ListGroup flush>
-              {!this.props.isFetching && courses}
-              {this.props.isFetching && loadingSpinner}
-              {!this.state.showCreateCoursePanel && createCourseButton}
-              {this.state.showCreateCoursePanel && createCoursePanel}
-            </ListGroup>
-          </Card>
+          <div className="d-sm-flex align-items-center mb-4">
+            <h3 className="d-block d-sm-inline-block mb-0">Or, select a course</h3>
+            <ShowForAdmin>
+              <Button
+                className="ml-auto mt-3 mt-sm-0"
+                color="primary"
+                onClick={() => this.showCreateCoursePanel()}
+              >
+                <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                Create course
+              </Button>
+            </ShowForAdmin>
+          </div>
+          {this.state.showCreateCoursePanel &&
+            <div className="mb-4">
+              <NewCourse
+                onCreateCourse={course => this.createCourse(course)}
+                onCancel={() => this.hideCreateCoursePanel()}
+              />
+            </div>
+          }
+          <div className="mb-4">
+            {courseButtons}
+          </div>
         </Container>
         <style global jsx>{`
           .courses-card {
@@ -167,25 +177,31 @@ class Index extends React.Component {
 }
 
 Index.propTypes = {
-  isFetching: PropTypes.bool,
   courses: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string,
   })),
+  coursesById: PropTypes.objectOf(PropTypes.shape({
+    name: PropTypes.string,
+  })),
+  queues: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+  })),
   fetchCourses: PropTypes.func.isRequired,
+  fetchQueues: PropTypes.func.isRequired,
   createCourse: PropTypes.func.isRequired,
 }
 
 Index.defaultProps = {
-  isFetching: false,
   courses: [],
+  coursesById: {},
+  queues: [],
 }
 
 const mapStateToProps = state => ({
-  coursesByKey: state.courses.courses,
+  coursesById: state.courses.courses,
   courses: Object.keys(state.courses.courses).sort().map(id => state.courses.courses[id]),
   queuesById: state.queues.queues,
-  queues: Object.keys(state.queues.queues).sort().map(id => state.queues.queues[id])
-  isFetching: state.courses.isFetching,
+  queues: Object.keys(state.queues.queues).sort().map(id => state.queues.queues[id]),
 })
 
 const mapDispatchToProps = dispatch => ({

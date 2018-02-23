@@ -9,19 +9,23 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faMapMarker from '@fortawesome/fontawesome-free-solid/faMapMarker'
 import faQuestion from '@fortawesome/fontawesome-free-solid/faQuestionCircle'
 
-const QueueCard = ({ queue, ...rest }) => {
-  // const { name: queueName, location, questionCount } = queue
+const QueueCard = ({ queue, courseName, ...rest }) => {
+  const { name: queueName, location, questionCount } = queue
+
+  const questionCountText = `${questionCount} Question${questionCount !== 1 ? 's' : ''}`
+  const locationText = location || 'No location specified'
+
   return (
-    <Card className="mb-3 queue-card" {...rest}>
+    <Card className="queue-card" {...rest}>
       <CardBody>
-        <CardTitle>CS 225</CardTitle>
-        <CardSubtitle className="mb-2">Another queue name</CardSubtitle>
+        <CardTitle>{courseName}</CardTitle>
+        <CardSubtitle className="mb-2">{queueName}</CardSubtitle>
         <div className="text-muted">
           <FontAwesomeIcon icon={faMapMarker} fixedWidth className="mr-2" />
-          Siebel Basement
+          {locationText}
           <br />
           <FontAwesomeIcon icon={faQuestion} fixedWidth className="mr-2" />
-          2 Questions
+          {questionCountText}
         </div>
       </CardBody>
       <style global jsx>{`
