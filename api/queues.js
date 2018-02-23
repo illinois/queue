@@ -19,15 +19,12 @@ const {
   failIfErrors,
 } = require('./util')
 
-const requireAdmin = require('../middleware/requireAdmin')
 const requireCourseStaffForQueue = require('../middleware/requireCourseStaffForQueue')
 const requireCourseStaff = require('../middleware/requireCourseStaff')
 
-// Get a list of all queues
-router.get('/', [
-  requireAdmin,
-], async (req, res, _next) => {
-  const queues = await Queue.findAll()
+// Get all open queues
+router.get('/', async (req, res, _next) => {
+  const queues = await Queue.scope('questionCount').findAll()
   res.json(queues)
 })
 

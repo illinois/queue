@@ -2,9 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {
   Container,
+  Row,
+  Col,
   ListGroup,
   ListGroupItem,
   Card,
+  CardBody,
   CardHeader,
   CardTitle,
   CardSubtitle,
@@ -13,8 +16,10 @@ import withRedux from 'next-redux-wrapper'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
 import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner'
+import faMapMarker from '@fortawesome/fontawesome-free-solid/faMapMarker'
+import faQuestion from '@fortawesome/fontawesome-free-solid/faQuestionCircle'
 
-import { Link } from '../routes'
+import { Link, Router } from '../routes'
 import makeStore from '../redux/makeStore'
 import { fetchCoursesRequest, fetchCourses, createCourse } from '../actions/course'
 
@@ -23,6 +28,7 @@ import Loading from '../components/Loading'
 import Layout from '../components/Layout'
 import NewCourse from '../components/NewCourse'
 import ShowForAdmin from '../components/ShowForAdmin'
+import QueueCard from '../components/QueueCard'
 
 
 class Index extends React.Component {
@@ -59,6 +65,10 @@ class Index extends React.Component {
 
   createCourse(course) {
     this.props.createCourse(course).then(() => this.hideCreateCoursePanel())
+  }
+
+  handleQueueClick(id) {
+    Router.pushRoute('queue', { id })
   }
 
   render() {
@@ -107,6 +117,17 @@ class Index extends React.Component {
     return (
       <Layout>
         <Container>
+          <h1 className="display-4 mb-4">Open queues</h1>
+          <Row className="equal-height">
+            <Col xs={{ size: 12 }} md={{ size: 6 }} lg={{ size: 4 }}>
+              <QueueCard onClick={id => this.handleQueueClick(1)} />
+            </Col>
+            <Col xs={{ size: 12 }} md={{ size: 6 }} lg={{ size: 4 }}>
+              <QueueCard />
+            </Col>
+          </Row>
+        </Container>
+        <Container className="d-none">
           <Card className="courses-card">
             <CardHeader className="bg-primary text-white">
               <CardTitle tag="h3">Hey there!</CardTitle>
@@ -120,11 +141,22 @@ class Index extends React.Component {
             </ListGroup>
           </Card>
         </Container>
-        <style jsx>{`
-          :global(.courses-card) {
+        <style global jsx>{`
+          .courses-card {
             width: 100%;
             max-width: 500px;
             margin: auto;
+          }
+          .row.equal-height {
+            display: flex;
+            flex-wrap: wrap;
+          }
+          .row.equal-height > [class*='col-'] {
+            display: flex;
+            flex-direction: column;
+          }
+          .row.equal-height .card {
+            flex: 1;
           }
         `}</style>
       </Layout>
