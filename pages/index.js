@@ -182,12 +182,14 @@ class Index extends React.Component {
             </ShowForAdmin>
           </div>
           {this.state.showCreateCoursePanel &&
-            <div className="mb-4">
-              <NewCourse
-                onCreateCourse={course => this.createCourse(course)}
-                onCancel={() => this.hideCreateCoursePanel()}
-              />
-            </div>
+            <Card className="mb-4">
+              <CardBody>
+                <NewCourse
+                  onCreateCourse={course => this.createCourse(course)}
+                  onCancel={() => this.hideCreateCoursePanel()}
+                />
+              </CardBody>
+            </Card>
           }
           <div className="mb-4">
             {courseButtons}
