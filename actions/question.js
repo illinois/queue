@@ -66,20 +66,20 @@ export function updateQuestionAnswering(questionId, beingAnswered) {
 }
 
 /**
- * Update a question's attributes (just location for now).
+ * Update a question's attributes
  */
-const editQuestionRequest = makeActionCreator(types.EDIT_QUESTION.REQUEST, 'questionId', 'attributes')
-const editQuestionSuccess = makeActionCreator(types.EDIT_QUESTION.SUCCESS, 'questionId', 'attributes')
-const editQuestionFailure = makeActionCreator(types.EDIT_QUESTION.FAILURE, 'questionId')
+const updateQuestionRequest = makeActionCreator(types.UPDATE_QUESTION.REQUEST, 'questionId', 'attributes')
+const updateQuestionSuccess = makeActionCreator(types.UPDATE_QUESTION.SUCCESS, 'questionId', 'attributes')
+const updateQuestionFailure = makeActionCreator(types.UPDATE_QUESTION.FAILURE, 'questionId')
 
-export function editQuestion(questionId, attributes) {
+export function updateSingleQuestion(questionId, attributes) {
   return (dispatch) => {
-    dispatch(editQuestionRequest(questionId, attributes))
+    dispatch(updateQuestionRequest(questionId, attributes))
     return axios.patch(`/api/questions/${questionId}`, attributes).then(
-      res => dispatch(editQuestionSuccess(questionId, res.data)),
+      res => dispatch(updateQuestionSuccess(questionId, res.data)),
       (err) => {
         console.error(err)
-        dispatch(editQuestionFailure(questionId))
+        dispatch(updateQuestionFailure(questionId))
       },
     )
   }

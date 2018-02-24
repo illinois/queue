@@ -31,15 +31,26 @@ class QuestionEdit extends React.Component {
     super(props)
 
     this.state = {
-      location: '', // props.question.location ||
-      topic: '', // props.question.topic ||
+      location: '',
+      topic: '',
       isFieldValid: {},
     }
+
 
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleSubmitEdit = this.handleSubmitEdit.bind(this)
     this.handleCancel = this.handleCancel.bind(this)
     this.handleModalExit = this.handleModalExit.bind(this)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.question) {
+      this.setState({
+        location: nextProps.question.location,
+        topic: nextProps.question.topic,
+        isFieldValid: {},
+      })
+    }
   }
 
   handleInputChange(event) {
@@ -99,7 +110,7 @@ class QuestionEdit extends React.Component {
                   type="text"
                   name="location"
                   id="location"
-                  value={this.state.name}
+                  value={this.state.location}
                   onChange={this.handleInputChange}
                   valid={isValid(this.state.isFieldValid.location)}
                 />
@@ -113,7 +124,7 @@ class QuestionEdit extends React.Component {
                   type="text"
                   name="topic"
                   id="topic"
-                  value={this.state.name}
+                  value={this.state.topic}
                   onChange={this.handleInputChange}
                   valid={isValid(this.state.isFieldValid.topic)}
                 />
@@ -132,9 +143,18 @@ class QuestionEdit extends React.Component {
 }
 
 QuestionEdit.propTypes = {
+  question: PropTypes.shape({
+    name: PropTypes.string,
+    location: PropTypes.string,
+    topic: PropTypes.string,
+  }),
   isOpen: PropTypes.bool.isRequired,
   onCancel: PropTypes.func.isRequired,
   onSubmitQuestionEdit: PropTypes.func.isRequired,
+}
+
+QuestionEdit.defaultProps = {
+  question: null,
 }
 
 export default QuestionEdit

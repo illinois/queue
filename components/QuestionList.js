@@ -59,7 +59,7 @@ class QuestionList extends React.Component {
   }
 
   handleSubmitQuestionEdit(attributes) {
-    this.props.editQuestion(this.state.attributeId, attributes).then(() => {
+    this.props.updateSingleQuestion(this.state.attributeId, attributes).then(() => {
       this.setState({
         showQuestionEditModal: false,
       })
@@ -161,7 +161,7 @@ class QuestionList extends React.Component {
           confirm={() => this.handleConfirmedDeletion()}
         />
         <QuestionEdit
-          id={this.state.attributeId}
+          question={this.props.questions[this.state.attributeId]}
           isOpen={this.state.showQuestionEditModal}
           onSubmitQuestionEdit={attributes => this.handleSubmitQuestionEdit(attributes)}
           onCancel={() => this.handleQuestionEditCancel()}
@@ -185,7 +185,7 @@ QuestionList.propTypes = {
   deleteQuestion: PropTypes.func.isRequired,
   updateQuestionBeingAnswered: PropTypes.func.isRequired,
   finishAnsweringQuestion: PropTypes.func.isRequired,
-  editQuestion: PropTypes.func.isRequired,
+  updateSingleQuestion: PropTypes.func.isRequired,
 }
 
 QuestionList.defaultProps = {
