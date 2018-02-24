@@ -28,7 +28,7 @@ export function createQueue(courseId, queue) {
  * Fetch a queue
  */
 
-const fetchQueueRequest = makeActionCreator(types.FETCH_QUEUE.REQUEST, 'queueId')
+export const fetchQueueRequest = makeActionCreator(types.FETCH_QUEUE.REQUEST, 'queueId')
 const fetchQueueSuccess = makeActionCreator(types.FETCH_QUEUE.SUCCESS, 'queueId', 'queue')
 const fetchQueueFailure = makeActionCreator(types.FETCH_QUEUE.FAILURE, 'queueId', 'data')
 

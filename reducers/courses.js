@@ -16,7 +16,7 @@ const defaultState = {
 }
 
 function normalizeCourse(course) {
-  const newCourse = Object.assign({}, course)
+  const newCourse = { ...course }
   if (course.queues) {
     newCourse.queues = course.queues.map(queue => queue.id)
   }
@@ -42,7 +42,8 @@ function removeStaffFromCourse(state, courseId, userId) {
   }
 
   const course = state.courses[courseId]
-  const newState = Object.assign({}, state, {
+  return {
+    ...state,
     courses: {
       ...state.courses,
       [courseId]: {
@@ -50,8 +51,7 @@ function removeStaffFromCourse(state, courseId, userId) {
         staff: course.staff.filter(id => id !== userId),
       },
     },
-  })
-  return newState
+  }
 }
 
 function addQueueToCourse(state, courseId, queue) {
@@ -59,7 +59,7 @@ function addQueueToCourse(state, courseId, queue) {
     return state
   }
 
-  const newState = Object.assign({}, state)
+  const newState = { ...state }
   newState.courses[courseId].queues.push(queue.id)
   return newState
 }
@@ -70,7 +70,8 @@ function removeQueueFromCourse(state, courseId, queueId) {
   }
 
   const course = state.courses[courseId]
-  const newState = Object.assign({}, state, {
+  return {
+    ...state,
     courses: {
       ...state.courses,
       [courseId]: {
@@ -78,57 +79,67 @@ function removeQueueFromCourse(state, courseId, queueId) {
         queues: course.queues.filter(id => id !== queueId),
       },
     },
-  })
-  return newState
+  }
 }
 
 const courses = (state = defaultState, action) => {
   switch (action.type) {
     case FETCH_COURSES.REQUEST: {
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: true,
-      })
+      }
     }
     case FETCH_COURSES.SUCCESS: {
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: false,
         courses: action.courses.reduce((obj, item) => {
           // eslint-disable-next-line no-param-reassign
           obj[item.id] = normalizeCourse(item)
           return obj
         }, {}),
-      })
+      }
     }
     case FETCH_COURSES.FAILURE: {
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: false,
         courses: {},
-        error: true,
-      })
+      }
     }
     case FETCH_COURSE.REQUEST: {
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: true,
-      })
+      }
     }
     case FETCH_COURSE.SUCCESS: {
       const { course } = action
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: false,
         courses: {
           ...state.courses,
           [course.id]: normalizeCourse(course),
         },
-      })
+      }
+    }
+    case FETCH_COURSE.FAILURE: {
+      return {
+        ...state,
+        isFetching: false,
+      }
     }
     case CREATE_COURSE.SUCCESS: {
       const { course } = action
-      return Object.assign({}, state, {
+      return {
+        ...state,
         courses: {
           ...state.courses,
           [course.id]: normalizeCourse(course),
         },
-      })
+      }
     }
     case CREATE_QUEUE.SUCCESS: {
       return addQueueToCourse(state, action.courseId, action.queue)

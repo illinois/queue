@@ -19,6 +19,7 @@ import makeStore from '../redux/makeStore'
 import { fetchCoursesRequest, fetchCourses, createCourse } from '../actions/course'
 
 import PageWithUser from '../components/PageWithUser'
+import Loading from '../components/Loading'
 import Layout from '../components/Layout'
 import NewCourse from '../components/NewCourse'
 import ShowForAdmin from '../components/ShowForAdmin'
@@ -61,6 +62,9 @@ class Index extends React.Component {
   }
 
   render() {
+    if (this.props.isFetching) {
+      return <Loading />
+    }
     let courses
     if (this.props.courses && this.props.courses.length > 0) {
       courses = this.props.courses.map(course => (

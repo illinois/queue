@@ -19,6 +19,19 @@ module.exports = (sequelize, DataTypes) => {
     models.Queue.hasMany(models.ActiveStaff)
     models.Queue.hasMany(models.Question)
     models.Queue.belongsTo(models.User, { as: 'createdByUser' })
+
+    models.Queue.addScope('questionCount', {
+      attributes: {
+        include: [[sequelize.literal('(SELECT COUNT(`questions`.`id`) FROM `questions` WHERE `questions`.`queueId` = `queue`.`id` AND `questions`.`dequeueTime` IS NULL)'), 'questionCount']],
+      },
+      include: [{
+        model: models.Question,
+        where: { dequeueTime: null },
+        required: false,
+        attributes: [],
+      }],
+      group: ['queue.id'],
+    })
   }
 
   return obj
