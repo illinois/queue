@@ -105,10 +105,12 @@ class Course extends React.Component {
     }
 
     const createQueuePanel = (
-      <NewQueue
-        onCreateQueue={queue => this.createQueue(queue)}
-        onCancel={() => this.hideCreateQueuePanel()}
-      />
+      <ListGroupItem>
+        <NewQueue
+          onCreateQueue={queue => this.createQueue(queue)}
+          onCancel={() => this.hideCreateQueuePanel()}
+        />
+      </ListGroupItem>
     )
 
     const createQueueButton = (

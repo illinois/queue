@@ -4,21 +4,43 @@ import {
   CardBody,
   CardTitle,
   CardSubtitle,
+  Button,
 } from 'reactstrap'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faMapMarker from '@fortawesome/fontawesome-free-solid/faMapMarker'
 import faQuestion from '@fortawesome/fontawesome-free-solid/faQuestionCircle'
 
-const QueueCard = ({ queue, courseName, ...rest }) => {
+import ShowForCourseStaff from './ShowForCourseStaff'
+
+const QueueCard = ({ queue, courseName, onDelete, ...rest }) => {
   const { name: queueName, location, questionCount } = queue
 
   const questionCountText = `${questionCount} Question${questionCount !== 1 ? 's' : ''}`
   const locationText = location || 'No location specified'
 
+  const handleDelete = (e) => {
+    e.stopPropagation()
+    e.preventDefault()
+    onDelete()
+  }
+
   return (
     <Card className="queue-card" {...rest}>
       <CardBody>
-        <CardTitle>{courseName}</CardTitle>
+        <CardTitle className="d-flex align-items-center">
+          {courseName}
+          <ShowForCourseStaff courseId={queue.courseId}>
+            <Button
+              color="danger"
+              size="sm"
+              className="ml-auto"
+              outline
+              onClick={handleDelete}
+            >
+              Delete
+            </Button>
+          </ShowForCourseStaff>
+        </CardTitle>
         <CardSubtitle className="mb-2">{queueName}</CardSubtitle>
         <div className="text-muted">
           <FontAwesomeIcon icon={faMapMarker} fixedWidth className="mr-2" />

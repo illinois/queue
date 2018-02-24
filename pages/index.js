@@ -15,12 +15,13 @@ import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
 import { Link, Router } from '../routes'
 import makeStore from '../redux/makeStore'
 import { fetchCoursesRequest, fetchCourses, createCourse } from '../actions/course'
-import { fetchQueues } from '../actions/queue'
+import { fetchQueues, createQueue, deleteQueue } from '../actions/queue'
 
 import PageWithUser from '../components/PageWithUser'
 import Loading from '../components/Loading'
 import Layout from '../components/Layout'
 import NewCourse from '../components/NewCourse'
+import NewQueue from '../components/NewQueue'
 import ShowForAdmin from '../components/ShowForAdmin'
 import QueueCard from '../components/QueueCard'
 
@@ -39,6 +40,7 @@ class Index extends React.Component {
     this.state = {
       finishedLoading: false,
       showCreateCoursePanel: false,
+      showCreateQueuePanel: false,
     }
   }
 
@@ -64,8 +66,28 @@ class Index extends React.Component {
     })
   }
 
+  showCreateQueuePanel() {
+    this.setState({
+      showCreateQueuePanel: true,
+    })
+  }
+
+  hideCreateQueuePanel() {
+    this.setState({
+      showCreateQueuePanel: false,
+    })
+  }
+
   createCourse(course) {
     this.props.createCourse(course).then(() => this.hideCreateCoursePanel())
+  }
+
+  createQueue(queue, courseId) {
+    this.props.createQueue(courseId, queue).then(() => this.hideCreateQueuePanel())
+  }
+
+  deleteQueue(courseId, queueId) {
+    this.props.deleteQueue(courseId, queueId)
   }
 
   render() {
@@ -89,7 +111,6 @@ class Index extends React.Component {
     )
 
     let queues
-    console.log(this.props.queues)
     if (this.props.queues && this.props.queues.length > 0) {
       const handleQueueClick = (id) => {
         Router.pushRoute('queue', { id })
@@ -102,6 +123,7 @@ class Index extends React.Component {
               queue={queue}
               courseName={courseName}
               onClick={() => handleQueueClick(queue.id)}
+              onDelete={() => this.deleteQueue(queue.courseId, queue.id)}
             />
           </CardCol>
         )
@@ -121,11 +143,28 @@ class Index extends React.Component {
         <Container>
           <div className="d-sm-flex align-items-center mb-4">
             <h1 className="display-4 d-block d-sm-inline-block">Open queues</h1>
-            <Button color="primary" className="ml-auto mt-3 mt-sm-0">
-              <FontAwesomeIcon icon={faPlus} className="mr-2" />
-              Create queue
-            </Button>
+            {this.props.userIsCourseStaff &&
+              <Button
+                color="primary"
+                className="ml-auto mt-3 mt-sm-0"
+                onClick={() => this.showCreateQueuePanel()}
+              >
+                <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                Create queue
+              </Button>
+            }
           </div>
+          {this.state.showCreateQueuePanel &&
+            <Card className="mb-4">
+              <CardBody>
+                <NewQueue
+                  showCourseSelector
+                  onCreateQueue={(queue, courseId) => this.createQueue(queue, courseId)}
+                  onCancel={() => this.hideCreateQueuePanel()}
+                />
+              </CardBody>
+            </Card>
+          }
           <Row className="equal-height mb-5">
             {queues}
           </Row>
@@ -178,6 +217,7 @@ class Index extends React.Component {
 }
 
 Index.propTypes = {
+  userIsCourseStaff: PropTypes.bool.isRequired,
   courses: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string,
   })),
@@ -190,6 +230,8 @@ Index.propTypes = {
   fetchCourses: PropTypes.func.isRequired,
   fetchQueues: PropTypes.func.isRequired,
   createCourse: PropTypes.func.isRequired,
+  createQueue: PropTypes.func.isRequired,
+  deleteQueue: PropTypes.func.isRequired,
 }
 
 Index.defaultProps = {
@@ -205,6 +247,7 @@ const mapObjectToArray = (o) => {
 }
 
 const mapStateToProps = state => ({
+  userIsCourseStaff: state.user.user && state.user.user.staffAssignments.length > 0,
   coursesById: state.courses.courses,
   courses: mapObjectToArray(state.courses.courses),
   queuesById: state.queues.queues,
@@ -215,6 +258,8 @@ const mapDispatchToProps = dispatch => ({
   fetchCourses: () => dispatch(fetchCourses()),
   fetchQueues: () => dispatch(fetchQueues()),
   createCourse: course => dispatch(createCourse(course)),
+  createQueue: (courseId, queue) => dispatch(createQueue(courseId, queue)),
+  deleteQueue: (courseId, queueId) => dispatch(deleteQueue(courseId, queueId)),
 })
 
 export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(PageWithUser(Index))
