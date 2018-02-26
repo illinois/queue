@@ -9,6 +9,7 @@ const {
   Course,
   Queue,
   User,
+  Sequelize,
 } = require('../models')
 const {
   requireCourse,
@@ -33,10 +34,11 @@ router.get('/:courseId', [
   const { id: courseId } = res.locals.course
   const { locals: { userAuthz } } = res
 
-  const includes = []
+  const include = []
+  const order = []
   // Only include list of course staff for other course staff or admins
   if (userAuthz.isAdmin || userAuthz.staffedCourseIds.indexOf(courseId) !== -1) {
-    includes.push({
+    include.push({
       model: User,
       as: 'staff',
       attributes: ['id', 'netid', 'name'],
@@ -44,11 +46,16 @@ router.get('/:courseId', [
         attributes: [],
       },
     })
+    // This sort order puts NULLs last
+    order.push(Sequelize.literal('-`staff`.`preferredName` DESC'))
+    order.push(Sequelize.literal('-`staff`.`universityName` DESC'))
+    order.push(Sequelize.literal('`staff`.`netid` ASC'))
   }
 
   const course = (await Course.findOne({
     where: { id: courseId },
-    include: includes,
+    include,
+    order,
   })).toJSON()
 
   // It turns out that sequelize can only generate queries that include the
