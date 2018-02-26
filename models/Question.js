@@ -34,10 +34,6 @@ module.exports = (sequelize, DataTypes) => {
       include: [{
         model: models.User,
         as: 'answeredBy',
-        /* attributes: {
-          include: ['name'],
-          exclude: ['universityName', 'preferredName'],
-        }, */
         attributes: ['name', 'netid'],
         required: false,
       }],
