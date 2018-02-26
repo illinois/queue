@@ -10,6 +10,5 @@ module.exports = {
               specialLink: ['to', 'route'],
               aspects: ['noHref', 'invalidHref', 'preferButton'],
           }],
-          'no-bitwise': ['error', { 'allow': ['>>>'] }]
     }
 };
