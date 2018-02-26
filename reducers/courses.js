@@ -32,7 +32,7 @@ function addStaffToCourse(state, courseId, userId) {
   }
 
   const newState = { ...state }
-  newState.courses[courseId].staff.unshift(userId)
+  newState.courses[courseId].staff.push(userId)
   return newState
 }
 

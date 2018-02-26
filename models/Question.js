@@ -20,17 +20,30 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     // Don't actually delete, so that we can save feedback
     paranoid: true,
-    defaultScope: {
-      attributes: {
-        include: ['askedById', 'answeredById', 'queueId'],
-      },
-    },
   })
 
   obj.associate = (models) => {
     models.Question.belongsTo(models.Queue)
     models.Question.belongsTo(models.User, { as: 'askedBy' })
     models.Question.belongsTo(models.User, { as: 'answeredBy' })
+
+    models.Question.addScope('defaultScope', {
+      attributes: {
+        include: ['askedById', 'answeredById', 'queueId'],
+      },
+      include: [{
+        model: models.User,
+        as: 'answeredBy',
+        /* attributes: {
+          include: ['name'],
+          exclude: ['universityName', 'preferredName'],
+        }, */
+        attributes: ['name'],
+        required: false,
+      }],
+    }, {
+      override: true,
+    })
   }
 
   return obj

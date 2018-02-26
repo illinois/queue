@@ -22,6 +22,7 @@ class Question extends React.Component {
       enqueueTime,
       isUserCourseStaff,
       didUserAskQuestion,
+      answeredBy,
     } = this.props
     const badgeColor = beingAnswered ? 'success' : 'secondary'
     const badgeLabel = beingAnswered ? 'TA Answering' : 'Waiting'
@@ -117,6 +118,7 @@ class Question extends React.Component {
             <div>
               <ParrotText text={topic} />
             </div>
+            <div>{answeredBy && answeredBy.name}</div>
           </div>
           <div className="ml-auto pt-3 pt-sm-0">
             {buttonCluster}
