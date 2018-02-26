@@ -143,7 +143,7 @@ class Index extends React.Component {
         <Container>
           <div className="d-sm-flex align-items-center mb-4">
             <h1 className="display-4 d-block d-sm-inline-block">Open queues</h1>
-            {this.props.userIsCourseStaff &&
+            {this.props.showCreateQueueButton &&
               <Button
                 color="primary"
                 className="ml-auto mt-3 mt-sm-0"
@@ -219,7 +219,7 @@ class Index extends React.Component {
 }
 
 Index.propTypes = {
-  userIsCourseStaff: PropTypes.bool.isRequired,
+  showCreateQueueButton: PropTypes.bool.isRequired,
   courses: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string,
   })),
@@ -249,7 +249,9 @@ const mapObjectToArray = (o) => {
 }
 
 const mapStateToProps = state => ({
-  userIsCourseStaff: state.user.user && state.user.user.staffAssignments.length > 0,
+  showCreateQueueButton: state.user.user && (
+    state.user.user.isAdmin || state.user.user.staffAssignments.length > 0
+  ),
   coursesById: state.courses.courses,
   courses: mapObjectToArray(state.courses.courses),
   queuesById: state.queues.queues,

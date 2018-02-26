@@ -5,6 +5,7 @@ import {
   Form,
   FormGroup,
   FormText,
+  FormFeedback,
   Label,
   Input,
   Button,
@@ -12,6 +13,8 @@ import {
 import { connect } from 'react-redux'
 
 import { mapObjectToArray } from '../util'
+
+const isValid = error => (error === undefined ? undefined : error === '')
 
 class NewQueue extends React.Component {
   constructor(props) {
@@ -21,10 +24,11 @@ class NewQueue extends React.Component {
       name: '',
       location: '',
       course: 'none',
+      fieldErrors: {},
     }
 
     this.handleInputChange = this.handleInputChange.bind(this)
-    this.handleCreateQueue = this.handleCreateQueue.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   handleInputChange(event) {
@@ -33,7 +37,26 @@ class NewQueue extends React.Component {
     })
   }
 
-  handleCreateQueue() {
+  handleSubmit() {
+    let valid = true
+    const fieldErrors = {}
+
+    // Only validate the course if the course selector is shown
+    if (this.props.showCourseSelector && this.state.course === 'none') {
+      valid = false
+      fieldErrors.course = 'You must select a course'
+    }
+
+    if (!this.state.name) {
+      valid = false
+      fieldErrors.name = 'You must name this queue'
+    }
+
+    if (!valid) {
+      this.setState({ fieldErrors })
+      return
+    }
+
     const queue = {
       name: this.state.name,
       location: this.state.location,
@@ -74,10 +97,12 @@ class NewQueue extends React.Component {
                 id="course"
                 onChange={this.handleInputChange}
                 value={this.state.course}
+                valid={isValid(this.state.fieldErrors.course)}
               >
                 <option value="none" disabled>Select a course</option>
                 {courseOptions}
               </Input>
+              <FormFeedback>{this.state.fieldErrors.course}</FormFeedback>
             </Col>
           </FormGroup>
         }
@@ -90,7 +115,9 @@ class NewQueue extends React.Component {
               placeholder="Office Hours"
               onChange={this.handleInputChange}
               value={this.state.name}
+              valid={isValid(this.state.fieldErrors.name)}
             />
+            <FormFeedback>{this.state.fieldErrors.name}</FormFeedback>
           </Col>
         </FormGroup>
         <FormGroup row>
@@ -124,7 +151,7 @@ class NewQueue extends React.Component {
               block
               color="primary"
               type="button"
-              onClick={() => this.handleCreateQueue()}
+              onClick={() => this.handleSubmit()}
             >
               Create
             </Button>
