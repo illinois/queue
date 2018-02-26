@@ -20,12 +20,11 @@ class Question extends React.Component {
       topic,
       beingAnswered,
       enqueueTime,
-      isUserCourseStaff,
-      didUserAskQuestion,
       answeredBy,
+      isUserCourseStaff,
+      isUserAnsweringQuestion,
+      didUserAskQuestion,
     } = this.props
-    const badgeColor = beingAnswered ? 'success' : 'secondary'
-    const badgeLabel = beingAnswered ? 'TA Answering' : 'Waiting'
 
     const userCanDelete = didUserAskQuestion || isUserCourseStaff
 
@@ -34,13 +33,15 @@ class Question extends React.Component {
       if (isUserCourseStaff) {
         buttonCluster = (
           <Fragment>
-            <Button
-              color="primary"
-              className="mr-2"
-              onClick={() => this.props.finishedAnswering(id)}
-            >
-              Finish Answering
-            </Button>
+            {isUserAnsweringQuestion &&
+              <Button
+                color="primary"
+                className="mr-2"
+                onClick={() => this.props.finishedAnswering(id)}
+              >
+                Finish Answering
+              </Button>
+            }
             <Button
               color="light"
               onClick={() => this.props.updateQuestionBeingAnswered(id, false)}
@@ -86,26 +87,46 @@ class Question extends React.Component {
       )
     }
 
+    const isBeingAnswered = !!answeredBy
+    const answeringName = (answeredBy && (answeredBy.name || answeredBy.netid)) || undefined
+
     return (
       <Fragment>
         <ListGroupItem key={id} className="d-sm-flex align-items-center">
-          {didUserAskQuestion &&
-            <div
-              style={{
-                height: '100%',
-                width: '5px',
-                position: 'absolute',
-                top: '0',
-                left: '0',
-              }}
-              className="bg-primary"
-            />
-          }
+          <div
+            style={{
+              height: '100%',
+              position: 'absolute',
+              top: '0',
+              left: '0',
+            }}
+          >
+            {didUserAskQuestion &&
+              <div
+                style={{
+                  height: '100%',
+                  width: '5px',
+                  float: 'left',
+                }}
+                className="bg-primary"
+              />
+            }
+            {isBeingAnswered &&
+              <div
+                style={{
+                  height: '100%',
+                  width: '5px',
+                  float: 'left',
+                }}
+                className="bg-success"
+              />
+            }
+          </div>
           <div>
-            <div>
-              <Badge color={badgeColor} className="mr-2">{badgeLabel}</Badge>
-              <strong>{name}</strong>
-            </div>
+            {isBeingAnswered &&
+              <Badge color="success">Being answered by {answeringName}</Badge>
+            }
+            <strong className="d-block">{name}</strong>
             <div className="text-muted">
               <span className="text-muted" style={{ fontSize: '0.9rem' }}>
                 <span title="Location">{location}</span>
@@ -118,7 +139,6 @@ class Question extends React.Component {
             <div>
               <ParrotText text={topic} />
             </div>
-            <div>{answeredBy && answeredBy.name}</div>
           </div>
           <div className="ml-auto pt-3 pt-sm-0">
             {buttonCluster}
@@ -129,6 +149,10 @@ class Question extends React.Component {
   }
 }
 
+Question.defaultProps = {
+  answeredBy: null,
+}
+
 Question.propTypes = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
@@ -136,8 +160,13 @@ Question.propTypes = {
   topic: PropTypes.string.isRequired,
   beingAnswered: PropTypes.bool.isRequired,
   enqueueTime: PropTypes.string.isRequired,
+  answeredBy: PropTypes.shape({
+    name: PropTypes.string,
+    netid: PropTypes.string,
+  }),
   didUserAskQuestion: PropTypes.bool.isRequired,
   isUserCourseStaff: PropTypes.bool.isRequired,
+  isUserAnsweringQuestion: PropTypes.bool.isRequired,
   updateQuestionBeingAnswered: PropTypes.func.isRequired,
   finishedAnswering: PropTypes.func.isRequired,
   deleteQuestion: PropTypes.func.isRequired,

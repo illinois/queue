@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
           include: ['name'],
           exclude: ['universityName', 'preferredName'],
         }, */
-        attributes: ['name'],
+        attributes: ['name', 'netid'],
         required: false,
       }],
     }, {
