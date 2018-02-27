@@ -1,6 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const obj = sequelize.define('course', {
     name: DataTypes.STRING,
+    shortcode: DataTypes.STRING,
   })
 
   obj.associate = (models) => {

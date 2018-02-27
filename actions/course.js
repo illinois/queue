@@ -13,9 +13,7 @@ export function createCourse(course) {
   return (dispatch) => {
     dispatch(createCourseRequest(course))
 
-    return axios.post('/api/courses', {
-      name: course.name,
-    }).then(
+    return axios.post('/api/courses', course).then(
       res => dispatch(createCourseSuccess(res.data)),
       (err) => {
         console.error(err)

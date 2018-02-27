@@ -49,4 +49,7 @@ app.use(`${baseUrl}/api/courses/:courseId/queues`, require('./api/queues'))
 app.use(`${baseUrl}/api/courses/:courseId/queues/:queueId/questions`, require('./api/questions'))
 app.use(`${baseUrl}/api/queues/:queueId/questions`, require('./api/questions'))
 
+// Support for course shortcodes
+app.use(`${baseUrl}/:courseCode`, require('./middleware/courseShortcodes'))
+
 module.exports = app

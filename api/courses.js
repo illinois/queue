@@ -66,11 +66,13 @@ router.get('/:courseId', [
 router.post('/', [
   requireAdmin,
   check('name', 'name must be specified').exists(),
+  check('shortcode', 'shortcode must be specified').exists(),
   failIfErrors,
 ], async (req, res, _next) => {
-  const { name } = matchedData(req)
+  const { name, shortcode } = matchedData(req)
   const course = Course.build({
     name,
+    shortcode,
   })
   const newCourse = await course.save()
   res.status(201).send(newCourse)
