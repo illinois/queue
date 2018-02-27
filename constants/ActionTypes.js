@@ -14,6 +14,7 @@ export const ADD_COURSE_STAFF = makeActionStrings('ADD_COURSE_STAFF')
 export const REMOVE_COURSE_STAFF = makeActionStrings('REMOVE_COURSE_STAFF')
 
 
+export const FETCH_QUEUES = makeActionStrings('FETCH_QUEUES')
 export const FETCH_QUEUE = makeActionStrings('FETCH_QUEUE')
 export const CREATE_QUEUE = makeActionStrings('CREATE_QUEUE')
 export const DELETE_QUEUE = makeActionStrings('DELETE_QUEUE')

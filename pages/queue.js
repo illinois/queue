@@ -8,9 +8,6 @@ import {
 import withRedux from 'next-redux-wrapper'
 import Error from 'next/error'
 
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner'
-
 import makeStore from '../redux/makeStore'
 import { fetchQueue, fetchQueueRequest } from '../actions/queue'
 import { connectToQueue, disconnectFromQueue } from '../socket/client'

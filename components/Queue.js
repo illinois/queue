@@ -27,7 +27,10 @@ class Queue extends React.Component {
       questionCount,
     } = this.props
 
-    const questionCountText = `${questionCount} Question${questionCount !== 1 ? 's' : ''}`
+    // When we first create a queue, there's no question count in the response
+    // We'll just assume it's 0 until a page reload or websocket event
+    const adjustedCount = questionCount || 0
+    const questionCountText = `${adjustedCount} Question${adjustedCount !== 1 ? 's' : ''}`
     const locationText = location || 'No location specified'
 
     return (

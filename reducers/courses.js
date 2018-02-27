@@ -55,17 +55,20 @@ function removeStaffFromCourse(state, courseId, userId) {
 }
 
 function addQueueToCourse(state, courseId, queue) {
-  if (!(courseId in state.courses) || state.courses[courseId].queues.indexOf(queue.id) !== -1) {
+  if (state.courses[courseId].queues && (!(courseId in state.courses) || state.courses[courseId].queues.indexOf(queue.id) !== -1)) {
     return state
   }
 
   const newState = { ...state }
+  if (!newState.courses[courseId].queues) {
+    newState.courses[courseId].queues = []
+  }
   newState.courses[courseId].queues.push(queue.id)
   return newState
 }
 
 function removeQueueFromCourse(state, courseId, queueId) {
-  if (!(courseId in state.courses) || state.courses[courseId].queues.indexOf(queueId) === -1) {
+  if (!state.courses[courseId].queues || !(courseId in state.courses) || state.courses[courseId].queues.indexOf(queueId) === -1) {
     return state
   }
 
