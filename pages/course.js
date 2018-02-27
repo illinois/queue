@@ -28,6 +28,7 @@ import Layout from '../components/Layout'
 import NewQueue from '../components/NewQueue'
 import Queue from '../components/Queue'
 import ShowForCourseStaff from '../components/ShowForCourseStaff'
+import ConfirmDeleteQueueModal from '../components/ConfirmDeleteQueueModal'
 
 class Course extends React.Component {
   static async getInitialProps({ isServer, store, query }) {
@@ -46,6 +47,8 @@ class Course extends React.Component {
 
     this.state = {
       showCreateQueuePanel: false,
+      showDeleteQueueModal: false,
+      pendingDeleteQueueId: null,
     }
   }
 
@@ -53,24 +56,37 @@ class Course extends React.Component {
     this.props.fetchCourse(this.props.courseId)
   }
 
-  showCreateQueuePanel() {
+  showCreateQueuePanel(state) {
     this.setState({
-      showCreateQueuePanel: true,
-    })
-  }
-
-  hideCreateQueuePanel() {
-    this.setState({
-      showCreateQueuePanel: false,
+      showCreateQueuePanel: state,
     })
   }
 
   createQueue(queue) {
-    this.props.createQueue(this.props.courseId, queue).then(() => this.hideCreateQueuePanel())
+    this.props.createQueue(this.props.courseId, queue).then(() => this.showCreateQueuePanel(false))
   }
 
   deleteQueue(queueId) {
-    this.props.deleteQueue(this.props.courseId, queueId)
+    this.setState({
+      showDeleteQueueModal: true,
+      pendingDeleteQueueId: queueId,
+    })
+  }
+
+  confirmDeleteQueue() {
+    const { pendingDeleteQueueId } = this.state
+    this.props.deleteQueue(this.props.courseId, pendingDeleteQueueId).then(() => {
+      this.setState({
+        showDeleteQueueModal: false,
+        pendingDeleteQueueId: null,
+      })
+    })
+  }
+
+  toggleDeleteModal() {
+    this.setState({
+      showDeleteQueueModal: !this.state.showDeleteQueueModal,
+    })
   }
 
   render() {
@@ -108,14 +124,18 @@ class Course extends React.Component {
       <ListGroupItem>
         <NewQueue
           onCreateQueue={queue => this.createQueue(queue)}
-          onCancel={() => this.hideCreateQueuePanel()}
+          onCancel={() => this.showCreateQueuePanel(false)}
         />
       </ListGroupItem>
     )
 
     const createQueueButton = (
       <ShowForCourseStaff courseId={this.props.courseId}>
-        <ListGroupItem action className="text-muted" onClick={() => this.showCreateQueuePanel()}>
+        <ListGroupItem
+          action
+          className="text-muted"
+          onClick={() => this.showCreateQueuePanel(true)}
+        >
           <FontAwesomeIcon icon={faPlus} className="mr-2" />
           Create a queue
         </ListGroupItem>
@@ -149,6 +169,13 @@ class Course extends React.Component {
             </ListGroup>
           </Card>
         </Container>
+        {this.state.showDeleteQueueModal &&
+          <ConfirmDeleteQueueModal
+            isOpen={this.state.showDeleteQueueModal}
+            toggle={() => this.toggleDeleteModal()}
+            confirm={() => this.confirmDeleteQueue()}
+          />
+        }
         <style jsx>{`
           :global(.courses-card) {
             width: 100%;
