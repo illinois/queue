@@ -11,17 +11,16 @@ const { requireQueue, requireQuestion, failIfErrors } = require('./util')
 const requireCourseStaffForQueueForQuestion = require('../middleware/requireCourseStaffForQueueForQuestion')
 
 
-async function modifyBeingAnswered(questionId, answering) {
-  const question = await Question.findOne({ where: { id: questionId } })
+/* eslint-disable no-param-reassign */
+function modifyBeingAnswered(question, answering) {
   question.beingAnswered = answering
   if (answering) {
     question.answerStartTime = new Date()
   } else {
     question.answerEndTime = new Date()
   }
-
-  return question.save()
 }
+/* eslint-enable no-param-reassign */
 
 // Adds a question to a queue
 router.post('/', [
@@ -93,8 +92,10 @@ router.post('/:questionId/answering', [
   requireQuestion,
   failIfErrors,
 ], async (req, res, _next) => {
-  const { id: questionId } = res.locals.question
-  const question = await modifyBeingAnswered(questionId, true)
+  const { question } = res.locals
+  modifyBeingAnswered(question, true)
+  question.answeredById = res.locals.userAuthn.id
+  await question.save()
   res.send(question)
 })
 
@@ -105,8 +106,10 @@ router.delete('/:questionId/answering', [
   requireQuestion,
   failIfErrors,
 ], async (req, res, _next) => {
-  const { id: questionId } = res.locals.question
-  const question = await modifyBeingAnswered(questionId, false)
+  const { question } = res.locals
+  modifyBeingAnswered(question, false)
+  question.answeredById = null
+  await question.save()
   res.send(question)
 })
 
