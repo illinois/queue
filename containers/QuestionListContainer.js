@@ -3,7 +3,7 @@ import {
   fetchQuestions,
   deleteQuestion,
   updateQuestionAnswering,
-  updateSingleQuestion,
+  updateQuestion,
   finishAnsweringQuestion,
 } from '../actions/question'
 import { isUserActiveStaffForQueue } from '../selectors'
@@ -26,7 +26,7 @@ const mapDispatchToProps = (dispatch, { queueId }) => ({
   // eslint-disable-next-line max-len
   updateQuestionBeingAnswered: (questionId, beingAnswered) => dispatch(updateQuestionAnswering(questionId, beingAnswered)),
   // eslint-disable-next-line max-len
-  updateSingleQuestion: (questionId, attributes) => dispatch(updateSingleQuestion(questionId, attributes)),
+  updateQuestion: (questionId, attributes) => dispatch(updateQuestion(questionId, attributes)),
   // eslint-disable-next-line max-len
   finishAnsweringQuestion: (questionId, feedback) => dispatch(finishAnsweringQuestion(queueId, questionId, feedback)),
 })
