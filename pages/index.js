@@ -24,6 +24,7 @@ import NewCourse from '../components/NewCourse'
 import NewQueue from '../components/NewQueue'
 import ShowForAdmin from '../components/ShowForAdmin'
 import QueueCard from '../components/QueueCard'
+import ConfirmDeleteQueueModal from '../components/ConfirmDeleteQueueModal'
 
 
 class Index extends React.Component {
@@ -41,6 +42,8 @@ class Index extends React.Component {
       finishedLoading: false,
       showCreateCoursePanel: false,
       showCreateQueuePanel: false,
+      showDeleteQueueModal: false,
+      pendingDeleteQueue: null,
     }
   }
 
@@ -54,40 +57,47 @@ class Index extends React.Component {
     })
   }
 
-  showCreateCoursePanel() {
+  showCreateCoursePanel(state) {
     this.setState({
-      showCreateCoursePanel: true,
+      showCreateCoursePanel: state,
     })
   }
 
-  hideCreateCoursePanel() {
+  showCreateQueuePanel(state) {
     this.setState({
-      showCreateCoursePanel: false,
-    })
-  }
-
-  showCreateQueuePanel() {
-    this.setState({
-      showCreateQueuePanel: true,
-    })
-  }
-
-  hideCreateQueuePanel() {
-    this.setState({
-      showCreateQueuePanel: false,
+      showCreateQueuePanel: state,
     })
   }
 
   createCourse(course) {
-    this.props.createCourse(course).then(() => this.hideCreateCoursePanel())
+    this.props.createCourse(course).then(() => this.showCreateCoursePanel(false))
   }
 
   createQueue(queue, courseId) {
-    this.props.createQueue(courseId, queue).then(() => this.hideCreateQueuePanel())
+    this.props.createQueue(courseId, queue).then(() => this.showCreateQueuePanel(false))
   }
 
   deleteQueue(courseId, queueId) {
-    this.props.deleteQueue(courseId, queueId)
+    this.setState({
+      showDeleteQueueModal: true,
+      pendingDeleteQueue: { courseId, queueId },
+    })
+  }
+
+  confirmDeleteQueue() {
+    const { courseId, queueId } = this.state.pendingDeleteQueue
+    this.props.deleteQueue(courseId, queueId).then(() => {
+      this.setState({
+        showDeleteQueueModal: false,
+        pendingDeleteQueue: null,
+      })
+    })
+  }
+
+  toggleDeleteModal() {
+    this.setState({
+      showDeleteQueueModal: !this.state.showDeleteQueueModal,
+    })
   }
 
   render() {
@@ -147,7 +157,7 @@ class Index extends React.Component {
               <Button
                 color="primary"
                 className="ml-auto mt-3 mt-sm-0"
-                onClick={() => this.showCreateQueuePanel()}
+                onClick={() => this.showCreateQueuePanel(true)}
               >
                 <FontAwesomeIcon icon={faPlus} className="mr-2" />
                 Create queue
@@ -160,7 +170,7 @@ class Index extends React.Component {
                 <NewQueue
                   showCourseSelector
                   onCreateQueue={(queue, courseId) => this.createQueue(queue, courseId)}
-                  onCancel={() => this.hideCreateQueuePanel()}
+                  onCancel={() => this.showCreateQueuePanel(false)}
                 />
               </CardBody>
             </Card>
@@ -174,7 +184,7 @@ class Index extends React.Component {
               <Button
                 className="ml-auto mt-3 mt-sm-0"
                 color="primary"
-                onClick={() => this.showCreateCoursePanel()}
+                onClick={() => this.showCreateCoursePanel(true)}
               >
                 <FontAwesomeIcon icon={faPlus} className="mr-2" />
                 Create course
@@ -186,7 +196,7 @@ class Index extends React.Component {
               <CardBody>
                 <NewCourse
                   onCreateCourse={course => this.createCourse(course)}
-                  onCancel={() => this.hideCreateCoursePanel()}
+                  onCancel={() => this.showCreateCoursePanel(false)}
                 />
               </CardBody>
             </Card>
@@ -195,6 +205,13 @@ class Index extends React.Component {
             {courseButtons}
           </div>
         </Container>
+        {this.state.showDeleteQueueModal &&
+          <ConfirmDeleteQueueModal
+            isOpen={this.state.showDeleteQueueModal}
+            toggle={() => this.toggleDeleteModal()}
+            confirm={() => this.confirmDeleteQueue()}
+          />
+        }
         <style global jsx>{`
           .courses-card {
             width: 100%;

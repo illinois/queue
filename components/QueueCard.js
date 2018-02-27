@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {
   Card,
   CardBody,
@@ -12,7 +13,12 @@ import faQuestion from '@fortawesome/fontawesome-free-solid/faQuestionCircle'
 
 import ShowForCourseStaff from './ShowForCourseStaff'
 
-const QueueCard = ({ queue, courseName, onDelete, ...rest }) => {
+const QueueCard = ({
+  queue,
+  courseName,
+  onDelete,
+  ...rest
+}) => {
   const { name: queueName, location, questionCount } = queue
 
   const questionCountText = `${questionCount} Question${questionCount !== 1 ? 's' : ''}`
@@ -62,6 +68,14 @@ const QueueCard = ({ queue, courseName, onDelete, ...rest }) => {
       `}</style>
     </Card>
   )
+}
+
+QueueCard.propTypes = {
+  queue: PropTypes.shape({
+    courseId: PropTypes.number,
+  }).isRequired,
+  courseName: PropTypes.string.isRequired,
+  onDelete: PropTypes.func.isRequired,
 }
 
 export default QueueCard
