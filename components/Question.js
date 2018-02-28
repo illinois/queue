@@ -95,13 +95,9 @@ class Question extends React.Component {
     }
 
     const isBeingAnswered = !!answeredBy
-<<<<<<< HEAD
     const answeringName =
       (answeredBy && (answeredBy.name || answeredBy.netid)) || undefined
 
-=======
-    const answeringName = (answeredBy && (answeredBy.name || answeredBy.netid)) || undefined
->>>>>>> show netid next to student name
     return (
       <Fragment>
         <ListGroupItem key={id} className="d-sm-flex align-items-center">
@@ -165,7 +161,6 @@ class Question extends React.Component {
 
 Question.defaultProps = {
   answeredBy: null,
-  askedBy: null,
 }
 
 Question.propTypes = {
@@ -181,7 +176,7 @@ Question.propTypes = {
   }),
   askedBy: PropTypes.shape({
     netid: PropTypes.string,
-  }),
+  }).isRequired,
   didUserAskQuestion: PropTypes.bool.isRequired,
   isUserCourseStaff: PropTypes.bool.isRequired,
   isUserAnsweringQuestion: PropTypes.bool.isRequired,
