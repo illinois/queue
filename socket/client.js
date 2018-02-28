@@ -1,5 +1,5 @@
 import io from 'socket.io-client'
-import { replaceQuestions, updateQuestion, createQuestionSuccess, deleteQuestionSuccess } from '../actions/question'
+import { replaceQuestions, createQuestionSuccess, updateQuestionSuccess, deleteQuestionSuccess } from '../actions/question'
 import { addQueueStaffSuccess, removeQueueStaffSuccess } from '../actions/queue'
 import { replaceActiveStaff } from '../actions/activeStaff'
 import { normalizeActiveStaff } from '../reducers/normalize'
@@ -7,8 +7,6 @@ import { baseUrl } from '../util'
 
 const socketOpts = {
   path: `${baseUrl}/socket.io`,
-  // TODO remove in production; this is just for testing
-  transports: ['polling'],
 }
 
 const queueSockets = {}
@@ -18,7 +16,7 @@ const handleQuestionCreate = (dispatch, queueId, question) => {
 }
 
 const handleQuestionUpdate = (dispatch, question) => {
-  dispatch(updateQuestion(question))
+  dispatch(updateQuestionSuccess(question.id, question))
 }
 
 const handleQuestionDelete = (dispatch, queueId, questionId) => {

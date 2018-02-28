@@ -66,7 +66,7 @@ const questions = (state = defaultState, action) => {
         },
       }
     }
-    case UPDATE_QUESTION: {
+    case UPDATE_QUESTION.SUCCESS: {
       const { question } = action
       return {
         ...state,

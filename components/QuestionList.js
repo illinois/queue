@@ -12,6 +12,8 @@ import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner'
 import Question from './Question'
 import QuestionFeedback from './QuestionFeedback'
 import ConfirmLeaveQueueModal from './ConfirmLeaveQueueModal'
+import QuestionEdit from './QuestionEdit'
+
 
 class QuestionList extends React.Component {
   constructor(props) {
@@ -20,6 +22,8 @@ class QuestionList extends React.Component {
     this.state = {
       showFeedbackModal: false,
       showDeleteModal: false,
+      showQuestionEditModal: false,
+      attributeId: null,
       feedbackId: null,
       deleteId: null,
     }
@@ -44,6 +48,28 @@ class QuestionList extends React.Component {
     this.setState({
       showFeedbackModal: false,
       feedbackId: null,
+    })
+  }
+
+  handleEditQuestion(attributeId) {
+    this.setState({
+      showQuestionEditModal: true,
+      attributeId,
+    })
+  }
+
+  handleSubmitQuestionEdit(attributes) {
+    this.props.updateQuestion(this.state.attributeId, attributes).then(() => {
+      this.setState({
+        showQuestionEditModal: false,
+      })
+    })
+  }
+
+  handleQuestionEditCancel() {
+    this.setState({
+      showQuestionEditModal: false,
+      attributeId: null,
     })
   }
 
@@ -89,6 +115,7 @@ class QuestionList extends React.Component {
               deleteQuestion={() => this.deleteQuestion(questionId)}
               updateQuestionBeingAnswered={this.props.updateQuestionBeingAnswered}
               finishedAnswering={() => this.handleFinishedAnswering(questionId)}
+              editQuestion={() => this.handleEditQuestion(questionId)}
               {...question}
             />
           )
@@ -134,6 +161,12 @@ class QuestionList extends React.Component {
           toggle={() => this.toggleDeleteModal()}
           confirm={() => this.handleConfirmedDeletion()}
         />
+        <QuestionEdit
+          question={this.props.questions[this.state.attributeId]}
+          isOpen={this.state.showQuestionEditModal}
+          onSubmitQuestionEdit={attributes => this.handleSubmitQuestionEdit(attributes)}
+          onCancel={() => this.handleQuestionEditCancel()}
+        />
       </div>
     )
   }
@@ -153,6 +186,7 @@ QuestionList.propTypes = {
   deleteQuestion: PropTypes.func.isRequired,
   updateQuestionBeingAnswered: PropTypes.func.isRequired,
   finishAnsweringQuestion: PropTypes.func.isRequired,
+  updateQuestion: PropTypes.func.isRequired,
 }
 
 QuestionList.defaultProps = {

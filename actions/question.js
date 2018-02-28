@@ -66,6 +66,26 @@ export function updateQuestionAnswering(questionId, beingAnswered) {
 }
 
 /**
+ * Update a question's attributes
+ */
+const updateQuestionRequest = makeActionCreator(types.UPDATE_QUESTION.REQUEST, 'questionId', 'attributes')
+export const updateQuestionSuccess = makeActionCreator(types.UPDATE_QUESTION.SUCCESS, 'questionId', 'question')
+const updateQuestionFailure = makeActionCreator(types.UPDATE_QUESTION.FAILURE, 'questionId')
+
+export function updateQuestion(questionId, attributes) {
+  return (dispatch) => {
+    dispatch(updateQuestionRequest(questionId, attributes))
+    return axios.patch(`/api/questions/${questionId}`, attributes).then(
+      res => dispatch(updateQuestionSuccess(questionId, res.data)),
+      (err) => {
+        console.error(err)
+        dispatch(updateQuestionFailure(questionId))
+      },
+    )
+  }
+}
+
+/**
  * Finishes answering a question and submits feedback for it
  */
 const finishAnsweringQuestionRequest = makeActionCreator(types.FINISH_ANSWERING_QUESTION.REQUEST, 'queueId', 'questionId', 'feedback')
@@ -112,5 +132,4 @@ export function deleteQuestion(queueId, questionId) {
 /**
  * Update all questions for a queue
  */
-export const updateQuestion = makeActionCreator(types.UPDATE_QUESTION, 'question')
 export const replaceQuestions = makeActionCreator(types.REPLACE_QUESTIONS, 'queueId', 'questions')

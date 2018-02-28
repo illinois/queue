@@ -135,6 +135,27 @@ router.post('/:questionId/answered', [
   res.send(updatedQuestion)
 })
 
+// updates a question's location
+router.patch('/:questionId', [
+  requireQuestion,
+  check('location').isLength({ min: 1, max: constants.QUESTION_LOCATION_MAX_LENGTH }).trim(),
+  check('topic').isLength({ min: 1, max: constants.QUESTION_TOPIC_MAX_LENGTH }).trim(),
+  failIfErrors,
+], async (req, res, _next) => {
+  const { userAuthn, question } = res.locals
+  const data = matchedData(req)
+
+  if (question.askedById === userAuthn.id) {
+    await question.update({
+      location: data.location,
+      topic: data.topic,
+    })
+    res.status(201).send(question)
+  } else {
+    res.status(403).send()
+  }
+})
+
 
 // Deletes a question from a queue, without marking
 // it as answered; can only be done by the person
