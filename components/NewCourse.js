@@ -5,6 +5,7 @@ import {
   Form,
   FormGroup,
   FormFeedback,
+  FormText,
   Label,
   Input,
   Button,
@@ -16,6 +17,7 @@ class NewCourse extends React.Component {
 
     this.state = {
       name: '',
+      shortcode: '',
       isFieldValid: {},
     }
 
@@ -30,27 +32,34 @@ class NewCourse extends React.Component {
   }
 
   handleCreateCourse() {
-    if (!this.state.name) {
-      this.setState({
-        isFieldValid: {
-          name: false,
-        },
-      })
-    } else {
-      const course = {
-        name: this.state.name,
-      }
+    let valid = true
+    const isFieldValid = {};
 
-      this.props.onCreateCourse(course)
+    ['name', 'shortcode'].forEach((field) => {
+      if (!this.state[field]) {
+        valid = false
+        isFieldValid[field] = false
+      }
+    })
+    if (!valid) {
+      this.setState({ isFieldValid })
+      return
     }
+
+    const course = {
+      name: this.state.name,
+      shortcode: this.state.shortcode,
+    }
+
+    this.props.onCreateCourse(course)
   }
 
   render() {
     return (
       <Form autoComplete="off">
         <FormGroup row>
-          <Label for="name" sm={2}>Name</Label>
-          <Col sm={10}>
+          <Label for="name" sm={3}>Name</Label>
+          <Col sm={9}>
             <Input
               name="name"
               id="name"
@@ -60,6 +69,25 @@ class NewCourse extends React.Component {
               valid={this.state.isFieldValid.name}
             />
             <FormFeedback>A name is required</FormFeedback>
+          </Col>
+        </FormGroup>
+        <FormGroup row>
+          <Label for="name" sm={3}>Shortcode</Label>
+          <Col sm={9}>
+            <Input
+              name="shortcode"
+              id="shortcode"
+              placeholder="Enter a course shortcode (e.g. cs225)"
+              value={this.state.shortcode}
+              onChange={this.handleInputChange}
+              valid={this.state.isFieldValid.shortcode}
+            />
+            <FormFeedback>A shortcode is required!</FormFeedback>
+            <FormText>
+              Adding a shortcode will allow you to generate a special link
+              that will direct students to your currently open queue when they
+              visit it.
+            </FormText>
           </Col>
         </FormGroup>
         <FormGroup row className="mb-0">
