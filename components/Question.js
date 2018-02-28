@@ -136,7 +136,7 @@ class Question extends React.Component {
             }
             <strong className="d-block">{name}
               {isUserCourseStaff &&
-                <span className="text-muted"> ({askedBy.netid}) </span>
+                <span className="text-muted"> ({askedBy.netid})</span>
                }
             </strong>
             <div className="text-muted">
