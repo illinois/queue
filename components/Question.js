@@ -17,6 +17,7 @@ class Question extends React.Component {
       beingAnswered,
       enqueueTime,
       answeredBy,
+      askedBy,
       isUserCourseStaff,
       isUserAnsweringQuestion,
       didUserAskQuestion,
@@ -94,9 +95,13 @@ class Question extends React.Component {
     }
 
     const isBeingAnswered = !!answeredBy
+<<<<<<< HEAD
     const answeringName =
       (answeredBy && (answeredBy.name || answeredBy.netid)) || undefined
 
+=======
+    const answeringName = (answeredBy && (answeredBy.name || answeredBy.netid)) || undefined
+>>>>>>> show netid next to student name
     return (
       <Fragment>
         <ListGroupItem key={id} className="d-sm-flex align-items-center">
@@ -132,8 +137,12 @@ class Question extends React.Component {
           <div>
             {isBeingAnswered && (
               <Badge color="success">Being answered by {answeringName}</Badge>
-            )}
-            <strong className="d-block">{name}</strong>
+            }
+            <strong className="d-block">{name}
+              {isUserCourseStaff &&
+                <span className="text-muted"> ({askedBy.netid}) </span>
+               }
+            </strong>
             <div className="text-muted">
               <span className="text-muted" style={{ fontSize: '0.9rem' }}>
                 <span title="Location">{location}</span>
@@ -156,6 +165,7 @@ class Question extends React.Component {
 
 Question.defaultProps = {
   answeredBy: null,
+  askedBy: null,
 }
 
 Question.propTypes = {
@@ -167,6 +177,9 @@ Question.propTypes = {
   enqueueTime: PropTypes.string.isRequired,
   answeredBy: PropTypes.shape({
     name: PropTypes.string,
+    netid: PropTypes.string,
+  }),
+  askedBy: PropTypes.shape({
     netid: PropTypes.string,
   }),
   didUserAskQuestion: PropTypes.bool.isRequired,

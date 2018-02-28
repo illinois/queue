@@ -37,19 +37,20 @@ module.exports = (sequelize, DataTypes) => {
         attributes: {
           include: ['askedById', 'answeredById', 'queueId'],
         },
-        include: [
-          {
-            model: models.User,
-            as: 'answeredBy',
-            attributes: ['name', 'netid'],
-            required: false,
-          },
-        ],
-      },
-      {
-        override: true,
-      }
-    )
+      include: [{
+        model: models.User,
+        as: 'answeredBy',
+        attributes: ['name', 'netid'],
+        required: false,
+      }, {
+        model: models.User,
+        as: 'askedBy',
+        attributes: ['netid'],
+        required: true,
+      }],
+    }, {
+      override: true,
+    })
   }
 
   return obj
