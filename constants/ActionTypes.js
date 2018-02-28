@@ -14,6 +14,7 @@ export const ADD_COURSE_STAFF = makeActionStrings('ADD_COURSE_STAFF')
 export const REMOVE_COURSE_STAFF = makeActionStrings('REMOVE_COURSE_STAFF')
 
 
+export const FETCH_QUEUES = makeActionStrings('FETCH_QUEUES')
 export const FETCH_QUEUE = makeActionStrings('FETCH_QUEUE')
 export const CREATE_QUEUE = makeActionStrings('CREATE_QUEUE')
 export const DELETE_QUEUE = makeActionStrings('DELETE_QUEUE')
@@ -24,6 +25,7 @@ export const REMOVE_QUEUE_STAFF = makeActionStrings('REMOVE_QUEUE_STAFF')
 export const FETCH_QUESTIONS = makeActionStrings('FETCH_QUESTIONS')
 export const CREATE_QUESTION = makeActionStrings('CREATE_QUESTION')
 export const UPDATE_QUESTION_ANSWERING = makeActionStrings('UPDATE_QUESTION_ANSWERING')
+export const UPDATE_QUESTION = makeActionStrings('UPDATE_QUESTION')
 export const FINISH_ANSWERING_QUESTION = makeActionStrings('FINISH_ANSWERING_QUESTION')
 export const DELETE_QUESTION = makeActionStrings('DELETE_QUESTION')
 
@@ -32,7 +34,6 @@ export const UPDATE_USER_PREFERRED_NAME = makeActionStrings('UPDATE_USER_PREFERR
 
 
 /* These events will be fired on websocket messages */
-export const UPDATE_QUESTION = 'UPDATE_QUESTION'
 export const REPLACE_QUESTIONS = 'REPLACE_QUESTIONS'
 export const UPDATE_QUEUES = 'UPDATE_QUEUES'
 export const REPLACE_ACTIVE_STAFF = 'REPLACE_ACTIVE_STAFF'

@@ -4,6 +4,28 @@ import { makeActionCreator } from './util'
 import { normalizeActiveStaff } from '../reducers/normalize'
 
 /**
+ * Loading all courses
+ */
+export const fetchQueuesRequest = makeActionCreator(types.FETCH_QUEUES.REQUEST)
+const fetchQueuesSuccess = makeActionCreator(types.FETCH_QUEUES.SUCCESS, 'queues')
+const fetchQueuesFailure = makeActionCreator(types.FETCH_QUEUES.FAILURE, 'data')
+
+export function fetchQueues() {
+  return (dispatch) => {
+    dispatch(fetchQueuesRequest())
+
+    return axios.get('/api/queues')
+      .then(
+        res => dispatch(fetchQueuesSuccess(res.data)),
+        (err) => {
+          console.error(err)
+          dispatch(fetchQueuesFailure(err))
+        },
+      )
+  }
+}
+
+/**
  * Creating a new queue
  */
 const createQueueRequest = makeActionCreator(types.CREATE_QUEUE.REQUEST, 'courseId', 'queue')

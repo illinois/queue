@@ -1,5 +1,6 @@
 import {
   FETCH_COURSE,
+  FETCH_QUEUES,
   FETCH_QUEUE,
   CREATE_QUEUE,
   CREATE_QUESTION,
@@ -94,6 +95,26 @@ const queues = (state = defaultState, action) => {
       }
     }
     case FETCH_COURSE.FAILURE: {
+      return {
+        ...state,
+        isFetching: false,
+      }
+    }
+    case FETCH_QUEUES.SUCCESS: {
+      return {
+        ...state,
+        isFetching: false,
+        queues: {
+          ...state.queues,
+          ...action.queues.reduce((obj, item) => {
+            // eslint-disable-next-line no-param-reassign
+            obj[item.id] = normalizeQueue(item)
+            return obj
+          }, {}),
+        },
+      }
+    }
+    case FETCH_QUEUES.FAILURE: {
       return {
         ...state,
         isFetching: false,
