@@ -1,4 +1,6 @@
 /* eslint global-require: "off", no-console: "off" */
+require('dotenv').config()
+
 const app = require('./app')
 const server = require('http').Server(app)
 const io = require('socket.io')
@@ -8,8 +10,6 @@ const co = require('co')
 const routes = require('./routes')
 const serverSocket = require('./socket/server')
 const { baseUrl } = require('./util')
-
-require('dotenv').config()
 
 const DEV = process.env.NODE_ENV !== 'production'
 const PORT = process.env.PORT || 3000
