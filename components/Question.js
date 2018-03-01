@@ -17,6 +17,7 @@ class Question extends React.Component {
       beingAnswered,
       enqueueTime,
       answeredBy,
+      askedBy,
       isUserCourseStaff,
       isUserAnsweringQuestion,
       didUserAskQuestion,
@@ -133,7 +134,12 @@ class Question extends React.Component {
             {isBeingAnswered && (
               <Badge color="success">Being answered by {answeringName}</Badge>
             )}
-            <strong className="d-block">{name}</strong>
+            <strong className="d-block">
+              {name}
+              {isUserCourseStaff && (
+                <span className="text-muted"> ({askedBy.netid})</span>
+              )}
+            </strong>
             <div className="text-muted">
               <span className="text-muted" style={{ fontSize: '0.9rem' }}>
                 <span title="Location">{location}</span>
@@ -169,6 +175,9 @@ Question.propTypes = {
     name: PropTypes.string,
     netid: PropTypes.string,
   }),
+  askedBy: PropTypes.shape({
+    netid: PropTypes.string,
+  }).isRequired,
   didUserAskQuestion: PropTypes.bool.isRequired,
   isUserCourseStaff: PropTypes.bool.isRequired,
   isUserAnsweringQuestion: PropTypes.bool.isRequired,

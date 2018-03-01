@@ -20,6 +20,11 @@ describe('Questions API', () => {
         .post('/api/queues/1/questions')
         .send(question)
       expect(res.statusCode).toBe(201)
+      expect(res.body.name).toBe('a')
+      expect(res.body.location).toBe('b')
+      expect(res.body.topic).toBe('c')
+      expect(res.body).toHaveProperty('askedBy')
+      expect(res.body.askedBy.netid).toBe('dev')
     })
 
     test('fails if name is missing', async () => {
@@ -106,7 +111,11 @@ describe('Questions API', () => {
       expect(res.body).toHaveLength(2)
       // Ensure the questions are ordered correctly
       expect(res.body[0].id).toBe(1)
+      expect(res.body[0]).toHaveProperty('askedBy')
+      expect(res.body[0].askedBy.netid).toBe('admin')
+      expect(res.body[1]).toHaveProperty('askedBy')
       expect(res.body[1].id).toBe(2)
+      expect(res.body[1].askedBy.netid).toBe('student')
     })
 
     test('fails if queue does not exist', async () => {
@@ -122,7 +131,11 @@ describe('Questions API', () => {
       expect(res.body).toHaveLength(2)
       // Ensure the questions are ordered correctly
       expect(res.body[0].id).toBe(1)
+      expect(res.body[0]).toHaveProperty('askedBy')
+      expect(res.body[0].askedBy.netid).toBe('admin')
       expect(res.body[1].id).toBe(2)
+      expect(res.body[1]).toHaveProperty('askedBy')
+      expect(res.body[1].askedBy.netid).toBe('student')
     })
   })
 
@@ -131,6 +144,8 @@ describe('Questions API', () => {
       const res = await request(app).get('/api/queues/1/questions/1')
       expect(res.statusCode).toBe(200)
       expect(res.body.name).toBe('Nathan')
+      expect(res.body).toHaveProperty('askedBy')
+      expect(res.body.askedBy.netid).toBe('admin')
       expect(res.body.location).toBe('Siebel')
       expect(res.body.topic).toBe('Queue')
       expect(res.body.id).toBe(1)
@@ -142,6 +157,8 @@ describe('Questions API', () => {
       )
       expect(res.statusCode).toBe(200)
       expect(res.body.name).toBe('Nathan')
+      expect(res.body).toHaveProperty('askedBy')
+      expect(res.body.askedBy.netid).toBe('admin')
       expect(res.body.location).toBe('Siebel')
       expect(res.body.topic).toBe('Queue')
       expect(res.body.id).toBe(1)
@@ -155,6 +172,8 @@ describe('Questions API', () => {
         .patch('/api/queues/1/questions/1?forceuser=admin')
         .send(attributes)
       expect(res.statusCode).toBe(201)
+      expect(res.body).toHaveProperty('askedBy')
+      expect(res.body.askedBy.netid).toBe('admin')
       expect(res.body.location).toBe('bx')
       expect(res.body.topic).toBe('cs')
     })
@@ -190,6 +209,8 @@ describe('Questions API', () => {
         '/api/queues/1/questions/1/answering?forceuser=admin'
       )
       expect(res.statusCode).toBe(200)
+      expect(res.body).toHaveProperty('askedBy')
+      expect(res.body.askedBy.netid).toBe('admin')
       expect(res.body.beingAnswered).toBe(true)
     })
 
@@ -198,6 +219,8 @@ describe('Questions API', () => {
         '/api/queues/1/questions/1/answering?forceuser=225staff'
       )
       expect(res.statusCode).toBe(200)
+      expect(res.body).toHaveProperty('askedBy')
+      expect(res.body.askedBy.netid).toBe('admin')
       expect(res.body.beingAnswered).toBe(true)
     })
 
@@ -215,6 +238,8 @@ describe('Questions API', () => {
         '/api/queues/1/questions/1/answering?forceuser=admin'
       )
       expect(res.statusCode).toBe(200)
+      expect(res.body).toHaveProperty('askedBy')
+      expect(res.body.askedBy.netid).toBe('admin')
       expect(res.body.beingAnswered).toBe(false)
     })
 
@@ -223,6 +248,8 @@ describe('Questions API', () => {
         '/api/queues/1/questions/1/answering?forceuser=225staff'
       )
       expect(res.statusCode).toBe(200)
+      expect(res.body).toHaveProperty('askedBy')
+      expect(res.body.askedBy.netid).toBe('admin')
       expect(res.body.beingAnswered).toBe(false)
     })
 
@@ -244,6 +271,8 @@ describe('Questions API', () => {
         .post('/api/queues/1/questions/1/answered?forceuser=admin')
         .send(feedback)
       expect(res.statusCode).toBe(200)
+      expect(res.body).toHaveProperty('askedBy')
+      expect(res.body.askedBy.netid).toBe('admin')
       expect(res.body.beingAnswered).toBe(false)
       expect(res.body.answeredById).toBe(2)
     })
@@ -257,6 +286,8 @@ describe('Questions API', () => {
         .post('/api/queues/1/questions/1/answered?forceuser=225staff')
         .send(feedback)
       expect(res.statusCode).toBe(200)
+      expect(res.body).toHaveProperty('askedBy')
+      expect(res.body.askedBy.netid).toBe('admin')
       expect(res.body.beingAnswered).toBe(false)
       expect(res.body.answeredById).toBe(3)
     })

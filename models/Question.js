@@ -44,6 +44,12 @@ module.exports = (sequelize, DataTypes) => {
             attributes: ['name', 'netid'],
             required: false,
           },
+          {
+            model: models.User,
+            as: 'askedBy',
+            attributes: ['netid'],
+            required: true,
+          },
         ],
       },
       {
