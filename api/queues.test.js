@@ -12,8 +12,8 @@ afterEach(() => testutil.destroyTestDb())
 
 describe('Queues API', () => {
   describe('GET /api/queues', () => {
-    test('succeeds for admin', async () => {
-      const res = await request(app).get('/api/queues?forceuser=admin')
+    const doGetTest = async (user) => {
+      const res = await request(app).get(`/api/queues?forceuser={user}`)
       expect(res.statusCode).toBe(200)
       expect(res.body).toHaveLength(2)
       expect(res.body[0].name).toBe('CS225 Queue')
@@ -22,11 +22,12 @@ describe('Queues API', () => {
       expect(res.body[1].location).toBe('There')
       expect(res.body[0].id).toBe(1)
       expect(res.body[1].id).toBe(2)
+    }
+    test('succeeds for admin', async () => {
+      await doGetTest('admin')
     })
-    test('fails for non admin', async () => {
-      const res = await request(app).get('/api/queues?forceuser=student')
-      expect(res.statusCode).toBe(403)
-      expect(res.body).toEqual({})
+    test('succeeds for non admin', async () => {
+      await doGetTest('student')
     })
   })
   describe('GET /api/queues/2', () => {

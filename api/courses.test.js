@@ -65,11 +65,22 @@ describe('Courses API', () => {
 
   describe('POST /api/courses', () => {
     test('succeeds for admin', async () => {
-      const course = { name: 'CS423' }
+      const course = { name: 'CS423', shortcode: 'cs423' }
       const res = await request(app).post('/api/courses?forceuser=admin').send(course)
       expect(res.statusCode).toBe(201)
-      expect(res.body.name).toBe('CS423')
       expect(res.body.id).toBe(3)
+      expect(res.body.name).toBe('CS423')
+      expect(res.body.shortcode).toBe('cs423')
+    })
+    test('fails for missing name', async () => {
+      const course = { shortcode: 'cs423' }
+      const res = await request(app).post('/api/courses?forceuser=admin').send(course)
+      expect(res.statusCode).toBe(422)
+    })
+    test('fails for missing shortcode', async () => {
+      const course = { name: 'CS423' }
+      const res = await request(app).post('/api/courses?forceuser=admin').send(course)
+      expect(res.statusCode).toBe(422)
     })
     test('fails for non-admin', async () => {
       const course = { name: 'CS423' }
