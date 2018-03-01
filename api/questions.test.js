@@ -20,6 +20,10 @@ describe('Questions API', () => {
         .post('/api/queues/1/questions')
         .send(question)
       expect(res.statusCode).toBe(201)
+      expect(res.body.name).toBe('a')
+      expect(res.body.location).toBe('a')
+      expect(res.body.topic).toBe('c')
+      expect(res.body.askedBy.netid).toBe('dev')
     })
 
     test('fails if name is missing', async () => {
