@@ -13,7 +13,7 @@ afterEach(() => testutil.destroyTestDb())
 describe('Queues API', () => {
   describe('GET /api/queues', () => {
     const doGetTest = async (user) => {
-      const res = await request(app).get(`/api/queues?forceuser={user}`)
+      const res = await request(app).get(`/api/queues?forceuser=${user}`)
       expect(res.statusCode).toBe(200)
       expect(res.body).toHaveLength(2)
       expect(res.body[0].name).toBe('CS225 Queue')
