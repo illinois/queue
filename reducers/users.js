@@ -12,11 +12,12 @@ const defaultState = {
   isFetching: false,
 }
 
-const reduceUsers = users => users.reduce((obj, item) => {
-  // eslint-disable-next-line no-param-reassign
-  obj[item.id] = item
-  return obj
-}, {})
+const reduceUsers = users =>
+  users.reduce((obj, item) => {
+    // eslint-disable-next-line no-param-reassign
+    obj[item.id] = item
+    return obj
+  }, {})
 
 const users = (state = defaultState, action) => {
   switch (action.type) {

@@ -24,11 +24,7 @@ const ParrotText = ({ text }) => {
       />
     )
   })
-  return (
-    <Fragment>
-      {mapped}
-    </Fragment>
-  )
+  return <Fragment>{mapped}</Fragment>
 }
 
 ParrotText.propTypes = {

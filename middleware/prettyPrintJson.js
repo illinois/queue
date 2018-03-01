@@ -1,5 +1,5 @@
 module.exports = (req, res, next) => {
-  res.json = (body) => {
+  res.json = body => {
     if (!res.get('Content-Type')) {
       res.set('Content-Type', 'application/json')
     }

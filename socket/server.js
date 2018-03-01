@@ -1,10 +1,5 @@
 const sequelizeStream = require('sequelize-stream')
-const {
-  sequelize,
-  Question,
-  User,
-  ActiveStaff,
-} = require('../models')
+const { sequelize, Question, User, ActiveStaff } = require('../models')
 
 let io = null
 let queueNamespace = null
@@ -15,9 +10,7 @@ const sendInitialState = (queueId, callback) => {
       queueId,
       dequeueTime: null,
     },
-    order: [
-      ['id', 'ASC'],
-    ],
+    order: [['id', 'ASC']],
   })
 
   const activeStaffPromise = ActiveStaff.findAll({
@@ -28,21 +21,25 @@ const sendInitialState = (queueId, callback) => {
     include: [User],
   })
 
-  Promise.all([questionPromise, activeStaffPromise]).then((results) => {
+  Promise.all([questionPromise, activeStaffPromise]).then(results => {
     const [questions, activeStaff] = results
     callback({ questions, activeStaff })
   })
 }
 
 const handleQuestionCreate = (id, queueId) => {
-  Question.findOne({ where: { id } }).then((question) => {
-    queueNamespace.to(`queue-${queueId}`).emit('question:create', { id, question })
+  Question.findOne({ where: { id } }).then(question => {
+    queueNamespace
+      .to(`queue-${queueId}`)
+      .emit('question:create', { id, question })
   })
 }
 
 const handleQuestionUpdate = (id, queueId) => {
-  Question.findOne({ where: { id } }).then((question) => {
-    queueNamespace.to(`queue-${queueId}`).emit('question:update', { id, question })
+  Question.findOne({ where: { id } }).then(question => {
+    queueNamespace
+      .to(`queue-${queueId}`)
+      .emit('question:update', { id, question })
   })
 }
 
@@ -64,16 +61,18 @@ const handleQuestionEvent = (event, instance) => {
       }
       break
     default:
-      // Do nothing
+    // Do nothing
   }
 }
 
-const handleActiveStaffCreate = (id) => {
+const handleActiveStaffCreate = id => {
   ActiveStaff.findOne({
     where: { id },
     include: [User],
-  }).then((activeStaff) => {
-    queueNamespace.to(`queue-${activeStaff.queueId}`).emit('activeStaff:create', { id, activeStaff })
+  }).then(activeStaff => {
+    queueNamespace
+      .to(`queue-${activeStaff.queueId}`)
+      .emit('activeStaff:create', { id, activeStaff })
   })
 }
 
@@ -93,12 +92,12 @@ const handleActiveStaffEvent = (event, instance) => {
       handleActiveStaffDelete(instance.id, instance.queueId)
       break
     default:
-      // Do nothing
+    // Do nothing
   }
 }
 
 const stream = sequelizeStream(sequelize)
-stream.on('data', (data) => {
+stream.on('data', data => {
   const { event, instance } = data
   if (instance instanceof Question) {
     handleQuestionEvent(event, instance)
@@ -107,12 +106,11 @@ stream.on('data', (data) => {
   }
 })
 
-
-module.exports = (newIo) => {
+module.exports = newIo => {
   io = newIo
 
   queueNamespace = io.of('/queue')
-  queueNamespace.on('connection', (socket) => {
+  queueNamespace.on('connection', socket => {
     socket.on('join', (msg, callback) => {
       if ('queueId' in msg) {
         const { queueId } = msg

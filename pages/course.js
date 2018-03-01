@@ -63,7 +63,9 @@ class Course extends React.Component {
   }
 
   createQueue(queue) {
-    this.props.createQueue(this.props.courseId, queue).then(() => this.showCreateQueuePanel(false))
+    this.props
+      .createQueue(this.props.courseId, queue)
+      .then(() => this.showCreateQueuePanel(false))
   }
 
   deleteQueue(queueId) {
@@ -75,12 +77,14 @@ class Course extends React.Component {
 
   confirmDeleteQueue() {
     const { pendingDeleteQueueId } = this.state
-    this.props.deleteQueue(this.props.courseId, pendingDeleteQueueId).then(() => {
-      this.setState({
-        showDeleteQueueModal: false,
-        pendingDeleteQueueId: null,
+    this.props
+      .deleteQueue(this.props.courseId, pendingDeleteQueueId)
+      .then(() => {
+        this.setState({
+          showDeleteQueueModal: false,
+          pendingDeleteQueueId: null,
+        })
       })
-    })
   }
 
   toggleDeleteModal() {
@@ -99,7 +103,7 @@ class Course extends React.Component {
 
     let queues
     if (this.props.course.queues && this.props.course.queues.length > 0) {
-      queues = this.props.course.queues.map((id) => {
+      queues = this.props.course.queues.map(id => {
         const queue = this.props.queues[id]
         return (
           <Queue
@@ -151,8 +155,15 @@ class Course extends React.Component {
                 {this.props.course && this.props.course.name} Queues
               </CardTitle>
               <ShowForCourseStaff courseId={this.props.courseId}>
-                <Link route="courseStaff" params={{ id: this.props.courseId }} prefetch passHref>
-                  <Button tag="a" color="light" size="sm" className="ml-auto">Manage Staff</Button>
+                <Link
+                  route="courseStaff"
+                  params={{ id: this.props.courseId }}
+                  prefetch
+                  passHref
+                >
+                  <Button tag="a" color="light" size="sm" className="ml-auto">
+                    Manage Staff
+                  </Button>
                 </Link>
               </ShowForCourseStaff>
             </CardHeader>
@@ -169,13 +180,13 @@ class Course extends React.Component {
             </ListGroup>
           </Card>
         </Container>
-        {this.state.showDeleteQueueModal &&
+        {this.state.showDeleteQueueModal && (
           <ConfirmDeleteQueueModal
             isOpen={this.state.showDeleteQueueModal}
             toggle={() => this.toggleDeleteModal()}
             confirm={() => this.confirmDeleteQueue()}
           />
-        }
+        )}
         <style jsx>{`
           :global(.courses-card) {
             width: 100%;
@@ -194,10 +205,12 @@ Course.propTypes = {
     name: PropTypes.string,
     queues: PropTypes.arrayOf(PropTypes.number),
   }),
-  queues: PropTypes.objectOf(PropTypes.shape({
-    name: PropTypes.string,
-    location: PropTypes.location,
-  })),
+  queues: PropTypes.objectOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      location: PropTypes.location,
+    })
+  ),
   isFetching: PropTypes.bool,
   createQueue: PropTypes.func.isRequired,
   fetchCourse: PropTypes.func.isRequired,
@@ -230,4 +243,6 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 })
 
-export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(PageWithUser(Course))
+export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(
+  PageWithUser(Course)
+)

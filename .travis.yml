@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - "node"
+script:
+  - npm run test
+  - npm run lint-js
+  - npm run prettier-diff
+cache:
+  directories:
+    - "node_modules"

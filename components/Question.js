@@ -1,10 +1,6 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
-import {
-  ListGroupItem,
-  Button,
-  Badge,
-} from 'reactstrap'
+import { ListGroupItem, Button, Badge } from 'reactstrap'
 import Moment from 'react-moment'
 import moment from 'moment'
 
@@ -33,7 +29,7 @@ class Question extends React.Component {
       if (isUserCourseStaff) {
         buttonCluster = (
           <Fragment>
-            {isUserAnsweringQuestion &&
+            {isUserAnsweringQuestion && (
               <Button
                 color="primary"
                 className="mr-2"
@@ -41,7 +37,7 @@ class Question extends React.Component {
               >
                 Finish Answering
               </Button>
-            }
+            )}
             <Button
               color="light"
               onClick={() => this.props.updateQuestionBeingAnswered(id, false)}
@@ -64,7 +60,7 @@ class Question extends React.Component {
     } else {
       buttonCluster = (
         <Fragment>
-          {isUserCourseStaff &&
+          {isUserCourseStaff && (
             <Button
               color="primary"
               outline
@@ -73,8 +69,8 @@ class Question extends React.Component {
             >
               Start Answering!
             </Button>
-          }
-          {didUserAskQuestion &&
+          )}
+          {didUserAskQuestion && (
             <Button
               color="primary"
               outline
@@ -83,8 +79,8 @@ class Question extends React.Component {
             >
               Edit
             </Button>
-          }
-          {userCanDelete &&
+          )}
+          {userCanDelete && (
             <Button
               color="danger"
               outline
@@ -92,13 +88,14 @@ class Question extends React.Component {
             >
               Delete
             </Button>
-          }
+          )}
         </Fragment>
       )
     }
 
     const isBeingAnswered = !!answeredBy
-    const answeringName = (answeredBy && (answeredBy.name || answeredBy.netid)) || undefined
+    const answeringName =
+      (answeredBy && (answeredBy.name || answeredBy.netid)) || undefined
 
     return (
       <Fragment>
@@ -111,7 +108,7 @@ class Question extends React.Component {
               left: '0',
             }}
           >
-            {didUserAskQuestion &&
+            {didUserAskQuestion && (
               <div
                 style={{
                   height: '100%',
@@ -120,8 +117,8 @@ class Question extends React.Component {
                 }}
                 className="bg-primary"
               />
-            }
-            {isBeingAnswered &&
+            )}
+            {isBeingAnswered && (
               <div
                 style={{
                   height: '100%',
@@ -130,12 +127,12 @@ class Question extends React.Component {
                 }}
                 className="bg-success"
               />
-            }
+            )}
           </div>
           <div>
-            {isBeingAnswered &&
+            {isBeingAnswered && (
               <Badge color="success">Being answered by {answeringName}</Badge>
-            }
+            )}
             <strong className="d-block">{name}</strong>
             <div className="text-muted">
               <span className="text-muted" style={{ fontSize: '0.9rem' }}>
@@ -150,9 +147,7 @@ class Question extends React.Component {
               <ParrotText text={topic} />
             </div>
           </div>
-          <div className="ml-auto pt-3 pt-sm-0">
-            {buttonCluster}
-          </div>
+          <div className="ml-auto pt-3 pt-sm-0">{buttonCluster}</div>
         </ListGroupItem>
       </Fragment>
     )

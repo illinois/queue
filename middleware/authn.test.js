@@ -11,7 +11,7 @@ afterEach(() => testutil.destroyTestDb())
 
 const makeReq = (eppn, displayName) => {
   const get = jest.fn()
-  get.mockImplementation((header) => {
+  get.mockImplementation(header => {
     switch (header) {
       case 'eppn':
         return eppn

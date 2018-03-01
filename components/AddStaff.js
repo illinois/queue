@@ -1,11 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-  ListGroupItem,
-  Form,
-  Input,
-  Button,
-} from 'reactstrap'
+import { ListGroupItem, Form, Input, Button } from 'reactstrap'
 
 class AddStaff extends React.Component {
   constructor(props) {

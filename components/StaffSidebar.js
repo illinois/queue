@@ -1,30 +1,28 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-  Card,
-  CardBody,
-  CardTitle,
-  Button,
-} from 'reactstrap'
+import { Card, CardBody, CardTitle, Button } from 'reactstrap'
 import { connect } from 'react-redux'
 import FlipMove from 'react-flip-move'
 
 import { addQueueStaff, removeQueueStaff } from '../actions/queue'
-import { isUserCourseStaffForQueue, isUserActiveStaffForQueue } from '../selectors'
+import {
+  isUserCourseStaffForQueue,
+  isUserActiveStaffForQueue,
+} from '../selectors'
 import StaffMember from './StaffMember'
 
-const StaffSidebar = (props) => {
+const StaffSidebar = props => {
   let staffList = null
 
   if (props.queue) {
     const { removeStaff, queue } = props
     const activeStaffIds = queue.activeStaff
     if (activeStaffIds && activeStaffIds.length > 0) {
-      staffList = activeStaffIds.map((id) => {
+      staffList = activeStaffIds.map(id => {
         const activeStaffId = id
         const user = props.users[props.activeStaff[id].user]
         return (
-          <div key={user.id} >
+          <div key={user.id}>
             <StaffMember
               {...user}
               isUserCourseStaff={props.isUserCourseStaff}
@@ -34,12 +32,12 @@ const StaffSidebar = (props) => {
         )
       })
     } else {
-      staffList = (<div className="text-muted pb-2 pt-2">No on-duty staff</div>)
+      staffList = <div className="text-muted pb-2 pt-2">No on-duty staff</div>
     }
   }
 
   function removeCurrentUser() {
-    const activeStaffId = Object.values(props.activeStaff).find((as) => {
+    const activeStaffId = Object.values(props.activeStaff).find(as => {
       return props.activeStaff[as.id].user === props.user.id
     })
     if (activeStaffId) {
@@ -51,11 +49,7 @@ const StaffSidebar = (props) => {
   if (props.isUserCourseStaff) {
     if (props.isUserActiveStaff) {
       button = (
-        <Button
-          block
-          color="danger"
-          onClick={() => removeCurrentUser()}
-        >
+        <Button block color="danger" onClick={() => removeCurrentUser()}>
           Leave
         </Button>
       )
@@ -111,15 +105,19 @@ StaffSidebar.propTypes = {
   queue: PropTypes.shape({
     activeStaff: PropTypes.arrayOf(PropTypes.number),
   }),
-  users: PropTypes.objectOf(PropTypes.shape({
-    id: PropTypes.number,
-    netid: PropTypes.string,
-    name: PropTypes.string,
-  })),
-  activeStaff: PropTypes.objectOf(PropTypes.shape({
-    id: PropTypes.number,
-    user: PropTypes.number,
-  })),
+  users: PropTypes.objectOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      netid: PropTypes.string,
+      name: PropTypes.string,
+    })
+  ),
+  activeStaff: PropTypes.objectOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      user: PropTypes.number,
+    })
+  ),
   joinStaff: PropTypes.func.isRequired,
   removeStaff: PropTypes.func.isRequired,
   isUserCourseStaff: PropTypes.bool,
@@ -137,7 +135,8 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   joinStaff: (...args) => dispatch(addQueueStaff(ownProps.queueId, ...args)),
-  removeStaff: (...args) => dispatch(removeQueueStaff(ownProps.queueId, ...args)),
+  removeStaff: (...args) =>
+    dispatch(removeQueueStaff(ownProps.queueId, ...args)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(StaffSidebar)

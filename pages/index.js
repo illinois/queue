@@ -1,20 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  CardBody,
-  Button,
-} from 'reactstrap'
+import { Container, Row, Col, Card, CardBody, Button } from 'reactstrap'
 import withRedux from 'next-redux-wrapper'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
 
 import { Link, Router } from '../routes'
 import makeStore from '../redux/makeStore'
-import { fetchCoursesRequest, fetchCourses, createCourse } from '../actions/course'
+import {
+  fetchCoursesRequest,
+  fetchCourses,
+  createCourse,
+} from '../actions/course'
 import { fetchQueues, createQueue, deleteQueue } from '../actions/queue'
 
 import PageWithUser from '../components/PageWithUser'
@@ -25,7 +22,6 @@ import NewQueue from '../components/NewQueue'
 import ShowForAdmin from '../components/ShowForAdmin'
 import QueueCard from '../components/QueueCard'
 import ConfirmDeleteQueueModal from '../components/ConfirmDeleteQueueModal'
-
 
 class Index extends React.Component {
   static async getInitialProps({ store, isServer }) {
@@ -50,11 +46,13 @@ class Index extends React.Component {
   componentDidMount() {
     // We need to wait for multiple network requests to complete, so we can't
     // use the usual isFetching property from the state blob
-    Promise.all([this.props.fetchCourses(), this.props.fetchQueues()]).then(() => {
-      this.setState({
-        finishedLoading: true,
-      })
-    })
+    Promise.all([this.props.fetchCourses(), this.props.fetchQueues()]).then(
+      () => {
+        this.setState({
+          finishedLoading: true,
+        })
+      }
+    )
   }
 
   showCreateCoursePanel(state) {
@@ -70,11 +68,15 @@ class Index extends React.Component {
   }
 
   createCourse(course) {
-    this.props.createCourse(course).then(() => this.showCreateCoursePanel(false))
+    this.props
+      .createCourse(course)
+      .then(() => this.showCreateCoursePanel(false))
   }
 
   createQueue(queue, courseId) {
-    this.props.createQueue(courseId, queue).then(() => this.showCreateQueuePanel(false))
+    this.props
+      .createQueue(courseId, queue)
+      .then(() => this.showCreateQueuePanel(false))
   }
 
   deleteQueue(courseId, queueId) {
@@ -108,24 +110,38 @@ class Index extends React.Component {
     let courseButtons
     if (this.props.courses && this.props.courses.length > 0) {
       courseButtons = this.props.courses.map(course => (
-        <Link route="course" params={{ id: course.id }} key={course.id} prefetch passHref>
-          <Button color="primary" tag="a" className="mr-3" outline>{course.name}</Button>
+        <Link
+          route="course"
+          params={{ id: course.id }}
+          key={course.id}
+          prefetch
+          passHref
+        >
+          <Button color="primary" tag="a" className="mr-3" outline>
+            {course.name}
+          </Button>
         </Link>
       ))
     }
 
     const CardCol = ({ children, ...rest }) => (
-      <Col xs={{ size: 12 }} md={{ size: 6 }} lg={{ size: 4 }} className="mb-3" {...rest} >
+      <Col
+        xs={{ size: 12 }}
+        md={{ size: 6 }}
+        lg={{ size: 4 }}
+        className="mb-3"
+        {...rest}
+      >
         {children}
       </Col>
     )
 
     let queues
     if (this.props.queues && this.props.queues.length > 0) {
-      const handleQueueClick = (id) => {
+      const handleQueueClick = id => {
         Router.pushRoute('queue', { id })
       }
-      queues = this.props.queues.map((queue) => {
+      queues = this.props.queues.map(queue => {
         const courseName = this.props.coursesById[queue.courseId].name
         return (
           <CardCol key={queue.id}>
@@ -142,7 +158,9 @@ class Index extends React.Component {
       queues = (
         <Col>
           <Card className="bg-light">
-            <CardBody className="text-center">There aren&apos;t any open queues right now</CardBody>
+            <CardBody className="text-center">
+              There aren&apos;t any open queues right now
+            </CardBody>
           </Card>
         </Col>
       )
@@ -153,7 +171,7 @@ class Index extends React.Component {
         <Container>
           <div className="d-sm-flex align-items-center mb-4">
             <h1 className="display-4 d-block d-sm-inline-block">Open queues</h1>
-            {this.props.showCreateQueueButton &&
+            {this.props.showCreateQueueButton && (
               <Button
                 color="primary"
                 className="ml-auto mt-3 mt-sm-0"
@@ -162,24 +180,26 @@ class Index extends React.Component {
                 <FontAwesomeIcon icon={faPlus} className="mr-2" />
                 Create queue
               </Button>
-            }
+            )}
           </div>
-          {this.state.showCreateQueuePanel &&
+          {this.state.showCreateQueuePanel && (
             <Card className="mb-4">
               <CardBody>
                 <NewQueue
                   showCourseSelector
-                  onCreateQueue={(queue, courseId) => this.createQueue(queue, courseId)}
+                  onCreateQueue={(queue, courseId) =>
+                    this.createQueue(queue, courseId)
+                  }
                   onCancel={() => this.showCreateQueuePanel(false)}
                 />
               </CardBody>
             </Card>
-          }
-          <Row className="equal-height mb-5">
-            {queues}
-          </Row>
+          )}
+          <Row className="equal-height mb-5">{queues}</Row>
           <div className="d-sm-flex align-items-center mb-4">
-            <h3 className="d-block d-sm-inline-block mb-0">Or, select a course</h3>
+            <h3 className="d-block d-sm-inline-block mb-0">
+              Or, select a course
+            </h3>
             <ShowForAdmin>
               <Button
                 className="ml-auto mt-3 mt-sm-0"
@@ -191,7 +211,7 @@ class Index extends React.Component {
               </Button>
             </ShowForAdmin>
           </div>
-          {this.state.showCreateCoursePanel &&
+          {this.state.showCreateCoursePanel && (
             <Card className="mb-4">
               <CardBody>
                 <NewCourse
@@ -200,18 +220,16 @@ class Index extends React.Component {
                 />
               </CardBody>
             </Card>
-          }
-          <div className="mb-4">
-            {courseButtons}
-          </div>
+          )}
+          <div className="mb-4">{courseButtons}</div>
         </Container>
-        {this.state.showDeleteQueueModal &&
+        {this.state.showDeleteQueueModal && (
           <ConfirmDeleteQueueModal
             isOpen={this.state.showDeleteQueueModal}
             toggle={() => this.toggleDeleteModal()}
             confirm={() => this.confirmDeleteQueue()}
           />
-        }
+        )}
         <style global jsx>{`
           .courses-card {
             width: 100%;
@@ -237,15 +255,21 @@ class Index extends React.Component {
 
 Index.propTypes = {
   showCreateQueueButton: PropTypes.bool.isRequired,
-  courses: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string,
-  })),
-  coursesById: PropTypes.objectOf(PropTypes.shape({
-    name: PropTypes.string,
-  })),
-  queues: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string,
-  })),
+  courses: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+    })
+  ),
+  coursesById: PropTypes.objectOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+    })
+  ),
+  queues: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+    })
+  ),
   fetchCourses: PropTypes.func.isRequired,
   fetchQueues: PropTypes.func.isRequired,
   createCourse: PropTypes.func.isRequired,
@@ -259,16 +283,16 @@ Index.defaultProps = {
   queues: [],
 }
 
-const mapObjectToArray = (o) => {
+const mapObjectToArray = o => {
   const keys = Object.keys(o).map(id => Number.parseInt(id, 10))
   const sortKeys = keys.sort((a, b) => (a < b ? -1 : 1))
   return sortKeys.map(id => o[id])
 }
 
 const mapStateToProps = state => ({
-  showCreateQueueButton: state.user.user && (
-    state.user.user.isAdmin || state.user.user.staffAssignments.length > 0
-  ),
+  showCreateQueueButton:
+    state.user.user &&
+    (state.user.user.isAdmin || state.user.user.staffAssignments.length > 0),
   coursesById: state.courses.courses,
   courses: mapObjectToArray(state.courses.courses),
   queuesById: state.queues.queues,
@@ -283,4 +307,6 @@ const mapDispatchToProps = dispatch => ({
   deleteQueue: (courseId, queueId) => dispatch(deleteQueue(courseId, queueId)),
 })
 
-export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(PageWithUser(Index))
+export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(
+  PageWithUser(Index)
+)

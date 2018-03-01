@@ -9,11 +9,13 @@ module.exports = async (req, res, next) => {
       '$staff.id$': userAuthn.id,
     },
     attributes: ['id'],
-    include: [{
-      model: User,
-      as: 'staff',
-      attributes: [],
-    }],
+    include: [
+      {
+        model: User,
+        as: 'staff',
+        attributes: [],
+      },
+    ],
     raw: true,
   })
   const staffedCourseIds = staffedCourses.map(row => row.id)

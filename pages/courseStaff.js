@@ -26,7 +26,6 @@ import Layout from '../components/Layout'
 import AddStaff from '../components/AddStaff'
 import CourseStaffMember from '../components/CourseStaffMember'
 
-
 class CourseStaff extends React.Component {
   static async getInitialProps({ isServer, store, query }) {
     const courseId = Number.parseInt(query.id, 10)
@@ -61,12 +60,14 @@ class CourseStaff extends React.Component {
 
     let users
     if (this.props.course.staff && this.props.course.staff.length > 0) {
-      users = this.props.course.staff.map((id) => {
+      users = this.props.course.staff.map(id => {
         const user = this.props.users[id]
         return (
           <CourseStaffMember
             key={user.id}
-            removeCourseStaff={userId => this.props.removeCourseStaff(courseId, userId)}
+            removeCourseStaff={userId =>
+              this.props.removeCourseStaff(courseId, userId)
+            }
             {...user}
           />
         )
@@ -91,9 +92,7 @@ class CourseStaff extends React.Component {
               </CardTitle>
             </CardHeader>
             <ListGroup flush className="position-relative">
-              <AddStaff
-                onAddStaff={staff => this.addStaff(staff)}
-              />
+              <AddStaff onAddStaff={staff => this.addStaff(staff)} />
               <FlipMove
                 enterAnimation="accordionVertical"
                 leaveAnimation="accordionVertical"
@@ -131,11 +130,13 @@ CourseStaff.propTypes = {
     name: PropTypes.string,
     staff: PropTypes.arrayOf(PropTypes.number),
   }),
-  users: PropTypes.objectOf(PropTypes.shape({
-    id: PropTypes.number,
-    netid: PropTypes.string,
-    name: PropTypes.string,
-  })).isRequired,
+  users: PropTypes.objectOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      netid: PropTypes.string,
+      name: PropTypes.string,
+    })
+  ).isRequired,
 }
 
 const mapStateToProps = (state, { courseId }) => ({
@@ -146,10 +147,14 @@ const mapStateToProps = (state, { courseId }) => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchCourse: courseId => dispatch(fetchCourse(courseId)),
-  addCourseStaff: (courseId, netid, name) => dispatch(addCourseStaff(courseId, netid, name)),
-  removeCourseStaff: (courseId, userId) => dispatch(removeCourseStaff(courseId, userId)),
+  addCourseStaff: (courseId, netid, name) =>
+    dispatch(addCourseStaff(courseId, netid, name)),
+  removeCourseStaff: (courseId, userId) =>
+    dispatch(removeCourseStaff(courseId, userId)),
   dispatch,
 })
 
 const permissions = { requireCourseStaff: true }
-export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(PageWithUser(CourseStaff, permissions))
+export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(
+  PageWithUser(CourseStaff, permissions)
+)

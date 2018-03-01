@@ -1,10 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-  Container,
-  Row,
-  Col,
-} from 'reactstrap'
+import { Container, Row, Col } from 'reactstrap'
 import withRedux from 'next-redux-wrapper'
 import Error from 'next/error'
 
@@ -20,7 +16,6 @@ import QuestionPanel from '../components/QuestionPanel'
 import QuestionListContainer from '../containers/QuestionListContainer'
 import ShowForCourseStaff from '../components/ShowForCourseStaff'
 import QuestionNotificationsToggle from '../components/QuestionNotificationsToggle'
-
 
 class Queue extends React.Component {
   static getInitialProps({ isServer, store, query }) {
@@ -39,7 +34,7 @@ class Queue extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if ((prevProps.isFetching && !this.props.isFetching) && this.props.hasQueue) {
+    if (prevProps.isFetching && !this.props.isFetching && this.props.hasQueue) {
       // We have finished fetching the queue and the queue exists (was not a 404)
       // It's now safe to connect to the websocket
       connectToQueue(this.props.dispatch, this.props.queueId)
@@ -62,7 +57,12 @@ class Queue extends React.Component {
       <Layout>
         <Container fluid>
           <Row>
-            <Col xs={{ size: 12 }} md={{ size: 4 }} lg={{ size: 3 }} className="mb-3 mb-md-0">
+            <Col
+              xs={{ size: 12 }}
+              md={{ size: 4 }}
+              lg={{ size: 3 }}
+              className="mb-3 mb-md-0"
+            >
               <ShowForCourseStaff queueId={this.props.queueId}>
                 <QuestionNotificationsToggle />
               </ShowForCourseStaff>
@@ -97,4 +97,6 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 })
 
-export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(PageWithUser(Queue))
+export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(
+  PageWithUser(Queue)
+)

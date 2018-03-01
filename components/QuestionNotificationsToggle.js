@@ -9,9 +9,12 @@ class QuestionNotificationsToggle extends React.Component {
   constructor(props) {
     super(props)
 
-    const supported = (typeof window !== 'undefined' && 'Notification' in window)
+    const supported = typeof window !== 'undefined' && 'Notification' in window
     const permission = (supported && Notification.permission) || null
-    const enabled = (supported && permission === 'granted' && window.localStorage.getItem('notificationsEnabled') === 'true')
+    const enabled =
+      supported &&
+      permission === 'granted' &&
+      window.localStorage.getItem('notificationsEnabled') === 'true'
 
     // Sync the notifications state to local storage
     localStorage.setItem('notificationsEnabled', enabled ? 'true' : 'false')
@@ -24,7 +27,7 @@ class QuestionNotificationsToggle extends React.Component {
 
     // Sync notification setting between tabs
     if (supported) {
-      window.addEventListener('storage', (e) => {
+      window.addEventListener('storage', e => {
         if (e.key === 'notificationsEnabled') {
           this.setState({
             enabled: e.newValue === 'true',
@@ -40,10 +43,12 @@ class QuestionNotificationsToggle extends React.Component {
   }
 
   toggleNotificationsEnabled() {
-    const hasBeenGranted = (Notification.permission === 'denied' || Notification.permission === 'granted')
+    const hasBeenGranted =
+      Notification.permission === 'denied' ||
+      Notification.permission === 'granted'
     if (!hasBeenGranted) {
       // Request permissions first
-      this.promptNotificationPermission((permission) => {
+      this.promptNotificationPermission(permission => {
         if (permission === 'granted') {
           this.setNotificationsEnabled(true)
         }
@@ -54,8 +59,12 @@ class QuestionNotificationsToggle extends React.Component {
   }
 
   promptNotificationPermission(callback) {
-    if ('Notification' in window && Notification.permission !== 'denied' && Notification.permission !== 'granted') {
-      Notification.requestPermission((permission) => {
+    if (
+      'Notification' in window &&
+      Notification.permission !== 'denied' &&
+      Notification.permission !== 'granted'
+    ) {
+      Notification.requestPermission(permission => {
         this.setState({ permission })
         callback(permission)
       })
@@ -76,7 +85,9 @@ class QuestionNotificationsToggle extends React.Component {
       text = 'Enable notifications'
       color = 'info'
     } else {
-      text = this.state.enabled ? 'Disable notifications' : 'Enable notifications'
+      text = this.state.enabled
+        ? 'Disable notifications'
+        : 'Enable notifications'
       color = this.state.enabled ? 'secondary' : 'info'
     }
 

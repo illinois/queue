@@ -16,13 +16,16 @@ import {
 
 import constants from '../constants'
 
-const fields = [{
-  name: 'topic',
-  maxLength: constants.QUESTION_TOPIC_MAX_LENGTH,
-}, {
-  name: 'location',
-  maxLength: constants.QUESTION_LOCATION_MAX_LENGTH,
-}]
+const fields = [
+  {
+    name: 'topic',
+    maxLength: constants.QUESTION_TOPIC_MAX_LENGTH,
+  },
+  {
+    name: 'location',
+    maxLength: constants.QUESTION_LOCATION_MAX_LENGTH,
+  },
+]
 
 const isValid = error => (error === undefined ? undefined : error === '')
 
@@ -35,7 +38,6 @@ class QuestionEdit extends React.Component {
       topic: '',
       isFieldValid: {},
     }
-
 
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleSubmitEdit = this.handleSubmitEdit.bind(this)
@@ -72,7 +74,9 @@ class QuestionEdit extends React.Component {
         isFieldValid[name] = 'This field is required!'
         valid = false
       } else if (this.state[name].length > maxLength) {
-        isFieldValid[name] = `This field has a maximum length of ${maxLength} characters`
+        isFieldValid[
+          name
+        ] = `This field has a maximum length of ${maxLength} characters`
         valid = false
       }
     })
@@ -104,7 +108,9 @@ class QuestionEdit extends React.Component {
         <ModalBody>
           <Form autoComplete="off">
             <FormGroup row>
-              <Label for="location" sm={4}>Location</Label>
+              <Label for="location" sm={4}>
+                Location
+              </Label>
               <Col sm={8}>
                 <Input
                   type="text"
@@ -118,7 +124,9 @@ class QuestionEdit extends React.Component {
               </Col>
             </FormGroup>
             <FormGroup row>
-              <Label for="topic" sm={4}>Topic</Label>
+              <Label for="topic" sm={4}>
+                Topic
+              </Label>
               <Col sm={8}>
                 <Input
                   type="text"
@@ -134,8 +142,12 @@ class QuestionEdit extends React.Component {
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="light" onClick={this.handleCancel}>Cancel</Button>
-          <Button color="primary" onClick={this.handleSubmitEdit}>Update</Button>
+          <Button color="light" onClick={this.handleCancel}>
+            Cancel
+          </Button>
+          <Button color="primary" onClick={this.handleSubmitEdit}>
+            Update
+          </Button>
         </ModalFooter>
       </Modal>
     )

@@ -27,7 +27,10 @@ function normalizeCourse(course) {
 }
 
 function addStaffToCourse(state, courseId, userId) {
-  if (!(courseId in state.courses) || state.courses[courseId].staff.indexOf(userId) !== -1) {
+  if (
+    !(courseId in state.courses) ||
+    state.courses[courseId].staff.indexOf(userId) !== -1
+  ) {
     return state
   }
 
@@ -37,7 +40,10 @@ function addStaffToCourse(state, courseId, userId) {
 }
 
 function removeStaffFromCourse(state, courseId, userId) {
-  if (!(courseId in state.courses) || state.courses[courseId].staff.indexOf(userId) === -1) {
+  if (
+    !(courseId in state.courses) ||
+    state.courses[courseId].staff.indexOf(userId) === -1
+  ) {
     return state
   }
 
@@ -55,7 +61,11 @@ function removeStaffFromCourse(state, courseId, userId) {
 }
 
 function addQueueToCourse(state, courseId, queue) {
-  if (state.courses[courseId].queues && (!(courseId in state.courses) || state.courses[courseId].queues.indexOf(queue.id) !== -1)) {
+  if (
+    state.courses[courseId].queues &&
+    (!(courseId in state.courses) ||
+      state.courses[courseId].queues.indexOf(queue.id) !== -1)
+  ) {
     return state
   }
 
@@ -68,7 +78,11 @@ function addQueueToCourse(state, courseId, queue) {
 }
 
 function removeQueueFromCourse(state, courseId, queueId) {
-  if (!state.courses[courseId].queues || !(courseId in state.courses) || state.courses[courseId].queues.indexOf(queueId) === -1) {
+  if (
+    !state.courses[courseId].queues ||
+    !(courseId in state.courses) ||
+    state.courses[courseId].queues.indexOf(queueId) === -1
+  ) {
     return state
   }
 

@@ -1,9 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-  ListGroupItem,
-  Button,
-} from 'reactstrap'
+import { ListGroupItem, Button } from 'reactstrap'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faMapMarker from '@fortawesome/fontawesome-free-solid/faMapMarker'
 import faQuestion from '@fortawesome/fontawesome-free-solid/faQuestionCircle'
@@ -19,18 +16,14 @@ class Queue extends React.Component {
   }
 
   render() {
-    const {
-      id,
-      name,
-      location,
-      isUserCourseStaff,
-      questionCount,
-    } = this.props
+    const { id, name, location, isUserCourseStaff, questionCount } = this.props
 
     // When we first create a queue, there's no question count in the response
     // We'll just assume it's 0 until a page reload or websocket event
     const adjustedCount = questionCount || 0
-    const questionCountText = `${adjustedCount} Question${adjustedCount !== 1 ? 's' : ''}`
+    const questionCountText = `${adjustedCount} Question${
+      adjustedCount !== 1 ? 's' : ''
+    }`
     const locationText = location || 'No location specified'
 
     return (
@@ -46,7 +39,7 @@ class Queue extends React.Component {
               {questionCountText}
             </div>
           </div>
-          {isUserCourseStaff &&
+          {isUserCourseStaff && (
             <Button
               color="danger"
               tag="div"
@@ -57,7 +50,7 @@ class Queue extends React.Component {
             >
               Delete
             </Button>
-          }
+          )}
         </ListGroupItem>
       </Link>
     )

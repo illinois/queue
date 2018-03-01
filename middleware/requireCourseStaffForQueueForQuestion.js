@@ -19,11 +19,13 @@ module.exports = async (req, res, next) => {
 
     const course = await Course.findOne({
       attributes: ['id'],
-      include: [{
-        model: Queue,
-        attributes: [],
-        where: { id: queueId },
-      }],
+      include: [
+        {
+          model: Queue,
+          attributes: [],
+          where: { id: queueId },
+        },
+      ],
       raw: true,
     })
 
@@ -32,7 +34,9 @@ module.exports = async (req, res, next) => {
     } else if (res.locals.userAuthz.isAdmin) {
       // Admins can do anything course staff can!
       next()
-    } else if (res.locals.userAuthz.staffedCourseIds.indexOf(course.id) === -1) {
+    } else if (
+      res.locals.userAuthz.staffedCourseIds.indexOf(course.id) === -1
+    ) {
       res.status(403).send()
     } else {
       next()

@@ -33,9 +33,8 @@ class NewCourse extends React.Component {
 
   handleCreateCourse() {
     let valid = true
-    const isFieldValid = {};
-
-    ['name', 'shortcode'].forEach((field) => {
+    const isFieldValid = {}
+    ;['name', 'shortcode'].forEach(field => {
       if (!this.state[field]) {
         valid = false
         isFieldValid[field] = false
@@ -58,7 +57,9 @@ class NewCourse extends React.Component {
     return (
       <Form autoComplete="off">
         <FormGroup row>
-          <Label for="name" sm={3}>Name</Label>
+          <Label for="name" sm={3}>
+            Name
+          </Label>
           <Col sm={9}>
             <Input
               name="name"
@@ -72,7 +73,9 @@ class NewCourse extends React.Component {
           </Col>
         </FormGroup>
         <FormGroup row>
-          <Label for="name" sm={3}>Shortcode</Label>
+          <Label for="name" sm={3}>
+            Shortcode
+          </Label>
           <Col sm={9}>
             <Input
               name="shortcode"
@@ -84,9 +87,9 @@ class NewCourse extends React.Component {
             />
             <FormFeedback>A shortcode is required!</FormFeedback>
             <FormText>
-              Adding a shortcode will allow you to generate a special link
-              that will direct students to your currently open queue when they
-              visit it.
+              Adding a shortcode will allow you to generate a special link that
+              will direct students to your currently open queue when they visit
+              it.
             </FormText>
           </Col>
         </FormGroup>

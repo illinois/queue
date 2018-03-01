@@ -40,12 +40,10 @@ class Header extends React.Component {
     return (
       <Navbar color="dark" dark className="mb-3" expand="sm">
         <Link route="index" passHref>
-          <NavbarBrand>
-              CS@Illinois Queues
-          </NavbarBrand>
+          <NavbarBrand>CS@Illinois Queues</NavbarBrand>
         </Link>
         <NavbarToggler onClick={() => this.toggle()} />
-        {user &&
+        {user && (
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav navbar className="ml-auto">
               <Link route="userSettings" passHref>
@@ -56,7 +54,7 @@ class Header extends React.Component {
               </Link>
             </Nav>
           </Collapse>
-        }
+        )}
       </Navbar>
     )
   }

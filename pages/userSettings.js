@@ -1,12 +1,6 @@
 import React from 'react'
 import withRedux from 'next-redux-wrapper'
-import {
-  Container,
-  Card,
-  CardHeader,
-  CardTitle,
-  CardBody,
-} from 'reactstrap'
+import { Container, Card, CardHeader, CardTitle, CardBody } from 'reactstrap'
 
 import makeStore from '../redux/makeStore'
 
@@ -25,7 +19,9 @@ class UserSettings extends React.Component {
         <Container fluid>
           <Card className="settings-card">
             <CardHeader className="bg-primary text-white d-flex align-items-center">
-              <CardTitle tag="h4" className="mb-0">Settings</CardTitle>
+              <CardTitle tag="h4" className="mb-0">
+                Settings
+              </CardTitle>
             </CardHeader>
             <CardBody>
               <CardTitle tag="h5">User profile</CardTitle>
@@ -45,10 +41,12 @@ class UserSettings extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     user: state.user.user,
   }
 }
 
-export default withRedux(makeStore, mapStateToProps, null)(PageWithUser(UserSettings))
+export default withRedux(makeStore, mapStateToProps, null)(
+  PageWithUser(UserSettings)
+)

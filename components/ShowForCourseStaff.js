@@ -1,7 +1,11 @@
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import { isUserAdmin, isUserCourseStaff, isUserCourseStaffForQueue } from '../selectors'
+import {
+  isUserAdmin,
+  isUserCourseStaff,
+  isUserCourseStaffForQueue,
+} from '../selectors'
 
 const ShowForCourseStaff = ({
   isAdmin,

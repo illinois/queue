@@ -6,13 +6,11 @@ function makeActionStrings(action) {
   }
 }
 
-
 export const FETCH_COURSES = makeActionStrings('FETCH_COURSES')
 export const FETCH_COURSE = makeActionStrings('FETCH_COURSE')
 export const CREATE_COURSE = makeActionStrings('CREATE_COURSE')
 export const ADD_COURSE_STAFF = makeActionStrings('ADD_COURSE_STAFF')
 export const REMOVE_COURSE_STAFF = makeActionStrings('REMOVE_COURSE_STAFF')
-
 
 export const FETCH_QUEUES = makeActionStrings('FETCH_QUEUES')
 export const FETCH_QUEUE = makeActionStrings('FETCH_QUEUE')
@@ -21,17 +19,21 @@ export const DELETE_QUEUE = makeActionStrings('DELETE_QUEUE')
 export const ADD_QUEUE_STAFF = makeActionStrings('ADD_QUEUE_STAFF')
 export const REMOVE_QUEUE_STAFF = makeActionStrings('REMOVE_QUEUE_STAFF')
 
-
 export const FETCH_QUESTIONS = makeActionStrings('FETCH_QUESTIONS')
 export const CREATE_QUESTION = makeActionStrings('CREATE_QUESTION')
-export const UPDATE_QUESTION_ANSWERING = makeActionStrings('UPDATE_QUESTION_ANSWERING')
+export const UPDATE_QUESTION_ANSWERING = makeActionStrings(
+  'UPDATE_QUESTION_ANSWERING'
+)
 export const UPDATE_QUESTION = makeActionStrings('UPDATE_QUESTION')
-export const FINISH_ANSWERING_QUESTION = makeActionStrings('FINISH_ANSWERING_QUESTION')
+export const FINISH_ANSWERING_QUESTION = makeActionStrings(
+  'FINISH_ANSWERING_QUESTION'
+)
 export const DELETE_QUESTION = makeActionStrings('DELETE_QUESTION')
 
 export const FETCH_CURRENT_USER = makeActionStrings('FETCH_CURRENT_USER')
-export const UPDATE_USER_PREFERRED_NAME = makeActionStrings('UPDATE_USER_PREFERRED_NAME')
-
+export const UPDATE_USER_PREFERRED_NAME = makeActionStrings(
+  'UPDATE_USER_PREFERRED_NAME'
+)
 
 /* These events will be fired on websocket messages */
 export const REPLACE_QUESTIONS = 'REPLACE_QUESTIONS'

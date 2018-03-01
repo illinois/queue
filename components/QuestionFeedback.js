@@ -72,9 +72,10 @@ class QuestionFeedback extends React.Component {
   }
 
   render() {
-    const preparednessWarning = (this.state.isFieldValid.preparedness === false) ? (
-      <div className="invalid-feedback d-block">This is required!</div>
-    ) : null
+    const preparednessWarning =
+      this.state.isFieldValid.preparedness === false ? (
+        <div className="invalid-feedback d-block">This is required!</div>
+      ) : null
 
     return (
       <Modal isOpen={this.props.isOpen} onClosed={this.handleModalExit}>
@@ -82,7 +83,9 @@ class QuestionFeedback extends React.Component {
         <ModalBody>
           <Form autoComplete="off">
             <FormGroup row>
-              <Label for="preparedness" sm={4}>Preparedness</Label>
+              <Label for="preparedness" sm={4}>
+                Preparedness
+              </Label>
               <Col sm={8}>
                 <ButtonGroup>
                   <Button
@@ -109,13 +112,15 @@ class QuestionFeedback extends React.Component {
                 </ButtonGroup>
                 {preparednessWarning}
                 <FormText color="muted">
-                  <i>(required)</i> Select the level of preparedness the student exhibited
-                  when asking their question.
+                  <i>(required)</i> Select the level of preparedness the student
+                  exhibited when asking their question.
                 </FormText>
               </Col>
             </FormGroup>
             <FormGroup row>
-              <Label for="comments" sm={4}>Comments</Label>
+              <Label for="comments" sm={4}>
+                Comments
+              </Label>
               <Col sm={8}>
                 <Input
                   type="textarea"
@@ -125,15 +130,20 @@ class QuestionFeedback extends React.Component {
                   onChange={this.handleInputChange}
                 />
                 <FormText color="muted">
-                  Enter any comments you had about the interaction with the student.
+                  Enter any comments you had about the interaction with the
+                  student.
                 </FormText>
               </Col>
             </FormGroup>
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="light" onClick={this.handleCancel}>Cancel</Button>
-          <Button color="primary" onClick={this.handleSubmitFeedback}>Submit</Button>
+          <Button color="light" onClick={this.handleCancel}>
+            Cancel
+          </Button>
+          <Button color="primary" onClick={this.handleSubmitFeedback}>
+            Submit
+          </Button>
         </ModalFooter>
       </Modal>
     )

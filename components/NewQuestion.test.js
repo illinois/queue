@@ -17,14 +17,14 @@ const doInputChange = (wrapper, name, value) => {
 }
 
 describe('<NewQuestion />', () => {
-  test('defaults to empty name if user doesn\'t have one set', () => {
+  test("defaults to empty name if user doesn't have one set", () => {
     const props = makeProps(1, null)
     const wrapper = shallow(<NewQuestion {...props} />)
     const nameInput = wrapper.find(Input).find('[name="name"]')
     expect(nameInput.prop('value')).toBe('')
   })
 
-  test('populates the name field with the user\'s name', () => {
+  test("populates the name field with the user's name", () => {
     const props = makeProps(1, 'My Cool Name')
     const wrapper = shallow(<NewQuestion {...props} />)
     const nameInput = wrapper.find(Input).find('[name="name"]')

@@ -14,7 +14,10 @@ import {
   REPLACE_ACTIVE_STAFF,
 } from '../constants/ActionTypes'
 
-import { normalizeQueue as normalizeQueueHelper, normalizeActiveStaffList } from './normalize'
+import {
+  normalizeQueue as normalizeQueueHelper,
+  normalizeActiveStaffList,
+} from './normalize'
 
 const defaultState = {
   isFetching: false,
@@ -26,14 +29,18 @@ function normalizeQueue(queue) {
   return normalized.entities.queues[normalized.result]
 }
 
-const reduceQueues = queues => queues.reduce((obj, item) => {
-  // eslint-disable-next-line no-param-reassign
-  obj[item.id] = normalizeQueue(item)
-  return obj
-}, {})
+const reduceQueues = queues =>
+  queues.reduce((obj, item) => {
+    // eslint-disable-next-line no-param-reassign
+    obj[item.id] = normalizeQueue(item)
+    return obj
+  }, {})
 
 function addQuestionToQueue(state, queueId, questionId) {
-  if (!(queueId in state.queues) || state.queues[queueId].questions.indexOf(questionId) !== -1) {
+  if (
+    !(queueId in state.queues) ||
+    state.queues[queueId].questions.indexOf(questionId) !== -1
+  ) {
     return state
   }
 
@@ -43,7 +50,10 @@ function addQuestionToQueue(state, queueId, questionId) {
 }
 
 function removeQuestionFromQueue(state, queueId, questionId) {
-  if (!(queueId in state.queues) || state.queues[queueId].questions.indexOf(questionId) === -1) {
+  if (
+    !(queueId in state.queues) ||
+    state.queues[queueId].questions.indexOf(questionId) === -1
+  ) {
     return state
   }
 
@@ -61,7 +71,10 @@ function removeQuestionFromQueue(state, queueId, questionId) {
 }
 
 function addActiveStaffToQueue(state, queueId, activeStaffId) {
-  if (!(queueId in state.queues) || state.queues[queueId].activeStaff.indexOf(activeStaffId) !== -1) {
+  if (
+    !(queueId in state.queues) ||
+    state.queues[queueId].activeStaff.indexOf(activeStaffId) !== -1
+  ) {
     return state
   }
 
@@ -207,7 +220,9 @@ const queues = (state = defaultState, action) => {
           ...state.queues,
           [queueId]: {
             ...originalQueue,
-            activeStaff: originalQueue.activeStaff.filter(id => id !== activeStaffId),
+            activeStaff: originalQueue.activeStaff.filter(
+              id => id !== activeStaffId
+            ),
           },
         },
       }

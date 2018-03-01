@@ -2,12 +2,16 @@
 import { CREATE_QUESTION } from '../constants/ActionTypes'
 import { baseUrl } from '../util'
 
-export default store => next => (action) => {
+export default store => next => action => {
   if (action.type === CREATE_QUESTION.SUCCESS) {
     const state = store.getState()
     // We obviously want to avoid notifying ourselves
     if (state.user.user.id !== action.question.askedById) {
-      if (typeof window !== 'undefined' && window.localStorage && window.localStorage.getItem('notificationsEnabled') === 'true') {
+      if (
+        typeof window !== 'undefined' &&
+        window.localStorage &&
+        window.localStorage.getItem('notificationsEnabled') === 'true'
+      ) {
         if (Notification.permission === 'granted') {
           const { name, location } = action.question
 

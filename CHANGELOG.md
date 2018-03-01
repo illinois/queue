@@ -8,6 +8,7 @@ with the current date and the next changes should go under a **[Next]** header.
 ## [Next]
 
 * Add changelog. ([@nwalters512](https://github.com/nwalters512) in [#34](https://github.com/illinois/queue/pull/34))
+* Add Travis and Prettier support. ([@nwalters512](https://github.com/nwalters512) in [#37](https://github.com/illinois/queue/pull/37))
 
 
 ## 27 February 2018

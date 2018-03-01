@@ -16,16 +16,20 @@ import {
 
 import constants from '../constants'
 
-const fields = [{
-  name: 'name',
-  maxLength: constants.QUESTION_NAME_MAX_LENGTH,
-}, {
-  name: 'topic',
-  maxLength: constants.QUESTION_TOPIC_MAX_LENGTH,
-}, {
-  name: 'location',
-  maxLength: constants.QUESTION_LOCATION_MAX_LENGTH,
-}]
+const fields = [
+  {
+    name: 'name',
+    maxLength: constants.QUESTION_NAME_MAX_LENGTH,
+  },
+  {
+    name: 'topic',
+    maxLength: constants.QUESTION_TOPIC_MAX_LENGTH,
+  },
+  {
+    name: 'location',
+    maxLength: constants.QUESTION_LOCATION_MAX_LENGTH,
+  },
+]
 
 const isValid = error => (error === undefined ? undefined : error === '')
 
@@ -59,7 +63,9 @@ export default class NewQuestion extends React.Component {
         fieldErrors[name] = 'This field is required!'
         valid = false
       } else if (this.state[name].length > maxLength) {
-        fieldErrors[name] = `This field has a maximum length of ${maxLength} characters`
+        fieldErrors[
+          name
+        ] = `This field has a maximum length of ${maxLength} characters`
         valid = false
       }
     })
@@ -83,7 +89,9 @@ export default class NewQuestion extends React.Component {
         <CardBody>
           <Form onSubmit={this.handleSubmit} autoComplete="off">
             <FormGroup row>
-              <Label for="name" sm={2}>Name</Label>
+              <Label for="name" sm={2}>
+                Name
+              </Label>
               <Col sm={10}>
                 <Input
                   name="name"
@@ -94,13 +102,13 @@ export default class NewQuestion extends React.Component {
                   valid={isValid(this.state.fieldErrors.name)}
                 />
                 <FormFeedback>{this.state.fieldErrors.name}</FormFeedback>
-                <FormText color="muted">
-                  Using a nickname is fine!
-                </FormText>
+                <FormText color="muted">Using a nickname is fine!</FormText>
               </Col>
             </FormGroup>
             <FormGroup row>
-              <Label for="topic" sm={2}>Topic</Label>
+              <Label for="topic" sm={2}>
+                Topic
+              </Label>
               <Col sm={10}>
                 <Input
                   name="topic"
@@ -114,7 +122,9 @@ export default class NewQuestion extends React.Component {
               </Col>
             </FormGroup>
             <FormGroup row>
-              <Label for="location" sm={2}>Location</Label>
+              <Label for="location" sm={2}>
+                Location
+              </Label>
               <Col sm={10}>
                 <Input
                   name="location"
