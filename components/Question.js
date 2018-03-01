@@ -133,11 +133,12 @@ class Question extends React.Component {
           <div>
             {isBeingAnswered && (
               <Badge color="success">Being answered by {answeringName}</Badge>
-            }
-            <strong className="d-block">{name}
-              {isUserCourseStaff &&
+            )}
+            <strong className="d-block">
+              {name}
+              {isUserCourseStaff && (
                 <span className="text-muted"> ({askedBy.netid})</span>
-               }
+              )}
             </strong>
             <div className="text-muted">
               <span className="text-muted" style={{ fontSize: '0.9rem' }}>

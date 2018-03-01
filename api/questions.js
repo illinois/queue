@@ -63,10 +63,11 @@ router.post(
       askedById: res.locals.userAuthn.id,
     })
 
-  await question.save()
-  await question.reload()
-  res.status(201).send(question)
-})
+    await question.save()
+    await question.reload()
+    res.status(201).send(question)
+  }
+)
 
 // Get all questions for a particular queue
 router.get('/', [requireQueue, failIfErrors], async (req, res, _next) => {
