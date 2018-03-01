@@ -53,6 +53,7 @@ describe('Queues API', () => {
       const res3 = await request(app).get('/api/queues/2?forceuser=admin')
       expect(res3.body).toHaveProperty('questions')
       expect(res3.body.questions).toHaveLength(1)
+      expect(res3.body.questions[0]).toHaveProperty('askedBy')
       expect(res3.body.questions[0].askedBy.netid).toBe('dev')
     })
 
@@ -78,6 +79,7 @@ describe('Queues API', () => {
       const res3 = await request(app).get('/api/queues/2?forceuser=student')
       expect(res3.body).toHaveProperty('questions')
       expect(res3.body.questions).toHaveLength(1)
+      expect(res3.body.questions[0]).toHaveProperty('askedBy')
       expect(res3.body.questions[0].askedBy.netid).toBe('dev')
     })
   })
