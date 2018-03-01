@@ -11,26 +11,24 @@ module.exports = async (req, res, next) => {
   })
   console.log(firstQueue)
   
-  //Cannot Find Queue In Deleted or Non Deleted
+  // Cannot Find Queue In Deleted or Non Deleted
   if(!firstQueue){
     res.redirect(`${baseUrl}/`)
   }
 
-  //Deleted Queue
+  // Deleted Queue
   if (firstQueue.dataValues.deletedAt) {
     // Find the most recent open queue for this course
     const sameCourseQueues = await Queue.findAll({
       where: {
         courseId: firstQueue.dataValues.courseId,
-      },
-      order: [['id', 'DESC']],
+      }
     })
 
+    // Redirect to Queue from the same Course
     if (sameCourseQueues.length === 1) {
-      console.log("TO SAME COURSE QUEUE")
       res.redirect(`${baseUrl}/queue/${sameCourseQueues[0].id}`)
-    } else {
-      console.log("TO THE COURSE")
+    } else { // Redirect to the Course the Queue was fron
       res.redirect(`${baseUrl}/course/${firstQueue.dataValues.courseId}`)
     }
   }
