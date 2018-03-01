@@ -1,17 +1,17 @@
 const { baseUrl } = require('../util')
-const { Course, Queue } = require('../models')
+const { Queue } = require('../models')
 
 module.exports = async (req, res, next) => {
   const { queueId: qid } = req.params
   const firstQueue = await Queue.findOne({
     where: {
-      id: qid
+      id: qid,
     },
-    paranoid: false
+    paranoid: false,
   })
-  
+
   // Cannot Find Queue In Deleted or Non Deleted
-  if(!firstQueue){
+  if (!firstQueue) {
     res.redirect(`${baseUrl}/`)
   }
 
@@ -21,17 +21,17 @@ module.exports = async (req, res, next) => {
     const sameCourseQueues = await Queue.findAll({
       where: {
         courseId: firstQueue.dataValues.courseId,
-      }
+      },
     })
 
     // Redirect to Queue from the same Course
     if (sameCourseQueues.length === 1) {
       res.redirect(`${baseUrl}/queue/${sameCourseQueues[0].id}`)
-    } else { // Redirect to the Course the Queue was fron
+    } else {
+      // Redirect to the Course the Queue was fron
       res.redirect(`${baseUrl}/course/${firstQueue.dataValues.courseId}`)
     }
-  }
-  else {
+  } else {
     next()
   }
 }
