@@ -18,7 +18,7 @@ const nextApp = nextJs({ dev: DEV })
 const handler = routes.getRequestHandler(nextApp)
 
 /* eslint-disable func-names */
-co(function* () {
+co(function*() {
   // Initialize the Next.js app
   yield nextApp.prepare()
 

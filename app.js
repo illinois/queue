@@ -12,11 +12,13 @@ const DEV = process.env.NODE_ENV !== 'production'
 // eppn header from Shib. In dev, to support multiple users for testing, we
 // use session middleware.
 if (DEV) {
-  app.use(session({
-    secret: 'this is not a secret',
-    resave: false,
-    saveUninitialized: true,
-  }))
+  app.use(
+    session({
+      secret: 'this is not a secret',
+      resave: false,
+      saveUninitialized: true,
+    })
+  )
 }
 
 app.use(bodyParser.json())
@@ -46,7 +48,10 @@ app.use(`${baseUrl}/api/courses`, require('./api/courses'))
 app.use(`${baseUrl}/api/queues`, require('./api/queues'))
 app.use(`${baseUrl}/api/questions`, require('./api/questions'))
 app.use(`${baseUrl}/api/courses/:courseId/queues`, require('./api/queues'))
-app.use(`${baseUrl}/api/courses/:courseId/queues/:queueId/questions`, require('./api/questions'))
+app.use(
+  `${baseUrl}/api/courses/:courseId/queues/:queueId/questions`,
+  require('./api/questions')
+)
 app.use(`${baseUrl}/api/queues/:queueId/questions`, require('./api/questions'))
 
 // Support for course shortcodes

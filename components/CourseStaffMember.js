@@ -1,15 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import {
-  ListGroupItem,
-  Button,
-} from 'reactstrap'
+import { ListGroupItem, Button } from 'reactstrap'
 
 // eslint-disable-next-line react/prefer-stateless-function
 class CourseStaffMember extends React.Component {
   render() {
-    const netidClasses = classNames('text-muted', 'small', { 'ml-2': this.props.name })
+    const netidClasses = classNames('text-muted', 'small', {
+      'ml-2': this.props.name,
+    })
 
     return (
       <ListGroupItem className="d-flex align-items-center">

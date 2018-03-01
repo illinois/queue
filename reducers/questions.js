@@ -13,11 +13,12 @@ const defaultState = {
   questions: {},
 }
 
-const reduceQuestions = questions => questions.reduce((obj, item) => {
-  // eslint-disable-next-line no-param-reassign
-  obj[item.id] = item
-  return obj
-}, {})
+const reduceQuestions = questions =>
+  questions.reduce((obj, item) => {
+    // eslint-disable-next-line no-param-reassign
+    obj[item.id] = item
+    return obj
+  }, {})
 
 const questions = (state = defaultState, action) => {
   switch (action.type) {

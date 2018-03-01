@@ -4,6 +4,7 @@ node_js:
 script:
   - npm run test
   - npm run lint-js
+  - npm run prettier-diff
 cache:
   directories:
     - "node_modules"

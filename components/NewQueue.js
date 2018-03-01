@@ -76,7 +76,9 @@ class NewQueue extends React.Component {
     if (showCourseSelector) {
       let userCourses = courses
       if (!user.isAdmin) {
-        userCourses = courses.filter(c => user.staffAssignments.indexOf(c.id) !== -1)
+        userCourses = courses.filter(
+          c => user.staffAssignments.indexOf(c.id) !== -1
+        )
       }
       courseOptions = userCourses.map(course => (
         <option value={course.id} key={course.id}>
@@ -87,9 +89,11 @@ class NewQueue extends React.Component {
 
     return (
       <Form autoComplete="off">
-        {showCourseSelector &&
+        {showCourseSelector && (
           <FormGroup row>
-            <Label for="course" sm={3}>Course</Label>
+            <Label for="course" sm={3}>
+              Course
+            </Label>
             <Col sm={9}>
               <Input
                 type="select"
@@ -99,15 +103,19 @@ class NewQueue extends React.Component {
                 value={this.state.course}
                 valid={isValid(this.state.fieldErrors.course)}
               >
-                <option value="none" disabled>Select a course</option>
+                <option value="none" disabled>
+                  Select a course
+                </option>
                 {courseOptions}
               </Input>
               <FormFeedback>{this.state.fieldErrors.course}</FormFeedback>
             </Col>
           </FormGroup>
-        }
+        )}
         <FormGroup row>
-          <Label for="name" sm={3}>Name</Label>
+          <Label for="name" sm={3}>
+            Name
+          </Label>
           <Col sm={9}>
             <Input
               type="text"
@@ -121,7 +129,9 @@ class NewQueue extends React.Component {
           </Col>
         </FormGroup>
         <FormGroup row>
-          <Label for="location" sm={3}>Location</Label>
+          <Label for="location" sm={3}>
+            Location
+          </Label>
           <Col sm={9}>
             <Input
               type="text"
@@ -130,9 +140,7 @@ class NewQueue extends React.Component {
               onChange={this.handleInputChange}
               value={this.state.location}
             />
-            <FormText color="muted">
-              Setting a location is optional!
-            </FormText>
+            <FormText color="muted">Setting a location is optional!</FormText>
           </Col>
         </FormGroup>
         <FormGroup row className="mb-0">
@@ -170,10 +178,12 @@ NewQueue.propTypes = {
   showCourseSelector: PropTypes.bool,
   onCreateQueue: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
-  courses: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-  })).isRequired,
+  courses: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    })
+  ).isRequired,
   user: PropTypes.shape({
     staffAssignments: PropTypes.arrayOf(PropTypes.number).isRequired,
   }).isRequired,

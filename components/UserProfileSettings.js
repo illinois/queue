@@ -1,11 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-  Form,
-  Input,
-  FormText,
-  Button,
-} from 'reactstrap'
+import { Form, Input, FormText, Button } from 'reactstrap'
 
 class UserProfileSettings extends React.Component {
   constructor(props) {

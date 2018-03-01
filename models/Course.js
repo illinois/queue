@@ -4,9 +4,12 @@ module.exports = (sequelize, DataTypes) => {
     shortcode: DataTypes.STRING,
   })
 
-  obj.associate = (models) => {
+  obj.associate = models => {
     models.Course.hasMany(models.Queue)
-    models.Course.belongsToMany(models.User, { as: 'staff', through: models.CourseStaff })
+    models.Course.belongsToMany(models.User, {
+      as: 'staff',
+      through: models.CourseStaff,
+    })
   }
 
   return obj

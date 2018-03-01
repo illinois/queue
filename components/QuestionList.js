@@ -1,9 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-  ListGroup,
-  ListGroupItem,
-} from 'reactstrap'
+import { ListGroup, ListGroupItem } from 'reactstrap'
 import FlipMove from 'react-flip-move'
 
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
@@ -13,7 +10,6 @@ import Question from './Question'
 import QuestionFeedback from './QuestionFeedback'
 import ConfirmLeaveQueueModal from './ConfirmLeaveQueueModal'
 import QuestionEdit from './QuestionEdit'
-
 
 class QuestionList extends React.Component {
   constructor(props) {
@@ -37,11 +33,13 @@ class QuestionList extends React.Component {
   }
 
   handleSubmitFeedback(feedback) {
-    this.props.finishAnsweringQuestion(this.state.feedbackId, feedback).then(() => {
-      this.setState({
-        showFeedbackModal: false,
+    this.props
+      .finishAnsweringQuestion(this.state.feedbackId, feedback)
+      .then(() => {
+        this.setState({
+          showFeedbackModal: false,
+        })
       })
-    })
   }
 
   handleFeedbackCancel() {
@@ -104,16 +102,20 @@ class QuestionList extends React.Component {
     let questions
     if (this.props.queue && this.props.queue.questions) {
       if (this.props.queue.questions.length > 0) {
-        questions = this.props.queue.questions.map((questionId) => {
+        questions = this.props.queue.questions.map(questionId => {
           const question = this.props.questions[questionId]
           return (
             <Question
               key={questionId}
               isUserCourseStaff={this.props.isUserCourseStaff}
-              isUserAnsweringQuestion={this.props.userId === question.answeredById}
+              isUserAnsweringQuestion={
+                this.props.userId === question.answeredById
+              }
               didUserAskQuestion={this.props.userId === question.askedById}
               deleteQuestion={() => this.deleteQuestion(questionId)}
-              updateQuestionBeingAnswered={this.props.updateQuestionBeingAnswered}
+              updateQuestionBeingAnswered={
+                this.props.updateQuestionBeingAnswered
+              }
               finishedAnswering={() => this.handleFinishedAnswering(questionId)}
               editQuestion={() => this.handleEditQuestion(questionId)}
               {...question}
@@ -164,7 +166,9 @@ class QuestionList extends React.Component {
         <QuestionEdit
           question={this.props.questions[this.state.attributeId]}
           isOpen={this.state.showQuestionEditModal}
-          onSubmitQuestionEdit={attributes => this.handleSubmitQuestionEdit(attributes)}
+          onSubmitQuestionEdit={attributes =>
+            this.handleSubmitQuestionEdit(attributes)
+          }
           onCancel={() => this.handleQuestionEditCancel()}
         />
       </div>
@@ -176,11 +180,13 @@ QuestionList.propTypes = {
   queue: PropTypes.shape({
     questions: PropTypes.arrayOf(PropTypes.number),
   }),
-  questions: PropTypes.objectOf(PropTypes.shape({
-    name: PropTypes.string,
-    location: PropTypes.string,
-    topic: PropTypes.string,
-  })),
+  questions: PropTypes.objectOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      location: PropTypes.string,
+      topic: PropTypes.string,
+    })
+  ),
   userId: PropTypes.number.isRequired,
   isUserCourseStaff: PropTypes.bool.isRequired,
   deleteQuestion: PropTypes.func.isRequired,

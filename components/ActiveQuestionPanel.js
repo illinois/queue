@@ -1,12 +1,7 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import {
-  Card,
-  CardTitle,
-  CardText,
-  Button,
-} from 'reactstrap'
+import { Card, CardTitle, CardText, Button } from 'reactstrap'
 
 import { deleteQuestion } from '../actions/question'
 
@@ -43,10 +38,12 @@ class ActiveQuestionPanel extends React.Component {
         <Card body inverse color="primary">
           <CardTitle>You&apos;re on the queue!</CardTitle>
           <CardText>
-            Someone from course staff will be with you shortly.
-            In the meantime, keep working hard!
+            Someone from course staff will be with you shortly. In the meantime,
+            keep working hard!
           </CardText>
-          <Button color="light" onClick={() => this.toggle()}>Leave the queue</Button>
+          <Button color="light" onClick={() => this.toggle()}>
+            Leave the queue
+          </Button>
         </Card>
         <ConfirmLeaveQueueModal
           isOpen={this.state.modalOpen}

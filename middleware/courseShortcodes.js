@@ -18,9 +18,7 @@ module.exports = async (req, res, next) => {
     where: {
       courseId: course.id,
     },
-    order: [
-      ['id', 'DESC'],
-    ],
+    order: [['id', 'DESC']],
   })
 
   if (queue.length === 1) {

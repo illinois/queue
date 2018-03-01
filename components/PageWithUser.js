@@ -6,7 +6,7 @@ import Error from 'next/error'
 import { fetchCurrentUser } from '../actions/user'
 import Loading from './Loading'
 
-export default function (AuthedComponent, permissions) {
+export default function(AuthedComponent, permissions) {
   class PageWithUser extends React.Component {
     static async getInitialProps(ctx) {
       return AuthedComponent.getInitialProps(ctx)
@@ -34,19 +34,20 @@ export default function (AuthedComponent, permissions) {
         let authzed = true
         // Admins can do everything and see everything, of course
         if (permissions && !user.isAdmin) {
-          const {
-            requireAdmin,
-            requireCourseStaff,
-          } = permissions
+          const { requireAdmin, requireCourseStaff } = permissions
 
           if (requireAdmin && !user.isAdmin) {
             authzed = false
           } else if (requireCourseStaff) {
             // We should have received a courseId prop...
             if (!this.props.courseId) {
-              console.warn('PageWithUser requested course staff authz, but no courseId was provided')
+              console.warn(
+                'PageWithUser requested course staff authz, but no courseId was provided'
+              )
               authzed = false
-            } else if (user.staffAssignments.indexOf(this.props.courseId) === -1) {
+            } else if (
+              user.staffAssignments.indexOf(this.props.courseId) === -1
+            ) {
               authzed = false
             }
           }
@@ -61,11 +62,7 @@ export default function (AuthedComponent, permissions) {
 
     render() {
       /* eslint-disable no-unused-vars */
-      const {
-        fetchUser,
-        user,
-        ...restProps
-      } = this.props
+      const { fetchUser, user, ...restProps } = this.props
 
       if (!this.state.isLoading) {
         if (this.state.isAuthed) {

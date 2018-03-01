@@ -12,7 +12,8 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    createQuestion: (queueId, question) => dispatch(createQuestion(queueId, question)),
+    createQuestion: (queueId, question) =>
+      dispatch(createQuestion(queueId, question)),
   }
 }
 

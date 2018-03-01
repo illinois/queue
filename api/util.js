@@ -1,11 +1,6 @@
 const { validationResult } = require('express-validator/check')
 
-const {
-  Course,
-  Queue,
-  Question,
-  User,
-} = require('../models')
+const { Course, Queue, Question, User } = require('../models')
 
 const findPropertyInRequest = (req, property) => {
   const locations = ['params', 'body']
@@ -13,14 +8,20 @@ const findPropertyInRequest = (req, property) => {
   return location !== undefined ? req[location][property] : null
 }
 
-const requireModel = (model, modelName, propertyName) => async (req, res, next) => {
+const requireModel = (model, modelName, propertyName) => async (
+  req,
+  res,
+  next
+) => {
   const rawModelId = findPropertyInRequest(req, propertyName)
   if (rawModelId) {
     const parsedModelId = Number.parseInt(rawModelId, 10)
     if (!Number.isNaN(parsedModelId)) {
       const entity = await model.findOne({ where: { id: parsedModelId } })
       if (entity === null) {
-        res.status(404).send(`${modelName} with ID ${parsedModelId} does not exist`)
+        res
+          .status(404)
+          .send(`${modelName} with ID ${parsedModelId} does not exist`)
       } else {
         res.locals[modelName] = entity
         next()

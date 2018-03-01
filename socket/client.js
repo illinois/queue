@@ -1,5 +1,10 @@
 import io from 'socket.io-client'
-import { replaceQuestions, createQuestionSuccess, updateQuestionSuccess, deleteQuestionSuccess } from '../actions/question'
+import {
+  replaceQuestions,
+  createQuestionSuccess,
+  updateQuestionSuccess,
+  deleteQuestionSuccess,
+} from '../actions/question'
 import { addQueueStaffSuccess, removeQueueStaffSuccess } from '../actions/queue'
 import { replaceActiveStaff } from '../actions/activeStaff'
 import { normalizeActiveStaff } from '../reducers/normalize'
@@ -42,14 +47,24 @@ export const connectToQueue = (dispatch, queueId) => {
       dispatch(replaceActiveStaff(queueId, activeStaff))
     })
   })
-  socket.on('question:create', ({ question }) => handleQuestionCreate(dispatch, queueId, question))
-  socket.on('question:update', ({ question }) => handleQuestionUpdate(dispatch, question))
-  socket.on('question:delete', ({ id }) => handleQuestionDelete(dispatch, queueId, id))
-  socket.on('activeStaff:create', ({ activeStaff }) => handleActiveStaffCreate(dispatch, queueId, activeStaff))
-  socket.on('activeStaff:delete', ({ id }) => handleActiveStaffDelete(dispatch, queueId, id))
+  socket.on('question:create', ({ question }) =>
+    handleQuestionCreate(dispatch, queueId, question)
+  )
+  socket.on('question:update', ({ question }) =>
+    handleQuestionUpdate(dispatch, question)
+  )
+  socket.on('question:delete', ({ id }) =>
+    handleQuestionDelete(dispatch, queueId, id)
+  )
+  socket.on('activeStaff:create', ({ activeStaff }) =>
+    handleActiveStaffCreate(dispatch, queueId, activeStaff)
+  )
+  socket.on('activeStaff:delete', ({ id }) =>
+    handleActiveStaffDelete(dispatch, queueId, id)
+  )
 }
 
-export const disconnectFromQueue = (queueId) => {
+export const disconnectFromQueue = queueId => {
   if (queueId in queueSockets) {
     queueSockets[queueId].close()
     delete queueSockets[queueId]

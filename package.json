@@ -9,7 +9,9 @@
     "build": "next build",
     "start": "NODE_ENV=production node server.js",
     "test": "jest",
-    "lint-js": "eslint --ext js ."
+    "lint-js": "eslint --ext js .",
+    "prettier": "prettier --write \"**/*.js\"",
+    "prettier-diff": "prettier --list-different \"**/*.js\""
   },
   "keywords": [],
   "author": "",
@@ -64,12 +66,16 @@
     "enzyme-adapter-react-16": "^1.1.1",
     "eslint": "^4.16.0",
     "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.5.1",
+    "husky": "^0.14.3",
     "jest": "^22.3.0",
     "jest-enzyme": "^4.2.0",
     "nodemon": "^1.14.12",
+    "prettier": "1.11.1",
+    "pretty-quick": "^1.4.1",
     "react-test-renderer": "^16.2.0",
     "sqlite3": "^3.1.13",
     "supertest": "^3.0.0"
@@ -77,5 +83,10 @@
   "jest": {
     "setupTestFrameworkScriptFile": "./testSetup.js",
     "collectCoverage": true
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   }
 }

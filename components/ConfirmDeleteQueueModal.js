@@ -1,12 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-} from 'reactstrap'
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'
 
 const ConfirmDeleteQueueModal = props => (
   <Modal isOpen={props.isOpen} toggle={props.toggle}>
@@ -15,8 +9,12 @@ const ConfirmDeleteQueueModal = props => (
       This queue and all its open questions will be deleted.
     </ModalBody>
     <ModalFooter>
-      <Button color="danger" onClick={props.confirm}>Delete queue</Button>
-      <Button color="secondary" onClick={props.toggle}>Cancel</Button>
+      <Button color="danger" onClick={props.confirm}>
+        Delete queue
+      </Button>
+      <Button color="secondary" onClick={props.toggle}>
+        Cancel
+      </Button>
     </ModalFooter>
   </Modal>
 )

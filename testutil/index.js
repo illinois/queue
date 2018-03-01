@@ -20,10 +20,7 @@ module.exports.createTestUsers = async () => {
 }
 
 module.exports.createTestCourses = async () => {
-  await models.Course.bulkCreate([
-    { name: 'CS225' },
-    { name: 'CS241' },
-  ])
+  await models.Course.bulkCreate([{ name: 'CS225' }, { name: 'CS241' }])
 }
 
 module.exports.createTestQueues = async () => {
