@@ -9,7 +9,6 @@ module.exports = async (req, res, next) => {
     },
     paranoid: false
   })
-  console.log(firstQueue)
   
   // Cannot Find Queue In Deleted or Non Deleted
   if(!firstQueue){
