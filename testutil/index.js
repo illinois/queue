@@ -2,15 +2,17 @@ const models = require('../models')
 
 module.exports.resetDb = async () => {
   const promises = []
-  Object.keys(models.models).forEach((key) => {
-    promises.push(models.models[key].destroy({
-      truncate: true,
-      force: true,
-      cascade: true,
-    }))
+  Object.keys(models.models).forEach(key => {
+    promises.push(
+      models.models[key].destroy({
+        truncate: true,
+        force: true,
+        cascade: true,
+      })
+    )
   })
   await Promise.all(promises)
-  await models.sequelize.query("DELETE FROM sqlite_sequence")
+  await models.sequelize.query('DELETE FROM sqlite_sequence')
 }
 
 module.exports.resetAndPopulateDb = async () => {
