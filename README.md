@@ -1,5 +1,5 @@
 # queue
-
+[![Build Status](https://travis-ci.org/illinois/queue.svg?branch=master)](https://travis-ci.org/illinois/queue)
 ### Running locally in `dev` mode:
 - Clone the repository
 - Install [`node` and `npm`](https://nodejs.org/en/download/package-manager/)
