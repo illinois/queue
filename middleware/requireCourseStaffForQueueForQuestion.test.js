@@ -2,12 +2,9 @@
 const requireCourseStaffForQueueForQuestion = require('./requireCourseStaffForQueueForQuestion')
 const testutil = require('../testutil')
 
-beforeAll(async () => {
-  await testutil.setupTestDb()
-  await testutil.populateTestDb()
-})
-
-afterAll(() => testutil.destroyTestDb())
+beforeAll(testutil.createDb)
+afterAll(testutil.destroyDb)
+beforeEach(testutil.resetAndPopulateDb)
 
 const makeReq = questionId => ({
   params: {

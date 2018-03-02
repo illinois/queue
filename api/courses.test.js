@@ -4,11 +4,9 @@ const app = require('../app')
 const testutil = require('../testutil')
 const { User } = require('../models')
 
-beforeEach(async () => {
-  await testutil.setupTestDb()
-  await testutil.populateTestDb()
-})
-afterEach(() => testutil.destroyTestDb())
+beforeAll(testutil.createDb)
+afterAll(testutil.destroyDb)
+beforeEach(testutil.resetAndPopulateDb)
 
 describe('Courses API', () => {
   test('GET /api/courses', async () => {

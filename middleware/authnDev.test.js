@@ -2,8 +2,9 @@
 const authnDev = require('./authnDev')
 const testutil = require('../testutil')
 
-beforeEach(() => testutil.setupTestDb())
-afterEach(() => testutil.destroyTestDb())
+beforeAll(testutil.createDb)
+afterAll(testutil.destroyDb)
+beforeEach(testutil.resetAndPopulateDb)
 
 describe('authnDev middleware', () => {
   test('defaults to dev admin user', async () => {

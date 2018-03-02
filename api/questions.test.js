@@ -5,12 +5,9 @@ const app = require('../app')
 const testutil = require('../testutil')
 const constants = require('../constants')
 
-beforeEach(async () => {
-  await testutil.setupTestDb()
-  await testutil.populateTestDb()
-})
-
-afterEach(() => testutil.destroyTestDb())
+beforeAll(testutil.createDb)
+afterAll(testutil.destroyDb)
+beforeEach(testutil.resetAndPopulateDb)
 
 describe('Questions API', () => {
   describe('POST /api/queues/:queueId/questions', () => {

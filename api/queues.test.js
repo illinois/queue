@@ -3,12 +3,9 @@ const request = require('supertest')
 const app = require('../app')
 const testutil = require('../testutil')
 
-beforeEach(async () => {
-  await testutil.setupTestDb()
-  await testutil.populateTestDb()
-})
-
-afterEach(() => testutil.destroyTestDb())
+beforeAll(testutil.createDb)
+afterAll(testutil.destroyDb)
+beforeEach(testutil.resetAndPopulateDb)
 
 describe('Queues API', () => {
   describe('GET /api/queues', () => {

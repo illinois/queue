@@ -1,10 +1,28 @@
 const models = require('../models')
 
-module.exports.setupTestDb = async () => {
-  await models.sequelize.sync()
+module.exports.resetDb = async () => {
+  const promises = []
+  Object.keys(models.models).forEach((key) => {
+    promises.push(models.models[key].destroy({
+      truncate: true,
+      force: true,
+      cascade: true,
+    }))
+  })
+  await Promise.all(promises)
+  await models.sequelize.query("DELETE FROM sqlite_sequence")
 }
 
-module.exports.destroyTestDb = async () => {
+module.exports.resetAndPopulateDb = async () => {
+  await module.exports.resetDb()
+  await module.exports.populateDb()
+}
+
+module.exports.createDb = async () => {
+  await models.sequelize.sync({ force: true })
+}
+
+module.exports.destroyDb = async () => {
   await models.sequelize.drop()
 }
 
@@ -49,7 +67,7 @@ module.exports.createTestQuestions = async () => {
   ])
 }
 
-module.exports.populateTestDb = async () => {
+module.exports.populateDb = async () => {
   await module.exports.createTestUsers()
   await module.exports.createTestCourses()
 

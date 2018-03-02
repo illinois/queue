@@ -3,11 +3,9 @@ const authn = require('./authn')
 const testutil = require('../testutil')
 const { User } = require('../models')
 
-beforeEach(async () => {
-  await testutil.setupTestDb()
-  await testutil.populateTestDb()
-})
-afterEach(() => testutil.destroyTestDb())
+beforeAll(testutil.createDb)
+afterAll(testutil.destroyDb)
+beforeEach(testutil.resetAndPopulateDb)
 
 const makeReq = (eppn, displayName) => {
   const get = jest.fn()
