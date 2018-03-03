@@ -40,7 +40,7 @@ export default class MyDocument extends Document {
             crossOrigin="anonymous"
           />
           <style>{FontAwesome.dom.css()}</style>
-          <title>Queues @ Illinois</title>
+          <title>Queues@Illinois</title>
           <link rel="icon" href={faviconPath} type="image/png" />
           {baseUrl && <script dangerouslySetInnerHTML={script} />}
         </Head>
