@@ -26,6 +26,7 @@ export default class MyDocument extends Document {
       __html: `window.BASE_URL = '${baseUrl}';`,
     }
     const faviconPath = `${baseUrl}/static/favicon.ico`
+    const manifestPath = `${baseUrl}/static/manifest.json`
     return (
       <html lang="en">
         <Head>
@@ -38,6 +39,11 @@ export default class MyDocument extends Document {
             href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css"
             integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy"
             crossOrigin="anonymous"
+          />
+          <link
+            rel="manifest"
+            crossOrigin="use-credentials"
+            href={manifestPath}
           />
           <style>{FontAwesome.dom.css()}</style>
           <title>Queues@Illinois</title>
