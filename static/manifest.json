@@ -2,7 +2,7 @@
   "name": "CS@Illinois Queues",
   "short_name": "Queues",
   "display": "standalone",
-  "background_color": "#343a40",
+  "background_color": "#fff",
   "icons": [{
     "src": "notif_icon.png",
     "sizes": "128x128",
