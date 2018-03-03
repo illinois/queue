@@ -40,7 +40,7 @@ class Header extends React.Component {
     return (
       <Navbar color="dark" dark className="mb-3" expand="sm">
         <Link route="index" passHref>
-          <NavbarBrand>CS@Illinois Queues</NavbarBrand>
+          <NavbarBrand>Queues@Illinois</NavbarBrand>
         </Link>
         <NavbarToggler onClick={() => this.toggle()} />
         {user && (
