@@ -46,7 +46,7 @@ export default class MyDocument extends Document {
             href={manifestPath}
           />
           <style>{FontAwesome.dom.css()}</style>
-          <title>CS@Illinois Queues</title>
+          <title>Queues@Illinois</title>
           <link rel="icon" href={faviconPath} type="image/png" />
           {baseUrl && <script dangerouslySetInnerHTML={script} />}
         </Head>
