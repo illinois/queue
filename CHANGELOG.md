@@ -11,12 +11,8 @@ with the current date and the next changes should go under a **[Next]** header.
 * Add Travis and Prettier support. ([@nwalters512](https://github.com/nwalters512) in [#37](https://github.com/illinois/queue/pull/37))
 * Allow course staff to see netids next to student name. ([@genevievehelsel](https://github.com/genevievehelsel) in [#32](https://github.com/illinois/queue/pull/32))
 * Automatically redirect to a current queue or course page if visiting a closed queue. ([@Muakasan](https://github.com/Muakasan) in [#40](https://github.com/illinois/queue/pull/40))
-<<<<<<< HEAD
-* Add web manifest for "Add to Home Screen" on Android. ([@shreyas208](https://github.com/shreyas208) in [#29](https://github.com/illinois/queue/pull/29))
-=======
 * Rebrand from CS@Illinois Queues to Queues@Illinois. ([@genevievehelsel](https://github.com/genevievehelsel) in [#42](https://github.com/illinois/queue/pull/42))
 * Add web manifest for "Add to Home Screen" on Android. ([@shreyas208](https://github.com/shreyas208) in [#24](https://github.com/illinois/queue/pull/29))
->>>>>>> 0bd4e1638a1eaacf3cbe388fd911d424ec436d3e
 
 ## 27 February 2018
 
