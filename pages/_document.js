@@ -40,7 +40,11 @@ export default class MyDocument extends Document {
             integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy"
             crossOrigin="anonymous"
           />
-          <link rel="manifest" href={manifestPath} />
+          <link
+            rel="manifest"
+            crossOrigin="use-credentials"
+            href={manifestPath}
+          />
           <style>{FontAwesome.dom.css()}</style>
           <title>CS@Illinois Queues</title>
           <link rel="icon" href={faviconPath} type="image/png" />
