@@ -212,6 +212,7 @@ describe('Questions API', () => {
       expect(res.body).toHaveProperty('askedBy')
       expect(res.body.askedBy.netid).toBe('admin')
       expect(res.body.beingAnswered).toBe(true)
+      expect(res.body.questionStartTime).not.toBe(null)
     })
 
     test('succeeds for course staff', async () => {
@@ -222,6 +223,7 @@ describe('Questions API', () => {
       expect(res.body).toHaveProperty('askedBy')
       expect(res.body.askedBy.netid).toBe('admin')
       expect(res.body.beingAnswered).toBe(true)
+      expect(res.body.questionStartTime).not.toBe(null)
     })
 
     test('fails for student', async () => {
@@ -241,6 +243,8 @@ describe('Questions API', () => {
       expect(res.body).toHaveProperty('askedBy')
       expect(res.body.askedBy.netid).toBe('admin')
       expect(res.body.beingAnswered).toBe(false)
+      expect(res.body.answerStartTime).toBe(null)
+      expect(res.body.answerEndTime).toBe(null)
     })
 
     test('succeeds for course staff', async () => {
@@ -251,6 +255,8 @@ describe('Questions API', () => {
       expect(res.body).toHaveProperty('askedBy')
       expect(res.body.askedBy.netid).toBe('admin')
       expect(res.body.beingAnswered).toBe(false)
+      expect(res.body.answerStartTime).toBe(null)
+      expect(res.body.answerEndTime).toBe(null)
     })
 
     test('fails for student', async () => {

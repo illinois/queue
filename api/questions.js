@@ -10,17 +10,6 @@ const { Course, Queue, Question } = require('../models/')
 const { requireQueue, requireQuestion, failIfErrors } = require('./util')
 const requireCourseStaffForQueueForQuestion = require('../middleware/requireCourseStaffForQueueForQuestion')
 
-/* eslint-disable no-param-reassign */
-function modifyBeingAnswered(question, answering) {
-  question.beingAnswered = answering
-  if (answering) {
-    question.answerStartTime = new Date()
-  } else {
-    question.answerEndTime = new Date()
-  }
-}
-/* eslint-enable no-param-reassign */
-
 // Adds a question to a queue
 router.post(
   '/',
@@ -96,7 +85,8 @@ router.post(
   [requireCourseStaffForQueueForQuestion, requireQuestion, failIfErrors],
   async (req, res, _next) => {
     const { question } = res.locals
-    modifyBeingAnswered(question, true)
+    question.beingAnswered = true
+    question.answerStartTime = new Date()
     question.answeredById = res.locals.userAuthn.id
     await question.save()
     res.send(question)
@@ -109,8 +99,9 @@ router.delete(
   [requireCourseStaffForQueueForQuestion, requireQuestion, failIfErrors],
   async (req, res, _next) => {
     const { question } = res.locals
-    modifyBeingAnswered(question, false)
+    question.beingAnswered = false
     question.answeredById = null
+    question.answerStartTime = null
     await question.save()
     res.send(question)
   }
@@ -132,6 +123,7 @@ router.post(
     const data = matchedData(req)
 
     const { question } = res.locals
+    question.beingAnswered = false
     question.answerFinishTime = new Date()
     question.dequeueTime = new Date()
     question.preparedness = data.preparedness
@@ -200,6 +192,7 @@ router.delete(
     ) {
       await question.update({
         dequeueTime: new Date(),
+        beingAnswered: false,
       })
       res.status(204).send()
     } else {
