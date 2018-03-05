@@ -244,7 +244,7 @@ describe('Questions API', () => {
       expect(res.body.askedBy.netid).toBe('admin')
       expect(res.body.beingAnswered).toBe(false)
       expect(res.body.answerStartTime).toBe(null)
-      expect(res.body.answerEndTime).toBe(null)
+      expect(res.body.answerFinishTime).toBe(null)
     })
 
     test('succeeds for course staff', async () => {
@@ -256,7 +256,7 @@ describe('Questions API', () => {
       expect(res.body.askedBy.netid).toBe('admin')
       expect(res.body.beingAnswered).toBe(false)
       expect(res.body.answerStartTime).toBe(null)
-      expect(res.body.answerEndTime).toBe(null)
+      expect(res.body.answerFinishTime).toBe(null)
     })
 
     test('fails for student', async () => {
