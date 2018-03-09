@@ -1,14 +1,35 @@
 # queue
 [![Build Status](https://travis-ci.org/illinois/queue.svg?branch=master)](https://travis-ci.org/illinois/queue)
+
 ### Running locally in `dev` mode:
 - Clone the repository
 - Install [`node` and `npm`](https://nodejs.org/en/download/package-manager/)
-- Install `sqlite3`: `npm install sqlite3` in the `queue` directory
+- Install [`MySQL`](https://www.mysql.com/)
+  - You should create a user named `queue` and a database also named `queue`. See below
 - Install dependencies: `npm install` in the `queue` directory
 - In `models/index.js`, uncomment `sequelize.sync({force: true})`
   - Comment this line after the first run if you do not want databases to be dropped and rebuilt on startup
 - Start the server: `npm run dev`
   - Access the queue from a browser at `localhost:3000`
+
+##### Setting up MySQL
+
+The queue runs with a specific MySQL username and database, both of which are
+named `queue`. This is configured in `config/config.json` and can vary between
+development, staging, and production environments.
+
+To create the database for development:
+
+```sql
+CREATE DATABASE queue;
+```
+
+Now, you can create a user and grant its permissions:
+
+```sql
+CREATE USER 'queue'@'localhost';
+GRANT ALL PRIVILEGES ON *.* TO 'queue'@'localhost';
+```
 
 ### Multiple users in dev mode
 In production, all auth is done my Shibboleth, and we just read out of the `eppn` header

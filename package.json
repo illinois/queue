@@ -24,6 +24,7 @@
     "body-parser": "^1.18.2",
     "classnames": "^2.2.5",
     "co": "^4.6.0",
+    "dbdiff": "^0.5.3",
     "dotenv": "^5.0.0",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
