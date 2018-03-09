@@ -11,7 +11,7 @@ const routes = require('./routes')
 const serverSocket = require('./socket/server')
 const { baseUrl } = require('./util')
 
-const DEV = process.env.NODE_ENV !== 'production'
+const DEV = process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'staging'
 const PORT = process.env.PORT || 3000
 
 const nextApp = nextJs({ dev: DEV })

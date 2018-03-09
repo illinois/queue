@@ -30,6 +30,7 @@
     "express-urlrewrite": "^1.2.0",
     "express-validator": "^4.3.0",
     "isomorphic-unfetch": "^2.0.0",
+    "js-yaml": "^3.11.0",
     "json-patch": "^0.7.0",
     "moment": "^2.20.1",
     "mysql2": "^1.5.2",

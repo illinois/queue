@@ -1,10 +1,11 @@
 const fs = require('fs')
 const path = require('path')
+const yaml = require('js-yaml')
 const Sequelize = require('sequelize')
 
 const env = process.env.NODE_ENV || 'development'
-const config = JSON.parse(
-  fs.readFileSync(path.join(__dirname, '..', 'config', 'config.json'))
+const config = yaml.safeLoad(
+  fs.readFileSync(path.join(__dirname, '..', 'config', 'config.yml'), 'utf-8')
 )[env]
 
 const sequelizeConfig = {
