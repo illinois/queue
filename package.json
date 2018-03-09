@@ -18,6 +18,7 @@
   "license": "ISC",
   "dependencies": {
     "@fortawesome/fontawesome": "^1.1.2",
+    "@fortawesome/fontawesome-free-brands": "^5.0.8",
     "@fortawesome/fontawesome-free-solid": "^5.0.4",
     "@fortawesome/react-fontawesome": "0.0.17",
     "axios": "^0.17.1",
