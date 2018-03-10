@@ -60,11 +60,6 @@ if (process.env.DATABASE_URL) {
 
 const models = module.exports.initSequelize(sequelize)
 
-if (env === 'development') {
-  // Create all tables if needed
-  // sequelize.sync({ force: true })
-}
-
 Object.assign(module.exports, models)
 
 module.exports.sequelize = sequelize
