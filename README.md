@@ -35,7 +35,7 @@ If you want to run the test suite, it's important that the `queue` user be able 
 
 ## Database Migrations
 
-We use [Sequelize](http://docs.sequelizejs.com/) as an ORM to make interacting with our database easier. However, its build-in support for migrations is primitive and hard to automate, so Queue includes its own migration support.
+We use [Sequelize](http://docs.sequelizejs.com/) as an ORM to make interacting with our database easier. However, its built-in support for migrations is primitive and hard to automate, so Queue includes its own migration support.
 
 Our philosophy is that the Sequelize model definitions in `models/` should serve as the source of truth for what the database should look like at any given repository state. However, because Sequelize can't automatically mutate the database schema to bring it up-to-date with what's expected, we track each change to the database schema so that we can smoothly update the database whenever the schema changes.
 
@@ -61,7 +61,7 @@ The following steps occur when the app starts up in order to perform migrations 
 
 2. All `.sql` files from `migrations` are read, parsed, and sorted by index.
 
-3. Each one is applied to the database sequentially in order. When a migration is successfully applied, an entry is created in the `migrations` table so that that migration won't be applied again.
+3. Each one is applied to the database in order. When a migration is successfully applied, an entry is created in the `migrations` table so that that migration won't be applied again.
 
 ## Multiple users in dev mode
 In production, all auth is done my Shibboleth, and we just read out of the `eppn` header
