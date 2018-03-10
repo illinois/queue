@@ -6,9 +6,7 @@
 - Install [`node` and `npm`](https://nodejs.org/en/download/package-manager/)
 - Install [`MySQL`](https://www.mysql.com/)
   - You should create a user named `queue` and a database also named `queue`. See below for specific instructions.
-- Install dependencies: `npm install` in the `queue` directory
-- In `models/index.js`, uncomment `sequelize.sync({force: true})`
-  - Comment this line after the first run if you do not want databases to be dropped and rebuilt on startup
+- Run `npm install` in the cloned directory to install the Node dependencies
 - Start the server: `npm run dev`
   - Access the queue from a browser at `localhost:3000`
 
