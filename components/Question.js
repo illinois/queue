@@ -4,6 +4,7 @@ import { ListGroupItem, Button, Badge } from 'reactstrap'
 import Moment from 'react-moment'
 import moment from 'moment'
 
+import CountUpTimer from './CountUpTimer'
 import ParrotText from './ParrotText'
 
 /* eslint-disable react/prefer-stateless-function */
@@ -16,6 +17,7 @@ class Question extends React.Component {
       topic,
       beingAnswered,
       enqueueTime,
+      answerStartTime,
       answeredBy,
       askedBy,
       isUserCourseStaff,
@@ -153,7 +155,20 @@ class Question extends React.Component {
               <ParrotText text={topic} />
             </div>
           </div>
-          <div className="ml-auto pt-3 pt-sm-0">{buttonCluster}</div>
+          <div className="ml-auto pt-3 pt-sm-0">
+            {buttonCluster}
+            {userCanDelete &&
+              beingAnswered && (
+                <div className="text-muted mt-2">
+                  elapsed answering time:
+                  <CountUpTimer
+                    startTime={answerStartTime}
+                    tag="span"
+                    className="ml-1"
+                  />
+                </div>
+              )}
+          </div>
         </ListGroupItem>
       </Fragment>
     )
@@ -162,6 +177,7 @@ class Question extends React.Component {
 
 Question.defaultProps = {
   answeredBy: null,
+  answerStartTime: null,
 }
 
 Question.propTypes = {
@@ -171,6 +187,7 @@ Question.propTypes = {
   topic: PropTypes.string.isRequired,
   beingAnswered: PropTypes.bool.isRequired,
   enqueueTime: PropTypes.string.isRequired,
+  answerStartTime: PropTypes.string,
   answeredBy: PropTypes.shape({
     name: PropTypes.string,
     netid: PropTypes.string,

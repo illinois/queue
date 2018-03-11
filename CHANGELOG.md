@@ -13,6 +13,7 @@ with the current date and the next changes should go under a **[Next]** header.
 * Automatically redirect to a current queue or course page if visiting a closed queue. ([@Muakasan](https://github.com/Muakasan) in [#40](https://github.com/illinois/queue/pull/40))
 * Rebrand from CS@Illinois Queues to Queues@Illinois. ([@genevievehelsel](https://github.com/genevievehelsel) in [#42](https://github.com/illinois/queue/pull/42))
 * Add web manifest for "Add to Home Screen" on Android. ([@shreyas208](https://github.com/shreyas208) in [#29](https://github.com/illinois/queue/pull/29))
+* Show course staff and asker how long question has been being answered for. ([@nwalters512](https://github.com/nwalters512) in [#46](https://github.com/illinois/queue/pull/46))
 
 ## 27 February 2018
 
