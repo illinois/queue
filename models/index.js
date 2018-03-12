@@ -48,7 +48,7 @@ Object.keys(models).forEach(modelName => {
 
 if (env === 'development') {
   // Create all tables if needed
-  // sequelize.sync({ force: true })
+  sequelize.sync({ force: true })
 }
 
 Object.assign(module.exports, models)
