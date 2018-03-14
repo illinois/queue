@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    queryInterface.createTable('courseStaff', {
+    return queryInterface.createTable('questions', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -20,7 +20,7 @@ module.exports = {
       enqueueTime: Sequelize.DATE,
       dequeueTime: Sequelize.DATE,
       comments: Sequelize.TEXT,
-      preparedness: Sequelize.TEXT,
+      preparedness: Sequelize.ENUM('not', 'average', 'well'),
 
       createdAt: {
         allowNull: false,
@@ -39,7 +39,6 @@ module.exports = {
           model: 'queues',
           key: 'id',
         },
-        allowNull: false,
       },
       askedById: {
         type: Sequelize.INTEGER,
@@ -47,7 +46,6 @@ module.exports = {
           model: 'users',
           key: 'id',
         },
-        allowNull: false,
       },
       answeredById: {
         type: Sequelize.INTEGER,
@@ -55,7 +53,6 @@ module.exports = {
           model: 'users',
           key: 'id',
         },
-        allowNull: false,
       }
     })
   },

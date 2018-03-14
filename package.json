@@ -24,6 +24,7 @@
     "body-parser": "^1.18.2",
     "classnames": "^2.2.5",
     "co": "^4.6.0",
+    "dbdiff": "^0.5.3",
     "dotenv": "^5.0.0",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
@@ -56,6 +57,7 @@
     "socket.io": "^2.0.4",
     "socket.io-client": "^2.0.4",
     "styled-jsx": "^2.2.3",
+    "umzug": "^2.1.0",
     "validator": "^9.4.0"
   },
   "devDependencies": {

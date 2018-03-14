@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    queryInterface.createTable('activeStaff', {
+    return queryInterface.createTable('activeStaff', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -23,7 +23,6 @@ module.exports = {
           model: 'users',
           key: 'id',
         },
-        allowNull: false,
       },
       queueId: {
         type: Sequelize.INTEGER,
@@ -31,7 +30,6 @@ module.exports = {
           model: 'queues',
           key: 'id',
         },
-        allowNull: false,
       }
     })
   },

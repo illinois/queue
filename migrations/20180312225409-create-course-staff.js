@@ -1,12 +1,6 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    queryInterface.createTable('courseStaff', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
-      },
+    return queryInterface.createTable('courseStaff', {
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -32,6 +26,9 @@ module.exports = {
         allowNull: false,
       }
     })
+    /* await queryInterface.addConstraint('questions', ['courseId', 'userId'], {
+      type: 'primary key',
+    }) */
   },
 
   down: (queryInterface, _Sequelize) => {
