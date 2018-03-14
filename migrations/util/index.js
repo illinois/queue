@@ -77,5 +77,14 @@ module.exports.verifyMigrations = async () => {
   await testConnection.query('DROP DATABASE IF EXISTS `queue_sequelize`;')
   await testConnection.query('DROP DATABASE IF EXISTS `queue_migrations`;')
 
-  return diff.commands('drop')
+  const diffString = diff.commands('drop')
+  if (!diffString) {
+    return null
+  }
+
+  return {
+    diff: diffString,
+    sequelizeSchema: await diff.describeDatabase(sequelizeUri),
+    migrationSchema: await diff.describeDatabase(migrationUri),
+  }
 }
