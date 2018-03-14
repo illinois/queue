@@ -3,12 +3,6 @@ sudo: required
 language: node_js
 node_js:
   - node
-addons:
-  apt:
-    sources:
-      - mysql-5.7-trusty
-    packages:
-      - mysql-server
 before_install:
   - wget https://dev.mysql.com/get/mysql-apt-config_0.8.9-1_all.deb
   - sudo dpkg -i mysql-apt-config_0.8.9-1_all.deb
