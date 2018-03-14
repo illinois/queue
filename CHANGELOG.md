@@ -7,6 +7,8 @@ with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
 
+* Add support and tooling for Sequelize database migrations. ([@nwalters512](https://github.com/nwalters512) in [#56](https://github.com/illinois/queue/pull/56))
+
 ## 13 March 2018
 
 * Add changelog. ([@nwalters512](https://github.com/nwalters512) in [#34](https://github.com/illinois/queue/pull/34))
