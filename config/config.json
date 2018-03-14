@@ -3,7 +3,7 @@
     "dialect": "sqlite",
     "storage": "./dev.sqlite",
     "benchmark": true,
-    "logging": true
+    "logging": false
   },
   "test": {
     "dialect": "sqlite",

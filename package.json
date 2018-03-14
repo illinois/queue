@@ -58,7 +58,8 @@
     "socket.io-client": "^2.0.4",
     "styled-jsx": "^2.2.3",
     "umzug": "^2.1.0",
-    "validator": "^9.4.0"
+    "validator": "^9.4.0",
+    "winston": "^3.0.0-rc2"
   },
   "devDependencies": {
     "babel-jest": "^22.2.2",

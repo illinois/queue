@@ -2,6 +2,7 @@ const Umzug = require('umzug')
 const Sequelize = require('sequelize')
 const mysql = require('mysql2/promise')
 
+const logger = require('../../util/logger')
 const models = require('../../models')
 
 /**
@@ -9,6 +10,7 @@ const models = require('../../models')
  * @return {Promise} A promise that resolves when all migrations are complete
  */
 module.exports.performMigrations = async sequelize => {
+  logger.info('Running migrations...')
   const umzug = new Umzug({
     storage: 'sequelize',
     storageOptions: {
@@ -19,7 +21,9 @@ module.exports.performMigrations = async sequelize => {
     },
   })
 
-  await umzug.up()
+  const migrations = await umzug.up()
+  migrations.forEach((migration, i) => logger.info(`${i}. ${migration.file}`))
+  logger.info(`Ran ${migrations.length} migrations`)
 }
 
 /**
