@@ -9,6 +9,7 @@ describe('Database migrations', () => {
     if (diff) {
       const sequelizeSchema = JSON.stringify(diff.sequelizeSchema, null, 2)
       const migrationSchema = JSON.stringify(diff.migrationSchema, null, 2)
+      expect(diff.sequelizeSchema).toEqual(diff.migrationSchema)
       console.log(`Sequelize schema:\n\n${sequelizeSchema}`)
       console.log(`Migration schema:\n\n${migrationSchema}`)
       throw new Error(

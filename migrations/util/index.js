@@ -2,6 +2,7 @@ const Umzug = require('umzug')
 const Sequelize = require('sequelize')
 const mysql = require('mysql2/promise')
 const DBDiff = require('dbdiff/dbdiff')
+const { describeDatabase } = require('dbdiff/dialects')
 
 const models = require('../../models')
 
@@ -73,18 +74,21 @@ module.exports.verifyMigrations = async () => {
   const diff = new DBDiff()
   await diff.compare(migrationUri, sequelizeUri)
 
+  const diffString = diff.commands('drop')
+  let ret
+  if (!diffString) {
+    ret = null
+  } else {
+    ret = {
+      diff: diffString,
+      sequelizeSchema: await describeDatabase(sequelizeUri),
+      migrationSchema: await describeDatabase(migrationUri),
+    }
+  }
+
   // Clean up, now that we're done
   await testConnection.query('DROP DATABASE IF EXISTS `queue_sequelize`;')
   await testConnection.query('DROP DATABASE IF EXISTS `queue_migrations`;')
 
-  const diffString = diff.commands('drop')
-  if (!diffString) {
-    return null
-  }
-
-  return {
-    diff: diffString,
-    sequelizeSchema: await diff.describeDatabase(sequelizeUri),
-    migrationSchema: await diff.describeDatabase(migrationUri),
-  }
+  return ret
 }
