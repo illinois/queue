@@ -1,9 +1,14 @@
+dist: trusty
 sudo: required
 language: node_js
 node_js:
   - node
-services:
-  - mysql
+addons:
+  apt:
+    sources:
+      - mysql-5.7-trusty
+    packages:
+      - mysql-server
 before_install:
   - sudo apt-get install mysql-utilities
   - mysql -e 'CREATE USER 'queue'@'localhost'; GRANT ALL PRIVILEGES ON *.* TO 'queue'@'localhost'; CREATE DATABASE queue;'
