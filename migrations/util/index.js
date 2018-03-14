@@ -48,14 +48,14 @@ module.exports.createVerificationDatabases = async () => {
     dialectOptions: {
       multipleStatements: true,
     },
-    logging: false,
+    logging: console.log,
   })
   const migrationSequelize = new Sequelize(migrationUri, {
     operatorsAliases: false,
     dialectOptions: {
       multipleStatements: true,
     },
-    logging: false,
+    logging: console.log,
   })
 
   // Run migrations on the appropriate database
