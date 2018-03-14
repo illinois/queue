@@ -51,7 +51,7 @@ module.exports.verifyMigrations = async () => {
     dialectOptions: {
       multipleStatements: true,
     },
-    logging: false,
+    logging: console.log,
   })
   const migrationSequelize = new Sequelize(migrationUri, {
     operatorsAliases: false,
