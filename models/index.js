@@ -7,8 +7,42 @@ const config = JSON.parse(
   fs.readFileSync(path.join(__dirname, '..', 'config', 'config.json'))
 )[env]
 
+/**
+ * Loads our models into the given Sequelize instance
+ * @param  {[type]} sequelize [description]
+ * @return {[type]}           [description]
+ */
+module.exports.initSequelize = sequelize => {
+  const models = {}
+
+  fs
+    .readdirSync(__dirname)
+    .filter(
+      file =>
+        file.indexOf('.') !== 0 &&
+        file.indexOf('.js') !== -1 &&
+        file !== 'index.js'
+    )
+    .forEach(file => {
+      const model = sequelize.import(path.join(__dirname, file))
+      const modelName = file.substring(0, file.indexOf('.js'))
+      models[modelName] = model
+    })
+
+  Object.keys(models).forEach(modelName => {
+    if ('associate' in models[modelName]) {
+      models[modelName].associate(models)
+    }
+  })
+
+  return models
+}
+
 const sequelizeConfig = {
   operatorsAliases: Sequelize.Op,
+  dialectOptions: {
+    multipleStatements: true,
+  },
 }
 
 let sequelize
@@ -24,32 +58,7 @@ if (process.env.DATABASE_URL) {
   })
 }
 
-const models = {}
-
-fs
-  .readdirSync(__dirname)
-  .filter(
-    file =>
-      file.indexOf('.') !== 0 &&
-      file.indexOf('.js') !== -1 &&
-      file !== 'index.js'
-  )
-  .forEach(file => {
-    const model = sequelize.import(path.join(__dirname, file))
-    const modelName = file.substring(0, file.indexOf('.js'))
-    models[modelName] = model
-  })
-
-Object.keys(models).forEach(modelName => {
-  if ('associate' in models[modelName]) {
-    models[modelName].associate(models)
-  }
-})
-
-if (env === 'development') {
-  // Create all tables if needed
-  // sequelize.sync({ force: true })
-}
+const models = module.exports.initSequelize(sequelize)
 
 Object.assign(module.exports, models)
 

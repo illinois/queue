@@ -1,9 +1,11 @@
 {
   "development": {
-    "dialect": "sqlite",
-    "storage": "./dev.sqlite",
+    "dialect": "mysql",
+    "username": "queue",
+    "password": null,
+    "database": "queue",
     "benchmark": true,
-    "logging": false
+    "logging": true
   },
   "test": {
     "dialect": "sqlite",

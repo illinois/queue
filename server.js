@@ -7,6 +7,8 @@ const io = require('socket.io')
 const nextJs = require('next')
 const co = require('co')
 
+const models = require('./models')
+const migrations = require('./migrations')
 const routes = require('./routes')
 const serverSocket = require('./socket/server')
 const { baseUrl } = require('./util')
@@ -21,6 +23,9 @@ const handler = routes.getRequestHandler(nextApp)
 co(function*() {
   // Initialize the Next.js app
   yield nextApp.prepare()
+
+  // Initialize the database
+  yield migrations.runMigrations(models.sequelize)
 
   // Websocket stuff
   const socket = io(server, { path: `${baseUrl}/socket.io` })
