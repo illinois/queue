@@ -39,6 +39,8 @@ module.exports = {
           model: 'queues',
           key: 'id',
         },
+        onUpdate: 'cascade',
+        onDelete: 'set null',
       },
       askedById: {
         type: Sequelize.INTEGER,
@@ -46,6 +48,8 @@ module.exports = {
           model: 'users',
           key: 'id',
         },
+        onUpdate: 'cascade',
+        onDelete: 'set null',
       },
       answeredById: {
         type: Sequelize.INTEGER,
@@ -53,6 +57,8 @@ module.exports = {
           model: 'users',
           key: 'id',
         },
+        onUpdate: 'cascade',
+        onDelete: 'set null',
       },
     })
   },

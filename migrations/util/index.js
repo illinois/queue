@@ -1,8 +1,6 @@
 const Umzug = require('umzug')
 const Sequelize = require('sequelize')
 const mysql = require('mysql2/promise')
-const DBDiff = require('dbdiff/dbdiff')
-const { describeDatabase } = require('dbdiff/dialects')
 
 const models = require('../../models')
 
@@ -16,7 +14,6 @@ module.exports.performMigrations = async sequelize => {
     storageOptions: {
       sequelize,
     },
-    logging: console.log,
     migrations: {
       params: [sequelize.getQueryInterface(), Sequelize],
     },
@@ -30,7 +27,7 @@ module.exports.performMigrations = async sequelize => {
  * our migration.
  * @return {Promise} A promise that resolves with the diff when the comparisons are complete
  */
-module.exports.verifyMigrations = async () => {
+module.exports.createVerificationDatabases = async () => {
   // We'll skirt around Sequelize for a hot minute and do some manual setup
   const testConnection = await mysql.createConnection({
     host: 'localhost',
@@ -51,14 +48,14 @@ module.exports.verifyMigrations = async () => {
     dialectOptions: {
       multipleStatements: true,
     },
-    logging: console.log,
+    logging: false,
   })
   const migrationSequelize = new Sequelize(migrationUri, {
     operatorsAliases: false,
     dialectOptions: {
       multipleStatements: true,
     },
-    logging: console.log,
+    logging: false,
   })
 
   // Run migrations on the appropriate database
@@ -71,25 +68,21 @@ module.exports.verifyMigrations = async () => {
   // Delete the migrations metadata table before diffing
   await migrationSequelize.getQueryInterface().dropTable('SequelizeMeta')
 
-  // Perform the diff!
-  const diff = new DBDiff()
-  await diff.compare(migrationUri, sequelizeUri)
+  testConnection.close()
+  syncedSequelize.close()
+  migrationSequelize.close()
+}
 
-  const diffString = diff.commands('drop')
-  let ret
-  if (!diffString) {
-    ret = null
-  } else {
-    ret = {
-      diff: diffString,
-      sequelizeSchema: await describeDatabase(sequelizeUri),
-      migrationSchema: await describeDatabase(migrationUri),
-    }
-  }
+module.exports.destroyVerificationDatabases = async () => {
+  // We'll skirt around Sequelize for a hot minute and do some manual setup
+  const testConnection = await mysql.createConnection({
+    host: 'localhost',
+    user: 'queue',
+  })
 
-  // Clean up, now that we're done
+  // Cleanup time!
   await testConnection.query('DROP DATABASE IF EXISTS `queue_sequelize`;')
   await testConnection.query('DROP DATABASE IF EXISTS `queue_migrations`;')
 
-  return ret
+  testConnection.close()
 }

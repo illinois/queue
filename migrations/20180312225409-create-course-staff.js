@@ -16,7 +16,8 @@ module.exports = {
             model: 'courses',
             key: 'id',
           },
-          allowNull: false,
+          onUpdate: 'cascade',
+          onDelete: 'cascade',
         },
         userId: {
           type: Sequelize.INTEGER,
@@ -24,7 +25,8 @@ module.exports = {
             model: 'users',
             key: 'id',
           },
-          allowNull: false,
+          onUpdate: 'cascade',
+          onDelete: 'cascade',
         },
       })
       .then(() => {

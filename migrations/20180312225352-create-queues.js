@@ -28,6 +28,8 @@ module.exports = {
           model: 'courses',
           key: 'id',
         },
+        onUpdate: 'cascade',
+        onDelete: 'set null',
       },
       createdByUserId: {
         type: Sequelize.INTEGER,
@@ -35,6 +37,8 @@ module.exports = {
           model: 'users',
           key: 'id',
         },
+        onUpdate: 'cascade',
+        onDelete: 'set null',
       },
     })
   },
