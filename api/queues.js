@@ -83,6 +83,47 @@ router.get(
   }
 )
 
+// Modify a queue for a course
+router.post(
+  '/:queueId',
+  [
+    requireCourseStaff,
+    requireCourse,
+    check('name').isLength({ min: 1 }),
+    check('location').optional({ nullable: true }),
+    failIfErrors,
+  ],
+  async (req, res, _next) => {
+    const { id: queueId } = res.locals.queue
+
+    // const queue = await Queue.findOne({
+    //   where: {
+    //     id: queueId,
+    //   },
+    //   include: [
+    //     {
+    //       model: ActiveStaff,
+    //       where: {
+    //         queueId,
+    //         endTime: null,
+    //       },
+    //       required: false,
+    //       include: [User],
+    //     },
+    //     {
+    //       model: Question,
+    //       required: false,
+    //       where: {
+    //         dequeueTime: null,
+    //       },
+    //     },
+    //   ],
+    //   order: [[Question, 'id', 'ASC']],
+    // })
+    res.json(queue)
+  }
+)
+
 // Gets the on-duty staff list for a specific queue
 router.get(
   '/:queueId/staff',

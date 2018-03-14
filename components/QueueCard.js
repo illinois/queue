@@ -30,11 +30,22 @@ const QueueCard = ({ queue, courseName, onDelete, ...rest }) => {
             <Button
               color="danger"
               size="sm"
-              className="ml-auto"
+              className={"mr-1 ml-auto"}
               outline
               onClick={handleDelete}
             >
               Delete
+            </Button>
+          </ShowForCourseStaff>
+          <ShowForCourseStaff courseId={queue.courseId}>
+            <Button
+              color="info"
+              size="sm"
+              className={"mr-0 ml-1"}
+              outline
+              onClick={() => console.log("hello")}
+            >
+              Modify
             </Button>
           </ShowForCourseStaff>
         </CardTitle>
