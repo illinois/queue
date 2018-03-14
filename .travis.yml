@@ -10,6 +10,8 @@ addons:
     packages:
       - mysql-server
 before_install:
+  - sudo mysql_upgrade
+  - sudo service mysql restart
   - sudo apt-get install mysql-utilities
   - mysql -e 'CREATE USER 'queue'@'localhost'; GRANT ALL PRIVILEGES ON *.* TO 'queue'@'localhost'; CREATE DATABASE queue;'
 script:
