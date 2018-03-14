@@ -16,6 +16,7 @@ module.exports.performMigrations = async sequelize => {
     storageOptions: {
       sequelize,
     },
+    logging: console.log,
     migrations: {
       params: [sequelize.getQueryInterface(), Sequelize],
     },
