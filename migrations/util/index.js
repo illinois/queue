@@ -58,7 +58,7 @@ module.exports.verifyMigrations = async () => {
     dialectOptions: {
       multipleStatements: true,
     },
-    logging: false,
+    logging: console.log,
   })
 
   // Run migrations on the appropriate database
