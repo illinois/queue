@@ -5,7 +5,7 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
 
       name: Sequelize.TEXT,
@@ -24,14 +24,14 @@ module.exports = {
 
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       deletedAt: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       queueId: {
         type: Sequelize.INTEGER,
@@ -53,11 +53,11 @@ module.exports = {
           model: 'users',
           key: 'id',
         },
-      }
+      },
     })
   },
 
   down: (queryInterface, _Sequelize) => {
     return queryInterface.dropTable('questions')
-  }
-};
+  },
+}

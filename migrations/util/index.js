@@ -9,7 +9,7 @@ const models = require('../../models')
  * Executes all pending migrations.
  * @return {Promise} A promise that resolves when all migrations are complete
  */
-module.exports.performMigrations = async (sequelize) => {
+module.exports.performMigrations = async sequelize => {
   const umzug = new Umzug({
     storage: 'sequelize',
     storageOptions: {

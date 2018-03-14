@@ -5,22 +5,22 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       name: Sequelize.STRING,
       shortcode: Sequelize.STRING,
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     })
   },
 
   down: (queryInterface, _Sequelize) => {
-   return queryInterface.dropTable('courses')
-  }
-};
+    return queryInterface.dropTable('courses')
+  },
+}
