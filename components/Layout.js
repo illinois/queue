@@ -8,7 +8,6 @@ const Layout = props => (
   <Fragment>
     <Header />
     {props.children}
-    {/* This provides a bit of padding at the bottom of the page */}
     <Footer />
     <style global jsx>{`
       html {
