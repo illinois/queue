@@ -3,7 +3,7 @@ const Sequelize = require('sequelize')
 const mysql = require('mysql2/promise')
 const DBDiff = require('dbdiff/dbdiff')
 
-const models = require('../models')
+const models = require('../../models')
 
 /**
  * Executes all pending migrations.
@@ -20,12 +20,7 @@ module.exports.performMigrations = async (sequelize) => {
     },
   })
 
-  try {
-    console.log(await umzug.pending())
-    await umzug.up()
-  } catch (e) {
-    console.error(e)
-  }
+  await umzug.up()
 }
 
 /**
@@ -65,22 +60,22 @@ module.exports.verifyMigrations = async () => {
   })
 
   // Run migrations on the appropriate database
-  module.exports.performMigrations(migrationSequelize)
+  await module.exports.performMigrations(migrationSequelize)
 
   // Run the Sequelize "sync" on the other database
   models.initSequelize(syncedSequelize)
   await syncedSequelize.sync({ force: true })
 
   // Delete the migrations metadata table before diffing
-  // await migrationSequelize.getQueryInterface().dropTable('SequelizeMeta')
+  await migrationSequelize.getQueryInterface().dropTable('SequelizeMeta')
 
   // Perform the diff!
   const diff = new DBDiff()
   await diff.compare(migrationUri, sequelizeUri)
 
   // Clean up, now that we're done
-  // await testConnection.query('DROP DATABASE IF EXISTS `queue_sequelize`;')
-  // await testConnection.query('DROP DATABASE IF EXISTS `queue_migrations`;')
+  await testConnection.query('DROP DATABASE IF EXISTS `queue_sequelize`;')
+  await testConnection.query('DROP DATABASE IF EXISTS `queue_migrations`;')
 
   return diff.commands('drop')
 }

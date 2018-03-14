@@ -25,10 +25,11 @@ module.exports = {
         },
         allowNull: false,
       }
+    }).then(() => {
+      queryInterface.addConstraint('courseStaff', ['courseId', 'userId'], {
+        type: 'primary key',
+      })
     })
-    /* await queryInterface.addConstraint('questions', ['courseId', 'userId'], {
-      type: 'primary key',
-    }) */
   },
 
   down: (queryInterface, _Sequelize) => {
