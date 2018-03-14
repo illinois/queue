@@ -9,6 +9,7 @@ addons:
       - mysql-5.7-trusty
     packages:
       - mysql-server
+      - mysql-connector-python
 before_install:
   - wget https://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-utilities_1.6.5-1ubuntu14.04_all.deb
   - sudo dpkg -i mysql-utilities_1.6.5-1ubuntu14.04_all.deb
