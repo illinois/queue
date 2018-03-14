@@ -3,11 +3,9 @@ const redirectNoQueue = require('./redirectNoQueue')
 const testutil = require('../testutil')
 const { Queue } = require('../models')
 
-beforeEach(async () => {
-  await testutil.setupTestDb()
-  await testutil.populateTestDb()
-})
-afterEach(() => testutil.destroyTestDb())
+beforeAll(testutil.createDb)
+afterAll(testutil.destroyDb)
+beforeEach(testutil.resetAndPopulateDb)
 
 const makeArgs = queueId => {
   const req = {

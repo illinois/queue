@@ -3,14 +3,9 @@ const request = require('supertest')
 const app = require('../app')
 const testutil = require('../testutil')
 
-beforeAll(async () => {
-  await testutil.setupTestDb()
-  await testutil.populateTestDb()
-})
-
-afterAll(async () => {
-  await testutil.destroyTestDb()
-})
+beforeAll(testutil.createDb)
+afterAll(testutil.destroyDb)
+beforeEach(testutil.resetAndPopulateDb)
 
 describe('Users API', () => {
   describe('GET /api/users/me', () => {

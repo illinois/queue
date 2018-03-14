@@ -1,6 +1,9 @@
 language: node_js
 node_js:
   - "node"
+# Use custom install script to avoid running `npm ls` during builds
+install:
+  - npm install
 script:
   - npm run build
   - npm run test

@@ -2,14 +2,9 @@
 const testutil = require('../testutil')
 const util = require('./util')
 
-beforeAll(async () => {
-  await testutil.setupTestDb()
-  await testutil.populateTestDb()
-})
-
-afterAll(async () => {
-  await testutil.destroyTestDb()
-})
+beforeAll(testutil.createDb)
+afterAll(testutil.destroyDb)
+beforeEach(testutil.resetAndPopulateDb)
 
 function makeRes() {
   const status = jest.fn()
