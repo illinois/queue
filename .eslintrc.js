@@ -6,7 +6,7 @@ module.exports = {
       { args: 'after-used', argsIgnorePattern: '^_' },
     ],
     'react/jsx-filename-extension': ['error', { extensions: ['.js', '.jsx'] }],
-    'no-console': ['warn'],
+    'no-console': ['error', { allow: ['error'] }],
     'arrow-body-style': ['off'],
     'jsx-a11y/anchor-is-valid': [
       'error',
