@@ -9,7 +9,7 @@ before_install:
   - mysql -e 'CREATE USER 'queue'@'localhost'; GRANT ALL PRIVILEGES ON *.* TO 'queue'@'localhost'; CREATE DATABASE queue;'
 script:
   - npm run build
-  - sh ./tools/diff_databases.sh
+  - ./tools/diff_databases.sh
   - npm run test
   - npm run lint-js
   - npm run prettier-diff

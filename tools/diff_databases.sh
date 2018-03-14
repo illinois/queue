@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 # Check for the existence of mysqldbcompare
 if ! [ -x "$(command -v mysqldbcompare)" ]; then
