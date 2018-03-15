@@ -2,17 +2,22 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import { getUserActiveQuestionIdForQueue,
-        isUserActiveStaffForQueue
-        } from '../selectors'
-
+import {
+  getUserActiveQuestionIdForQueue,
+  isUserActiveStaffForQueue,
+} from '../selectors'
 
 import ActiveQuestionPanel from './ActiveQuestionPanel'
 import NewQuestionContainer from '../containers/NewQuestionContainer'
 
-const QuestionPanel = ({ queueId, user, userActiveQuestionId, isUserActiveStaff }) => {
+const QuestionPanel = ({
+  queueId,
+  user,
+  userActiveQuestionId,
+  isUserActiveStaff,
+}) => {
   if (isUserActiveStaff) {
-      return null
+    return null
   }
   if (userActiveQuestionId !== -1) {
     return (
