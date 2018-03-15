@@ -54,7 +54,7 @@ router.get(
   [requireQueue, failIfErrors],
   async (req, res, _next) => {
     const { id: queueId } = res.locals.queue
-
+    console.log(res.locals.queue)
     const queue = await Queue.findOne({
       where: {
         id: queueId,
@@ -84,7 +84,7 @@ router.get(
 )
 
 // Modify a queue for a course
-router.post(
+router.patch(
   '/:queueId',
   [
     requireCourseStaff,
@@ -94,33 +94,14 @@ router.post(
     failIfErrors,
   ],
   async (req, res, _next) => {
-    const { id: queueId } = res.locals.queue
+    const { queue } = res.locals
+    const data = matchedData(req)
 
-    // const queue = await Queue.findOne({
-    //   where: {
-    //     id: queueId,
-    //   },
-    //   include: [
-    //     {
-    //       model: ActiveStaff,
-    //       where: {
-    //         queueId,
-    //         endTime: null,
-    //       },
-    //       required: false,
-    //       include: [User],
-    //     },
-    //     {
-    //       model: Question,
-    //       required: false,
-    //       where: {
-    //         dequeueTime: null,
-    //       },
-    //     },
-    //   ],
-    //   order: [[Question, 'id', 'ASC']],
-    // })
-    res.json(queue)
+    await queue.update({
+      name: data.name,
+      location: data.location,
+    })
+    res.status(201).send(queue)
   }
 )
 
