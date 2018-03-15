@@ -35,7 +35,7 @@ class ActiveQuestionPanel extends React.Component {
   render() {
     return (
       <Fragment>
-        <Card body inverse color="primary">
+        <Card body inverse color="primary" className="mb-3">
           <CardTitle>You&apos;re on the queue!</CardTitle>
           <CardText>
             Someone from course staff will be with you shortly. In the meantime,

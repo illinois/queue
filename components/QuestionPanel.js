@@ -1,11 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-
-import {
-  getUserActiveQuestionIdForQueue,
-  isUserActiveStaffForQueue,
-} from '../selectors'
 
 import ActiveQuestionPanel from './ActiveQuestionPanel'
 import NewQuestionContainer from '../containers/NewQuestionContainer'
@@ -39,10 +33,4 @@ QuestionPanel.propTypes = {
   isUserActiveStaff: PropTypes.bool.isRequired,
 }
 
-const mapStateToProps = (state, ownProps) => ({
-  user: state.user.user,
-  userActiveQuestionId: getUserActiveQuestionIdForQueue(state, ownProps),
-  isUserActiveStaff: isUserActiveStaffForQueue(state, ownProps),
-})
-
-export default connect(mapStateToProps, null)(QuestionPanel)
+export default QuestionPanel
