@@ -7,6 +7,8 @@ with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
 
+* Improve spacing of course buttons on homepage. ([@nwalters512](https://github.com/nwalters512) in [#60](https://github.com/illinois/queue/pull/60))
+
 ## 13 March 2018
 
 * Add changelog. ([@nwalters512](https://github.com/nwalters512) in [#34](https://github.com/illinois/queue/pull/34))
