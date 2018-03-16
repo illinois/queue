@@ -20,7 +20,7 @@ class Question extends React.Component {
       askedBy,
       isUserCourseStaff,
       isUserAnsweringQuestion,
-      isUserAnsweringOtherQuestion ,
+      isUserAnsweringOtherQuestion,
       didUserAskQuestion,
     } = this.props
 
@@ -62,16 +62,17 @@ class Question extends React.Component {
     } else {
       buttonCluster = (
         <Fragment>
-          {isUserCourseStaff && !isUserAnsweringOtherQuestion && (
-            <Button
-              color="primary"
-              outline
-              className="mr-2"
-              onClick={() => this.props.updateQuestionBeingAnswered(id, true)}
-            >
-              Start Answering!
-            </Button>
-          )}
+          {isUserCourseStaff &&
+            !isUserAnsweringOtherQuestion && (
+              <Button
+                color="primary"
+                outline
+                className="mr-2"
+                onClick={() => this.props.updateQuestionBeingAnswered(id, true)}
+              >
+                Start Answering!
+              </Button>
+            )}
           {didUserAskQuestion && (
             <Button
               color="primary"

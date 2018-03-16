@@ -111,7 +111,9 @@ class QuestionList extends React.Component {
               isUserAnsweringQuestion={
                 this.props.userId === question.answeredById
               }
-              isUserAnsweringOtherQuestion={this.props.isUserAnsweringQuestionForQueue}
+              isUserAnsweringOtherQuestion={
+                this.props.isUserAnsweringQuestionForQueue
+              }
               didUserAskQuestion={this.props.userId === question.askedById}
               deleteQuestion={() => this.deleteQuestion(questionId)}
               updateQuestionBeingAnswered={

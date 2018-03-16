@@ -90,6 +90,8 @@ export const isUserAnsweringQuestionForQueue = createSelector(
       return false
     }
 
-    return queue.questions.some((questionId) => questions[questionId].answeredById === user.id)
+    return queue.questions.some(
+      questionId => questions[questionId].answeredById === user.id
+    )
   }
 )
