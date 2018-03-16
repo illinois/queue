@@ -8,6 +8,7 @@ with the current date and the next changes should go under a **[Next]** header.
 ## [Next]
 
 * Improve spacing of course buttons on homepage. ([@nwalters512](https://github.com/nwalters512) in [#60](https://github.com/illinois/queue/pull/60))
+* Add support and tooling for Sequelize database migrations. ([@nwalters512](https://github.com/nwalters512) in [#56](https://github.com/illinois/queue/pull/56))
 
 ## 13 March 2018
 
@@ -31,7 +32,6 @@ with the current date and the next changes should go under a **[Next]** header.
 * Allow student to edit topic and location of a qeustion that's already on the queue. ([@genevievehelsel](https://github.com/genevievehelsel) in [#18](https://github.com/illinois/queue/pull/18))
 * Add support for course shortcodes. ([@nwalters512](https://github.com/nwalters512) in [#26](https://github.com/illinois/queue/pull/26))
 * Make dotenv setup the first thing to run when starting the app. ([@nwalters512](https://github.com/nwalters512) in [#30](https://github.com/illinois/queue/pull/30))
-
 
 ## 20 February 2018
 

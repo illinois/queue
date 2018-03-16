@@ -43,7 +43,6 @@ module.exports = (sequelize, DataTypes) => {
           attributes: [],
         },
       ],
-      group: ['queue.id'],
     })
   }
 
