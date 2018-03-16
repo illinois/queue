@@ -41,7 +41,7 @@ export default function(AuthedComponent, permissions) {
           } else if (requireCourseStaff) {
             // We should have received a courseId prop...
             if (!this.props.courseId) {
-              console.warn(
+              console.error(
                 'PageWithUser requested course staff authz, but no courseId was provided'
               )
               authzed = false

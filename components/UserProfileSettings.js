@@ -34,7 +34,7 @@ class UserProfileSettings extends React.Component {
           <div>{user.netid}</div>
         </div>
         <div className="mb-3">
-          <div className="text-muted small">Univsersity Name</div>
+          <div className="text-muted small">University Name</div>
           <div>{user.universityName || 'No name :('}</div>
         </div>
         <div>
