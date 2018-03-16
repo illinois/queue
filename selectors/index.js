@@ -82,3 +82,14 @@ export const isUserAdmin = createSelector(
   [userSelector],
   user => user && user.isAdmin
 )
+
+export const isUserAnsweringQuestionForQueue = createSelector(
+  [userSelector, queueSelector, questionsSelector],
+  (user, queue, questions) => {
+    if (!queue || !queue.questions) {
+      return false
+    }
+
+    return queue.questions.some((questionId) => questions[questionId].answeredById === user.id)
+  }
+)

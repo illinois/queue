@@ -20,6 +20,7 @@ class Question extends React.Component {
       askedBy,
       isUserCourseStaff,
       isUserAnsweringQuestion,
+      isUserAnsweringOtherQuestion ,
       didUserAskQuestion,
     } = this.props
 
@@ -61,7 +62,7 @@ class Question extends React.Component {
     } else {
       buttonCluster = (
         <Fragment>
-          {isUserCourseStaff && (
+          {isUserCourseStaff && !isUserAnsweringOtherQuestion && (
             <Button
               color="primary"
               outline
@@ -181,6 +182,7 @@ Question.propTypes = {
   didUserAskQuestion: PropTypes.bool.isRequired,
   isUserCourseStaff: PropTypes.bool.isRequired,
   isUserAnsweringQuestion: PropTypes.bool.isRequired,
+  isUserAnsweringOtherQuestion: PropTypes.bool.isRequired,
   updateQuestionBeingAnswered: PropTypes.func.isRequired,
   editQuestion: PropTypes.func.isRequired,
   finishedAnswering: PropTypes.func.isRequired,
