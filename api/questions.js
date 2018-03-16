@@ -96,6 +96,11 @@ router.post(
   [requireCourseStaffForQueueForQuestion, requireQuestion, failIfErrors],
   async (req, res, _next) => {
     const { question } = res.locals
+    if (question.beingAnswered) {
+      // Forbid someone else from taking over this question
+      res.status(403).send('Another user is already answering this question')
+      return
+    }
     modifyBeingAnswered(question, true)
     question.answeredById = res.locals.userAuthn.id
     await question.save()
