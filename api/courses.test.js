@@ -148,6 +148,18 @@ describe('Courses API', () => {
       expect(user).not.toBe(null)
       expect(user.netid).toBe('newnetid')
     })
+
+    test('trims whitespace from netid', async () => {
+      const newUser = { netid: '  waf     ' }
+      const res = await request(app)
+        .post('/api/courses/1/staff')
+        .send(newUser)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.netid).toBe('waf')
+      const user = await User.findOne({ where: { netid: 'waf' } })
+      expect(user).not.toBe(null)
+      expect(user.netid).toBe('waf')
+    })
   })
 
   describe('DELETE /api/courses/:courseId/staff/:userId', () => {

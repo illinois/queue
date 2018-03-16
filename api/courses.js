@@ -81,8 +81,12 @@ router.post(
   [
     requireCourseStaff,
     requireCourse,
-    check('netid', 'netid must be specified').exists(),
-    check('name').optional(),
+    check('netid', 'netid must be specified')
+      .exists()
+      .trim(),
+    check('name')
+      .optional()
+      .trim(),
     failIfErrors,
   ],
   async (req, res, _next) => {
