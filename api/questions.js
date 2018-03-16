@@ -96,11 +96,26 @@ router.post(
   [requireCourseStaffForQueueForQuestion, requireQuestion, failIfErrors],
   async (req, res, _next) => {
     const { question } = res.locals
+
     if (question.beingAnswered) {
       // Forbid someone else from taking over this question
       res.status(403).send('Another user is already answering this question')
       return
     }
+
+    // Verify that this user isn't currently answering another question
+    const otherQuestions = await Question.find({
+      where: {
+        answeredById: res.locals.userAuthn.id,
+        dequeueTime: null,
+      },
+    })
+
+    if (otherQuestions !== null) {
+      res.status(403).send('You are already answering this question')
+      return
+    }
+
     modifyBeingAnswered(question, true)
     question.answeredById = res.locals.userAuthn.id
     await question.save()

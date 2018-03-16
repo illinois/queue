@@ -240,6 +240,19 @@ describe('Questions API', () => {
       expect(question.answeredById).toBe(2)
     })
 
+    test('fails if user is currently answering another question', async () => {
+      const res = await request(app).post(
+        '/api/queues/1/questions/1/answering?forceuser=admin'
+      )
+      expect(res.statusCode).toBe(200)
+      const res2 = await request(app).post(
+        '/api/queues/1/questions/2/answering?forceuser=admin'
+      )
+      expect(res2.statusCode).toBe(403)
+      const question = await Question.findById(2)
+      expect(question.beingAnswered).toBe(false)
+    })
+
     test('fails for student', async () => {
       const res = await request(app).post(
         '/api/queues/1/questions/1/answering?forceuser=student'
