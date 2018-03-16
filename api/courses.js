@@ -84,19 +84,12 @@ router.post(
     check('netid', 'netid must be specified')
       .exists()
       .trim(),
-    check('name')
-      .optional()
-      .trim(),
     failIfErrors,
   ],
   async (req, res, _next) => {
-    const { netid: originalNetid, name } = matchedData(req)
+    const { netid: originalNetid } = matchedData(req)
     const [netid] = originalNetid.split('@')
     const [user] = await User.findOrCreate({ where: { netid } })
-    if (name) {
-      user.name = name
-      await user.save()
-    }
     await user.addStaffAssignment(res.locals.course.id)
     res.status(201).send(user)
   }

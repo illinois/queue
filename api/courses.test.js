@@ -99,11 +99,12 @@ describe('Courses API', () => {
 
   describe('POST /api/course/:courseId/staff', async () => {
     test('succeeds for admin', async () => {
-      const newUser = { netid: 'newnetid', name: 'New Name' }
+      const newUser = { netid: 'newnetid' }
       const res = await request(app)
         .post('/api/courses/1/staff')
         .send(newUser)
       expect(res.statusCode).toBe(201)
+      expect(res.body.netid).toBe('newnetid')
     })
 
     test('succeeds for course staff', async () => {
@@ -112,6 +113,7 @@ describe('Courses API', () => {
         .post('/api/courses/1/staff?forceuser=225staff')
         .send(newUser)
       expect(res.statusCode).toBe(201)
+      expect(res.body.netid).toBe('newnetid')
     })
 
     test('fails if netid is missing', async () => {
