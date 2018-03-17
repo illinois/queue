@@ -172,7 +172,12 @@ class NewQueue extends React.Component {
               value={this.state.location}
               valid={isValid(this.state.fieldErrors.location)}
             />
-            {!this.state.fixedLocation && (
+            {this.state.fixedLocation ? (
+              <FormText color="muted">
+                Students will see this location when asking a question, but
+                won&apos; be able to change it.
+              </FormText>
+            ) : (
               <FormText color="muted">Setting a location is optional!</FormText>
             )}
             <FormFeedback>{this.state.fieldErrors.location}</FormFeedback>
