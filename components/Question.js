@@ -38,10 +38,7 @@ class Question extends React.Component {
                 Finish Answering
               </Button>
             )}
-            <Button
-              color="light"
-              onClick={() => this.props.cancelQuestion()}
-            >
+            <Button color="light" onClick={() => this.props.cancelQuestion()}>
               Cancel
             </Button>
           </Fragment>

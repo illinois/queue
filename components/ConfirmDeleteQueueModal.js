@@ -6,8 +6,8 @@ const ConfirmDeleteQueueModal = props => (
     isOpen={props.isOpen}
     toggle={props.toggle}
     confirm={props.confirm}
-    descText={"This queue and all its open questions will be deleted."}
-    confirmText={"Delete queue"}
+    descText={'This queue and all its open questions will be deleted.'}
+    confirmText={'Delete queue'}
   />
 )
 
