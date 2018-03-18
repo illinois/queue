@@ -74,11 +74,9 @@ class CourseStaff extends React.Component {
       })
     } else {
       users = (
-        <div>
-          <ListGroupItem className="text-center text-muted pt-4 pb-4">
-            This course doesn&apos;t have any staff yet
-          </ListGroupItem>
-        </div>
+        <ListGroupItem className="text-center text-muted pt-4 pb-4">
+          This course doesn&apos;t have any staff yet
+        </ListGroupItem>
       )
     }
 

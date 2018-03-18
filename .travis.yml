@@ -1,7 +1,19 @@
+dist: trusty
+sudo: required
 language: node_js
 node_js:
-  - "node"
+  - node
+before_install:
+  - wget https://dev.mysql.com/get/mysql-apt-config_0.8.9-1_all.deb
+  - sudo dpkg -i mysql-apt-config_0.8.9-1_all.deb
+  - sudo apt-get update
+  - sudo apt-get install mysql-server mysql-utilities
+  - sudo mysql_upgrade
+  - sudo service mysql restart
+  - mysql -e 'CREATE USER 'queue'@'localhost'; GRANT ALL PRIVILEGES ON *.* TO 'queue'@'localhost'; CREATE DATABASE queue;'
 script:
+  - npm run build
+  - ./tools/diff_databases.sh
   - npm run test
   - npm run lint-js
   - npm run prettier-diff

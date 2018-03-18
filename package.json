@@ -18,6 +18,7 @@
   "license": "ISC",
   "dependencies": {
     "@fortawesome/fontawesome": "^1.1.2",
+    "@fortawesome/fontawesome-free-brands": "^5.0.8",
     "@fortawesome/fontawesome-free-solid": "^5.0.4",
     "@fortawesome/react-fontawesome": "0.0.17",
     "axios": "^0.17.1",
@@ -56,7 +57,9 @@
     "socket.io": "^2.0.4",
     "socket.io-client": "^2.0.4",
     "styled-jsx": "^2.2.3",
-    "validator": "^9.4.0"
+    "umzug": "^2.1.0",
+    "validator": "^9.4.0",
+    "winston": "^3.0.0-rc2"
   },
   "devDependencies": {
     "babel-jest": "^22.2.2",
@@ -70,7 +73,7 @@
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.5.1",
-    "husky": "^0.14.3",
+    "husky": "^0.15.0-rc.9",
     "jest": "^22.3.0",
     "jest-enzyme": "^4.2.0",
     "nodemon": "^1.14.12",

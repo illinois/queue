@@ -63,9 +63,9 @@ router.post(
       askedById: res.locals.userAuthn.id,
     })
 
-    question.save().then(newQuestion => {
-      res.status(201).send(newQuestion)
-    })
+    await question.save()
+    await question.reload()
+    res.status(201).send(question)
   }
 )
 

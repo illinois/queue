@@ -43,6 +43,18 @@ describe('Queues API', () => {
       expect(res.body.questions).toHaveLength(0)
       expect(res.body).toHaveProperty('activeStaff')
       expect(res.body.activeStaff).toHaveLength(0)
+
+      const question = { name: 'a', location: 'b', topic: 'c' }
+      const res2 = await request(app)
+        .post('/api/queues/2/questions')
+        .send(question)
+      expect(res2.body.askedBy.netid).toBe('dev')
+
+      const res3 = await request(app).get('/api/queues/2?forceuser=admin')
+      expect(res3.body).toHaveProperty('questions')
+      expect(res3.body.questions).toHaveLength(1)
+      expect(res3.body.questions[0]).toHaveProperty('askedBy')
+      expect(res3.body.questions[0].askedBy.netid).toBe('dev')
     })
 
     test('succeeds for non-admin', async () => {
@@ -57,6 +69,18 @@ describe('Queues API', () => {
       expect(res.body.questions).toHaveLength(0)
       expect(res.body).toHaveProperty('activeStaff')
       expect(res.body.activeStaff).toHaveLength(0)
+
+      const question = { name: 'a', location: 'b', topic: 'c' }
+      const res2 = await request(app)
+        .post('/api/queues/2/questions')
+        .send(question)
+      expect(res2.body.askedBy.netid).toBe('dev')
+
+      const res3 = await request(app).get('/api/queues/2?forceuser=student')
+      expect(res3.body).toHaveProperty('questions')
+      expect(res3.body.questions).toHaveLength(1)
+      expect(res3.body.questions[0]).toHaveProperty('askedBy')
+      expect(res3.body.questions[0].askedBy.netid).toBe('dev')
     })
   })
 

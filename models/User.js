@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     netid: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: 'netid',
     },
     universityName: DataTypes.STRING,
     preferredName: DataTypes.STRING,
