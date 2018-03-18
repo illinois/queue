@@ -9,6 +9,7 @@ import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner'
 import Question from './Question'
 import QuestionFeedback from './QuestionFeedback'
 import ConfirmLeaveQueueModal from './ConfirmLeaveQueueModal'
+import ConfirmDeleteQuestionModal from './ConfirmDeleteQuestionModal'
 import QuestionEdit from './QuestionEdit'
 
 class QuestionList extends React.Component {
@@ -17,6 +18,7 @@ class QuestionList extends React.Component {
 
     this.state = {
       showFeedbackModal: false,
+      showLeaveModal: false,
       showDeleteModal: false,
       showQuestionEditModal: false,
       attributeId: null,
@@ -76,15 +78,24 @@ class QuestionList extends React.Component {
     if (this.props.userId === question.askedById) {
       // This user asked the question; confirm with them
       this.setState({
-        showDeleteModal: true,
+        showLeaveModal: true,
         deleteId: questionId,
       })
     } else {
       // We're probably course staff, don't confirm
-      this.props.deleteQuestion(questionId)
+      this.setState({
+        showDeleteModal: true,
+        deleteId: questionId,
+      })
     }
   }
 
+  toggleLeaveModal() {
+    this.setState({
+      showLeaveModal: !this.state.showLeaveModal,
+    })
+  }
+  
   toggleDeleteModal() {
     this.setState({
       showDeleteModal: !this.state.showDeleteModal,
@@ -95,6 +106,7 @@ class QuestionList extends React.Component {
     this.props.deleteQuestion(this.state.deleteId)
     this.setState({
       showDeleteModal: false,
+      showLeaveModal: false,
     })
   }
 
@@ -159,6 +171,11 @@ class QuestionList extends React.Component {
           onCancel={() => this.handleFeedbackCancel()}
         />
         <ConfirmLeaveQueueModal
+          isOpen={this.state.showLeaveModal}
+          toggle={() => this.toggleLeaveModal()}
+          confirm={() => this.handleConfirmedDeletion()}
+        />
+        <ConfirmDeleteQuestionModal
           isOpen={this.state.showDeleteModal}
           toggle={() => this.toggleDeleteModal()}
           confirm={() => this.handleConfirmedDeletion()}
