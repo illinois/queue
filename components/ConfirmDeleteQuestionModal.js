@@ -6,9 +6,11 @@ const ConfirmDeleteQuestionModal = props => (
     isOpen={props.isOpen}
     toggle={props.toggle}
     confirm={props.confirm}
-    descText={'This question will be deleted.'}
-    confirmText={'Delete question'}
+    descText="This question will be deleted."
+    confirmText="Delete question"
   />
 )
+
+ConfirmDeleteQuestionModal.propTypes = ConfirmModal.propTypes
 
 export default ConfirmDeleteQuestionModal

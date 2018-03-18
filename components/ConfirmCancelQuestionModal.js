@@ -6,9 +6,11 @@ const ConfirmCancelQuestionModal = props => (
     isOpen={props.isOpen}
     toggle={props.toggle}
     confirm={props.confirm}
-    descText={'You will stop answering this question.'}
-    confirmText={'Cancel question'}
+    descText="You will stop answering this question."
+    confirmText="Cancel question"
   />
 )
+
+ConfirmCancelQuestionModal.propTypes = ConfirmModal.propTypes
 
 export default ConfirmCancelQuestionModal
