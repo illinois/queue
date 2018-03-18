@@ -82,7 +82,7 @@ class QuestionList extends React.Component {
         deleteId: questionId,
       })
     } else {
-      // We're probably course staff, don't confirm
+      // We're probably course staff
       this.setState({
         showDeleteModal: true,
         deleteId: questionId,
