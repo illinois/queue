@@ -7,7 +7,7 @@ import { getUserActiveQuestionIdForQueue } from '../selectors'
 import ActiveQuestionPanel from './ActiveQuestionPanel'
 import NewQuestionContainer from '../containers/NewQuestionContainer'
 
-const QuestionPanel = ({ queueId, user, userActiveQuestionId }) => {
+const QuestionPanel = ({ queueId, userActiveQuestionId }) => {
   if (userActiveQuestionId !== -1) {
     return (
       <ActiveQuestionPanel
@@ -16,19 +16,15 @@ const QuestionPanel = ({ queueId, user, userActiveQuestionId }) => {
       />
     )
   }
-  return <NewQuestionContainer queueId={queueId} user={user} />
+  return <NewQuestionContainer queueId={queueId} />
 }
 
 QuestionPanel.propTypes = {
   queueId: PropTypes.number.isRequired,
-  user: PropTypes.shape({
-    name: PropTypes.string,
-  }).isRequired,
   userActiveQuestionId: PropTypes.number.isRequired,
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  user: state.user.user,
   userActiveQuestionId: getUserActiveQuestionIdForQueue(state, ownProps),
 })
 

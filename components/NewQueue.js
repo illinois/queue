@@ -75,6 +75,7 @@ class NewQueue extends React.Component {
     const queue = {
       name: this.state.name,
       location: this.state.location,
+      fixedLocation: this.state.fixedLocation,
     }
 
     let courseId

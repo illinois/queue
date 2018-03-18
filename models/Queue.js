@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       name: DataTypes.TEXT,
       location: DataTypes.TEXT,
+      fixedLocation: DataTypes.BOOLEAN,
 
       startTime: DataTypes.DATE,
       endTime: DataTypes.DATE,

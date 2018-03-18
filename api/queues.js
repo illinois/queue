@@ -31,6 +31,7 @@ router.post(
     requireCourse,
     check('name').isLength({ min: 1 }),
     check('location').optional({ nullable: true }),
+    check('fixedLocation').exists(),
     failIfErrors,
   ],
   (req, res, _next) => {
@@ -40,6 +41,7 @@ router.post(
     const queue = Queue.build({
       name: data.name,
       location: data.location,
+      fixedLocation: data.fixedLocation,
       courseId,
       createdByUserId: res.locals.userAuthn.id,
     })
@@ -79,6 +81,7 @@ router.get(
       ],
       order: [[Question, 'id', 'ASC']],
     })
+
     res.json(queue)
   }
 )

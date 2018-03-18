@@ -59,6 +59,8 @@ export default class NewQuestion extends React.Component {
     let valid = true
 
     fields.forEach(({ name, maxLength }) => {
+      // Skip location validation if queue is in fixed location mode
+      if (name === 'location' && this.props.queue.fixedLocation) return
       if (!this.state[name]) {
         fieldErrors[name] = 'This field is required!'
         valid = false
@@ -83,6 +85,10 @@ export default class NewQuestion extends React.Component {
   }
 
   render() {
+    const { queue: { location, fixedLocation } } = this.props
+
+    const queueLocation = fixedLocation ? location : this.state.location
+
     return (
       <Card color="light">
         <CardHeader sm={2}>New question</CardHeader>
@@ -130,11 +136,15 @@ export default class NewQuestion extends React.Component {
                   name="location"
                   id="location"
                   placeholder="Enter your location (eg. Basement Tables or 0224)"
-                  value={this.state.location}
+                  value={queueLocation}
+                  disabled={fixedLocation}
                   onChange={this.handleInputChange}
                   valid={isValid(this.state.fieldErrors.location)}
                 />
                 <FormFeedback>{this.state.fieldErrors.location}</FormFeedback>
+                {fixedLocation && (
+                  <FormText>This is a fixed-location queue.</FormText>
+                )}
               </Col>
             </FormGroup>
             <Button
@@ -152,8 +162,19 @@ export default class NewQuestion extends React.Component {
   }
 }
 
+NewQuestion.defaultProps = {
+  queue: {
+    location: '',
+    fixedLocation: false,
+  },
+}
+
 NewQuestion.propTypes = {
   queueId: PropTypes.number.isRequired,
+  queue: PropTypes.shape({
+    location: PropTypes.string,
+    fixedLocation: PropTypes.bool.isRequired,
+  }),
   user: PropTypes.shape({
     name: PropTypes.string,
   }).isRequired,
