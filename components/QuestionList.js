@@ -98,7 +98,7 @@ class QuestionList extends React.Component {
       showLeaveModal: !this.state.showLeaveModal,
     })
   }
-  
+
   toggleDeleteModal() {
     this.setState({
       showDeleteModal: !this.state.showDeleteModal,
@@ -112,7 +112,7 @@ class QuestionList extends React.Component {
       showLeaveModal: false,
     })
   }
-  
+
   toggleCancelModal() {
     this.setState({
       showCancelModal: !this.state.showCancelModal,
@@ -123,7 +123,7 @@ class QuestionList extends React.Component {
     this.setState({
       showCancelModal: true,
       cancelId: questionId,
-    })  
+    })
   }
 
   startQuestion(questionId) {
