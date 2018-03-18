@@ -3,6 +3,7 @@ module.exports = {
     return queryInterface.addColumn('queues', 'fixedLocation', {
       type: Sequelize.BOOLEAN,
       defaultValue: false,
+      after: 'location',
     })
   },
 
