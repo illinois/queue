@@ -10,6 +10,7 @@ import Question from './Question'
 import QuestionFeedback from './QuestionFeedback'
 import ConfirmLeaveQueueModal from './ConfirmLeaveQueueModal'
 import ConfirmDeleteQuestionModal from './ConfirmDeleteQuestionModal'
+import ConfirmCancelQuestionModal from './ConfirmCancelQuestionModal'
 import QuestionEdit from './QuestionEdit'
 
 class QuestionList extends React.Component {
@@ -20,10 +21,12 @@ class QuestionList extends React.Component {
       showFeedbackModal: false,
       showLeaveModal: false,
       showDeleteModal: false,
+      showCancelModal: false,
       showQuestionEditModal: false,
       attributeId: null,
       feedbackId: null,
       deleteId: null,
+      cancelId: null,
     }
   }
 
@@ -109,6 +112,30 @@ class QuestionList extends React.Component {
       showLeaveModal: false,
     })
   }
+  
+  toggleCancelModal() {
+    this.setState({
+      showCancelModal: !this.state.showCancelModal,
+    })
+  }
+
+  cancelQuestion(questionId) {
+    this.setState({
+      showCancelModal: true,
+      cancelId: questionId,
+    })  
+  }
+
+  startQuestion(questionId) {
+    this.props.updateQuestionBeingAnswered(questionId, true)
+  }
+
+  handleConfirmedCancellation() {
+    this.props.updateQuestionBeingAnswered(this.state.cancelId, false)
+    this.setState({
+      showCancelModal: false,
+    })
+  }
 
   render() {
     let questions
@@ -125,9 +152,8 @@ class QuestionList extends React.Component {
               }
               didUserAskQuestion={this.props.userId === question.askedById}
               deleteQuestion={() => this.deleteQuestion(questionId)}
-              updateQuestionBeingAnswered={
-                this.props.updateQuestionBeingAnswered
-              }
+              cancelQuestion={() => this.cancelQuestion(questionId)}
+              startQuestion={() => this.startQuestion(questionId)}
               finishedAnswering={() => this.handleFinishedAnswering(questionId)}
               editQuestion={() => this.handleEditQuestion(questionId)}
               {...question}
@@ -179,6 +205,11 @@ class QuestionList extends React.Component {
           isOpen={this.state.showDeleteModal}
           toggle={() => this.toggleDeleteModal()}
           confirm={() => this.handleConfirmedDeletion()}
+        />
+        <ConfirmCancelQuestionModal
+          isOpen={this.state.showCancelModal}
+          toggle={() => this.toggleCancelModal()}
+          confirm={() => this.handleConfirmedCancellation()}
         />
         <QuestionEdit
           question={this.props.questions[this.state.attributeId]}
