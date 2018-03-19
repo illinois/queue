@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "node src/server.js",
     "dev-watch": "nodemon src/server.js",
-    "build": "cp -r src build && next build build",
+    "build": "rimraf build && cpx \"src\\**\\*\" build && next build build",
     "start": "NODE_ENV=production node build/server.js",
     "test": "jest",
     "lint-js": "eslint --ext js .",
@@ -64,6 +64,7 @@
     "babel-jest": "^22.2.2",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
+    "cpx": "^1.5.0",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "eslint": "^4.16.0",
@@ -79,11 +80,13 @@
     "prettier": "1.11.1",
     "pretty-quick": "^1.4.1",
     "react-test-renderer": "^16.2.0",
+    "rimraf": "^2.6.2",
     "sqlite3": "^3.1.13",
     "supertest": "^3.0.0"
   },
   "jest": {
     "setupTestFrameworkScriptFile": "./test/setup.js",
+    "testRegex": "src/.*test.js",
     "collectCoverage": true
   },
   "husky": {
