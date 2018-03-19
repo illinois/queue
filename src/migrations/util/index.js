@@ -18,7 +18,7 @@ module.exports.performMigrations = async sequelize => {
       sequelize,
     },
     migrations: {
-      path: path.resolve(__dirname, '..', '..', '..', 'src', 'migrations'),
+      path: path.resolve(__dirname, '..'),
       params: [sequelize.getQueryInterface(), Sequelize],
     },
   })
