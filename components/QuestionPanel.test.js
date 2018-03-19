@@ -1,7 +1,6 @@
 /* eslint-env jest */
 import React from 'react'
 import { shallow } from 'enzyme'
-import { Button } from 'reactstrap'
 import QuestionPanel from './QuestionPanel'
 
 const makeProps = (
@@ -28,6 +27,6 @@ describe('<QuestionPanel />', () => {
   test('renders question panel if user is not active staff', () => {
     const props = makeProps(1, 'Genna', 1, false)
     const wrapper = shallow(<QuestionPanel {...props} />)
-    expect(wrapper.find(Button))
+    expect(wrapper.get(0)).not.toBeNull()
   })
 })
