@@ -181,7 +181,7 @@ class QuestionList extends React.Component {
 
     return (
       <div>
-        <ListGroup className="mt-3">
+        <ListGroup>
           <FlipMove
             enterAnimation="accordionVertical"
             leaveAnimation="accordionVertical"

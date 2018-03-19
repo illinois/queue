@@ -12,7 +12,7 @@ import PageWithUser from '../components/PageWithUser'
 import Loading from '../components/Loading'
 import Layout from '../components/Layout'
 import StaffSidebar from '../components/StaffSidebar'
-import QuestionPanel from '../components/QuestionPanel'
+import QuestionPanelContainer from '../containers/QuestionPanelContainer'
 import QuestionListContainer from '../containers/QuestionListContainer'
 import ShowForCourseStaff from '../components/ShowForCourseStaff'
 import QuestionNotificationsToggle from '../components/QuestionNotificationsToggle'
@@ -69,7 +69,7 @@ class Queue extends React.Component {
               <StaffSidebar queueId={this.props.queueId} />
             </Col>
             <Col xs={{ size: 12 }} md={{ size: 8 }} lg={{ size: 9 }}>
-              <QuestionPanel queueId={this.props.queueId} />
+              <QuestionPanelContainer queueId={this.props.queueId} />
               <QuestionListContainer queueId={this.props.queueId} />
             </Col>
           </Row>
