@@ -1,6 +1,6 @@
 /* eslint-env jest */
 const authn = require('./authn')
-const testutil = require('../testutil')
+const testutil = require('../../test/util')
 const { User } = require('../models')
 
 beforeEach(async () => {

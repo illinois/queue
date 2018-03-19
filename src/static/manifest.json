@@ -3,9 +3,11 @@
   "short_name": "Queues",
   "display": "standalone",
   "background_color": "#fff",
-  "icons": [{
-    "src": "notif_icon.png",
-    "sizes": "128x128",
-    "type": "image/png"
-  }]
+  "icons": [
+    {
+      "src": "notif_icon.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    }
+  ]
 }

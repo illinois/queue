@@ -1,5 +1,5 @@
 apps:
-  - script: server.js
+  - script: src/server.js
     env_staging:
       NODE_ENV: staging
       BASE_URL: /queue-dev2

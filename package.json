@@ -2,16 +2,15 @@
   "name": "queue-frontend",
   "version": "1.0.0",
   "description": "",
-  "main": "node server.js",
   "scripts": {
-    "dev": "node server.js",
-    "dev-watch": "nodemon server.js",
-    "build": "next build",
-    "start": "NODE_ENV=production node server.js",
+    "dev": "node src/server.js",
+    "dev-watch": "nodemon src/server.js",
+    "build": "cp -r src build && next build build",
+    "start": "NODE_ENV=production node build/server.js",
     "test": "jest",
     "lint-js": "eslint --ext js .",
-    "prettier": "prettier --write \"**/*.js\"",
-    "prettier-diff": "prettier --list-different \"**/*.js\""
+    "prettier": "prettier --write \"src/**/*.js\"",
+    "prettier-diff": "prettier --list-different \"src/**/*.js\""
   },
   "keywords": [],
   "author": "",
@@ -84,7 +83,7 @@
     "supertest": "^3.0.0"
   },
   "jest": {
-    "setupTestFrameworkScriptFile": "./testSetup.js",
+    "setupTestFrameworkScriptFile": "./test/setup.js",
     "collectCoverage": true
   },
   "husky": {

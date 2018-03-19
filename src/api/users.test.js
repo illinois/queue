@@ -1,7 +1,7 @@
 /* eslint-env jest */
 const request = require('supertest')
 const app = require('../app')
-const testutil = require('../testutil')
+const testutil = require('../../test/util')
 
 beforeAll(async () => {
   await testutil.setupTestDb()
