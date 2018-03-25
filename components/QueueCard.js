@@ -39,7 +39,7 @@ const QueueCard = ({ queue, courseName, onDelete, ...rest }) => {
           </ShowForCourseStaff>
           <ShowForCourseStaff courseId={queue.courseId}>
             <Button
-              color="info"
+              color="primary"
               size="sm"
               className={"mr-0 ml-1"}
               outline

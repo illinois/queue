@@ -54,7 +54,6 @@ router.get(
   [requireQueue, failIfErrors],
   async (req, res, _next) => {
     const { id: queueId } = res.locals.queue
-    console.log(res.locals.queue)
     const queue = await Queue.findOne({
       where: {
         id: queueId,
