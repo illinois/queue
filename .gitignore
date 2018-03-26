@@ -30,8 +30,9 @@ build/Release
 node_modules
 jspm_packages
 
-# Next.js build directory
-.next/
+# Build directory
+build
+src/.next
 
 # Optional npm cache directory
 .npm
@@ -39,8 +40,8 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 
-# Dev database
-dev.sqlite
+# Dev databases
+*.sqlite
 
 # Machine-specific dotenv
 .env

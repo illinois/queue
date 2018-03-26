@@ -11,14 +11,14 @@ fi
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Set up the verification databases in Node
-node -e "require('$DIR/../migrations/util').createVerificationDatabases()"
+node -e "require('$DIR/../src/migrations/util').createVerificationDatabases()"
 
 # Perform the actual diff
 mysqldbcompare --server1=queue@localhost --server2=queue@localhost --run-all-tests --changes-for=server2 queue_sequelize:queue_migrations
 EXIT_CODE=$?
 
 # Destroy the verification databases in Node
-node -e "require('$DIR/../migrations/util').destroyVerificationDatabases()"
+node -e "require('$DIR/../src/migrations/util').destroyVerificationDatabases()"
 
 # Let the user know if the databases diffed cleanly or not
 exit $EXIT_CODE

@@ -1,6 +1,6 @@
 /* eslint-env jest */
 const authnDev = require('./authnDev')
-const testutil = require('../testutil')
+const testutil = require('../../test/util')
 
 beforeEach(() => testutil.setupTestDb())
 afterEach(() => testutil.destroyTestDb())

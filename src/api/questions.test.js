@@ -2,7 +2,7 @@
 
 const request = require('supertest')
 const app = require('../app')
-const testutil = require('../testutil')
+const testutil = require('../../test/util')
 const constants = require('../constants')
 
 beforeEach(async () => {

@@ -1,4 +1,4 @@
-const models = require('../models')
+const models = require('../src/models')
 
 module.exports.setupTestDb = async () => {
   await models.sequelize.sync()

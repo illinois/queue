@@ -17,7 +17,7 @@ const { baseUrl } = require('./util')
 const DEV = ['production', 'staging'].indexOf(process.env.NODE_ENV) === -1
 const PORT = process.env.PORT || 3000
 
-const nextApp = nextJs({ dev: DEV })
+const nextApp = nextJs({ dev: DEV, dir: DEV ? 'src' : 'build' })
 const handler = routes.getRequestHandler(nextApp)
 
 /* eslint-disable func-names */
