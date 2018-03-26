@@ -1,5 +1,19 @@
-# queue
+# Illinois Open Source Queue
 [![Build Status](https://travis-ci.org/illinois/queue.svg?branch=master)](https://travis-ci.org/illinois/queue)
+
+A micro-service queue for holding office hours (with shibboleth identity management)
+
+
+## Using the Queue at Illinois
+
+At UIUC, this queue is hosted as a free service by Computer Science and EngrIT.  
+
+- View the queue at https://edu.cs.illinois.edu/queue/ 
+- [Request to have a queue created for your course by filling out this short form](https://forms.illinois.edu/sec/691281)
+
+
+## Running the Queue from Soruce
+
 ### Running locally in `dev` mode:
 - Clone the repository
 - Install [`node` and `npm`](https://nodejs.org/en/download/package-manager/)
