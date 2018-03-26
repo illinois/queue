@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
 
       // Feedback
       comments: DataTypes.TEXT,
-      preparedness: DataTypes.ENUM('not', 'average', 'well'),
+      preparedness: DataTypes.ENUM('bad', 'average', 'good'),
     },
     {
       // Don't actually delete, so that we can save feedback
