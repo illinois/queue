@@ -20,8 +20,7 @@ module.exports = {
       enqueueTime: Sequelize.DATE,
       dequeueTime: Sequelize.DATE,
       comments: Sequelize.TEXT,
-      preparedness: Sequelize.ENUM('not', 'average', 'well'),
-
+      preparedness: Sequelize.INTEGER,
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
