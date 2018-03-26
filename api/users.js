@@ -5,6 +5,7 @@ const { requireUser, failIfErrors } = require('./util')
 const { User, Course } = require('../models')
 
 const requireAdmin = require('../middleware/requireAdmin')
+const safeAsync = require('../middleware/safeAsync')
 
 // Get list of all users
 router.get('/', [requireAdmin], (req, res, _next) =>
@@ -12,47 +13,54 @@ router.get('/', [requireAdmin], (req, res, _next) =>
 )
 
 // Get the currently authenticated user
-router.get('/me', async (req, res, _next) => {
-  const { id } = res.locals.userAuthn
-  const user = await User.findOne({
-    where: { id },
-    include: [
-      {
-        model: Course,
-        as: 'staffAssignments',
-        through: {
-          attributes: [],
+router.get(
+  '/me',
+  safeAsync(async (req, res, _next) => {
+    throw new Error('rip')
+    const { id } = res.locals.userAuthn
+    const user = await User.findOne({
+      where: { id },
+      include: [
+        {
+          model: Course,
+          as: 'staffAssignments',
+          through: {
+            attributes: [],
+          },
         },
-      },
-    ],
+      ],
+    })
+    res.send(user)
   })
-  res.send(user)
-})
+)
 
 // Updates the information for a given user
-router.patch('/me', async (req, res, _next) => {
-  const { id } = res.locals.userAuthn
-  const user = await User.findOne({
-    where: { id },
-    include: [
-      {
-        model: Course,
-        as: 'staffAssignments',
-        through: {
-          attributes: [],
+router.patch(
+  '/me',
+  safeAsync(async (req, res, _next) => {
+    const { id } = res.locals.userAuthn
+    const user = await User.findOne({
+      where: { id },
+      include: [
+        {
+          model: Course,
+          as: 'staffAssignments',
+          through: {
+            attributes: [],
+          },
         },
-      },
-    ],
+      ],
+    })
+
+    // Right now, we only allow preferredName to be updated
+    if (req.body.preferredName) {
+      user.preferredName = req.body.preferredName
+      await user.save()
+    }
+
+    res.send(user)
   })
-
-  // Right now, we only allow preferredName to be updated
-  if (req.body.preferredName) {
-    user.preferredName = req.body.preferredName
-    await user.save()
-  }
-
-  res.send(user)
-})
+)
 
 // Get a specific user
 router.get(

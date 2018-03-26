@@ -60,4 +60,11 @@ app.use(`${baseUrl}/:courseCode`, require('./middleware/courseShortcodes'))
 // Support for redirects of nonexistent queues
 app.use(`${baseUrl}/queue/:queueId`, require('./middleware/redirectNoQueue'))
 
+// Error handling!
+if (DEV) {
+  app.use(require('./middleware/handleErrorDev'))
+} else {
+  app.use(require('./middleware/handleError'))
+}
+
 module.exports = app
