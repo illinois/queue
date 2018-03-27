@@ -7,7 +7,7 @@ import faQuestion from '@fortawesome/fontawesome-free-solid/faQuestionCircle'
 
 import ShowForCourseStaff from './ShowForCourseStaff'
 
-const QueueCard = ({ queue, courseName, onDelete, ...rest }) => {
+const QueueCard = ({ queue, courseName, onDelete, onUpdate, ...rest }) => {
   const { name: queueName, location, questionCount } = queue
 
   const questionCountText = `${questionCount} Question${
@@ -19,6 +19,12 @@ const QueueCard = ({ queue, courseName, onDelete, ...rest }) => {
     e.stopPropagation()
     e.preventDefault()
     onDelete()
+  }
+
+  const handleUpdate = e => {
+    e.stopPropagation()
+    e.preventDefault()
+    onUpdate()
   }
 
   return (
@@ -43,7 +49,7 @@ const QueueCard = ({ queue, courseName, onDelete, ...rest }) => {
               size="sm"
               className={"mr-0 ml-1"}
               outline
-              onClick={() => console.log("hello")}
+              onClick={handleUpdate}
             >
               Modify
             </Button>

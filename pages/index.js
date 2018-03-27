@@ -12,7 +12,7 @@ import {
   fetchCourses,
   createCourse,
 } from '../actions/course'
-import { fetchQueues, createQueue, deleteQueue } from '../actions/queue'
+import { fetchQueues, createQueue, deleteQueue, updateQueue } from '../actions/queue'
 
 import PageWithUser from '../components/PageWithUser'
 import Loading from '../components/Loading'
@@ -21,6 +21,7 @@ import NewCourse from '../components/NewCourse'
 import NewQueue from '../components/NewQueue'
 import ShowForAdmin from '../components/ShowForAdmin'
 import QueueCard from '../components/QueueCard'
+import QueueEdit from '../components/QueueEdit'
 import ConfirmDeleteQueueModal from '../components/ConfirmDeleteQueueModal'
 
 class Index extends React.Component {
@@ -39,7 +40,9 @@ class Index extends React.Component {
       showCreateCoursePanel: false,
       showCreateQueuePanel: false,
       showDeleteQueueModal: false,
+      showEditQueueModal: false,
       pendingDeleteQueue: null,
+      pendingEditQueueId: null,
     }
   }
 
@@ -77,6 +80,28 @@ class Index extends React.Component {
     this.props
       .createQueue(courseId, queue)
       .then(() => this.showCreateQueuePanel(false))
+  }
+
+  editQueue(queueId) {
+    this.setState({
+      showEditQueueModal: true,
+      pendingEditQueueId: queueId,
+    })
+  }
+
+  submitQueueEdit(attributes) {
+    this.props.updateQueue(this.state.pendingEditQueueId, attributes).then(() => {
+      this.setState({
+        showEditQueueModal: false,
+      })
+    })
+  }
+
+  queueEditCancel() {
+    this.setState({
+      showEditQueueModal: false,
+      pendingEditQueueId: null,
+    })
   }
 
   deleteQueue(courseId, queueId) {

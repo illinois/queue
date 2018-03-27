@@ -19,7 +19,7 @@ import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
 import { Link } from '../routes'
 import makeStore from '../redux/makeStore'
 import { fetchCourseRequest, fetchCourse } from '../actions/course'
-import { createQueue, deleteQueue } from '../actions/queue'
+import { createQueue, deleteQueue, updateQueue } from '../actions/queue'
 import { isUserCourseStaff } from '../selectors'
 
 import PageWithUser from '../components/PageWithUser'
@@ -27,6 +27,7 @@ import Loading from '../components/Loading'
 import Layout from '../components/Layout'
 import NewQueue from '../components/NewQueue'
 import Queue from '../components/Queue'
+import QueueEdit from '../components/QueueEdit'
 import ShowForCourseStaff from '../components/ShowForCourseStaff'
 import ConfirmDeleteQueueModal from '../components/ConfirmDeleteQueueModal'
 
@@ -48,7 +49,9 @@ class Course extends React.Component {
     this.state = {
       showCreateQueuePanel: false,
       showDeleteQueueModal: false,
+      showEditQueueModal: false,
       pendingDeleteQueueId: null,
+      pendingEditQueueId: null,
     }
   }
 
@@ -66,6 +69,28 @@ class Course extends React.Component {
     this.props
       .createQueue(this.props.courseId, queue)
       .then(() => this.showCreateQueuePanel(false))
+  }
+
+  editQueue(queueId) {
+    this.setState({
+      showEditQueueModal: true,
+      pendingEditQueueId: queueId,
+    })
+  }
+
+  submitQueueEdit(attributes) {
+    this.props.updateQueue(this.state.pendingEditQueueId, attributes).then(() => {
+      this.setState({
+        showEditQueueModal: false,
+      })
+    })
+  }
+
+  queueEditCancel() {
+    this.setState({
+      showEditQueueModal: false,
+      pendingEditQueueId: null,
+    })
   }
 
   deleteQueue(queueId) {
