@@ -81,6 +81,7 @@ Queue.propTypes = {
   name: PropTypes.string.isRequired,
   location: PropTypes.string.isRequired,
   questionCount: PropTypes.number.isRequired,
+  onUpdateQueue: PropTypes.func.isRequired,
   onDeleteQueue: PropTypes.func.isRequired,
   isUserCourseStaff: PropTypes.bool.isRequired,
 }

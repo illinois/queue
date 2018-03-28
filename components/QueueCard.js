@@ -85,6 +85,7 @@ QueueCard.propTypes = {
     courseId: PropTypes.number,
   }).isRequired,
   courseName: PropTypes.string.isRequired,
+  onUpdate: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
 }
 
