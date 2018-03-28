@@ -131,10 +131,24 @@ router.post(
   async (req, res, _next) => {
     const data = matchedData(req)
 
+    // Temporary, easy fix to avoid having to rename enums
+    // TODO Fix this garbage
+    let mappedPreparedness = data.preparedness
+    switch (data.preparedness) {
+      case 'bad':
+        mappedPreparedness = 'not'
+        break
+      case 'good':
+        mappedPreparedness = 'well'
+        break
+      default:
+        break
+    }
+
     const { question } = res.locals
     question.answerFinishTime = new Date()
     question.dequeueTime = new Date()
-    question.preparedness = data.preparedness
+    question.preparedness = mappedPreparedness
     question.comments = data.comments
     question.answeredById = res.locals.userAuthn.id
 
