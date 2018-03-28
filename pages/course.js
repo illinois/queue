@@ -79,9 +79,11 @@ class Course extends React.Component {
   }
 
   submitQueueEdit(attributes) {
-    this.props.updateQueue(this.state.pendingEditQueueId, attributes).then(() => {
+    const { pendingEditQueueId } = this.state
+    this.props.updateQueue(pendingEditQueueId, attributes).then(() => {
       this.setState({
         showEditQueueModal: false,
+        pendingEditQueueId: null,
       })
     })
   }
@@ -200,6 +202,14 @@ class Course extends React.Component {
                 duration={200}
               >
                 {queues}
+                <QueueEdit
+                  queue={this.props.queues[this.state.pendingEditQueueId]}
+                  isOpen={this.state.showEditQueueModal}
+                  onSubmitQueueEdit={attributes =>
+                    this.submitQueueEdit(attributes)
+                  }
+                  onCancel={() => this.queueEditCancel()}
+                />
               </FlipMove>
               {!this.state.showCreateQueuePanel && createQueueButton}
               {this.state.showCreateQueuePanel && createQueuePanel}
@@ -211,16 +221,6 @@ class Course extends React.Component {
             isOpen={this.state.showDeleteQueueModal}
             toggle={() => this.toggleDeleteModal()}
             confirm={() => this.confirmDeleteQueue()}
-          />
-        )}
-        {this.state.showEditQueueModal && (
-          <QueueEdit
-            queue={this.props.queues[this.state.pendingEditQueueId]}
-            isOpen={this.state.showEditQueueModal}
-            onSubmitQueueEdit={attributes =>
-              this.submitQueueEdit(attributes)
-            }
-            onCancel={() => this.queueEditCancel()}
           />
         )}
         <style jsx>{`
@@ -250,6 +250,7 @@ Course.propTypes = {
   isFetching: PropTypes.bool,
   createQueue: PropTypes.func.isRequired,
   fetchCourse: PropTypes.func.isRequired,
+  updateQueue: PropTypes.func.isRequired,
   deleteQueue: PropTypes.func.isRequired,
   isUserCourseStaff: PropTypes.bool,
   dispatch: PropTypes.func.isRequired,

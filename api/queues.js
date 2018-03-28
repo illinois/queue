@@ -86,8 +86,8 @@ router.get(
 router.patch(
   '/:queueId',
   [
-    requireCourseStaff,
-    requireCourse,
+    requireCourseStaffForQueue,
+    requireQueue,
     check('name').isLength({ min: 1 }),
     check('location').optional({ nullable: true }),
     failIfErrors,

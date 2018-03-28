@@ -114,7 +114,7 @@ const updateQueueFailure = makeActionCreator(
 export function updateQueue(queueId, attributes) {
   return dispatch => {
     dispatch(updateQueueRequest(queueId, attributes))
-    return axios.patch(`/api/queue/${queueId}`, attributes).then(
+    return axios.patch(`/api/queues/${queueId}`, attributes).then(
       res => dispatch(updateQueueSuccess(queueId, res.data)),
       err => {
         console.error(err)

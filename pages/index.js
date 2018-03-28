@@ -90,9 +90,11 @@ class Index extends React.Component {
   }
 
   submitQueueEdit(attributes) {
-    this.props.updateQueue(this.state.pendingEditQueueId, attributes).then(() => {
+    const { pendingEditQueueId } = this.state
+    this.props.updateQueue(pendingEditQueueId, attributes).then(() => {
       this.setState({
         showEditQueueModal: false,
+        pendingEditQueueId: null,
       })
     })
   }
@@ -221,7 +223,17 @@ class Index extends React.Component {
               </CardBody>
             </Card>
           )}
-          <Row className="equal-height mb-5">{queues}</Row>
+          <Row className="equal-height mb-5">
+            {queues}
+            <QueueEdit
+              queue={this.props.queuesById[this.state.pendingEditQueueId]}
+              isOpen={this.state.showEditQueueModal}
+              onSubmitQueueEdit={attributes =>
+                this.submitQueueEdit(attributes)
+              }
+              onCancel={() => this.queueEditCancel()}
+            />
+          </Row>
           <div className="d-sm-flex align-items-center mb-4">
             <h3 className="d-block d-sm-inline-block mb-0">
               Or, select a course
@@ -254,16 +266,6 @@ class Index extends React.Component {
             isOpen={this.state.showDeleteQueueModal}
             toggle={() => this.toggleDeleteModal()}
             confirm={() => this.confirmDeleteQueue()}
-          />
-        )}
-        {this.state.showEditQueueModal && (
-          <QueueEdit
-            queue={this.props.queuesById[this.state.pendingEditQueueId]}
-            isOpen={this.state.showEditQueueModal}
-            onSubmitQueueEdit={attributes =>
-              this.submitQueueEdit(attributes)
-            }
-            onCancel={() => this.queueEditCancel()}
           />
         )}
         <style global jsx>{`
@@ -310,6 +312,7 @@ Index.propTypes = {
   fetchQueues: PropTypes.func.isRequired,
   createCourse: PropTypes.func.isRequired,
   createQueue: PropTypes.func.isRequired,
+  updateQueue: PropTypes.func.isRequired,
   deleteQueue: PropTypes.func.isRequired,
 }
 

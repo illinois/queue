@@ -5,6 +5,7 @@ import {
   CREATE_QUEUE,
   CREATE_QUESTION,
   DELETE_QUESTION,
+  UPDATE_QUEUE,
   DELETE_QUEUE,
   REPLACE_QUESTIONS,
   UPDATE_QUEUES,
@@ -171,6 +172,19 @@ const queues = (state = defaultState, action) => {
     }
     case DELETE_QUESTION.SUCCESS: {
       return removeQuestionFromQueue(state, action.queueId, action.questionId)
+    }
+    case UPDATE_QUEUE.SUCCESS: {
+      const { queue } = action
+      // Manually preserve questionCount,
+      // not sure if this is correct thing to do though
+      queue.questionCount = state.queues[queue.id].questionCount
+      return {
+        ...state,
+        queues: {
+          ...state.queues,
+          [queue.id]: queue,
+        },
+      }
     }
     case DELETE_QUEUE.SUCCESS: {
       const { queueId } = action
