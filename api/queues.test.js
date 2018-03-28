@@ -15,7 +15,7 @@ describe('Queues API', () => {
     const doGetTest = async user => {
       const res = await request(app).get(`/api/queues?forceuser=${user}`)
       expect(res.statusCode).toBe(200)
-      expect(res.body.length).toBeGreaterThanOrEqual(2)
+      expect(res.body.length).toEqual(3)
       expect(res.body[0].name).toBe('CS225 Queue')
       expect(res.body[1].name).toBe('CS241 Queue')
       expect(res.body[0].location).toBe('Here')
