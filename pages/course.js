@@ -276,7 +276,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => ({
   fetchCourse: courseId => dispatch(fetchCourse(courseId)),
   createQueue: (courseId, queue) => dispatch(createQueue(courseId, queue)),
-  updateQueue: (queueId, attributes) => dispatch(updateQueue(queueId, attributes)),
+  updateQueue: (queueId, attributes) =>
+    dispatch(updateQueue(queueId, attributes)),
   deleteQueue: (courseId, queueId) => dispatch(deleteQueue(courseId, queueId)),
   dispatch,
 })

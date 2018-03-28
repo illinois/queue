@@ -12,7 +12,12 @@ import {
   fetchCourses,
   createCourse,
 } from '../actions/course'
-import { fetchQueues, createQueue, deleteQueue, updateQueue } from '../actions/queue'
+import {
+  fetchQueues,
+  createQueue,
+  deleteQueue,
+  updateQueue,
+} from '../actions/queue'
 
 import PageWithUser from '../components/PageWithUser'
 import Loading from '../components/Loading'
@@ -230,9 +235,7 @@ class Index extends React.Component {
               queue={this.props.queuesById[this.state.pendingEditQueueId]}
               /* eslint-enable react/prop-types */
               isOpen={this.state.showEditQueueModal}
-              onSubmitQueueEdit={attributes =>
-                this.submitQueueEdit(attributes)
-              }
+              onSubmitQueueEdit={attributes => this.submitQueueEdit(attributes)}
               onCancel={() => this.queueEditCancel()}
             />
           </Row>
@@ -345,7 +348,8 @@ const mapDispatchToProps = dispatch => ({
   fetchQueues: () => dispatch(fetchQueues()),
   createCourse: course => dispatch(createCourse(course)),
   createQueue: (courseId, queue) => dispatch(createQueue(courseId, queue)),
-  updateQueue: (queueId, attributes) => dispatch(updateQueue(queueId, attributes)),
+  updateQueue: (queueId, attributes) =>
+    dispatch(updateQueue(queueId, attributes)),
   deleteQueue: (courseId, queueId) => dispatch(deleteQueue(courseId, queueId)),
 })
 

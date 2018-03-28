@@ -346,7 +346,6 @@ describe('Queues API', () => {
       expect(res.statusCode).toBe(403)
       expect(res.body).toEqual({})
     })
-
   })
 
   describe('DELETE /api/queues/1', () => {

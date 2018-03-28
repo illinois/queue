@@ -114,7 +114,7 @@ class QueueEdit extends React.Component {
                   onChange={this.handleInputChange}
                   valid={isValid(this.state.isFieldValid.name)}
                 />
-              <FormFeedback>{this.state.isFieldValid.name}</FormFeedback>
+                <FormFeedback>{this.state.isFieldValid.name}</FormFeedback>
               </Col>
             </FormGroup>
             <FormGroup row>
