@@ -2,12 +2,16 @@
   "development": {
     "dialect": "sqlite",
     "storage": "./dev.sqlite",
-    "benchmark": true,
     "logging": false
   },
   "test": {
     "dialect": "sqlite",
     "storage": ":memory:",
+    "logging": false
+  },
+  "staging": {
+    "dialect": "sqlite",
+    "storage": "./staging.sqlite",
     "logging": false
   },
   "production": {

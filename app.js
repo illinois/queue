@@ -6,7 +6,7 @@ const rewrite = require('express-urlrewrite')
 
 const { baseUrl } = require('./util')
 
-const DEV = process.env.NODE_ENV !== 'production'
+const DEV = ['production', 'staging'].indexOf(process.env.NODE_ENV) === -1
 
 // In production, all concepts of "sessions" will be handled by checking the
 // eppn header from Shib. In dev, to support multiple users for testing, we
