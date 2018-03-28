@@ -4,9 +4,10 @@ import { createQuestion } from '../actions/question'
 import NewQuestion from '../components/NewQuestion'
 
 function mapStateToProps(state, ownProps) {
-  // TODO expose current user so we can autofill the name field
   return {
+    user: state.user.user,
     queueId: ownProps.queueId,
+    queue: state.queues.queues[ownProps.queueId],
   }
 }
 

@@ -28,6 +28,24 @@ describe('Questions API', () => {
       expect(res.body.askedBy.netid).toBe('dev')
     })
 
+    test('removes location for fixed-location queue', async () => {
+      const question = { name: 'a', location: 'testing', topic: 'c' }
+      const res = await request(app)
+        .post('/api/queues/3/questions?forceuser=student')
+        .send(question)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.location).toBe('')
+    })
+
+    test('succeeds if location is missing for fixed-location queue', async () => {
+      const question = { name: 'a', location: '', topic: 'c' }
+      const res = await request(app)
+        .post('/api/queues/3/questions?forceuser=student')
+        .send(question)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.location).toBe('')
+    })
+
     test('fails if name is missing', async () => {
       const question = { location: 'a', topic: 'b' }
       const res = await request(app)
@@ -176,6 +194,18 @@ describe('Questions API', () => {
       expect(res.body).toHaveProperty('askedBy')
       expect(res.body.askedBy.netid).toBe('admin')
       expect(res.body.location).toBe('bx')
+      expect(res.body.topic).toBe('cs')
+    })
+
+    test("doesn't update location for fixed-location queue", async () => {
+      const attributes = { location: 'bx', topic: 'cs' }
+      const res = await request(app)
+        .patch('/api/queues/3/questions/3?forceuser=admin')
+        .send(attributes)
+      expect(res.statusCode).toBe(201)
+      expect(res.body).toHaveProperty('askedBy')
+      expect(res.body.askedBy.netid).toBe('admin')
+      expect(res.body.location).toBe('')
       expect(res.body.topic).toBe('cs')
     })
 

@@ -2,7 +2,7 @@ const router = require('express').Router({
   mergeParams: true,
 })
 
-const { check } = require('express-validator/check')
+const { check, oneOf } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 
 const { Queue, ActiveStaff, Question, User } = require('../models')
@@ -30,7 +30,16 @@ router.post(
     requireCourseStaff,
     requireCourse,
     check('name').isLength({ min: 1 }),
-    check('location').optional({ nullable: true }),
+    oneOf([
+      [
+        check('fixedLocation').custom(value => value !== true),
+        check('location').optional({ nullable: true }),
+      ],
+      [
+        check('fixedLocation').custom(value => value === true),
+        check('location').isLength({ min: 1 }),
+      ],
+    ]),
     failIfErrors,
   ],
   (req, res, _next) => {
@@ -40,6 +49,7 @@ router.post(
     const queue = Queue.build({
       name: data.name,
       location: data.location,
+      fixedLocation: data.fixedLocation === true,
       courseId,
       createdByUserId: res.locals.userAuthn.id,
     })
@@ -79,6 +89,7 @@ router.get(
       ],
       order: [[Question, 'id', 'ASC']],
     })
+
     res.json(queue)
   }
 )

@@ -34,6 +34,30 @@ const requireModel = (model, modelName, propertyName) => async (
   }
 }
 
+const requireModelForModel = (
+  model,
+  modelName,
+  forModelName,
+  forPropertyName
+) => async (req, res, next) => {
+  if (forModelName in res.locals) {
+    if (forPropertyName in res.locals[forModelName]) {
+      const id = res.locals[forModelName][forPropertyName]
+      const entity = await model.findOne({ where: { id } })
+      if (entity === null) {
+        res.status(404).send(`${modelName} with ID ${id} does not exist`)
+      } else {
+        res.locals[modelName] = entity
+        next()
+      }
+    } else {
+      res.status(500).send(`${forPropertyName} was not in ${forModelName}`)
+    }
+  } else {
+    res.status(500).send(`${forModelName} was not in locals`)
+  }
+}
+
 module.exports = {
   failIfErrors(req, res, next) {
     const errors = validationResult(req)
@@ -47,6 +71,12 @@ module.exports = {
 
   requireCourse: requireModel(Course, 'course', 'courseId'),
   requireQueue: requireModel(Queue, 'queue', 'queueId'),
+  requireQueueForQuestion: requireModelForModel(
+    Queue,
+    'queue',
+    'question',
+    'queueId'
+  ),
   requireQuestion: requireModel(Question, 'question', 'questionId'),
   requireUser: requireModel(User, 'user', 'userId'),
 
