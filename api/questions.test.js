@@ -4,6 +4,7 @@ const request = require('supertest')
 const app = require('../app')
 const testutil = require('../testutil')
 const constants = require('../constants')
+const { Question } = require('../models')
 
 beforeEach(async () => {
   await testutil.setupTestDb()
@@ -222,6 +223,34 @@ describe('Questions API', () => {
       expect(res.body).toHaveProperty('askedBy')
       expect(res.body.askedBy.netid).toBe('admin')
       expect(res.body.beingAnswered).toBe(true)
+    })
+
+    test('fails if another user is already answering the question', async () => {
+      // Mark question as being answered by admin
+      const res = await request(app).post(
+        '/api/queues/1/questions/1/answering?forceuser=admin'
+      )
+      expect(res.statusCode).toBe(200)
+      // Attempt to answer as another user
+      const res2 = await request(app).post(
+        '/api/queues/1/questions/1/answering?forceuser=225staff'
+      )
+      expect(res2.statusCode).toBe(403)
+      const question = await Question.findById(1)
+      expect(question.answeredById).toBe(2)
+    })
+
+    test('fails if user is currently answering another question', async () => {
+      const res = await request(app).post(
+        '/api/queues/1/questions/1/answering?forceuser=admin'
+      )
+      expect(res.statusCode).toBe(200)
+      const res2 = await request(app).post(
+        '/api/queues/1/questions/2/answering?forceuser=admin'
+      )
+      expect(res2.statusCode).toBe(403)
+      const question = await Question.findById(2)
+      expect(question.beingAnswered).toBe(false)
     })
 
     test('fails for student', async () => {
