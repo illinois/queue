@@ -19,6 +19,7 @@ import QuestionNotificationsToggle from '../components/QuestionNotificationsTogg
 
 class Queue extends React.Component {
   static getInitialProps({ isServer, store, query }) {
+    console.log(this)
     const queueId = Number.parseInt(query.id, 10)
     if (isServer) {
       store.dispatch(fetchQueueRequest(queueId))
@@ -46,7 +47,8 @@ class Queue extends React.Component {
   }
 
   render() {
-    const { isFetching, hasQueue } = this.props
+    const { isFetching, hasQueue, queueInfo } = this.props
+    const location = this.props.queueInfo.location || 'Not Available'
     if (isFetching) {
       return <Loading />
     }
@@ -56,6 +58,9 @@ class Queue extends React.Component {
     return (
       <Layout>
         <Container fluid>
+          <h5>
+            {this.props.queueInfo.name}, Location: {location}{' '}
+          </h5>
           <Row>
             <Col
               xs={{ size: 12 }}
@@ -90,6 +95,7 @@ Queue.propTypes = {
 const mapStateToProps = (state, ownProps) => ({
   isFetching: state.queues.isFetching,
   hasQueue: !!state.queues.queues[ownProps.queueId],
+  queueInfo: state.queues.queues[ownProps.queueId],
 })
 
 const mapDispatchToProps = dispatch => ({
