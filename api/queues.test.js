@@ -199,41 +199,154 @@ describe('Queues API', () => {
   })
 
   describe('PATCH /api/queues/:queueId', () => {
-    test('succeeds for student with well-formed request who asked question', async () => {
-      const attributes = { location: 'bx', topic: 'cs' }
+    test('succeeds for course staff with well-formed request no location', async () => {
+      const attributes = { name: 'CS 225 Queue 1 Alter', location: '' }
       const res = await request(app)
-        .patch('/api/queues/1/questions/1?forceuser=admin')
+        .patch('/api/queues/1?forceuser=225staff')
         .send(attributes)
       expect(res.statusCode).toBe(201)
-      expect(res.body).toHaveProperty('askedBy')
-      expect(res.body.askedBy.netid).toBe('admin')
-      expect(res.body.location).toBe('bx')
-      expect(res.body.topic).toBe('cs')
+      expect(res.body.name).toBe('CS 225 Queue 1 Alter')
+      expect(res.body.id).toBe(1)
+      expect(res.body.location).toBe('')
     })
 
-    test('fails for student with well-formed request who didnt ask question', async () => {
-      const attributes = { location: 'bx', topic: 'cs' }
+    test('succeeds for course staff with well-formed request with location', async () => {
+      const attributes = { name: 'CS 225 Queue 1 Alter', location: 'Where' }
       const res = await request(app)
-        .patch('/api/queues/1/questions/1?forceuser=student')
+        .patch('/api/queues/1?forceuser=225staff')
+        .send(attributes)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.name).toBe('CS 225 Queue 1 Alter')
+      expect(res.body.id).toBe(1)
+      expect(res.body.location).toBe('Where')
+    })
+
+    test('succeeds for admin with well-formed request no location', async () => {
+      const attributes = { name: 'CS 225 Queue 1 Alter', location: '' }
+      const res = await request(app)
+        .patch('/api/queues/1?forceuser=admin')
+        .send(attributes)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.name).toBe('CS 225 Queue 1 Alter')
+      expect(res.body.id).toBe(1)
+      expect(res.body.location).toBe('')
+    })
+
+    test('succeeds for admin with well-formed request with location', async () => {
+      const attributes = { name: 'CS 225 Queue 1 Alter', location: 'Where' }
+      const res = await request(app)
+        .patch('/api/queues/1?forceuser=admin')
+        .send(attributes)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.name).toBe('CS 225 Queue 1 Alter')
+      expect(res.body.id).toBe(1)
+      expect(res.body.location).toBe('Where')
+    })
+
+    test('fails for course staff with ill-formed request no location', async () => {
+      const attributes = { name: '', location: '' }
+      const res = await request(app)
+        .patch('/api/queues/1?forceuser=225staff')
+        .send(attributes)
+      expect(res.statusCode).toBe(422)
+    })
+
+    test('fails for course staff with ill-formed request with location', async () => {
+      const attributes = { name: '', location: 'Where' }
+      const res = await request(app)
+        .patch('/api/queues/1?forceuser=225staff')
+        .send(attributes)
+      expect(res.statusCode).toBe(422)
+    })
+
+    test('fails for admin with ill-formed request no location', async () => {
+      const attributes = { name: '', location: '' }
+      const res = await request(app)
+        .patch('/api/queues/1?forceuser=admin')
+        .send(attributes)
+      expect(res.statusCode).toBe(422)
+    })
+
+    test('fails for admin with ill-formed request with location', async () => {
+      const attributes = { name: '', location: 'Where' }
+      const res = await request(app)
+        .patch('/api/queues/1?forceuser=admin')
+        .send(attributes)
+      expect(res.statusCode).toBe(422)
+    })
+
+    test('fails for student with well-formed request no location', async () => {
+      const attributes = { name: 'CS 225 Queue 1 Alter', location: '' }
+      const res = await request(app)
+        .patch('/api/queues/1?forceuser=student')
         .send(attributes)
       expect(res.statusCode).toBe(403)
+      expect(res.body).toEqual({})
     })
 
-    test('fails for student with ill-formed request who asked question (no topic)', async () => {
-      const attributes = { location: 'bx', topic: '' }
+    test('fails for student with well-formed request with location', async () => {
+      const attributes = { name: 'CS 225 Queue 1 Alter', location: 'Where' }
       const res = await request(app)
-        .patch('/api/queues/1/questions/1?forceuser=student')
+        .patch('/api/queues/1?forceuser=student')
         .send(attributes)
-      expect(res.statusCode).toBe(422)
+      expect(res.statusCode).toBe(403)
+      expect(res.body).toEqual({})
     })
 
-    test('fails for student with ill-formed request who asked question (no location)', async () => {
-      const attributes = { location: '', topic: 'cs' }
+    test('fails for student with ill-formed request no location', async () => {
+      const attributes = { name: '', location: '' }
       const res = await request(app)
-        .patch('/api/queues/1/questions/1?forceuser=student')
+        .patch('/api/queues/1?forceuser=student')
         .send(attributes)
-      expect(res.statusCode).toBe(422)
+      expect(res.statusCode).toBe(403)
+      expect(res.body).toEqual({})
     })
+
+    test('fails for student with ill-formed request with location', async () => {
+      const attributes = { name: '', location: 'Where' }
+      const res = await request(app)
+        .patch('/api/queues/1?forceuser=student')
+        .send(attributes)
+      expect(res.statusCode).toBe(403)
+      expect(res.body).toEqual({})
+    })
+
+    test('fails for course staff of different course with well-formed request no location', async () => {
+      const attributes = { name: 'CS 225 Queue 1 Alter', location: '' }
+      const res = await request(app)
+        .patch('/api/queues/1?forceuser=cs241staff')
+        .send(attributes)
+      expect(res.statusCode).toBe(403)
+      expect(res.body).toEqual({})
+    })
+
+    test('fails for course staff of different course with well-formed request with location', async () => {
+      const attributes = { name: 'CS 225 Queue 1 Alter', location: 'Where' }
+      const res = await request(app)
+        .patch('/api/queues/1?forceuser=cs241staff')
+        .send(attributes)
+      expect(res.statusCode).toBe(403)
+      expect(res.body).toEqual({})
+    })
+
+    test('fails for course staff of different course with ill-formed request no location', async () => {
+      const attributes = { name: '', location: '' }
+      const res = await request(app)
+        .patch('/api/queues/1?forceuser=cs241staff')
+        .send(attributes)
+      expect(res.statusCode).toBe(403)
+      expect(res.body).toEqual({})
+    })
+
+    test('fails for course staff of different course with ill-formed request with location', async () => {
+      const attributes = { name: '', location: 'Where' }
+      const res = await request(app)
+        .patch('/api/queues/1?forceuser=cs241staff')
+        .send(attributes)
+      expect(res.statusCode).toBe(403)
+      expect(res.body).toEqual({})
+    })
+
   })
 
   describe('DELETE /api/queues/1', () => {
