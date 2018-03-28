@@ -20,6 +20,7 @@ class Question extends React.Component {
       askedBy,
       isUserCourseStaff,
       isUserAnsweringQuestion,
+      isUserAnsweringOtherQuestion,
       didUserAskQuestion,
     } = this.props
 
@@ -39,10 +40,7 @@ class Question extends React.Component {
                 Finish Answering
               </Button>
             )}
-            <Button
-              color="light"
-              onClick={() => this.props.updateQuestionBeingAnswered(id, false)}
-            >
+            <Button color="light" onClick={() => this.props.cancelQuestion()}>
               Cancel
             </Button>
           </Fragment>
@@ -61,16 +59,17 @@ class Question extends React.Component {
     } else {
       buttonCluster = (
         <Fragment>
-          {isUserCourseStaff && (
-            <Button
-              color="primary"
-              outline
-              className="mr-2"
-              onClick={() => this.props.updateQuestionBeingAnswered(id, true)}
-            >
-              Start Answering!
-            </Button>
-          )}
+          {isUserCourseStaff &&
+            !isUserAnsweringOtherQuestion && (
+              <Button
+                color="primary"
+                outline
+                className="mr-2"
+                onClick={() => this.props.startQuestion()}
+              >
+                Start Answering!
+              </Button>
+            )}
           {didUserAskQuestion && (
             <Button
               color="primary"
@@ -181,7 +180,9 @@ Question.propTypes = {
   didUserAskQuestion: PropTypes.bool.isRequired,
   isUserCourseStaff: PropTypes.bool.isRequired,
   isUserAnsweringQuestion: PropTypes.bool.isRequired,
-  updateQuestionBeingAnswered: PropTypes.func.isRequired,
+  isUserAnsweringOtherQuestion: PropTypes.bool.isRequired,
+  cancelQuestion: PropTypes.func.isRequired,
+  startQuestion: PropTypes.func.isRequired,
   editQuestion: PropTypes.func.isRequired,
   finishedAnswering: PropTypes.func.isRequired,
   deleteQuestion: PropTypes.func.isRequired,

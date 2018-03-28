@@ -9,6 +9,8 @@ import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner'
 import Question from './Question'
 import QuestionFeedback from './QuestionFeedback'
 import ConfirmLeaveQueueModal from './ConfirmLeaveQueueModal'
+import ConfirmDeleteQuestionModal from './ConfirmDeleteQuestionModal'
+import ConfirmCancelQuestionModal from './ConfirmCancelQuestionModal'
 import QuestionEdit from './QuestionEdit'
 
 class QuestionList extends React.Component {
@@ -17,11 +19,14 @@ class QuestionList extends React.Component {
 
     this.state = {
       showFeedbackModal: false,
+      showLeaveModal: false,
       showDeleteModal: false,
+      showCancelModal: false,
       showQuestionEditModal: false,
       attributeId: null,
       feedbackId: null,
       deleteId: null,
+      cancelId: null,
     }
   }
 
@@ -76,13 +81,22 @@ class QuestionList extends React.Component {
     if (this.props.userId === question.askedById) {
       // This user asked the question; confirm with them
       this.setState({
-        showDeleteModal: true,
+        showLeaveModal: true,
         deleteId: questionId,
       })
     } else {
-      // We're probably course staff, don't confirm
-      this.props.deleteQuestion(questionId)
+      // We're probably course staff
+      this.setState({
+        showDeleteModal: true,
+        deleteId: questionId,
+      })
     }
+  }
+
+  toggleLeaveModal() {
+    this.setState({
+      showLeaveModal: !this.state.showLeaveModal,
+    })
   }
 
   toggleDeleteModal() {
@@ -95,6 +109,31 @@ class QuestionList extends React.Component {
     this.props.deleteQuestion(this.state.deleteId)
     this.setState({
       showDeleteModal: false,
+      showLeaveModal: false,
+    })
+  }
+
+  toggleCancelModal() {
+    this.setState({
+      showCancelModal: !this.state.showCancelModal,
+    })
+  }
+
+  cancelQuestion(questionId) {
+    this.setState({
+      showCancelModal: true,
+      cancelId: questionId,
+    })
+  }
+
+  startQuestion(questionId) {
+    this.props.updateQuestionBeingAnswered(questionId, true)
+  }
+
+  handleConfirmedCancellation() {
+    this.props.updateQuestionBeingAnswered(this.state.cancelId, false)
+    this.setState({
+      showCancelModal: false,
     })
   }
 
@@ -111,11 +150,13 @@ class QuestionList extends React.Component {
               isUserAnsweringQuestion={
                 this.props.userId === question.answeredById
               }
+              isUserAnsweringOtherQuestion={
+                this.props.isUserAnsweringQuestionForQueue
+              }
               didUserAskQuestion={this.props.userId === question.askedById}
               deleteQuestion={() => this.deleteQuestion(questionId)}
-              updateQuestionBeingAnswered={
-                this.props.updateQuestionBeingAnswered
-              }
+              cancelQuestion={() => this.cancelQuestion(questionId)}
+              startQuestion={() => this.startQuestion(questionId)}
               finishedAnswering={() => this.handleFinishedAnswering(questionId)}
               editQuestion={() => this.handleEditQuestion(questionId)}
               {...question}
@@ -143,7 +184,7 @@ class QuestionList extends React.Component {
 
     return (
       <div>
-        <ListGroup className="mt-3">
+        <ListGroup>
           <FlipMove
             enterAnimation="accordionVertical"
             leaveAnimation="accordionVertical"
@@ -159,9 +200,19 @@ class QuestionList extends React.Component {
           onCancel={() => this.handleFeedbackCancel()}
         />
         <ConfirmLeaveQueueModal
+          isOpen={this.state.showLeaveModal}
+          toggle={() => this.toggleLeaveModal()}
+          confirm={() => this.handleConfirmedDeletion()}
+        />
+        <ConfirmDeleteQuestionModal
           isOpen={this.state.showDeleteModal}
           toggle={() => this.toggleDeleteModal()}
           confirm={() => this.handleConfirmedDeletion()}
+        />
+        <ConfirmCancelQuestionModal
+          isOpen={this.state.showCancelModal}
+          toggle={() => this.toggleCancelModal()}
+          confirm={() => this.handleConfirmedCancellation()}
         />
         <QuestionEdit
           question={this.props.questions[this.state.attributeId]}
@@ -189,6 +240,7 @@ QuestionList.propTypes = {
   ),
   userId: PropTypes.number.isRequired,
   isUserCourseStaff: PropTypes.bool.isRequired,
+  isUserAnsweringQuestionForQueue: PropTypes.bool.isRequired,
   deleteQuestion: PropTypes.func.isRequired,
   updateQuestionBeingAnswered: PropTypes.func.isRequired,
   finishAnsweringQuestion: PropTypes.func.isRequired,

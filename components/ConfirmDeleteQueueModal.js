@@ -1,28 +1,16 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'
+import ConfirmModal from './ConfirmModal'
 
 const ConfirmDeleteQueueModal = props => (
-  <Modal isOpen={props.isOpen} toggle={props.toggle}>
-    <ModalHeader>Are you sure?</ModalHeader>
-    <ModalBody>
-      This queue and all its open questions will be deleted.
-    </ModalBody>
-    <ModalFooter>
-      <Button color="danger" onClick={props.confirm}>
-        Delete queue
-      </Button>
-      <Button color="secondary" onClick={props.toggle}>
-        Cancel
-      </Button>
-    </ModalFooter>
-  </Modal>
+  <ConfirmModal
+    isOpen={props.isOpen}
+    toggle={props.toggle}
+    confirm={props.confirm}
+    descText="This queue and all its open questions will be deleted."
+    confirmText="Delete queue"
+  />
 )
 
-ConfirmDeleteQueueModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  toggle: PropTypes.func.isRequired,
-  confirm: PropTypes.func.isRequired,
-}
+ConfirmDeleteQueueModal.propTypes = ConfirmModal.propTypes
 
 export default ConfirmDeleteQueueModal

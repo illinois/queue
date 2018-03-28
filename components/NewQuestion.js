@@ -90,7 +90,7 @@ export default class NewQuestion extends React.Component {
     const queueLocation = fixedLocation ? location : this.state.location
 
     return (
-      <Card color="light">
+      <Card color="light" className="mb-3">
         <CardHeader sm={2}>New question</CardHeader>
         <CardBody>
           <Form onSubmit={this.handleSubmit} autoComplete="off">
