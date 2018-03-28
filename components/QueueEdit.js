@@ -40,6 +40,7 @@ class QueueEdit extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log(nextProps)
     if (nextProps.queue) {
       this.setState({
         name: nextProps.queue.name,
@@ -57,6 +58,7 @@ class QueueEdit extends React.Component {
 
   handleCancel() {
     this.props.onCancel()
+    console.log(this.props)
   }
 
   handleSubmitEdit() {

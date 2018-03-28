@@ -134,6 +134,7 @@ class Course extends React.Component {
           <Queue
             key={id}
             onDeleteQueue={queueId => this.deleteQueue(queueId)}
+            onUpdateQueue={queueId => this.editQueue(queueId)}
             isUserCourseStaff={this.props.isUserCourseStaff}
             {...queue}
           />
@@ -212,6 +213,16 @@ class Course extends React.Component {
             confirm={() => this.confirmDeleteQueue()}
           />
         )}
+        {this.state.showEditQueueModal && (
+          <QueueEdit
+            queue={this.props.queues[this.state.pendingEditQueueId]}
+            isOpen={this.state.showEditQueueModal}
+            onSubmitQueueEdit={attributes =>
+              this.submitQueueEdit(attributes)
+            }
+            onCancel={() => this.queueEditCancel()}
+          />
+        )}
         <style jsx>{`
           :global(.courses-card) {
             width: 100%;
@@ -264,6 +275,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => ({
   fetchCourse: courseId => dispatch(fetchCourse(courseId)),
   createQueue: (courseId, queue) => dispatch(createQueue(courseId, queue)),
+  updateQueue: (queueId, attributes) => dispatch(updateQueue(queueId, attributes)),
   deleteQueue: (courseId, queueId) => dispatch(deleteQueue(courseId, queueId)),
   dispatch,
 })

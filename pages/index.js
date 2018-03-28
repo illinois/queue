@@ -175,6 +175,7 @@ class Index extends React.Component {
               courseName={courseName}
               onClick={() => handleQueueClick(queue.id)}
               onDelete={() => this.deleteQueue(queue.courseId, queue.id)}
+              onUpdate={() => this.editQueue(queue.id)}
             />
           </CardCol>
         )
@@ -255,6 +256,16 @@ class Index extends React.Component {
             confirm={() => this.confirmDeleteQueue()}
           />
         )}
+        {this.state.showEditQueueModal && (
+          <QueueEdit
+            queue={this.props.queuesById[this.state.pendingEditQueueId]}
+            isOpen={this.state.showEditQueueModal}
+            onSubmitQueueEdit={attributes =>
+              this.submitQueueEdit(attributes)
+            }
+            onCancel={() => this.queueEditCancel()}
+          />
+        )}
         <style global jsx>{`
           .courses-card {
             width: 100%;
@@ -329,6 +340,7 @@ const mapDispatchToProps = dispatch => ({
   fetchQueues: () => dispatch(fetchQueues()),
   createCourse: course => dispatch(createCourse(course)),
   createQueue: (courseId, queue) => dispatch(createQueue(courseId, queue)),
+  updateQueue: (queueId, attributes) => dispatch(updateQueue(queueId, attributes)),
   deleteQueue: (courseId, queueId) => dispatch(deleteQueue(courseId, queueId)),
 })
 
