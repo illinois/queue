@@ -141,8 +141,12 @@ class Question extends React.Component {
             </strong>
             <div className="text-muted">
               <span className="text-muted" style={{ fontSize: '0.9rem' }}>
-                <span title="Location">{location}</span>
-                <span className="mr-2 ml-2">&bull;</span>
+                {!!location && (
+                  <Fragment>
+                    <span title="Location">{location}</span>
+                    <span className="mr-2 ml-2">&bull;</span>
+                  </Fragment>
+                )}
                 <span title={moment(enqueueTime).calendar()}>
                   <Moment fromNow>{enqueueTime}</Moment>
                 </span>
