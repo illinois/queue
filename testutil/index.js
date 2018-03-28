@@ -52,6 +52,13 @@ module.exports.createTestQuestions = async () => {
       topic: 'Canada',
       askedById: 5,
     },
+    {
+      queueId: 3,
+      name: 'Arman',
+      location: '',
+      topic: 'Sauce',
+      askedById: 2,
+    },
   ])
 }
 

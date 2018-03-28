@@ -216,6 +216,7 @@ class QuestionList extends React.Component {
         />
         <QuestionEdit
           question={this.props.questions[this.state.attributeId]}
+          queue={this.props.queue}
           isOpen={this.state.showQuestionEditModal}
           onSubmitQuestionEdit={attributes =>
             this.handleSubmitQuestionEdit(attributes)
@@ -230,6 +231,7 @@ class QuestionList extends React.Component {
 QuestionList.propTypes = {
   queue: PropTypes.shape({
     questions: PropTypes.arrayOf(PropTypes.number),
+    fixedLocation: PropTypes.bool,
   }),
   questions: PropTypes.objectOf(
     PropTypes.shape({
