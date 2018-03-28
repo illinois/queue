@@ -36,7 +36,7 @@ const QueueCard = ({ queue, courseName, onDelete, onUpdate, ...rest }) => {
             <Button
               color="danger"
               size="sm"
-              className={"mr-1 ml-auto"}
+              className="mr-1 ml-auto"
               outline
               onClick={handleDelete}
             >
@@ -47,7 +47,7 @@ const QueueCard = ({ queue, courseName, onDelete, onUpdate, ...rest }) => {
             <Button
               color="primary"
               size="sm"
-              className={"mr-0 ml-1"}
+              className="mr-0 ml-1"
               outline
               onClick={handleUpdate}
             >

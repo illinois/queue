@@ -53,7 +53,7 @@ class Queue extends React.Component {
                 tag="div"
                 outline
                 size="sm"
-                className={"mr-1 ml-auto"}
+                className="mr-1 ml-auto"
                 onClick={e => this.deleteQueue(e)}
               >
                 Delete
@@ -63,7 +63,7 @@ class Queue extends React.Component {
                 tag="div"
                 outline
                 size="sm"
-                className={"mr-0 ml-1"}
+                className="mr-0 ml-1"
                 onClick={e => this.updateQueue(e)}
               >
                 Modify
