@@ -176,7 +176,7 @@ class NewQueue extends React.Component {
             {this.state.fixedLocation ? (
               <FormText color="muted">
                 Students will see this location when asking a question, but
-                won&apos; be able to change it.
+                won&apos;t be able to change it.
               </FormText>
             ) : (
               <FormText color="muted">Setting a location is optional!</FormText>
