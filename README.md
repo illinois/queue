@@ -1,16 +1,31 @@
-# queue
+# Illinois Open Source Queue
+
 [![Build Status](https://travis-ci.org/illinois/queue.svg?branch=master)](https://travis-ci.org/illinois/queue)
+
+A micro-service queue for holding office hours (with shibboleth identity management)
+
+## Using the Queue at Illinois
+
+At UIUC, this queue is hosted as a free service by Computer Science and EngrIT.
+
+* View the queue at https://edu.cs.illinois.edu/queue/
+* [Request to have a queue created for your course by filling out this short form](https://forms.illinois.edu/sec/691281)
+
+## Running the Queue from Soruce
+
 ### Running locally in `dev` mode:
-- Clone the repository
-- Install [`node` and `npm`](https://nodejs.org/en/download/package-manager/)
-- Install `sqlite3`: `npm install sqlite3` in the `queue` directory
-- Install dependencies: `npm install` in the `queue` directory
-- In `models/index.js`, uncomment `sequelize.sync({force: true})`
-  - Comment this line after the first run if you do not want databases to be dropped and rebuilt on startup
-- Start the server: `npm run dev`
-  - Access the queue from a browser at `localhost:3000`
+
+* Clone the repository
+* Install [`node` and `npm`](https://nodejs.org/en/download/package-manager/)
+* Install `sqlite3`: `npm install sqlite3` in the `queue` directory
+* Install dependencies: `npm install` in the `queue` directory
+* In `models/index.js`, uncomment `sequelize.sync({force: true})`
+  * Comment this line after the first run if you do not want databases to be dropped and rebuilt on startup
+* Start the server: `npm run dev`
+  * Access the queue from a browser at `localhost:3000`
 
 ### Multiple users in dev mode
+
 In production, all auth is done my Shibboleth, and we just read out of the `eppn` header
 to get a student's identity. In dev mode, we still want to be able to test with multiple
 users (for instance, to assert that user roles work correctly, or to ensue that syncing
@@ -24,6 +39,7 @@ To test with multiple users at the same time, you can open up multiple browsers,
 multiple incognito windows.
 
 ### Production config
+
 Several configuration options are exposed via environment variables:
 
 * `PORT`: controls which port the app will be served from.

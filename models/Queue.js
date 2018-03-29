@@ -4,6 +4,10 @@ module.exports = (sequelize, DataTypes) => {
     {
       name: DataTypes.TEXT,
       location: DataTypes.TEXT,
+      fixedLocation: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
 
       startTime: DataTypes.DATE,
       endTime: DataTypes.DATE,
@@ -43,7 +47,6 @@ module.exports = (sequelize, DataTypes) => {
           attributes: [],
         },
       ],
-      group: ['queue.id'],
     })
   }
 

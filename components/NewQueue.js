@@ -10,6 +10,8 @@ import {
   Input,
   Button,
 } from 'reactstrap'
+import Toggle from 'react-toggle'
+import 'react-toggle/style.css'
 import { connect } from 'react-redux'
 
 import { mapObjectToArray } from '../util'
@@ -21,9 +23,10 @@ class NewQueue extends React.Component {
     super(props)
 
     this.state = {
+      course: 'none',
       name: '',
       location: '',
-      course: 'none',
+      fixedLocation: false,
       fieldErrors: {},
     }
 
@@ -32,9 +35,15 @@ class NewQueue extends React.Component {
   }
 
   handleInputChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value,
-    })
+    if (event.target.type === 'checkbox') {
+      this.setState({
+        [event.target.name]: event.target.checked,
+      })
+    } else {
+      this.setState({
+        [event.target.name]: event.target.value,
+      })
+    }
   }
 
   handleSubmit() {
@@ -52,6 +61,12 @@ class NewQueue extends React.Component {
       fieldErrors.name = 'You must name this queue'
     }
 
+    if (this.state.fixedLocation && !this.state.location) {
+      valid = false
+      fieldErrors.location =
+        'You must set a location for a fixed-location queue'
+    }
+
     if (!valid) {
       this.setState({ fieldErrors })
       return
@@ -60,6 +75,7 @@ class NewQueue extends React.Component {
     const queue = {
       name: this.state.name,
       location: this.state.location,
+      fixedLocation: this.state.fixedLocation,
     }
 
     let courseId
@@ -129,6 +145,22 @@ class NewQueue extends React.Component {
           </Col>
         </FormGroup>
         <FormGroup row>
+          <Label for="fixedLocation" sm={3}>
+            Fixed location
+          </Label>
+          <Col sm={9}>
+            <Toggle
+              name="fixedLocation"
+              defaultChecked={false}
+              onChange={this.handleInputChange}
+            />
+            <FormText color="muted">
+              If a queue is marked as fixed-location, students won&apos;t be
+              able to set their own location.
+            </FormText>
+          </Col>
+        </FormGroup>
+        <FormGroup row>
           <Label for="location" sm={3}>
             Location
           </Label>
@@ -139,8 +171,17 @@ class NewQueue extends React.Component {
               placeholder="Siebel 0222"
               onChange={this.handleInputChange}
               value={this.state.location}
+              valid={isValid(this.state.fieldErrors.location)}
             />
-            <FormText color="muted">Setting a location is optional!</FormText>
+            {this.state.fixedLocation ? (
+              <FormText color="muted">
+                Students will see this location when asking a question, but
+                won&apos;t be able to change it.
+              </FormText>
+            ) : (
+              <FormText color="muted">Setting a location is optional!</FormText>
+            )}
+            <FormFeedback>{this.state.fieldErrors.location}</FormFeedback>
           </Col>
         </FormGroup>
         <FormGroup row className="mb-0">

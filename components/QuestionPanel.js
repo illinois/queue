@@ -1,13 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-
-import { getUserActiveQuestionIdForQueue } from '../selectors'
 
 import ActiveQuestionPanel from './ActiveQuestionPanel'
 import NewQuestionContainer from '../containers/NewQuestionContainer'
 
-const QuestionPanel = ({ queueId, user, userActiveQuestionId }) => {
+const QuestionPanel = ({
+  queueId,
+  userActiveQuestionId,
+  isUserActiveStaff,
+}) => {
+  if (isUserActiveStaff) {
+    return null
+  }
   if (userActiveQuestionId !== -1) {
     return (
       <ActiveQuestionPanel
@@ -16,20 +20,13 @@ const QuestionPanel = ({ queueId, user, userActiveQuestionId }) => {
       />
     )
   }
-  return <NewQuestionContainer queueId={queueId} user={user} />
+  return <NewQuestionContainer queueId={queueId} />
 }
 
 QuestionPanel.propTypes = {
   queueId: PropTypes.number.isRequired,
-  user: PropTypes.shape({
-    name: PropTypes.string,
-  }).isRequired,
   userActiveQuestionId: PropTypes.number.isRequired,
+  isUserActiveStaff: PropTypes.bool.isRequired,
 }
 
-const mapStateToProps = (state, ownProps) => ({
-  user: state.user.user,
-  userActiveQuestionId: getUserActiveQuestionIdForQueue(state, ownProps),
-})
-
-export default connect(mapStateToProps, null)(QuestionPanel)
+export default QuestionPanel

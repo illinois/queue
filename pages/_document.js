@@ -40,6 +40,7 @@ export default class MyDocument extends Document {
             integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy"
             crossOrigin="anonymous"
           />
+          <link rel="stylesheet" href={`${baseUrl}/_next/static/style.css`} />
           <link
             rel="manifest"
             crossOrigin="use-credentials"

@@ -47,12 +47,12 @@ describe('redirectNoQueue middleware', () => {
   })
 
   test('redirects to active queue if only one exists', async () => {
-    // Make a few new queues for 225 and delete the original one
-    await Queue.bulkCreate([{ name: 'CS225 Queue #2', courseId: 1 }])
-    await Queue.destroy({ where: { id: 1 } })
-    const { req, res, next } = makeArgs(1)
+    // Make a few new queues for 241 and delete the original one
+    await Queue.bulkCreate([{ name: 'CS225 Queue #2', courseId: 2 }])
+    await Queue.destroy({ where: { id: 2 } })
+    const { req, res, next } = makeArgs(2)
     await redirectNoQueue(req, res, next)
-    expect(res.redirect).toBeCalledWith('/queue/3')
+    expect(res.redirect).toBeCalledWith('/queue/4')
     expect(next).not.toBeCalled()
   })
 

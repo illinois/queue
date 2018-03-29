@@ -149,7 +149,7 @@ class Index extends React.Component {
           prefetch
           passHref
         >
-          <Button color="primary" tag="a" className="mr-3" outline>
+          <Button color="primary" tag="a" className="mr-3 mb-3" outline>
             {course.name}
           </Button>
         </Link>
@@ -264,7 +264,7 @@ class Index extends React.Component {
               </CardBody>
             </Card>
           )}
-          <div className="mb-4">{courseButtons}</div>
+          <div className="mb-1">{courseButtons}</div>
         </Container>
         {this.state.showDeleteQueueModal && (
           <ConfirmDeleteQueueModal
