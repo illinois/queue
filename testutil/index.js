@@ -27,6 +27,12 @@ module.exports.createTestQueues = async () => {
   await models.Queue.bulkCreate([
     { name: 'CS225 Queue', location: 'Here', courseId: 1 },
     { name: 'CS241 Queue', location: 'There', courseId: 2 },
+    {
+      name: 'CS225 Fixed Location',
+      fixedLocation: true,
+      location: 'Everywhere',
+      courseId: 1,
+    },
   ])
 }
 
@@ -45,6 +51,13 @@ module.exports.createTestQuestions = async () => {
       location: 'ECEB',
       topic: 'Canada',
       askedById: 5,
+    },
+    {
+      queueId: 3,
+      name: 'Arman',
+      location: '',
+      topic: 'Sauce',
+      askedById: 2,
     },
   ])
 }

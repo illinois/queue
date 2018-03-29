@@ -7,7 +7,12 @@ const { matchedData } = require('express-validator/filter')
 
 const constants = require('../constants')
 const { Course, Queue, Question } = require('../models/')
-const { requireQueue, requireQuestion, failIfErrors } = require('./util')
+const {
+  requireQueue,
+  requireQueueForQuestion,
+  requireQuestion,
+  failIfErrors,
+} = require('./util')
 const requireCourseStaffForQueueForQuestion = require('../middleware/requireCourseStaffForQueueForQuestion')
 
 /* eslint-disable no-param-reassign */
@@ -21,6 +26,19 @@ function modifyBeingAnswered(question, answering) {
 }
 /* eslint-enable no-param-reassign */
 
+function checkLocation(req, res, next) {
+  check('location')
+    .custom(value => {
+      if (res.locals.queue.fixedLocation) return true
+      return (
+        !!value &&
+        value.length > 0 &&
+        value.length <= constants.QUESTION_LOCATION_MAX_LENGTH
+      )
+    })
+    .trim()(req, res, next)
+}
+
 // Adds a question to a queue
 router.post(
   '/',
@@ -32,9 +50,7 @@ router.post(
     check('topic')
       .isLength({ min: 1, max: constants.QUESTION_TOPIC_MAX_LENGTH })
       .trim(),
-    check('location')
-      .isLength({ min: 1, max: constants.QUESTION_LOCATION_MAX_LENGTH })
-      .trim(),
+    checkLocation,
     failIfErrors,
   ],
   async (req, res, _next) => {
@@ -56,7 +72,8 @@ router.post(
 
     const question = Question.build({
       name: data.name,
-      location: data.location,
+      // Questions in fixed-location queues should never have a location
+      location: res.locals.queue.fixedLocation ? '' : data.location,
       topic: data.topic,
       enqueueTime: new Date(),
       queueId,
@@ -96,6 +113,26 @@ router.post(
   [requireCourseStaffForQueueForQuestion, requireQuestion, failIfErrors],
   async (req, res, _next) => {
     const { question } = res.locals
+
+    if (question.beingAnswered) {
+      // Forbid someone else from taking over this question
+      res.status(403).send('Another user is already answering this question')
+      return
+    }
+
+    // Verify that this user isn't currently answering another question
+    const otherQuestions = await Question.find({
+      where: {
+        answeredById: res.locals.userAuthn.id,
+        dequeueTime: null,
+      },
+    })
+
+    if (otherQuestions !== null) {
+      res.status(403).send('You are already answering this question')
+      return
+    }
+
     modifyBeingAnswered(question, true)
     question.answeredById = res.locals.userAuthn.id
     await question.save()
@@ -131,10 +168,24 @@ router.post(
   async (req, res, _next) => {
     const data = matchedData(req)
 
+    // Temporary, easy fix to avoid having to rename enums
+    // TODO Fix this garbage
+    let mappedPreparedness = data.preparedness
+    switch (data.preparedness) {
+      case 'bad':
+        mappedPreparedness = 'not'
+        break
+      case 'good':
+        mappedPreparedness = 'well'
+        break
+      default:
+        break
+    }
+
     const { question } = res.locals
     question.answerFinishTime = new Date()
     question.dequeueTime = new Date()
-    question.preparedness = data.preparedness
+    question.preparedness = mappedPreparedness
     question.comments = data.comments
     question.answeredById = res.locals.userAuthn.id
 
@@ -143,26 +194,25 @@ router.post(
   }
 )
 
-// updates a question's location
+// Updates a question's information
 router.patch(
   '/:questionId',
   [
     requireQuestion,
-    check('location')
-      .isLength({ min: 1, max: constants.QUESTION_LOCATION_MAX_LENGTH })
-      .trim(),
+    requireQueueForQuestion,
     check('topic')
       .isLength({ min: 1, max: constants.QUESTION_TOPIC_MAX_LENGTH })
       .trim(),
+    checkLocation,
     failIfErrors,
   ],
   async (req, res, _next) => {
-    const { userAuthn, question } = res.locals
+    const { userAuthn, question, queue } = res.locals
     const data = matchedData(req)
 
     if (question.askedById === userAuthn.id) {
       await question.update({
-        location: data.location,
+        location: queue.fixedLocation ? '' : data.location,
         topic: data.topic,
       })
       res.status(201).send(question)

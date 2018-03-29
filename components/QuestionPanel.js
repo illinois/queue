@@ -6,7 +6,6 @@ import NewQuestionContainer from '../containers/NewQuestionContainer'
 
 const QuestionPanel = ({
   queueId,
-  user,
   userActiveQuestionId,
   isUserActiveStaff,
 }) => {
@@ -21,14 +20,11 @@ const QuestionPanel = ({
       />
     )
   }
-  return <NewQuestionContainer queueId={queueId} user={user} />
+  return <NewQuestionContainer queueId={queueId} />
 }
 
 QuestionPanel.propTypes = {
   queueId: PropTypes.number.isRequired,
-  user: PropTypes.shape({
-    name: PropTypes.string,
-  }).isRequired,
   userActiveQuestionId: PropTypes.number.isRequired,
   isUserActiveStaff: PropTypes.bool.isRequired,
 }

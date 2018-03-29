@@ -6,7 +6,10 @@ import {
   updateQuestion,
   finishAnsweringQuestion,
 } from '../actions/question'
-import { isUserActiveStaffForQueue } from '../selectors'
+import {
+  isUserActiveStaffForQueue,
+  isUserAnsweringQuestionForQueue,
+} from '../selectors'
 
 import QuestionList from '../components/QuestionList'
 
@@ -16,6 +19,10 @@ function mapStateToProps(state, props) {
     questions: state.questions.questions,
     // isUserCourseStaff: isUserCourseStaff(state, queueId),
     isUserCourseStaff: isUserActiveStaffForQueue(state, props),
+    isUserAnsweringQuestionForQueue: isUserAnsweringQuestionForQueue(
+      state,
+      props
+    ),
     userId: state.user.user.id,
   }
 }
