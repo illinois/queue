@@ -116,11 +116,15 @@ router.patch(
     const { queue } = res.locals
     const data = matchedData(req)
 
+    if (queue.fixedLocation && !data.location) {
+      res.status(403).send()
+      return
+    }
+
     await queue.update({
       name: data.name,
       location: data.location,
     })
-
     const updatedQueue = await Queue.scope('questionCount').findOne({
       where: { id: queue.id },
     })
