@@ -60,13 +60,11 @@ class Queue extends React.Component {
     return (
       <Layout>
         <Container fluid>
-          <div className="rows">
-            <h3>{this.props.queue.name}</h3>
-            <h5 className="text-muted">
-              <FontAwesomeIcon icon={faMapMarker} fixedWidth className="mr-2" />
-              {locationText}
-            </h5>
-          </div>
+          <h3>{this.props.queue.name}</h3>
+          <h5 className="text-muted">
+            <FontAwesomeIcon icon={faMapMarker} fixedWidth className="mr-2" />
+            {locationText}
+          </h5>
           <Row>
             <Col
               xs={{ size: 12 }}
