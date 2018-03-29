@@ -96,13 +96,15 @@ Queue.propTypes = {
   fetchQueue: PropTypes.func.isRequired,
   queueId: PropTypes.number.isRequired,
   dispatch: PropTypes.func.isRequired,
-  queue: PropTypes.objectOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string,
-      location: PropTypes.location,
-    })
-  ).isRequired,
+  queue: PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string,
+    location: PropTypes.string,
+  }),
+}
+
+Queue.defaultProps = {
+  queue: null,
 }
 
 const mapStateToProps = (state, ownProps) => ({
