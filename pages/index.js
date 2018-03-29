@@ -231,9 +231,7 @@ class Index extends React.Component {
           <Row className="equal-height mb-5">
             {queues}
             <QueueEdit
-              /* eslint-disable react/prop-types */
               queue={this.props.queuesById[this.state.pendingEditQueueId]}
-              /* eslint-enable react/prop-types */
               isOpen={this.state.showEditQueueModal}
               onSubmitQueueEdit={attributes => this.submitQueueEdit(attributes)}
               onCancel={() => this.queueEditCancel()}
@@ -313,6 +311,11 @@ Index.propTypes = {
       name: PropTypes.string,
     })
   ),
+  queuesById: PropTypes.objectOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+    })
+  ),
   fetchCourses: PropTypes.func.isRequired,
   fetchQueues: PropTypes.func.isRequired,
   createCourse: PropTypes.func.isRequired,
@@ -325,6 +328,7 @@ Index.defaultProps = {
   courses: [],
   coursesById: {},
   queues: [],
+  queuesById: {},
 }
 
 const mapObjectToArray = o => {

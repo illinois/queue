@@ -177,7 +177,6 @@ const queues = (state = defaultState, action) => {
       const { queue } = action
       // Manually preserve questionCount,
       // not sure if this is correct thing to do though
-      queue.questionCount = state.queues[queue.id].questionCount
       return {
         ...state,
         queues: {

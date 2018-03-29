@@ -66,7 +66,7 @@ class Queue extends React.Component {
                 className="mr-0 ml-1"
                 onClick={e => this.updateQueue(e)}
               >
-                Modify
+                Edit
               </Button>
             </div>
           )}

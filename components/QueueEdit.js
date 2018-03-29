@@ -19,6 +19,10 @@ const fields = [
     name: 'name',
     minLength: 1,
   },
+  {
+    name: 'location',
+    minLength: 1,
+  },
 ]
 
 const isValid = error => (error === undefined ? undefined : error === '')
@@ -30,6 +34,7 @@ class QueueEdit extends React.Component {
     this.state = {
       name: '',
       location: '',
+      fixedLocation: false,
       isFieldValid: {},
     }
 
@@ -44,6 +49,7 @@ class QueueEdit extends React.Component {
       this.setState({
         name: nextProps.queue.name,
         location: nextProps.queue.location,
+        fixedLocation: nextProps.queue.fixedLocation,
         isFieldValid: {},
       })
     }
@@ -74,6 +80,12 @@ class QueueEdit extends React.Component {
         valid = false
       }
     })
+
+    // Handle fixed location queue
+    if (!this.state.fixedLocation && 'location' in isFieldValid) {
+      delete isFieldValid.location
+      valid = !('name' in isFieldValid)
+    }
 
     this.setState({
       isFieldValid,
@@ -152,6 +164,7 @@ QueueEdit.propTypes = {
   queue: PropTypes.shape({
     name: PropTypes.string,
     location: PropTypes.string,
+    fixedLocation: PropTypes.bool,
   }),
   isOpen: PropTypes.bool.isRequired,
   onCancel: PropTypes.func.isRequired,

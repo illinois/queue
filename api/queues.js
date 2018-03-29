@@ -100,7 +100,16 @@ router.patch(
     requireCourseStaffForQueue,
     requireQueue,
     check('name').isLength({ min: 1 }),
-    check('location').optional({ nullable: true }),
+    oneOf([
+      [
+        check('fixedLocation').custom(value => value !== true),
+        check('location').optional({ nullable: true }),
+      ],
+      [
+        check('fixedLocation').custom(value => value === true),
+        check('location').isLength({ min: 1 }),
+      ],
+    ]),
     failIfErrors,
   ],
   async (req, res, _next) => {
@@ -111,7 +120,11 @@ router.patch(
       name: data.name,
       location: data.location,
     })
-    res.status(201).send(queue)
+
+    const updatedQueue = await Queue.scope('questionCount').findOne({
+      where: { id: queue.id },
+    })
+    res.status(201).send(updatedQueue)
   }
 )
 

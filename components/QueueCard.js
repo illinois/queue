@@ -51,7 +51,7 @@ const QueueCard = ({ queue, courseName, onDelete, onUpdate, ...rest }) => {
               outline
               onClick={handleUpdate}
             >
-              Modify
+              Edit
             </Button>
           </ShowForCourseStaff>
         </CardTitle>

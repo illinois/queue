@@ -30,6 +30,7 @@ describe('Queues API', () => {
       await doGetTest('student')
     })
   })
+
   describe('GET /api/queues/2', () => {
     test('succeeds for admin', async () => {
       const res = await request(app).get('/api/queues/2?forceuser=admin')
