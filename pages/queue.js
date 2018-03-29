@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { Container, Row, Col } from 'reactstrap'
 import withRedux from 'next-redux-wrapper'
 import Error from 'next/error'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import faMapMarker from '@fortawesome/fontawesome-free-solid/faMapMarker'
 
 import makeStore from '../redux/makeStore'
 import { fetchQueue, fetchQueueRequest } from '../actions/queue'
@@ -19,7 +21,6 @@ import QuestionNotificationsToggle from '../components/QuestionNotificationsTogg
 
 class Queue extends React.Component {
   static getInitialProps({ isServer, store, query }) {
-    console.log(this)
     const queueId = Number.parseInt(query.id, 10)
     if (isServer) {
       store.dispatch(fetchQueueRequest(queueId))
@@ -47,20 +48,25 @@ class Queue extends React.Component {
   }
 
   render() {
-    const { isFetching, hasQueue, queueInfo } = this.props
-    const location = this.props.queueInfo.location || 'Not Available'
+    const { isFetching, hasQueue } = this.props
+
     if (isFetching) {
       return <Loading />
     }
     if (!isFetching && !hasQueue) {
       return <Error statusCode={404} />
     }
+    const locationText = this.props.queue.location || 'No location specified'
     return (
       <Layout>
         <Container fluid>
-          <h5>
-            {this.props.queueInfo.name}, Location: {location}{' '}
-          </h5>
+          <div className="rows">
+            <h3>{this.props.queue.name}</h3>
+            <h5 className="text-muted">
+              <FontAwesomeIcon icon={faMapMarker} fixedWidth className="mr-2" />
+              {locationText}
+            </h5>
+          </div>
           <Row>
             <Col
               xs={{ size: 12 }}
@@ -90,12 +96,19 @@ Queue.propTypes = {
   fetchQueue: PropTypes.func.isRequired,
   queueId: PropTypes.number.isRequired,
   dispatch: PropTypes.func.isRequired,
+  queue: PropTypes.objectOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string,
+      location: PropTypes.location,
+    })
+  ).isRequired,
 }
 
 const mapStateToProps = (state, ownProps) => ({
   isFetching: state.queues.isFetching,
   hasQueue: !!state.queues.queues[ownProps.queueId],
-  queueInfo: state.queues.queues[ownProps.queueId],
+  queue: state.queues.queues[ownProps.queueId],
 })
 
 const mapDispatchToProps = dispatch => ({
