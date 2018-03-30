@@ -117,7 +117,7 @@ router.patch(
     validateLocation,
     failIfErrors,
   ],
-  async (req, res, _next) => {
+  safeAsync(async (req, res, _next) => {
     const { queue } = res.locals
     const data = matchedData(req)
 
@@ -129,7 +129,7 @@ router.patch(
       where: { id: queue.id },
     })
     res.status(201).send(updatedQueue)
-  }
+  })
 )
 
 // Gets the on-duty staff list for a specific queue
