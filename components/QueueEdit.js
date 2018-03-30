@@ -70,6 +70,9 @@ class QueueEdit extends React.Component {
     let valid = true
 
     fields.forEach(({ name, minLength }) => {
+      // Handle fixed location queue
+      if (name === 'location' && !this.props.queue.fixedLocation) return
+
       if (!this.state[name]) {
         isFieldValid[name] = 'This field is required!'
         valid = false
@@ -80,12 +83,6 @@ class QueueEdit extends React.Component {
         valid = false
       }
     })
-
-    // Handle fixed location queue
-    if (!this.state.fixedLocation && 'location' in isFieldValid) {
-      delete isFieldValid.location
-      valid = !('name' in isFieldValid)
-    }
 
     this.setState({
       isFieldValid,

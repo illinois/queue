@@ -175,8 +175,6 @@ const queues = (state = defaultState, action) => {
     }
     case UPDATE_QUEUE.SUCCESS: {
       const { queue } = action
-      // Manually preserve questionCount,
-      // not sure if this is correct thing to do though
       return {
         ...state,
         queues: {
