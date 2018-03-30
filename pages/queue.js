@@ -61,7 +61,7 @@ class Queue extends React.Component {
       <Layout>
         <Container fluid>
           <h3>{this.props.queue.name}</h3>
-          <h5 className="text-muted">
+          <h5 className="mb-3 text-muted">
             <FontAwesomeIcon icon={faMapMarker} fixedWidth className="mr-2" />
             {locationText}
           </h5>
