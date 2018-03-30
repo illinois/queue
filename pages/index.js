@@ -138,7 +138,7 @@ class Index extends React.Component {
             </Card>
           )}
           <Row className="equal-height mb-4">
-            <QueueCardListContainer queueIds={queueIds} />
+            <QueueCardListContainer queueIds={queueIds} showCourseName />
           </Row>
           <div className="d-flex flex-wrap align-items-center mb-4">
             <h3 className="d-inline-block mb-0 mt-3 mr-auto pr-3">

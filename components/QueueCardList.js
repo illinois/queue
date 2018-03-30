@@ -93,7 +93,7 @@ class QueueCardList extends React.Component {
           <CardCol key={queue.id}>
             <QueueCard
               queue={queue}
-              courseName={courseName}
+              courseName={this.props.showCourseName ? courseName : null}
               onClick={() => handleQueueClick(queue.id)}
               onDelete={() => this.deleteQueue(queue.courseId, queue.id)}
               onUpdate={() => this.editQueue(queue.id)}
