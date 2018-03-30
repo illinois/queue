@@ -94,6 +94,37 @@ export function fetchQueue(queueId) {
 }
 
 /**
+ * Update a queue's attributes
+ */
+const updateQueueRequest = makeActionCreator(
+  types.UPDATE_QUEUE.REQUEST,
+  'queueId',
+  'attributes'
+)
+export const updateQueueSuccess = makeActionCreator(
+  types.UPDATE_QUEUE.SUCCESS,
+  'queueId',
+  'queue'
+)
+const updateQueueFailure = makeActionCreator(
+  types.UPDATE_QUEUE.FAILURE,
+  'queueId'
+)
+
+export function updateQueue(queueId, attributes) {
+  return dispatch => {
+    dispatch(updateQueueRequest(queueId, attributes))
+    return axios.patch(`/api/queues/${queueId}`, attributes).then(
+      res => dispatch(updateQueueSuccess(queueId, res.data)),
+      err => {
+        console.error(err)
+        dispatch(updateQueueFailure(queueId))
+      }
+    )
+  }
+}
+
+/**
  * Delete a queue
  */
 const deleteQueueRequest = makeActionCreator(

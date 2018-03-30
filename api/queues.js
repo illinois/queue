@@ -17,6 +17,13 @@ const {
 const requireCourseStaffForQueue = require('../middleware/requireCourseStaffForQueue')
 const requireCourseStaff = require('../middleware/requireCourseStaff')
 
+function validateLocation(req, res, next) {
+  check('location').custom(value => {
+    if (!res.locals.queue.fixedLocation) return true
+    return !!value && value.length > 0
+  })(req, res, next)
+}
+
 // Get all open queues
 router.get('/', async (req, res, _next) => {
   const queues = await Queue.scope('questionCount').findAll()
@@ -64,7 +71,6 @@ router.get(
   [requireQueue, failIfErrors],
   async (req, res, _next) => {
     const { id: queueId } = res.locals.queue
-
     const queue = await Queue.findOne({
       where: {
         id: queueId,
@@ -91,6 +97,31 @@ router.get(
     })
 
     res.json(queue)
+  }
+)
+
+// Modify a queue for a course
+router.patch(
+  '/:queueId',
+  [
+    requireCourseStaffForQueue,
+    requireQueue,
+    check('name').isLength({ min: 1 }),
+    validateLocation,
+    failIfErrors,
+  ],
+  async (req, res, _next) => {
+    const { queue } = res.locals
+    const data = matchedData(req)
+
+    await queue.update({
+      name: data.name,
+      location: data.location,
+    })
+    const updatedQueue = await Queue.scope('questionCount').findOne({
+      where: { id: queue.id },
+    })
+    res.status(201).send(updatedQueue)
   }
 )
 

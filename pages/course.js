@@ -19,7 +19,7 @@ import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
 import { Link } from '../routes'
 import makeStore from '../redux/makeStore'
 import { fetchCourseRequest, fetchCourse } from '../actions/course'
-import { createQueue, deleteQueue } from '../actions/queue'
+import { createQueue, deleteQueue, updateQueue } from '../actions/queue'
 import { isUserCourseStaff } from '../selectors'
 
 import PageWithUser from '../components/PageWithUser'
@@ -27,6 +27,7 @@ import Loading from '../components/Loading'
 import Layout from '../components/Layout'
 import NewQueue from '../components/NewQueue'
 import Queue from '../components/Queue'
+import QueueEdit from '../components/QueueEdit'
 import ShowForCourseStaff from '../components/ShowForCourseStaff'
 import ConfirmDeleteQueueModal from '../components/ConfirmDeleteQueueModal'
 
@@ -48,7 +49,9 @@ class Course extends React.Component {
     this.state = {
       showCreateQueuePanel: false,
       showDeleteQueueModal: false,
+      showEditQueueModal: false,
       pendingDeleteQueueId: null,
+      pendingEditQueueId: null,
     }
   }
 
@@ -66,6 +69,30 @@ class Course extends React.Component {
     this.props
       .createQueue(this.props.courseId, queue)
       .then(() => this.showCreateQueuePanel(false))
+  }
+
+  editQueue(queueId) {
+    this.setState({
+      showEditQueueModal: true,
+      pendingEditQueueId: queueId,
+    })
+  }
+
+  submitQueueEdit(attributes) {
+    const { pendingEditQueueId } = this.state
+    this.props.updateQueue(pendingEditQueueId, attributes).then(() => {
+      this.setState({
+        showEditQueueModal: false,
+        pendingEditQueueId: null,
+      })
+    })
+  }
+
+  queueEditCancel() {
+    this.setState({
+      showEditQueueModal: false,
+      pendingEditQueueId: null,
+    })
   }
 
   deleteQueue(queueId) {
@@ -109,6 +136,7 @@ class Course extends React.Component {
           <Queue
             key={id}
             onDeleteQueue={queueId => this.deleteQueue(queueId)}
+            onUpdateQueue={queueId => this.editQueue(queueId)}
             isUserCourseStaff={this.props.isUserCourseStaff}
             {...queue}
           />
@@ -174,6 +202,14 @@ class Course extends React.Component {
                 duration={200}
               >
                 {queues}
+                <QueueEdit
+                  queue={this.props.queues[this.state.pendingEditQueueId]}
+                  isOpen={this.state.showEditQueueModal}
+                  onSubmitQueueEdit={attributes =>
+                    this.submitQueueEdit(attributes)
+                  }
+                  onCancel={() => this.queueEditCancel()}
+                />
               </FlipMove>
               {!this.state.showCreateQueuePanel && createQueueButton}
               {this.state.showCreateQueuePanel && createQueuePanel}
@@ -214,6 +250,7 @@ Course.propTypes = {
   isFetching: PropTypes.bool,
   createQueue: PropTypes.func.isRequired,
   fetchCourse: PropTypes.func.isRequired,
+  updateQueue: PropTypes.func.isRequired,
   deleteQueue: PropTypes.func.isRequired,
   isUserCourseStaff: PropTypes.bool,
   dispatch: PropTypes.func.isRequired,
@@ -239,6 +276,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => ({
   fetchCourse: courseId => dispatch(fetchCourse(courseId)),
   createQueue: (courseId, queue) => dispatch(createQueue(courseId, queue)),
+  updateQueue: (queueId, attributes) =>
+    dispatch(updateQueue(queueId, attributes)),
   deleteQueue: (courseId, queueId) => dispatch(deleteQueue(courseId, queueId)),
   dispatch,
 })
