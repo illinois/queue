@@ -14,10 +14,7 @@ const safeAsync = require('../middleware/safeAsync')
 // Get all courses
 router.get(
   '/',
-  safeAsync(async (req, res, _next) => {
-    const courses = Course.findAll()
-    res.send(courses)
-  })
+  safeAsync(async (req, res, _next) => res.send(await Course.findAll()))
 )
 
 // Get a specific course

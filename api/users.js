@@ -16,7 +16,6 @@ router.get('/', [requireAdmin], (req, res, _next) =>
 router.get(
   '/me',
   safeAsync(async (req, res, _next) => {
-    throw new Error('rip')
     const { id } = res.locals.userAuthn
     const user = await User.findOne({
       where: { id },
