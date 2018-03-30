@@ -20,8 +20,6 @@ const requireCourseStaff = require('../middleware/requireCourseStaff')
 function validateLocation(req, res, next) {
   check('location').custom(value => {
     if (!res.locals.queue.fixedLocation) return true
-    console.log(!!value)
-    console.log(value.length)
     return !!value && value.length > 0
   })(req, res, next)
 }
