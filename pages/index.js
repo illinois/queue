@@ -43,7 +43,6 @@ class Index extends React.Component {
       finishedLoading: false,
       showCreateCoursePanel: false,
       showCreateQueuePanel: false,
-      showDeleteQueueModal: false,
     }
   }
 
