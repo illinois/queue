@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { Container, Row, Col } from 'reactstrap'
 import withRedux from 'next-redux-wrapper'
 import Error from 'next/error'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import faMapMarker from '@fortawesome/fontawesome-free-solid/faMapMarker'
 
 import makeStore from '../redux/makeStore'
 import { fetchQueue, fetchQueueRequest } from '../actions/queue'
@@ -47,15 +49,22 @@ class Queue extends React.Component {
 
   render() {
     const { isFetching, hasQueue } = this.props
+
     if (isFetching) {
       return <Loading />
     }
     if (!isFetching && !hasQueue) {
       return <Error statusCode={404} />
     }
+    const locationText = this.props.queue.location || 'No location specified'
     return (
       <Layout>
         <Container fluid>
+          <h3>{this.props.queue.name}</h3>
+          <h5 className="mb-3 text-muted">
+            <FontAwesomeIcon icon={faMapMarker} fixedWidth className="mr-2" />
+            {locationText}
+          </h5>
           <Row>
             <Col
               xs={{ size: 12 }}
@@ -85,11 +94,21 @@ Queue.propTypes = {
   fetchQueue: PropTypes.func.isRequired,
   queueId: PropTypes.number.isRequired,
   dispatch: PropTypes.func.isRequired,
+  queue: PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string,
+    location: PropTypes.string,
+  }),
+}
+
+Queue.defaultProps = {
+  queue: null,
 }
 
 const mapStateToProps = (state, ownProps) => ({
   isFetching: state.queues.isFetching,
   hasQueue: !!state.queues.queues[ownProps.queueId],
+  queue: state.queues.queues[ownProps.queueId],
 })
 
 const mapDispatchToProps = dispatch => ({

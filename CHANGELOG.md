@@ -7,6 +7,7 @@ with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
 
+* Show queue name and location on queue page. ([@sgorse](https://github.com/sgorse) in [#81](https://github.com/illinois/queue/pull/81))
 * Add ability to edit existing queues. ([@zwang180](https://github.com/zwang180) in
 [#78](https://github.com/illinois/queue/pull/78))
 
