@@ -319,7 +319,7 @@ describe('Queues API', () => {
     test('fails for course staff of different course with well-formed request no location', async () => {
       const attributes = { name: 'CS 225 Queue 1 Alter', location: '' }
       const res = await request(app)
-        .patch('/api/queues/1?forceuser=cs241staff')
+        .patch('/api/queues/1?forceuser=241staff')
         .send(attributes)
       expect(res.statusCode).toBe(403)
       expect(res.body).toEqual({})
@@ -328,7 +328,7 @@ describe('Queues API', () => {
     test('fails for course staff of different course with well-formed request with location', async () => {
       const attributes = { name: 'CS 225 Queue 1 Alter', location: 'Where' }
       const res = await request(app)
-        .patch('/api/queues/1?forceuser=cs241staff')
+        .patch('/api/queues/1?forceuser=241staff')
         .send(attributes)
       expect(res.statusCode).toBe(403)
       expect(res.body).toEqual({})
@@ -337,10 +337,9 @@ describe('Queues API', () => {
     test('fails for course staff with request to fixed location queue but no location', async () => {
       const attributes = { name: 'CS225 Fixed Location Alter', location: '' }
       const res = await request(app)
-        .patch('/api/queues/3?forceuser=cs225staff')
+        .patch('/api/queues/3?forceuser=225staff')
         .send(attributes)
-      expect(res.statusCode).toBe(403)
-      expect(res.body).toEqual({})
+      expect(res.statusCode).toBe(422)
     })
 
     test('fails for admin with request to fixed location queue but no location', async () => {
@@ -348,8 +347,7 @@ describe('Queues API', () => {
       const res = await request(app)
         .patch('/api/queues/3?forceuser=admin')
         .send(attributes)
-      expect(res.statusCode).toBe(403)
-      expect(res.body).toEqual({})
+      expect(res.statusCode).toBe(422)
     })
   })
 
