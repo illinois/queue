@@ -7,7 +7,7 @@ with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
 
-* Show queue name and location on queue page ([@sgorse](https://github.com/sgorse) in [#81](https://github.com/illinois/queue/pull/81) )
+* Show queue name and location on queue page. ([@sgorse](https://github.com/sgorse) in [#81](https://github.com/illinois/queue/pull/81))
 
 ## 28 March 2018
 
