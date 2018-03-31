@@ -62,9 +62,7 @@ router.post(
     })
 
     Queue.scope('questionCount')
-      .findOne({
-        where: { id: queue.id },
-      })
+      .findById(queue.id)
       .then(newQueue => res.status(201).json(newQueue))
   }
 )
