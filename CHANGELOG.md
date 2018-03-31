@@ -9,8 +9,8 @@ with the current date and the next changes should go under a **[Next]** header.
 
 * Correctly display number of questions when first creating a queue. ([@zwang180](https://github.com/zwang180) in [#84](https://github.com/illinois/queue/pull/84))
 * Show queue name and location on queue page. ([@sgorse](https://github.com/sgorse) in [#81](https://github.com/illinois/queue/pull/81))
-* Add ability to edit existing queues. ([@zwang180](https://github.com/zwang180) in
-  [#78](https://github.com/illinois/queue/pull/78))
+* Add ability to edit existing queues. ([@zwang180](https://github.com/zwang180) in [#78](https://github.com/illinois/queue/pull/78))
+* Fix [#89](https://github.com/illinois/queue/issues/89) by only checking in one queue for another question being answered by the same user. ([@nwalters512](https://github.com/nwalters512) in [#90](https://github.com/illinois/queue/pull/90))
 
 ## 28 March 2018
 
