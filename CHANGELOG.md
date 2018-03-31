@@ -9,7 +9,8 @@ with the current date and the next changes should go under a **[Next]** header.
 
 * Show queue name and location on queue page. ([@sgorse](https://github.com/sgorse) in [#81](https://github.com/illinois/queue/pull/81))
 * Add ability to edit existing queues. ([@zwang180](https://github.com/zwang180) in
-[#78](https://github.com/illinois/queue/pull/78))
+  [#78](https://github.com/illinois/queue/pull/78))
+* Properly handle any errors thrown in the API route handlers. ([@nwalters512](https://github.com/nwalters512) in [#86](https://github.com/illinois/queue/pull/86))
 
 ## 28 March 2018
 
