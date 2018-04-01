@@ -53,11 +53,11 @@ router.post(
     ]),
     failIfErrors,
   ],
-  (req, res, next) => {
+  safeAsync(async (req, res, next) => {
     const { id: courseId } = res.locals.course
     const data = matchedData(req)
 
-    const queue = Queue.build({
+    const queue = await Queue.create({
       name: data.name,
       location: data.location,
       fixedLocation: data.fixedLocation === true,
@@ -65,11 +65,11 @@ router.post(
       createdByUserId: res.locals.userAuthn.id,
     })
 
-    queue
-      .save()
+    Queue.scope('questionCount')
+      .findById(queue.id)
       .then(newQueue => res.status(201).json(newQueue))
       .catch(next)
-  }
+  })
 )
 
 // Gets a specific queue

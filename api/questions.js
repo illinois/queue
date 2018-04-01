@@ -115,9 +115,14 @@ router.get(
 // Mark a question as being answered
 router.post(
   '/:questionId/answering',
-  [requireCourseStaffForQueueForQuestion, requireQuestion, failIfErrors],
+  [
+    requireCourseStaffForQueueForQuestion,
+    requireQuestion,
+    requireQueueForQuestion,
+    failIfErrors,
+  ],
   safeAsync(async (req, res, _next) => {
-    const { question } = res.locals
+    const { queue, question } = res.locals
 
     if (question.beingAnswered) {
       // Forbid someone else from taking over this question
@@ -130,11 +135,14 @@ router.post(
       where: {
         answeredById: res.locals.userAuthn.id,
         dequeueTime: null,
+        queueId: queue.id,
       },
     })
 
     if (otherQuestions !== null) {
-      res.status(403).send('You are already answering this question')
+      res
+        .status(403)
+        .send('You are already answering another question on this queue')
       return
     }
 
