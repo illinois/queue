@@ -4,8 +4,6 @@ language: node_js
 node_js:
   - node
 before_install:
-  - wget https://repo.mysql.com/mysql-apt-config_0.8.9-1_all.deb
-  - wget https://repo.mysql.com//mysql-apt-config_0.8.9-1_all.deb
   - wget https://dev.mysql.com/get/mysql-apt-config_0.8.9-1_all.deb
   - sudo dpkg -i mysql-apt-config_0.8.9-1_all.deb
   - sudo apt-get update
