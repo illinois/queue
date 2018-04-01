@@ -14,20 +14,17 @@ import {
 
 import QuestionList from '../components/QuestionList'
 
-function mapStateToProps(state, props) {
-  console.log(props)
-  return {
-    queue: state.queues.queues[props.queueId],
-    questions: state.questions.questions,
-    isUserCourseStaff: isUserCourseStaffForQueue(state, props),
-    isUserActiveStaffForQueue: isUserActiveStaffForQueue(state, props),
-    isUserAnsweringQuestionForQueue: isUserAnsweringQuestionForQueue(
-      state,
-      props
-    ),
-    userId: state.user.user.id,
-  }
-}
+const mapStateToProps = (state, props) => ({
+  queue: state.queues.queues[props.queueId],
+  questions: state.questions.questions,
+  isUserCourseStaff: isUserCourseStaffForQueue(state, props),
+  isUserActiveStaffForQueue: isUserActiveStaffForQueue(state, props),
+  isUserAnsweringQuestionForQueue: isUserAnsweringQuestionForQueue(
+    state,
+    props
+  ),
+  userId: state.user.user.id,
+})
 
 const mapDispatchToProps = (dispatch, { queueId }) => ({
   fetchQuestions: () => dispatch(fetchQuestions(queueId)),
