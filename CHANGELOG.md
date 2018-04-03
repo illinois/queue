@@ -7,6 +7,7 @@ with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
 
+* Properly handle any errors thrown in the API route handlers. ([@nwalters512](https://github.com/nwalters512) in [#86](https://github.com/illinois/queue/pull/86))
 * Add notifications for students when their question is being answered. ([@zwang180](https://github.com/zwang180) in [#94](https://github.com/illinois/queue/pull/94))
 
 ## 31 March 2018
