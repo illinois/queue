@@ -1,9 +1,11 @@
 /* eslint-env browser */
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Button, UncontrolledTooltip } from 'reactstrap'
+import React, { Fragment } from 'react'
+import { Button, ButtonGroup } from 'reactstrap'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faBell from '@fortawesome/fontawesome-free-solid/faBell'
+import faInfo from '@fortawesome/fontawesome-free-solid/faInfoCircle'
+
+import QuestionNotificationsToggleExplanationModal from './QuestionNotificationsToggleExplanationModal'
 
 class QuestionNotificationsToggle extends React.Component {
   constructor(props) {
@@ -23,6 +25,7 @@ class QuestionNotificationsToggle extends React.Component {
       supported,
       enabled,
       permission,
+      showExplanationModal: false,
     }
 
     // Sync notification setting between tabs
@@ -40,6 +43,12 @@ class QuestionNotificationsToggle extends React.Component {
   setNotificationsEnabled(enabled) {
     localStorage.setItem('notificationsEnabled', enabled ? 'true' : 'false')
     this.setState({ enabled })
+  }
+
+  toggleExplanationModal() {
+    this.setState({
+      showExplanationModal: !this.state.showExplanationModal,
+    })
   }
 
   toggleNotificationsEnabled() {
@@ -91,36 +100,36 @@ class QuestionNotificationsToggle extends React.Component {
       color = this.state.enabled ? 'secondary' : 'info'
     }
 
-    const tooltip = (
-      <UncontrolledTooltip placement="right" target="notificationButton">
-        {this.props.isStudent
-          ? 'Get notifications for your question being answered!'
-          : 'Get notifications for new questions when on-duty!'}
-      </UncontrolledTooltip>
-    )
-
     return (
-      <div>
-        <Button
-          color={color}
-          block
-          disabled={disabled}
-          id="notificationButton"
-          className="mb-3 d-flex flex-row justify-content-center align-items-center"
-          style={{ whiteSpace: 'normal' }}
-          onClick={() => this.toggleNotificationsEnabled()}
-        >
-          <FontAwesomeIcon icon={faBell} className="mr-3" />
-          <span>{text}</span>
-        </Button>
-        {tooltip}
-      </div>
+      <Fragment>
+        <ButtonGroup className="mb-3 d-block d-flex flex-row justify-content-center align-items-center">
+          <Button
+            color={color}
+            disabled={disabled}
+            id="notificationButton"
+            className="d-flex flex-row justify-content-center align-items-center"
+            style={{ whiteSpace: 'normal', flex: 1 }}
+            onClick={() => this.toggleNotificationsEnabled()}
+          >
+            <FontAwesomeIcon icon={faBell} className="mr-3" />
+            <span>{text}</span>
+          </Button>
+          <Button
+            color={color}
+            outline
+            className="d-flex align-self-stretch"
+            onClick={() => this.toggleExplanationModal()}
+          >
+            <FontAwesomeIcon icon={faInfo} />
+          </Button>
+        </ButtonGroup>
+        <QuestionNotificationsToggleExplanationModal
+          isOpen={this.state.showExplanationModal}
+          toggle={() => this.toggleExplanationModal()}
+        />
+      </Fragment>
     )
   }
-}
-
-QuestionNotificationsToggle.propTypes = {
-  isStudent: PropTypes.bool.isRequired,
 }
 
 export default QuestionNotificationsToggle
