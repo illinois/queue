@@ -48,8 +48,8 @@ const sequelizeConfig = {
 let sequelize
 if (process.env.DATABASE_URL) {
   sequelize = new Sequelize(process.env.DATABASE_URL, {
-    ...config,
     ...sequelizeConfig,
+    logging: true,
   })
 } else {
   sequelize = new Sequelize(config.database, config.username, config.password, {
