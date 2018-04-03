@@ -20,7 +20,7 @@ class CourseShortCodeInfo extends React.Component {
         <p>
           This is a special link that you can use to easily reach the current
           queue. If there&apos;s exactly one queue open for this course, the
-          link will redirect you to take queue. Otherwise, it will redirect you
+          link will redirect you to that queue. Otherwise, it will redirect you
           to the course&apos;s homepage.
         </p>
       </div>
