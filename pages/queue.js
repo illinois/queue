@@ -16,7 +16,6 @@ import Layout from '../components/Layout'
 import StaffSidebar from '../components/StaffSidebar'
 import QuestionPanelContainer from '../containers/QuestionPanelContainer'
 import QuestionListContainer from '../containers/QuestionListContainer'
-import ShowForCourseStaff from '../components/ShowForCourseStaff'
 import QuestionNotificationsToggle from '../components/QuestionNotificationsToggle'
 
 class Queue extends React.Component {

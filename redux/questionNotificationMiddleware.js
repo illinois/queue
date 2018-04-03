@@ -1,8 +1,5 @@
 /* eslint-env browser */
-import {
-  CREATE_QUESTION,
-  UPDATE_QUESTION_ANSWERING,
-} from '../constants/ActionTypes'
+import { CREATE_QUESTION, UPDATE_QUESTION } from '../constants/ActionTypes'
 import { baseUrl } from '../util'
 
 function sendNotificationIfAllowed(title, options) {
@@ -30,7 +27,7 @@ function isOnDutyStaff(activeStaff, user) {
 export default store => next => action => {
   const state = store.getState()
   const { user } = state.user
-  console.log(action.type)
+
   // Notification for new questions added to on-duty staffs
   if (action.type === CREATE_QUESTION.SUCCESS) {
     const { activeStaff } = state.activeStaff
@@ -46,8 +43,20 @@ export default store => next => action => {
       sendNotificationIfAllowed(title, options)
     }
     // Notification for question being answered by staff to student
-  } else if (action.type === UPDATE_QUESTION_ANSWERING.SUCCESS) {
-    console.log(action)
+    // Note: Only UPDATE_QUESTION action will happen on student's side, but not UPDATE_QUESTION_ANSWERING
+  } else if (action.type === UPDATE_QUESTION.SUCCESS) {
+    const { question } = action
+    // If question is marked as being answered and it is the student who ask this question
+    if (question.beingAnswered && user.id === question.askedById) {
+      const title = 'Your question is being answered'
+      const name = question.answeredBy.name || question.answeredBy.netid
+
+      const options = {
+        body: `By staff: ${name}`,
+        icon: `${baseUrl}/static/notif_icon.png`,
+      }
+      sendNotificationIfAllowed(title, options)
+    }
   }
   return next(action)
 }
