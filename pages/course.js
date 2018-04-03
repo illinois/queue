@@ -6,6 +6,7 @@ import Error from 'next/error'
 
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
+import faUsers from '@fortawesome/fontawesome-free-solid/faUsers'
 
 import { Link } from '../routes'
 import makeStore from '../redux/makeStore'
@@ -80,7 +81,8 @@ class Course extends React.Component {
                 passHref
               >
                 <Button tag="a" color="primary" className="mt-3">
-                  Manage Staff
+                  <FontAwesomeIcon icon={faUsers} className="mr-2" />
+                  Manage staff
                 </Button>
               </Link>
             </ShowForCourseStaff>
