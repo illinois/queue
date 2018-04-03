@@ -255,6 +255,21 @@ describe('Questions API', () => {
       expect(res.body.beingAnswered).toBe(true)
     })
 
+    test('succeeds if user is answering a question on another queue', async () => {
+      // Mark question as being answered by admin
+      const res = await request(app).post(
+        '/api/queues/1/questions/1/answering?forceuser=admin'
+      )
+      expect(res.statusCode).toBe(200)
+      // Attempt to answer as another user
+      const res2 = await request(app).post(
+        '/api/queues/3/questions/3/answering?forceuser=admin'
+      )
+      expect(res2.statusCode).toBe(200)
+      const question = await Question.findById(3)
+      expect(question.answeredById).toBe(2)
+    })
+
     test('fails if another user is already answering the question', async () => {
       // Mark question as being answered by admin
       const res = await request(app).post(
