@@ -14,6 +14,7 @@ const {
   failIfErrors,
 } = require('./util')
 const requireCourseStaffForQueueForQuestion = require('../middleware/requireCourseStaffForQueueForQuestion')
+const safeAsync = require('../middleware/safeAsync')
 
 /* eslint-disable no-param-reassign */
 function modifyBeingAnswered(question, answering) {
@@ -53,7 +54,7 @@ router.post(
     checkLocation,
     failIfErrors,
   ],
-  async (req, res, _next) => {
+  safeAsync(async (req, res, _next) => {
     const data = matchedData(req)
     const { id: queueId } = res.locals.queue
 
@@ -83,21 +84,25 @@ router.post(
     await question.save()
     await question.reload()
     res.status(201).send(question)
-  }
+  })
 )
 
 // Get all questions for a particular queue
-router.get('/', [requireQueue, failIfErrors], async (req, res, _next) => {
-  const { id: queueId } = res.locals.queue
-  const questions = await Question.findAll({
-    where: {
-      queueId,
-      dequeueTime: null,
-    },
-    order: [['id', 'ASC']],
+router.get(
+  '/',
+  [requireQueue, failIfErrors],
+  safeAsync(async (req, res, _next) => {
+    const { id: queueId } = res.locals.queue
+    const questions = await Question.findAll({
+      where: {
+        queueId,
+        dequeueTime: null,
+      },
+      order: [['id', 'ASC']],
+    })
+    res.send(questions)
   })
-  res.send(questions)
-})
+)
 
 router.get(
   '/:questionId',
@@ -116,7 +121,7 @@ router.post(
     requireQueueForQuestion,
     failIfErrors,
   ],
-  async (req, res, _next) => {
+  safeAsync(async (req, res, _next) => {
     const { queue, question } = res.locals
 
     if (question.beingAnswered) {
@@ -145,20 +150,20 @@ router.post(
     question.answeredById = res.locals.userAuthn.id
     await question.save()
     res.send(question)
-  }
+  })
 )
 
 // Mark a question as no longer being answered
 router.delete(
   '/:questionId/answering',
   [requireCourseStaffForQueueForQuestion, requireQuestion, failIfErrors],
-  async (req, res, _next) => {
+  safeAsync(async (req, res, _next) => {
     const { question } = res.locals
     modifyBeingAnswered(question, false)
     question.answeredById = null
     await question.save()
     res.send(question)
-  }
+  })
 )
 
 // Mark the question as answered
@@ -173,7 +178,7 @@ router.post(
       .trim(),
     failIfErrors,
   ],
-  async (req, res, _next) => {
+  safeAsync(async (req, res, _next) => {
     const data = matchedData(req)
 
     // Temporary, easy fix to avoid having to rename enums
@@ -199,7 +204,7 @@ router.post(
 
     const updatedQuestion = await question.save()
     res.send(updatedQuestion)
-  }
+  })
 )
 
 // Updates a question's information
@@ -214,7 +219,7 @@ router.patch(
     checkLocation,
     failIfErrors,
   ],
-  async (req, res, _next) => {
+  safeAsync(async (req, res, _next) => {
     const { userAuthn, question, queue } = res.locals
     const data = matchedData(req)
 
@@ -227,7 +232,7 @@ router.patch(
     } else {
       res.status(403).send()
     }
-  }
+  })
 )
 
 // Deletes a question from a queue, without marking
@@ -236,7 +241,7 @@ router.patch(
 router.delete(
   '/:questionId',
   [requireQuestion, failIfErrors],
-  async (req, res, _next) => {
+  safeAsync(async (req, res, _next) => {
     const { userAuthn, userAuthz, question } = res.locals
     const { queueId } = question
 
@@ -263,7 +268,7 @@ router.delete(
     } else {
       res.status(403).send()
     }
-  }
+  })
 )
 
 module.exports = router
