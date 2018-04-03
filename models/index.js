@@ -48,6 +48,7 @@ const sequelizeConfig = {
 let sequelize
 if (process.env.DATABASE_URL) {
   sequelize = new Sequelize(process.env.DATABASE_URL, {
+    ...config,
     ...sequelizeConfig,
   })
 } else {
