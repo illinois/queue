@@ -60,4 +60,7 @@ app.use(`${baseUrl}/:courseCode`, require('./middleware/courseShortcodes'))
 // Support for redirects of nonexistent queues
 app.use(`${baseUrl}/queue/:queueId`, require('./middleware/redirectNoQueue'))
 
+// Error handling! This middleware should always be the last one in the chain.
+app.use(require('./middleware/handleError'))
+
 module.exports = app

@@ -6,6 +6,7 @@ const { check, oneOf } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 
 const { Queue, ActiveStaff, Question, User } = require('../models')
+const safeAsync = require('../middleware/safeAsync')
 
 const {
   requireCourse,
@@ -25,10 +26,13 @@ function validateLocation(req, res, next) {
 }
 
 // Get all open queues
-router.get('/', async (req, res, _next) => {
-  const queues = await Queue.scope('questionCount').findAll()
-  res.json(queues)
-})
+router.get(
+  '/',
+  safeAsync(async (req, res, _next) => {
+    const queues = await Queue.scope('questionCount').findAll()
+    res.json(queues)
+  })
+)
 
 // Create a queue for a course
 router.post(
@@ -49,7 +53,7 @@ router.post(
     ]),
     failIfErrors,
   ],
-  async (req, res, _next) => {
+  safeAsync(async (req, res, next) => {
     const { id: courseId } = res.locals.course
     const data = matchedData(req)
 
@@ -64,14 +68,15 @@ router.post(
     Queue.scope('questionCount')
       .findById(queue.id)
       .then(newQueue => res.status(201).json(newQueue))
-  }
+      .catch(next)
+  })
 )
 
 // Gets a specific queue
 router.get(
   '/:queueId',
   [requireQueue, failIfErrors],
-  async (req, res, _next) => {
+  safeAsync(async (req, res, _next) => {
     const { id: queueId } = res.locals.queue
     const queue = await Queue.findOne({
       where: {
@@ -99,7 +104,7 @@ router.get(
     })
 
     res.json(queue)
-  }
+  })
 )
 
 // Modify a queue for a course
@@ -112,7 +117,7 @@ router.patch(
     validateLocation,
     failIfErrors,
   ],
-  async (req, res, _next) => {
+  safeAsync(async (req, res, _next) => {
     const { queue } = res.locals
     const data = matchedData(req)
 
@@ -124,14 +129,14 @@ router.patch(
       where: { id: queue.id },
     })
     res.status(201).send(updatedQueue)
-  }
+  })
 )
 
 // Gets the on-duty staff list for a specific queue
 router.get(
   '/:queueId/staff',
   [requireQueue, failIfErrors],
-  async (req, res, _next) => {
+  safeAsync(async (req, res, _next) => {
     const { queue } = res.locals
     const staff = await ActiveStaff.findAll({
       where: {
@@ -141,14 +146,14 @@ router.get(
       include: [User],
     })
     res.json(staff)
-  }
+  })
 )
 
 // Joins the specified user to the specified queue
 router.post(
   '/:queueId/staff/:userId',
   [requireCourseStaffForQueue, requireQueue, requireUser, failIfErrors],
-  async (req, res, _next) => {
+  safeAsync(async (req, res, _next) => {
     const { id: userId } = res.locals.userAuthn
     const { id: queueId } = res.locals.queue
     const [staff, created] = await ActiveStaff.findOrCreate({
@@ -176,14 +181,14 @@ router.post(
     } else {
       res.status(202).json(staff)
     }
-  }
+  })
 )
 
 // Removes the specified user from the specified queue
 router.delete(
   '/:queueId/staff/:userId',
   [requireCourseStaffForQueue, requireQueue, requireUser, failIfErrors],
-  async (req, res, _next) => {
+  safeAsync(async (req, res, _next) => {
     const { id: userId } = res.locals.user
     const { id: queueId } = res.locals.queue
     const staff = await ActiveStaff.find({
@@ -200,17 +205,17 @@ router.delete(
     }
 
     res.status(202).send()
-  }
+  })
 )
 
 // Deletes the queue
 router.delete(
   '/:queueId',
   [requireCourseStaffForQueue, requireQueue, failIfErrors],
-  async (req, res, _next) => {
+  safeAsync(async (req, res, _next) => {
     await res.locals.queue.destroy()
     res.status(202).send()
-  }
+  })
 )
 
 module.exports = router
