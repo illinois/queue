@@ -10,6 +10,8 @@ import makeStore from '../redux/makeStore'
 import { fetchQueue, fetchQueueRequest } from '../actions/queue'
 import { connectToQueue, disconnectFromQueue } from '../socket/client'
 
+import { isUserStudent } from '../selectors'
+
 import PageWithUser from '../components/PageWithUser'
 import Loading from '../components/Loading'
 import Layout from '../components/Layout'
@@ -47,7 +49,7 @@ class Queue extends React.Component {
   }
 
   render() {
-    const { isFetching, hasQueue } = this.props
+    const { isFetching, isStudent, hasQueue } = this.props
 
     if (isFetching) {
       return <Loading />
@@ -71,7 +73,7 @@ class Queue extends React.Component {
               lg={{ size: 3 }}
               className="mb-3 mb-md-0"
             >
-              <QuestionNotificationsToggle />
+              <QuestionNotificationsToggle isStudent={isStudent} />
               <StaffSidebar queueId={this.props.queueId} />
             </Col>
             <Col xs={{ size: 12 }} md={{ size: 8 }} lg={{ size: 9 }}>
@@ -87,6 +89,7 @@ class Queue extends React.Component {
 
 Queue.propTypes = {
   isFetching: PropTypes.bool.isRequired,
+  isStudent: PropTypes.bool.isRequired,
   hasQueue: PropTypes.bool.isRequired,
   fetchQueue: PropTypes.func.isRequired,
   queueId: PropTypes.number.isRequired,
@@ -104,6 +107,7 @@ Queue.defaultProps = {
 
 const mapStateToProps = (state, ownProps) => ({
   isFetching: state.queues.isFetching,
+  isStudent: isUserStudent(state, ownProps),
   hasQueue: !!state.queues.queues[ownProps.queueId],
   queue: state.queues.queues[ownProps.queueId],
 })

@@ -95,3 +95,9 @@ export const isUserAnsweringQuestionForQueue = createSelector(
     )
   }
 )
+
+export const isUserStudent = createSelector(
+  [isUserAdmin, isUserCourseStaff, isUserCourseStaffForQueue],
+  (isAdmin, isCourseStaff, isCourseStaffForQueue) =>
+    !(isAdmin || isCourseStaff || isCourseStaffForQueue)
+)

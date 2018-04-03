@@ -1,7 +1,7 @@
 /* eslint-env browser */
 import React from 'react'
-import { Button } from 'reactstrap'
-
+import PropTypes from 'prop-types'
+import { Button, UncontrolledTooltip } from 'reactstrap'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faBell from '@fortawesome/fontawesome-free-solid/faBell'
 
@@ -91,20 +91,36 @@ class QuestionNotificationsToggle extends React.Component {
       color = this.state.enabled ? 'secondary' : 'info'
     }
 
+    const tooltip = (
+      <UncontrolledTooltip placement="right" target="notificationButton">
+        {this.props.isStudent
+          ? 'Get notifications for your question being answered!'
+          : 'Get notifications for new questions when on-duty!'}
+      </UncontrolledTooltip>
+    )
+
     return (
-      <Button
-        color={color}
-        block
-        disabled={disabled}
-        className="mb-3 d-flex flex-row justify-content-center align-items-center"
-        style={{ whiteSpace: 'normal' }}
-        onClick={() => this.toggleNotificationsEnabled()}
-      >
-        <FontAwesomeIcon icon={faBell} className="mr-3" />
-        <span>{text}</span>
-      </Button>
+      <div>
+        <Button
+          color={color}
+          block
+          disabled={disabled}
+          id="notificationButton"
+          className="mb-3 d-flex flex-row justify-content-center align-items-center"
+          style={{ whiteSpace: 'normal' }}
+          onClick={() => this.toggleNotificationsEnabled()}
+        >
+          <FontAwesomeIcon icon={faBell} className="mr-3" />
+          <span>{text}</span>
+        </Button>
+        {tooltip}
+      </div>
     )
   }
+}
+
+QuestionNotificationsToggle.propTypes = {
+  isStudent: PropTypes.bool.isRequired,
 }
 
 export default QuestionNotificationsToggle

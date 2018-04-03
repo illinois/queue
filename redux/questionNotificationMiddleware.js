@@ -52,7 +52,7 @@ export default store => next => action => {
       const name = question.answeredBy.name || question.answeredBy.netid
 
       const options = {
-        body: `By staff: ${name}`,
+        body: `Staff: ${name}`,
         icon: `${baseUrl}/static/notif_icon.png`,
       }
       sendNotificationIfAllowed(title, options)
