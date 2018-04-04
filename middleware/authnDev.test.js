@@ -1,5 +1,5 @@
 /* eslint-env jest */
-const authnDev = require('./authnDev')
+const authnDev = require('./authnDev').express
 const testutil = require('../testutil')
 
 beforeEach(() => testutil.setupTestDb())

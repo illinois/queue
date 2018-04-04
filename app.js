@@ -11,14 +11,14 @@ const DEV = ['production', 'staging'].indexOf(process.env.NODE_ENV) === -1
 // In production, all concepts of "sessions" will be handled by checking the
 // eppn header from Shib. In dev, to support multiple users for testing, we
 // use session middleware.
+let devSession
 if (DEV) {
-  app.use(
-    session({
-      secret: 'this is not a secret',
-      resave: false,
-      saveUninitialized: true,
-    })
-  )
+  devSession = session({
+    secret: 'this is not a secret',
+    resave: false,
+    saveUninitialized: true,
+  })
+  app.use(devSession)
 }
 
 app.use(bodyParser.json())
@@ -36,11 +36,11 @@ app.use(require('./middleware/prettyPrintJson'))
 // we can properly handle a forceuser query param on a page load.
 // In production, we only need this for the API routes; everything else is just statics.
 if (DEV) {
-  app.use(baseUrl, require('./middleware/authnDev'))
+  app.use(baseUrl, require('./middleware/authnDev').express)
 } else {
-  app.use(`${baseUrl}/api`, require('./middleware/authn'))
+  app.use(`${baseUrl}/api`, require('./middleware/authn').express)
 }
-app.use(`${baseUrl}/api`, require('./middleware/authz'))
+app.use(`${baseUrl}/api`, require('./middleware/authz').express)
 
 // API routes
 app.use(`${baseUrl}/api/users`, require('./api/users'))
@@ -63,4 +63,5 @@ app.use(`${baseUrl}/queue/:queueId`, require('./middleware/redirectNoQueue'))
 // Error handling! This middleware should always be the last one in the chain.
 app.use(require('./middleware/handleError'))
 
-module.exports = app
+module.exports.app = app
+module.exports.session = devSession

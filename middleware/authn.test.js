@@ -1,5 +1,5 @@
 /* eslint-env jest */
-const authn = require('./authn')
+const authn = require('./authn').express
 const testutil = require('../testutil')
 const { User } = require('../models')
 

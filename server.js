@@ -1,7 +1,7 @@
 /* eslint global-require: "off", no-console: "off" */
 require('dotenv').config()
 
-const app = require('./app')
+const { app, session } = require('./app')
 const server = require('http').Server(app)
 const io = require('socket.io')
 const nextJs = require('next')
@@ -30,7 +30,7 @@ co(function*() {
 
   // Websocket stuff
   const socket = io(server, { path: `${baseUrl}/socket.io` })
-  serverSocket(socket)
+  serverSocket(socket, session)
 
   app.use(handler)
 

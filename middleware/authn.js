@@ -1,21 +1,38 @@
 const { User } = require('../models')
 
-module.exports = async (req, res, next) => {
+const getUser = async (email = '') => {
   // Get the user's NetID based on the "eppn" field
-  const email = req.get('eppn') || ''
   if (email.indexOf('@') === -1) {
-    res.status(400).send('No login information found')
-    return
+    throw new Error('No login information found')
   }
   const [netid] = email.split('@')
-  const [user] = await User.findOrCreate({ where: { netid } })
+  return User.findOrCreate({ where: { netid } })
+}
 
-  const name = req.get('displayname')
-  if (name) {
-    user.universityName = name
-    await user.save()
+module.exports.socket = (socket, next) => {
+  getUser(socket.handshake.headers.eppn)
+    .then(user => {
+      /* eslint-disable no-param-reassign */
+      socket.userAuthn = user
+      next()
+    })
+    .catch(err => next(err))
+}
+
+module.exports.express = async (req, res, next) => {
+  try {
+    const user = await getUser(req.get('eppn'))
+
+    // Only do this during express authn, not for sockets
+    const name = req.get('displayname')
+    if (name) {
+      user.universityName = name
+      await user.save()
+    }
+
+    res.locals.userAuthn = user
+    next()
+  } catch (err) {
+    res.status(400).send('No login information found')
   }
-
-  res.locals.userAuthn = user
-  next()
 }

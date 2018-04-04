@@ -1,7 +1,13 @@
 const sequelizeStream = require('sequelize-stream')
+const sharedsession = require('express-socket.io-session')
+
 const { sequelize, Question, User, ActiveStaff } = require('../models')
+const authn = require('../middleware/authn').socket
+const authnDev = require('../middleware/authnDev').socket
+const authz = require('../middleware/authz').socket
 
 let io = null
+let session = null
 let queueNamespace = null
 
 const sendInitialState = (queueId, callback) => {
@@ -106,17 +112,32 @@ stream.on('data', data => {
   }
 })
 
-module.exports = newIo => {
-  io = newIo
-
-  queueNamespace = io.of('/queue')
-  queueNamespace.on('connection', socket => {
-    socket.on('join', (msg, callback) => {
-      if ('queueId' in msg) {
-        const { queueId } = msg
-        socket.join(`queue-${queueId}`)
-        sendInitialState(queueId, callback)
-      }
-    })
+const queueConnect = socket => {
+  socket.on('join', (msg, callback) => {
+    if ('queueId' in msg) {
+      const { queueId } = msg
+      socket.join(`queue-${queueId}`)
+      sendInitialState(queueId, callback)
+    }
   })
+}
+
+module.exports = (newIo, newSession) => {
+  io = newIo
+  session = newSession
+
+  const makeNamespace = name => {
+    const namespace = io.of(name)
+    if (session) {
+      namespace.use(sharedsession(session))
+      namespace.use(authnDev)
+    } else {
+      namespace.use(authn)
+    }
+    namespace.use(authz)
+    return namespace
+  }
+
+  queueNamespace = makeNamespace('/queue')
+  queueNamespace.on('connection', queueConnect)
 }
