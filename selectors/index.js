@@ -42,7 +42,7 @@ export const isUserCourseStaffForQueue = createSelector(
       // Blindly assume we can walk deep into objects, and fail if we can't
       // access any required properties
       // eslint-disable-next-line prefer-destructuring
-      return user.staffAssignments.indexOf(courseId) !== -1
+      return user.isAdmin || user.staffAssignments.indexOf(courseId) !== -1
     } catch (e) {
       return false
     }
@@ -56,7 +56,7 @@ export const isUserCourseStaff = createSelector(
       // Blindly assume we can walk deep into objects, and fail if we can't
       // access any required properties
       // eslint-disable-next-line prefer-destructuring
-      return user.staffAssignments.indexOf(course.id) !== -1
+      return user.isAdmin || user.staffAssignments.indexOf(course.id) !== -1
     } catch (e) {
       return false
     }

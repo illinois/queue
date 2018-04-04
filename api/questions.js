@@ -13,6 +13,7 @@ const {
   requireQuestion,
   failIfErrors,
 } = require('./util')
+const requireAdmin = require('../middleware/requireAdmin')
 const requireCourseStaffForQueueForQuestion = require('../middleware/requireCourseStaffForQueueForQuestion')
 const safeAsync = require('../middleware/safeAsync')
 
@@ -92,8 +93,11 @@ router.get(
   '/',
   [requireQueue, failIfErrors],
   safeAsync(async (req, res, _next) => {
-    const { id: queueId } = res.locals.queue
-    const questions = await Question.findAll({
+    const { userAuthz, queue: { id: queueId, courseId } } = res.locals
+    const scope = userAuthz.staffedCourseIds.includes(courseId)
+      ? 'defaultScope'
+      : 'student'
+    const questions = await Question.scope(scope).findAll({
       where: {
         queueId,
         dequeueTime: null,
@@ -104,9 +108,11 @@ router.get(
   })
 )
 
+// Get a specific question
+// Only admins can do this; we want to avoid scraping
 router.get(
   '/:questionId',
-  [requireQuestion, failIfErrors],
+  [requireAdmin, requireQuestion, failIfErrors],
   (req, res, _next) => {
     res.send(res.locals.question)
   }
@@ -259,7 +265,7 @@ router.delete(
 
     if (
       question.askedById === userAuthn.id ||
-      userAuthz.staffedCourseIds.indexOf(course.id) !== -1
+      userAuthz.staffedCourseIds.includes(course.id)
     ) {
       await question.update({
         dequeueTime: new Date(),

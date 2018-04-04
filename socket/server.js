@@ -1,7 +1,7 @@
 const sequelizeStream = require('sequelize-stream')
 const sharedsession = require('express-socket.io-session')
 
-const { sequelize, Question, User, ActiveStaff } = require('../models')
+const { sequelize, Question, User, ActiveStaff, Queue } = require('../models')
 const authn = require('../middleware/authn').socket
 const authnDev = require('../middleware/authnDev').socket
 const authz = require('../middleware/authz').socket
@@ -34,19 +34,23 @@ const sendInitialState = (queueId, callback) => {
 }
 
 const handleQuestionCreate = (id, queueId) => {
-  Question.findOne({ where: { id } }).then(question => {
-    queueNamespace
-      .to(`queue-${queueId}`)
-      .emit('question:create', { id, question })
-  })
+  const queryAndSendMessage = (model, room) => {
+    model.findOne({ where: { id } }).then(question => {
+      queueNamespace.to(room).emit('question:create', { id, question })
+    })
+  }
+  queryAndSendMessage(Question, `queue-${queueId}`)
+  queryAndSendMessage(Question.scope('student'), `queue-${queueId}-student`)
 }
 
 const handleQuestionUpdate = (id, queueId) => {
-  Question.findOne({ where: { id } }).then(question => {
-    queueNamespace
-      .to(`queue-${queueId}`)
-      .emit('question:update', { id, question })
-  })
+  const queryAndSendMessage = (model, room) => {
+    model.findOne({ where: { id } }).then(question => {
+      queueNamespace.to(room).emit('question:update', { id, question })
+    })
+  }
+  queryAndSendMessage(Question, `queue-${queueId}`)
+  queryAndSendMessage(Question.scope('student'), `queue-${queueId}-student`)
 }
 
 const handleQuestionDelete = (id, queueId) => {
@@ -112,12 +116,23 @@ stream.on('data', data => {
   }
 })
 
+const isCourseStaff = (userAuthn, courseId) => {
+  return userAuthn.isAdmin || userAuthn.staffedCourseIds.includes(courseId)
+}
+
 const queueConnect = socket => {
   socket.on('join', (msg, callback) => {
     if ('queueId' in msg) {
       const { queueId } = msg
-      socket.join(`queue-${queueId}`)
-      sendInitialState(queueId, callback)
+      Queue.findById(queueId).then(queue => {
+        if (isCourseStaff(socket.userAuthz, queue.courseId)) {
+          socket.join(`queue-${queueId}`)
+          sendInitialState(queueId, callback, true)
+        } else {
+          socket.join(`queue-${queueId}-student`)
+          sendInitialState(queueId, callback, false)
+        }
+      })
     }
   })
 }

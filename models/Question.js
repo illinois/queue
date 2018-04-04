@@ -56,6 +56,21 @@ module.exports = (sequelize, DataTypes) => {
         override: true,
       }
     )
+
+    models.Question.addScope('student', {
+      attributes: {
+        include: ['askedById'],
+        exclude: ['comments', 'preparedness'],
+      },
+      include: [
+        {
+          model: models.User,
+          as: 'answeredBy',
+          attributes: ['name'],
+          required: false,
+        },
+      ],
+    })
   }
 
   return obj
