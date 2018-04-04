@@ -102,6 +102,7 @@ describe('Queues API', () => {
       expect(res.statusCode).toBe(201)
       expect(res.body.name).toBe('CS225 Queue 2')
       expect(res.body.location).toBe('Where')
+      expect(res.body.questionCount).toBe(0)
     })
 
     test('succeeds for course staff', async () => {
@@ -112,6 +113,7 @@ describe('Queues API', () => {
       expect(res.statusCode).toBe(201)
       expect(res.body.name).toBe('CS225 Queue 2')
       expect(res.body.location).toBe('Where')
+      expect(res.body.questionCount).toBe(0)
     })
 
     test('fails if name is missing', async () => {

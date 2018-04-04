@@ -9,6 +9,7 @@
     "build": "next build",
     "start": "NODE_ENV=production node server.js",
     "test": "jest",
+    "test-sequential": "jest --runInBand",
     "lint-js": "eslint --ext js .",
     "prettier": "prettier --write \"**/*.js\"",
     "prettier-diff": "prettier --list-different \"**/*.js\""
