@@ -15,6 +15,13 @@ class Queue extends React.Component {
     this.props.onDeleteQueue(this.props.id)
   }
 
+  updateQueue(e) {
+    // Needed to prevent click from propagating to parent element
+    e.stopPropagation()
+    e.preventDefault()
+    this.props.onUpdateQueue(this.props.id)
+  }
+
   render() {
     const { id, name, location, isUserCourseStaff, questionCount } = this.props
 
@@ -40,16 +47,28 @@ class Queue extends React.Component {
             </div>
           </div>
           {isUserCourseStaff && (
-            <Button
-              color="danger"
-              tag="div"
-              outline
-              size="sm"
-              className="ml-auto"
-              onClick={e => this.deleteQueue(e)}
-            >
-              Delete
-            </Button>
+            <div className="ml-auto">
+              <Button
+                color="danger"
+                tag="div"
+                outline
+                size="sm"
+                className="mr-1 ml-auto"
+                onClick={e => this.deleteQueue(e)}
+              >
+                Delete
+              </Button>
+              <Button
+                color="primary"
+                tag="div"
+                outline
+                size="sm"
+                className="mr-0 ml-1"
+                onClick={e => this.updateQueue(e)}
+              >
+                Edit
+              </Button>
+            </div>
           )}
         </ListGroupItem>
       </Link>
@@ -62,6 +81,7 @@ Queue.propTypes = {
   name: PropTypes.string.isRequired,
   location: PropTypes.string.isRequired,
   questionCount: PropTypes.number.isRequired,
+  onUpdateQueue: PropTypes.func.isRequired,
   onDeleteQueue: PropTypes.func.isRequired,
   isUserCourseStaff: PropTypes.bool.isRequired,
 }

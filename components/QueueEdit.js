@@ -11,32 +11,30 @@ import {
   Input,
   Label,
   Button,
-  FormText,
   FormFeedback,
 } from 'reactstrap'
 
-import constants from '../constants'
-
 const fields = [
   {
-    name: 'topic',
-    maxLength: constants.QUESTION_TOPIC_MAX_LENGTH,
+    name: 'name',
+    minLength: 1,
   },
   {
     name: 'location',
-    maxLength: constants.QUESTION_LOCATION_MAX_LENGTH,
+    minLength: 1,
   },
 ]
 
 const isValid = error => (error === undefined ? undefined : error === '')
 
-class QuestionEdit extends React.Component {
+class QueueEdit extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
+      name: '',
       location: '',
-      topic: '',
+      fixedLocation: false,
       isFieldValid: {},
     }
 
@@ -47,10 +45,11 @@ class QuestionEdit extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.question) {
+    if (nextProps.queue) {
       this.setState({
-        location: nextProps.question.location,
-        topic: nextProps.question.topic,
+        name: nextProps.queue.name,
+        location: nextProps.queue.location,
+        fixedLocation: nextProps.queue.fixedLocation,
         isFieldValid: {},
       })
     }
@@ -70,15 +69,17 @@ class QuestionEdit extends React.Component {
     const isFieldValid = {}
     let valid = true
 
-    fields.forEach(({ name, maxLength }) => {
-      if (name === 'location' && this.props.queue.fixedLocation) return
+    fields.forEach(({ name, minLength }) => {
+      // Handle fixed location queue
+      if (name === 'location' && !this.props.queue.fixedLocation) return
+
       if (!this.state[name]) {
         isFieldValid[name] = 'This field is required!'
         valid = false
-      } else if (this.state[name].length > maxLength) {
+      } else if (this.state[name].length < minLength) {
         isFieldValid[
           name
-        ] = `This field has a maximum length of ${maxLength} characters`
+        ] = `This field has a minimum length of ${minLength} characters`
         valid = false
       }
     })
@@ -88,44 +89,41 @@ class QuestionEdit extends React.Component {
     })
     if (!valid) return
 
-    this.props.onSubmitQuestionEdit({
+    const attributes = {
+      name: this.state.name,
       location: this.state.location,
-      topic: this.state.topic,
-    })
+    }
+    this.props.onSubmitQueueEdit(attributes)
   }
 
   handleModalExit() {
     this.setState({
+      name: '',
       location: '',
-      topic: '',
       isFieldValid: {},
     })
   }
 
   render() {
-    const { queue: { location, fixedLocation } } = this.props
-
-    const queueLocation = fixedLocation ? location : this.state.location
-
     return (
       <Modal isOpen={this.props.isOpen} onClosed={this.handleModalExit}>
-        <ModalHeader>Edit Question</ModalHeader>
+        <ModalHeader>Edit Queue</ModalHeader>
         <ModalBody>
           <Form autoComplete="off">
             <FormGroup row>
-              <Label for="topic" sm={4}>
-                Topic
+              <Label for="name" sm={4}>
+                Name
               </Label>
               <Col sm={8}>
                 <Input
                   type="text"
-                  name="topic"
-                  id="topic"
-                  value={this.state.topic}
+                  name="name"
+                  id="name"
+                  value={this.state.name}
                   onChange={this.handleInputChange}
-                  valid={isValid(this.state.isFieldValid.topic)}
+                  valid={isValid(this.state.isFieldValid.name)}
                 />
-                <FormFeedback>{this.state.isFieldValid.topic}</FormFeedback>
+                <FormFeedback>{this.state.isFieldValid.name}</FormFeedback>
               </Col>
             </FormGroup>
             <FormGroup row>
@@ -137,15 +135,11 @@ class QuestionEdit extends React.Component {
                   type="text"
                   name="location"
                   id="location"
-                  disabled={this.props.queue.fixedLocation}
-                  value={queueLocation}
+                  value={this.state.location}
                   onChange={this.handleInputChange}
                   valid={isValid(this.state.isFieldValid.location)}
                 />
                 <FormFeedback>{this.state.isFieldValid.location}</FormFeedback>
-                {fixedLocation && (
-                  <FormText>This is a fixed-location queue.</FormText>
-                )}
               </Col>
             </FormGroup>
           </Form>
@@ -163,24 +157,19 @@ class QuestionEdit extends React.Component {
   }
 }
 
-QuestionEdit.propTypes = {
+QueueEdit.propTypes = {
   queue: PropTypes.shape({
+    name: PropTypes.string,
     location: PropTypes.string,
     fixedLocation: PropTypes.bool,
   }),
-  question: PropTypes.shape({
-    name: PropTypes.string,
-    location: PropTypes.string,
-    topic: PropTypes.string,
-  }),
   isOpen: PropTypes.bool.isRequired,
   onCancel: PropTypes.func.isRequired,
-  onSubmitQuestionEdit: PropTypes.func.isRequired,
+  onSubmitQueueEdit: PropTypes.func.isRequired,
 }
 
-QuestionEdit.defaultProps = {
+QueueEdit.defaultProps = {
   queue: null,
-  question: null,
 }
 
-export default QuestionEdit
+export default QueueEdit

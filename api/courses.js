@@ -9,17 +9,19 @@ const { Course, Queue, User } = require('../models')
 const { requireCourse, requireUser, failIfErrors } = require('./util')
 const requireAdmin = require('../middleware/requireAdmin')
 const requireCourseStaff = require('../middleware/requireCourseStaff')
+const safeAsync = require('../middleware/safeAsync')
 
 // Get all courses
-router.get('/', (req, res, _next) => {
-  Course.findAll().then(courses => res.send(courses))
-})
+router.get(
+  '/',
+  safeAsync(async (req, res, _next) => res.send(await Course.findAll()))
+)
 
 // Get a specific course
 router.get(
   '/:courseId',
   [requireCourse, failIfErrors],
-  async (req, res, _next) => {
+  safeAsync(async (req, res, _next) => {
     const { id: courseId } = res.locals.course
     const { locals: { userAuthz } } = res
 
@@ -52,7 +54,7 @@ router.get(
 
     course.queues = queues.map(q => q.toJSON())
     res.send(course)
-  }
+  })
 )
 
 // Create a new course
@@ -64,7 +66,7 @@ router.post(
     check('shortcode', 'shortcode must be specified').exists(),
     failIfErrors,
   ],
-  async (req, res, _next) => {
+  safeAsync(async (req, res, _next) => {
     const { name, shortcode } = matchedData(req)
     const course = Course.build({
       name,
@@ -72,7 +74,7 @@ router.post(
     })
     const newCourse = await course.save()
     res.status(201).send(newCourse)
-  }
+  })
 )
 
 // Add someone to course staff
@@ -81,35 +83,32 @@ router.post(
   [
     requireCourseStaff,
     requireCourse,
-    check('netid', 'netid must be specified').exists(),
-    check('name').optional(),
+    check('netid', 'netid must be specified')
+      .exists()
+      .trim(),
     failIfErrors,
   ],
-  async (req, res, _next) => {
-    const { netid: originalNetid, name } = matchedData(req)
+  safeAsync(async (req, res, _next) => {
+    const { netid: originalNetid } = matchedData(req)
     const [netid] = originalNetid.split('@')
     const [user] = await User.findOrCreate({ where: { netid } })
-    if (name) {
-      user.name = name
-      await user.save()
-    }
     await user.addStaffAssignment(res.locals.course.id)
     res.status(201).send(user)
-  }
+  })
 )
 
 // Remove someone from course staff
 router.delete(
   '/:courseId/staff/:userId',
   [requireCourseStaff, requireCourse, requireUser, failIfErrors],
-  async (req, res, _next) => {
+  safeAsync(async (req, res, _next) => {
     const { user, course } = res.locals
     const oldStaffAssignments = await user.getStaffAssignments()
     await user.setStaffAssignments(
       oldStaffAssignments.filter(c => c.id !== course.id)
     )
     res.status(202).send()
-  }
+  })
 )
 
 module.exports = router

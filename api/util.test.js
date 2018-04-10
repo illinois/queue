@@ -97,4 +97,32 @@ describe('Testing Utils', () => {
       expect(send).toBeCalled()
     })
   })
+
+  describe('requireModelForModel', () => {
+    test('succeeds for a model that exists', async () => {
+      const { res, status, send } = makeRes()
+      res.locals.question = {
+        queueId: 1,
+      }
+      const next = jest.fn()
+      await util.requireQueueForQuestion(null, res, next)
+      expect(next).toBeCalled()
+      expect(status).not.toBeCalled()
+      expect(send).not.toBeCalled()
+      expect(res.locals).toHaveProperty('queue')
+      expect(res.locals.queue.id).toBe(1)
+    })
+
+    test('fails with 404 if model does not exist', async () => {
+      const { res, status, send } = makeRes()
+      res.locals.question = {
+        queueId: 12345,
+      }
+      const next = jest.fn()
+      await util.requireQueueForQuestion(null, res, next)
+      expect(next).not.toBeCalled()
+      expect(status).toBeCalledWith(404)
+      expect(send).toBeCalled()
+    })
+  })
 })

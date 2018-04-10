@@ -7,11 +7,28 @@ with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
 
+* Properly handle any errors thrown in the API route handlers. ([@nwalters512](https://github.com/nwalters512) in [#86](https://github.com/illinois/queue/pull/86))
+* Run CI tests using a MySQL database. ([@nwalters512](https://github.com/nwalters512) in [#95](https://github.com/illinois/queue/pull/95))
+* Update all `npm` dependencies. ([@nwalters512](https://github.com/nwalters512) in [#91](https://github.com/illinois/queue/pull/91))
+
+## 31 March 2018
+
+* Show queue name and location on queue page. ([@sgorse](https://github.com/sgorse) in [#81](https://github.com/illinois/queue/pull/81))
+* Add ability to edit existing queues. ([@zwang180](https://github.com/zwang180) in [#78](https://github.com/illinois/queue/pull/78))
+* Fix [#89](https://github.com/illinois/queue/issues/89) by only checking in one queue for another question being answered by the same user. ([@nwalters512](https://github.com/nwalters512) in [#90](https://github.com/illinois/queue/pull/90))
+* Correctly display number of questions when first creating a queue. ([@zwang180](https://github.com/zwang180) in [#84](https://github.com/illinois/queue/pull/84))
+
+## 28 March 2018
+
 * Improve spacing of course buttons on homepage. ([@nwalters512](https://github.com/nwalters512) in [#60](https://github.com/illinois/queue/pull/60))
 * Add support and tooling for Sequelize database migrations. ([@nwalters512](https://github.com/nwalters512) in [#56](https://github.com/illinois/queue/pull/56))
 * Add confirmation prompt for cancelling and deleting student questions. ([@muakasan](https://github.com/muakasan) in [#71](https://github.com/illinois/queue/pull/71))
 * Hide new question panel for active course staff. ([@genevievehelsel](https://github.com/genevievehelsel) in [#61](https://github.com/illinois/queue/pull/61))
 * Updated README with information about the queue as a service for users at Illinois. ([@wadefagen](https://github.com/wadefagen) in [#73](https://github.com/illinois/queue/pull/73))
+* Add temporary fix for [#74](https://github.com/illinois/queue/issues/74). ([@nwalters512](https://github.com/nwalters512) in [#76](https://github.com/illinois/queue/pull/76))
+* Trim whitespace from netids when adding course staff. ([@nwalters512](https://github.com/nwalters512) in [#67](https://github.com/illinois/queue/pull/67))
+* Improve behavior of "Start answering" button. ([@nwalters512](https://github.com/nwalters512) in [#68](https://github.com/illinois/queue/pull/68))
+* Add support for fixed-location queues. ([@nwalters512](https://github.com/nwalters512) in [#69](https://github.com/illinois/queue/pull/69))
 
 ## 13 March 2018
 

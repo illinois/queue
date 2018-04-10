@@ -99,11 +99,12 @@ describe('Courses API', () => {
 
   describe('POST /api/course/:courseId/staff', async () => {
     test('succeeds for admin', async () => {
-      const newUser = { netid: 'newnetid', name: 'New Name' }
+      const newUser = { netid: 'newnetid' }
       const res = await request(app)
         .post('/api/courses/1/staff')
         .send(newUser)
       expect(res.statusCode).toBe(201)
+      expect(res.body.netid).toBe('newnetid')
     })
 
     test('succeeds for course staff', async () => {
@@ -112,6 +113,7 @@ describe('Courses API', () => {
         .post('/api/courses/1/staff?forceuser=225staff')
         .send(newUser)
       expect(res.statusCode).toBe(201)
+      expect(res.body.netid).toBe('newnetid')
     })
 
     test('fails if netid is missing', async () => {
@@ -148,6 +150,18 @@ describe('Courses API', () => {
       expect(user).not.toBe(null)
       expect(user.netid).toBe('newnetid')
     })
+
+    test('trims whitespace from netid', async () => {
+      const newUser = { netid: '  waf     ' }
+      const res = await request(app)
+        .post('/api/courses/1/staff')
+        .send(newUser)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.netid).toBe('waf')
+      const user = await User.findOne({ where: { netid: 'waf' } })
+      expect(user).not.toBe(null)
+      expect(user.netid).toBe('waf')
+    })
   })
 
   describe('DELETE /api/courses/:courseId/staff/:userId', () => {
@@ -161,9 +175,6 @@ describe('Courses API', () => {
       expect(res2.body.id).toBe(1)
       expect(res2.body.name).toBe('CS225')
       expect(res2.body).toHaveProperty('queues')
-      expect(res2.body.queues).toHaveLength(1)
-      expect(res2.body.queues[0].id).toBe(1)
-      expect(res2.body.queues[0].location).toBe('Here')
       expect(res2.body).toHaveProperty('staff')
       expect(res2.body.staff).toHaveLength(0)
     })
@@ -177,9 +188,6 @@ describe('Courses API', () => {
       expect(res2.body.id).toBe(1)
       expect(res2.body.name).toBe('CS225')
       expect(res2.body).toHaveProperty('queues')
-      expect(res2.body.queues).toHaveLength(1)
-      expect(res2.body.queues[0].id).toBe(1)
-      expect(res2.body.queues[0].location).toBe('Here')
       expect(res2.body).toHaveProperty('staff')
       expect(res2.body.staff).toHaveLength(0)
     })
@@ -193,9 +201,6 @@ describe('Courses API', () => {
       expect(res2.body.id).toBe(1)
       expect(res2.body.name).toBe('CS225')
       expect(res2.body).toHaveProperty('queues')
-      expect(res2.body.queues).toHaveLength(1)
-      expect(res2.body.queues[0].id).toBe(1)
-      expect(res2.body.queues[0].location).toBe('Here')
       expect(res2.body).toHaveProperty('staff')
       expect(res2.body.staff).toHaveLength(1)
       expect(res2.body.staff[0].netid).toBe('225staff')
@@ -211,9 +216,6 @@ describe('Courses API', () => {
       expect(res2.body.id).toBe(1)
       expect(res2.body.name).toBe('CS225')
       expect(res2.body).toHaveProperty('queues')
-      expect(res2.body.queues).toHaveLength(1)
-      expect(res2.body.queues[0].id).toBe(1)
-      expect(res2.body.queues[0].location).toBe('Here')
       expect(res2.body).toHaveProperty('staff')
       expect(res2.body.staff).toHaveLength(1)
       expect(res2.body.staff[0].netid).toBe('225staff')

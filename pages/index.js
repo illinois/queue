@@ -12,7 +12,12 @@ import {
   fetchCourses,
   createCourse,
 } from '../actions/course'
-import { fetchQueues, createQueue, deleteQueue } from '../actions/queue'
+import {
+  fetchQueues,
+  createQueue,
+  deleteQueue,
+  updateQueue,
+} from '../actions/queue'
 
 import PageWithUser from '../components/PageWithUser'
 import Loading from '../components/Loading'
@@ -21,6 +26,7 @@ import NewCourse from '../components/NewCourse'
 import NewQueue from '../components/NewQueue'
 import ShowForAdmin from '../components/ShowForAdmin'
 import QueueCard from '../components/QueueCard'
+import QueueEdit from '../components/QueueEdit'
 import ConfirmDeleteQueueModal from '../components/ConfirmDeleteQueueModal'
 
 class Index extends React.Component {
@@ -39,7 +45,9 @@ class Index extends React.Component {
       showCreateCoursePanel: false,
       showCreateQueuePanel: false,
       showDeleteQueueModal: false,
+      showEditQueueModal: false,
       pendingDeleteQueue: null,
+      pendingEditQueueId: null,
     }
   }
 
@@ -77,6 +85,30 @@ class Index extends React.Component {
     this.props
       .createQueue(courseId, queue)
       .then(() => this.showCreateQueuePanel(false))
+  }
+
+  editQueue(queueId) {
+    this.setState({
+      showEditQueueModal: true,
+      pendingEditQueueId: queueId,
+    })
+  }
+
+  submitQueueEdit(attributes) {
+    const { pendingEditQueueId } = this.state
+    this.props.updateQueue(pendingEditQueueId, attributes).then(() => {
+      this.setState({
+        showEditQueueModal: false,
+        pendingEditQueueId: null,
+      })
+    })
+  }
+
+  queueEditCancel() {
+    this.setState({
+      showEditQueueModal: false,
+      pendingEditQueueId: null,
+    })
   }
 
   deleteQueue(courseId, queueId) {
@@ -150,6 +182,7 @@ class Index extends React.Component {
               courseName={courseName}
               onClick={() => handleQueueClick(queue.id)}
               onDelete={() => this.deleteQueue(queue.courseId, queue.id)}
+              onUpdate={() => this.editQueue(queue.id)}
             />
           </CardCol>
         )
@@ -195,7 +228,15 @@ class Index extends React.Component {
               </CardBody>
             </Card>
           )}
-          <Row className="equal-height mb-5">{queues}</Row>
+          <Row className="equal-height mb-5">
+            {queues}
+            <QueueEdit
+              queue={this.props.queuesById[this.state.pendingEditQueueId]}
+              isOpen={this.state.showEditQueueModal}
+              onSubmitQueueEdit={attributes => this.submitQueueEdit(attributes)}
+              onCancel={() => this.queueEditCancel()}
+            />
+          </Row>
           <div className="d-sm-flex align-items-center mb-4">
             <h3 className="d-block d-sm-inline-block mb-0">
               Or, select a course
@@ -270,10 +311,16 @@ Index.propTypes = {
       name: PropTypes.string,
     })
   ),
+  queuesById: PropTypes.objectOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+    })
+  ),
   fetchCourses: PropTypes.func.isRequired,
   fetchQueues: PropTypes.func.isRequired,
   createCourse: PropTypes.func.isRequired,
   createQueue: PropTypes.func.isRequired,
+  updateQueue: PropTypes.func.isRequired,
   deleteQueue: PropTypes.func.isRequired,
 }
 
@@ -281,6 +328,7 @@ Index.defaultProps = {
   courses: [],
   coursesById: {},
   queues: [],
+  queuesById: {},
 }
 
 const mapObjectToArray = o => {
@@ -304,6 +352,8 @@ const mapDispatchToProps = dispatch => ({
   fetchQueues: () => dispatch(fetchQueues()),
   createCourse: course => dispatch(createCourse(course)),
   createQueue: (courseId, queue) => dispatch(createQueue(courseId, queue)),
+  updateQueue: (queueId, attributes) =>
+    dispatch(updateQueue(queueId, attributes)),
   deleteQueue: (courseId, queueId) => dispatch(deleteQueue(courseId, queueId)),
 })
 
