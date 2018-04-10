@@ -8,6 +8,8 @@ with the current date and the next changes should go under a **[Next]** header.
 ## [Next]
 
 * Properly handle any errors thrown in the API route handlers. ([@nwalters512](https://github.com/nwalters512) in [#86](https://github.com/illinois/queue/pull/86))
+* Run CI tests using a MySQL database. ([@nwalters512](https://github.com/nwalters512) in [#95](https://github.com/illinois/queue/pull/95))
+* Update all `npm` dependencies. ([@nwalters512](https://github.com/nwalters512) in [#91](https://github.com/illinois/queue/pull/91))
 * Redesign course homepage to use the new queue cards; add information about the course shortcode link. ([@nwalters512](https://github.com/nwalters512) in [#88](https://github.com/illinois/queue/pull/88))
 
 ## 31 March 2018
