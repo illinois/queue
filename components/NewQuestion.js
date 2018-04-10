@@ -120,6 +120,16 @@ export default class NewQuestion extends React.Component {
       'new-question-header-clickable': isUserCourseStaff,
     })
 
+    const namePlaceholder = `Enter ${isUserCourseStaff ? 'a' : 'your'} name`
+
+    const topicPlaceholder = `Enter a brief topic for ${
+      isUserCourseStaff ? 'the' : 'your'
+    } question`
+
+    const locationPlaceholder = `Enter ${
+      isUserCourseStaff ? 'a' : 'your'
+    } location`
+
     return (
       <Fragment>
         <Card color="light" className="mb-3">
@@ -168,7 +178,7 @@ export default class NewQuestion extends React.Component {
                     <Input
                       name="name"
                       id="name"
-                      placeholder="Enter your name"
+                      placeholder={namePlaceholder}
                       value={this.state.name}
                       onChange={this.handleInputChange}
                       valid={isValid(this.state.fieldErrors.name)}
@@ -185,7 +195,7 @@ export default class NewQuestion extends React.Component {
                     <Input
                       name="topic"
                       id="topic"
-                      placeholder="Enter a brief topic for your question"
+                      placeholder={topicPlaceholder}
                       value={this.state.topic}
                       onChange={this.handleInputChange}
                       valid={isValid(this.state.fieldErrors.topic)}
@@ -201,7 +211,7 @@ export default class NewQuestion extends React.Component {
                     <Input
                       name="location"
                       id="location"
-                      placeholder="Enter your location (eg. Basement Tables or 0224)"
+                      placeholder={locationPlaceholder}
                       value={queueLocation}
                       disabled={fixedLocation}
                       onChange={this.handleInputChange}
