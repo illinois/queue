@@ -18,14 +18,63 @@ describe('Questions API', () => {
     test('succeeds for student with well-formed request', async () => {
       const question = { name: 'a', location: 'b', topic: 'c' }
       const res = await request(app)
-        .post('/api/queues/1/questions')
+        .post('/api/queues/1/questions?forceuser=otherstudent')
         .send(question)
       expect(res.statusCode).toBe(201)
       expect(res.body.name).toBe('a')
       expect(res.body.location).toBe('b')
       expect(res.body.topic).toBe('c')
       expect(res.body).toHaveProperty('askedBy')
-      expect(res.body.askedBy.netid).toBe('dev')
+      expect(res.body.askedBy.netid).toBe('otherstudent')
+    })
+
+    test('succeeds for course staff with specific netid', async () => {
+      const question = {
+        name: 'a',
+        location: 'b',
+        topic: 'c',
+        netid: 'otherstudent',
+      }
+      const res = await request(app)
+        .post('/api/queues/1/questions?forceuser=225staff')
+        .send(question)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.name).toBe('a')
+      expect(res.body.location).toBe('b')
+      expect(res.body.topic).toBe('c')
+      expect(res.body).toHaveProperty('askedBy')
+      expect(res.body.askedBy.netid).toBe('otherstudent')
+    })
+
+    test('succeeds for admin with specific netid', async () => {
+      const question = {
+        name: 'a',
+        location: 'b',
+        topic: 'c',
+        netid: 'otherstudent',
+      }
+      const res = await request(app)
+        .post('/api/queues/1/questions?forceuser=admin')
+        .send(question)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.name).toBe('a')
+      expect(res.body.location).toBe('b')
+      expect(res.body.topic).toBe('c')
+      expect(res.body).toHaveProperty('askedBy')
+      expect(res.body.askedBy.netid).toBe('otherstudent')
+    })
+
+    test('fails for student with specific netid', async () => {
+      const question = {
+        name: 'a',
+        location: 'b',
+        topic: 'c',
+        netid: 'otherstudent',
+      }
+      const res = await request(app)
+        .post('/api/queues/1/questions?forceuser=student')
+        .send(question)
+      expect(res.statusCode).toBe(403)
     })
 
     test('removes location for fixed-location queue', async () => {
