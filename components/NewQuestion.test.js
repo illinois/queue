@@ -10,6 +10,7 @@ const makeProps = (queueId, userName = null) => ({
     name: userName,
   },
   createQuestion: jest.fn(),
+  isUserCourseStaff: false,
 })
 
 const doInputChange = (wrapper, name, value) => {
