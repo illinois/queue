@@ -76,7 +76,12 @@ export default class NewQuestion extends React.Component {
       fieldErrors,
     })
     if (!valid) return
+
+    const netid = this.props.isUserCourseStaff
+      ? this.state.netid || undefined
+      : undefined
     const question = {
+      netid,
       name: this.state.name,
       location: this.state.location,
       topic: this.state.topic,
@@ -85,7 +90,7 @@ export default class NewQuestion extends React.Component {
   }
 
   render() {
-    const { queue: { location, fixedLocation } } = this.props
+    const { queue: { location, fixedLocation }, isUserCourseStaff } = this.props
 
     const queueLocation = fixedLocation ? location : this.state.location
 
@@ -94,6 +99,26 @@ export default class NewQuestion extends React.Component {
         <CardHeader sm={2}>New question</CardHeader>
         <CardBody>
           <Form onSubmit={this.handleSubmit} autoComplete="off">
+            {isUserCourseStaff && (
+              <FormGroup row>
+                <Label for="netid" sm={2}>
+                  Net ID
+                </Label>
+                <Col sm={10}>
+                  <Input
+                    name="netid"
+                    id="netid"
+                    placeholder="Enter a Net ID (optional)"
+                    value={this.state.netid}
+                    onChange={this.handleInputChange}
+                    valid={isValid(this.state.fieldErrors.name)}
+                  />
+                  <FormText color="muted">
+                    This allows you to add a question on behalf of a student.
+                  </FormText>
+                </Col>
+              </FormGroup>
+            )}
             <FormGroup row>
               <Label for="name" sm={2}>
                 Name
@@ -179,4 +204,5 @@ NewQuestion.propTypes = {
     name: PropTypes.string,
   }).isRequired,
   createQuestion: PropTypes.func.isRequired,
+  isUserCourseStaff: PropTypes.bool.isRequired,
 }
