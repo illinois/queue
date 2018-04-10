@@ -16,6 +16,7 @@ import QuestionPanelContainer from '../containers/QuestionPanelContainer'
 import QuestionListContainer from '../containers/QuestionListContainer'
 import ShowForCourseStaff from '../components/ShowForCourseStaff'
 import QuestionNotificationsToggle from '../components/QuestionNotificationsToggle'
+import QueueStatusToggle from '../components/QueueStatusToggle'
 
 class Queue extends React.Component {
   static getInitialProps({ isServer, store, query }) {
@@ -65,6 +66,7 @@ class Queue extends React.Component {
             >
               <ShowForCourseStaff queueId={this.props.queueId}>
                 <QuestionNotificationsToggle />
+                <QueueStatusToggle queueId={this.props.queueId} />
               </ShowForCourseStaff>
               <StaffSidebar queueId={this.props.queueId} />
             </Col>
