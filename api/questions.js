@@ -6,7 +6,7 @@ const { check } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 
 const constants = require('../constants')
-const { Course, Queue, Question } = require('../models/')
+const { Course, Queue, Question, User } = require('../models/')
 const {
   requireQueue,
   requireQueueForQuestion,
@@ -51,18 +51,34 @@ router.post(
     check('topic')
       .isLength({ min: 1, max: constants.QUESTION_TOPIC_MAX_LENGTH })
       .trim(),
+    check('netid').optional({ nullable: true }),
     checkLocation,
     failIfErrors,
   ],
   safeAsync(async (req, res, _next) => {
     const data = matchedData(req)
-    const { id: queueId } = res.locals.queue
+    const { userAuthz, queue: { id: queueId, courseId } } = res.locals
+
+    // First, let's check if the request is coming from course staff and
+    // includes a specific netid
+    let askerId = res.locals.userAuthn.id
+    if (data.netid) {
+      if (userAuthz.isAdmin || userAuthz.staffedCourseIds.includes(courseId)) {
+        // The user is allowed to do this!
+        const [netid] = data.netid.split('@')
+        const [user] = await User.findOrCreate({ where: { netid } })
+        askerId = user.id
+      } else {
+        res.status(403).send("You don't have authorization to set a netid")
+        return
+      }
+    }
 
     // Let's check if the user already has a question for this queue
     const existingQuestion = await Question.findOne({
       where: {
         queueId,
-        askedById: res.locals.userAuthn.id,
+        askedById: askerId,
         dequeueTime: null,
       },
     })
@@ -78,7 +94,7 @@ router.post(
       topic: data.topic,
       enqueueTime: new Date(),
       queueId,
-      askedById: res.locals.userAuthn.id,
+      askedById: askerId,
     })
 
     await question.save()
@@ -259,7 +275,7 @@ router.delete(
 
     if (
       question.askedById === userAuthn.id ||
-      userAuthz.staffedCourseIds.indexOf(course.id) !== -1
+      userAuthz.staffedCourseIds.includes(course.id)
     ) {
       await question.update({
         dequeueTime: new Date(),

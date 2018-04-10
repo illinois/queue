@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import { createQuestion } from '../actions/question'
 
+import { isUserCourseStaffForQueue, isUserAdmin } from '../selectors'
 import NewQuestion from '../components/NewQuestion'
 
 function mapStateToProps(state, ownProps) {
@@ -8,6 +9,9 @@ function mapStateToProps(state, ownProps) {
     user: state.user.user,
     queueId: ownProps.queueId,
     queue: state.queues.queues[ownProps.queueId],
+    isUserCourseStaff:
+      isUserCourseStaffForQueue(state, ownProps) ||
+      isUserAdmin(state, ownProps),
   }
 }
 
