@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Container, Row, Col, Card, CardBody, Button } from 'reactstrap'
+import { Container, Row, Card, CardBody, Button } from 'reactstrap'
 import withRedux from 'next-redux-wrapper'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
 
-import { Link, Router } from '../routes'
+import { Link } from '../routes'
 import makeStore from '../redux/makeStore'
 import {
   fetchCoursesRequest,
@@ -18,6 +18,7 @@ import {
   deleteQueue,
   updateQueue,
 } from '../actions/queue'
+import { mapObjectToArray } from '../util'
 
 import PageWithUser from '../components/PageWithUser'
 import Loading from '../components/Loading'
@@ -25,9 +26,7 @@ import Layout from '../components/Layout'
 import NewCourse from '../components/NewCourse'
 import NewQueue from '../components/NewQueue'
 import ShowForAdmin from '../components/ShowForAdmin'
-import QueueCard from '../components/QueueCard'
-import QueueEdit from '../components/QueueEdit'
-import ConfirmDeleteQueueModal from '../components/ConfirmDeleteQueueModal'
+import QueueCardListContainer from '../containers/QueueCardListContainer'
 
 class Index extends React.Component {
   static async getInitialProps({ store, isServer }) {
@@ -44,10 +43,6 @@ class Index extends React.Component {
       finishedLoading: false,
       showCreateCoursePanel: false,
       showCreateQueuePanel: false,
-      showDeleteQueueModal: false,
-      showEditQueueModal: false,
-      pendingDeleteQueue: null,
-      pendingEditQueueId: null,
     }
   }
 
@@ -87,53 +82,6 @@ class Index extends React.Component {
       .then(() => this.showCreateQueuePanel(false))
   }
 
-  editQueue(queueId) {
-    this.setState({
-      showEditQueueModal: true,
-      pendingEditQueueId: queueId,
-    })
-  }
-
-  submitQueueEdit(attributes) {
-    const { pendingEditQueueId } = this.state
-    this.props.updateQueue(pendingEditQueueId, attributes).then(() => {
-      this.setState({
-        showEditQueueModal: false,
-        pendingEditQueueId: null,
-      })
-    })
-  }
-
-  queueEditCancel() {
-    this.setState({
-      showEditQueueModal: false,
-      pendingEditQueueId: null,
-    })
-  }
-
-  deleteQueue(courseId, queueId) {
-    this.setState({
-      showDeleteQueueModal: true,
-      pendingDeleteQueue: { courseId, queueId },
-    })
-  }
-
-  confirmDeleteQueue() {
-    const { courseId, queueId } = this.state.pendingDeleteQueue
-    this.props.deleteQueue(courseId, queueId).then(() => {
-      this.setState({
-        showDeleteQueueModal: false,
-        pendingDeleteQueue: null,
-      })
-    })
-  }
-
-  toggleDeleteModal() {
-    this.setState({
-      showDeleteQueueModal: !this.state.showDeleteQueueModal,
-    })
-  }
-
   render() {
     if (!this.state.finishedLoading) {
       return <Loading />
@@ -156,58 +104,19 @@ class Index extends React.Component {
       ))
     }
 
-    const CardCol = ({ children, ...rest }) => (
-      <Col
-        xs={{ size: 12 }}
-        md={{ size: 6 }}
-        lg={{ size: 4 }}
-        className="mb-3"
-        {...rest}
-      >
-        {children}
-      </Col>
-    )
-
-    let queues
-    if (this.props.queues && this.props.queues.length > 0) {
-      const handleQueueClick = id => {
-        Router.pushRoute('queue', { id })
-      }
-      queues = this.props.queues.map(queue => {
-        const courseName = this.props.coursesById[queue.courseId].name
-        return (
-          <CardCol key={queue.id}>
-            <QueueCard
-              queue={queue}
-              courseName={courseName}
-              onClick={() => handleQueueClick(queue.id)}
-              onDelete={() => this.deleteQueue(queue.courseId, queue.id)}
-              onUpdate={() => this.editQueue(queue.id)}
-            />
-          </CardCol>
-        )
-      })
-    } else {
-      queues = (
-        <Col>
-          <Card className="bg-light">
-            <CardBody className="text-center">
-              There aren&apos;t any open queues right now
-            </CardBody>
-          </Card>
-        </Col>
-      )
-    }
+    const queueIds = this.props.queues.map(queue => queue.id)
 
     return (
       <Layout>
         <Container>
-          <div className="d-sm-flex align-items-center mb-4">
-            <h1 className="display-4 d-block d-sm-inline-block">Open queues</h1>
+          <div className="d-flex flex-wrap align-items-center mb-4">
+            <h1 className="display-4 d-inline-block mb-0 mt-3 mr-auto pr-3">
+              Open queues
+            </h1>
             {this.props.showCreateQueueButton && (
               <Button
                 color="primary"
-                className="ml-auto mt-3 mt-sm-0"
+                className="mt-3"
                 onClick={() => this.showCreateQueuePanel(true)}
               >
                 <FontAwesomeIcon icon={faPlus} className="mr-2" />
@@ -228,23 +137,17 @@ class Index extends React.Component {
               </CardBody>
             </Card>
           )}
-          <Row className="equal-height mb-5">
-            {queues}
-            <QueueEdit
-              queue={this.props.queuesById[this.state.pendingEditQueueId]}
-              isOpen={this.state.showEditQueueModal}
-              onSubmitQueueEdit={attributes => this.submitQueueEdit(attributes)}
-              onCancel={() => this.queueEditCancel()}
-            />
+          <Row className="equal-height mb-4">
+            <QueueCardListContainer queueIds={queueIds} showCourseName />
           </Row>
-          <div className="d-sm-flex align-items-center mb-4">
-            <h3 className="d-block d-sm-inline-block mb-0">
+          <div className="d-flex flex-wrap align-items-center mb-4">
+            <h3 className="d-inline-block mb-0 mt-3 mr-auto pr-3">
               Or, select a course
             </h3>
             <ShowForAdmin>
               <Button
-                className="ml-auto mt-3 mt-sm-0"
                 color="primary"
+                className="mt-3"
                 onClick={() => this.showCreateCoursePanel(true)}
               >
                 <FontAwesomeIcon icon={faPlus} className="mr-2" />
@@ -264,13 +167,6 @@ class Index extends React.Component {
           )}
           <div className="mb-1">{courseButtons}</div>
         </Container>
-        {this.state.showDeleteQueueModal && (
-          <ConfirmDeleteQueueModal
-            isOpen={this.state.showDeleteQueueModal}
-            toggle={() => this.toggleDeleteModal()}
-            confirm={() => this.confirmDeleteQueue()}
-          />
-        )}
         <style global jsx>{`
           .courses-card {
             width: 100%;
@@ -301,17 +197,7 @@ Index.propTypes = {
       name: PropTypes.string,
     })
   ),
-  coursesById: PropTypes.objectOf(
-    PropTypes.shape({
-      name: PropTypes.string,
-    })
-  ),
   queues: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string,
-    })
-  ),
-  queuesById: PropTypes.objectOf(
     PropTypes.shape({
       name: PropTypes.string,
     })
@@ -320,30 +206,18 @@ Index.propTypes = {
   fetchQueues: PropTypes.func.isRequired,
   createCourse: PropTypes.func.isRequired,
   createQueue: PropTypes.func.isRequired,
-  updateQueue: PropTypes.func.isRequired,
-  deleteQueue: PropTypes.func.isRequired,
 }
 
 Index.defaultProps = {
   courses: [],
-  coursesById: {},
   queues: [],
-  queuesById: {},
-}
-
-const mapObjectToArray = o => {
-  const keys = Object.keys(o).map(id => Number.parseInt(id, 10))
-  const sortKeys = keys.sort((a, b) => (a < b ? -1 : 1))
-  return sortKeys.map(id => o[id])
 }
 
 const mapStateToProps = state => ({
   showCreateQueueButton:
     state.user.user &&
     (state.user.user.isAdmin || state.user.user.staffAssignments.length > 0),
-  coursesById: state.courses.courses,
   courses: mapObjectToArray(state.courses.courses),
-  queuesById: state.queues.queues,
   queues: mapObjectToArray(state.queues.queues),
 })
 

@@ -11,6 +11,7 @@ with the current date and the next changes should go under a **[Next]** header.
 * Run CI tests using a MySQL database. ([@nwalters512](https://github.com/nwalters512) in [#95](https://github.com/illinois/queue/pull/95))
 * Update all `npm` dependencies. ([@nwalters512](https://github.com/nwalters512) in [#91](https://github.com/illinois/queue/pull/91))
 * Show NetID for non-active staff; add tests for question rendering. ([@nwalters512](https://github.com/nwalters512) in [#93](https://github.com/illinois/queue/pull/93))
+* Redesign course homepage to use the new queue cards; add information about the course shortcode link. ([@nwalters512](https://github.com/nwalters512) in [#88](https://github.com/illinois/queue/pull/88))
 
 ## 31 March 2018
 
