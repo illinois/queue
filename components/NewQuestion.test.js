@@ -9,7 +9,10 @@ const makeProps = (queueId, userName = null) => ({
   user: {
     name: userName,
   },
-  createQuestion: jest.fn(),
+  createQuestion: jest.fn().mockReturnValueOnce({
+    // Fake Promie, woooo
+    then: () => {},
+  }),
   isUserCourseStaff: false,
 })
 
