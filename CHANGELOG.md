@@ -9,6 +9,7 @@ with the current date and the next changes should go under a **[Next]** header.
 
 * Properly handle any errors thrown in the API route handlers. ([@nwalters512](https://github.com/nwalters512) in [#86](https://github.com/illinois/queue/pull/86))
 * Run CI tests using a MySQL database. ([@nwalters512](https://github.com/nwalters512) in [#95](https://github.com/illinois/queue/pull/95))
+* Update all `npm` dependencies. ([@nwalters512](https://github.com/nwalters512) in [#91](https://github.com/illinois/queue/pull/91))
 * Show NetID for non-active staff; add tests for question rendering. ([@nwalters512](https://github.com/nwalters512) in [#93](https://github.com/illinois/queue/pull/93))
 
 ## 31 March 2018
