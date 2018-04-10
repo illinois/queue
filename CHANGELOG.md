@@ -10,6 +10,7 @@ with the current date and the next changes should go under a **[Next]** header.
 * Properly handle any errors thrown in the API route handlers. ([@nwalters512](https://github.com/nwalters512) in [#86](https://github.com/illinois/queue/pull/86))
 * Run CI tests using a MySQL database. ([@nwalters512](https://github.com/nwalters512) in [#95](https://github.com/illinois/queue/pull/95))
 * Update all `npm` dependencies. ([@nwalters512](https://github.com/nwalters512) in [#91](https://github.com/illinois/queue/pull/91))
+* Allow course staff and admins to add questions on behalf of other students. ([@nwalters512](https://github.com/nwalters512) in [#96](https://github.com/illinois/queue/pull/96))
 
 ## 31 March 2018
 
