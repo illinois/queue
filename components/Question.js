@@ -19,6 +19,7 @@ class Question extends React.Component {
       answeredBy,
       askedBy,
       isUserCourseStaff,
+      isUserActiveStaffForQueue,
       isUserAnsweringQuestion,
       isUserAnsweringOtherQuestion,
       didUserAskQuestion,
@@ -59,7 +60,7 @@ class Question extends React.Component {
     } else {
       buttonCluster = (
         <Fragment>
-          {isUserCourseStaff &&
+          {isUserActiveStaffForQueue &&
             !isUserAnsweringOtherQuestion && (
               <Button
                 color="primary"
@@ -134,9 +135,12 @@ class Question extends React.Component {
               <Badge color="success">Being answered by {answeringName}</Badge>
             )}
             <strong className="d-block">
-              {name}
+              <span title="Name">{name}</span>
               {isUserCourseStaff && (
-                <span className="text-muted"> ({askedBy.netid})</span>
+                <span title="NetID" className="text-muted">
+                  {' '}
+                  ({askedBy.netid})
+                </span>
               )}
             </strong>
             <div className="text-muted">
@@ -152,7 +156,7 @@ class Question extends React.Component {
                 </span>
               </span>
             </div>
-            <div>
+            <div title="Topic">
               <ParrotText text={topic} />
             </div>
           </div>
@@ -183,6 +187,7 @@ Question.propTypes = {
   }).isRequired,
   didUserAskQuestion: PropTypes.bool.isRequired,
   isUserCourseStaff: PropTypes.bool.isRequired,
+  isUserActiveStaffForQueue: PropTypes.bool.isRequired,
   isUserAnsweringQuestion: PropTypes.bool.isRequired,
   isUserAnsweringOtherQuestion: PropTypes.bool.isRequired,
   cancelQuestion: PropTypes.func.isRequired,

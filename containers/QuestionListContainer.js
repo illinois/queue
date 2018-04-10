@@ -7,25 +7,24 @@ import {
   finishAnsweringQuestion,
 } from '../actions/question'
 import {
+  isUserCourseStaffForQueue,
   isUserActiveStaffForQueue,
   isUserAnsweringQuestionForQueue,
 } from '../selectors'
 
 import QuestionList from '../components/QuestionList'
 
-function mapStateToProps(state, props) {
-  return {
-    queue: state.queues.queues[props.queueId],
-    questions: state.questions.questions,
-    // isUserCourseStaff: isUserCourseStaff(state, queueId),
-    isUserCourseStaff: isUserActiveStaffForQueue(state, props),
-    isUserAnsweringQuestionForQueue: isUserAnsweringQuestionForQueue(
-      state,
-      props
-    ),
-    userId: state.user.user.id,
-  }
-}
+const mapStateToProps = (state, props) => ({
+  queue: state.queues.queues[props.queueId],
+  questions: state.questions.questions,
+  isUserCourseStaff: isUserCourseStaffForQueue(state, props),
+  isUserActiveStaffForQueue: isUserActiveStaffForQueue(state, props),
+  isUserAnsweringQuestionForQueue: isUserAnsweringQuestionForQueue(
+    state,
+    props
+  ),
+  userId: state.user.user.id,
+})
 
 const mapDispatchToProps = (dispatch, { queueId }) => ({
   fetchQuestions: () => dispatch(fetchQuestions(queueId)),
