@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import {
+  Collapse,
   Card,
   CardBody,
   CardHeader,
@@ -13,6 +14,9 @@ import {
   FormText,
   FormFeedback,
 } from 'reactstrap'
+import classNames from 'classnames'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import faChevronDown from '@fortawesome/fontawesome-free-solid/faChevronDown'
 
 import constants from '../constants'
 
@@ -42,10 +46,21 @@ export default class NewQuestion extends React.Component {
       topic: '',
       location: '',
       fieldErrors: {},
+      isOpen: !this.props.isUserCourseStaff,
     }
 
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+  }
+
+  onCardHeaderClick() {
+    if (!this.props.isUserCourseStaff) {
+      // This isn't toggleable for normal users
+      return
+    }
+    this.setState({
+      isOpen: !this.state.isOpen,
+    })
   }
 
   handleInputChange(event) {
@@ -94,95 +109,136 @@ export default class NewQuestion extends React.Component {
 
     const queueLocation = fixedLocation ? location : this.state.location
 
+    const chevronClassNames = classNames({
+      'new-question-expand': true,
+      'ml-auto': true,
+      open: this.state.isOpen,
+    })
+
+    const headerClassNames = classNames({
+      'd-flex align-items-center': true,
+      'new-question-header-clickable': isUserCourseStaff,
+    })
+
     return (
-      <Card color="light" className="mb-3">
-        <CardHeader sm={2}>New question</CardHeader>
-        <CardBody>
-          <Form onSubmit={this.handleSubmit} autoComplete="off">
+      <Fragment>
+        <Card color="light" className="mb-3">
+          <CardHeader
+            sm={2}
+            className={headerClassNames}
+            onClick={() => this.onCardHeaderClick()}
+          >
+            <span>New question</span>
             {isUserCourseStaff && (
-              <FormGroup row>
-                <Label for="netid" sm={2}>
-                  Net ID
-                </Label>
-                <Col sm={10}>
-                  <Input
-                    name="netid"
-                    id="netid"
-                    placeholder="Enter a Net ID (optional)"
-                    value={this.state.netid}
-                    onChange={this.handleInputChange}
-                    valid={isValid(this.state.fieldErrors.name)}
-                  />
-                  <FormText color="muted">
-                    This allows you to add a question on behalf of a student.
-                  </FormText>
-                </Col>
-              </FormGroup>
+              <FontAwesomeIcon
+                icon={faChevronDown}
+                className={chevronClassNames}
+              />
             )}
-            <FormGroup row>
-              <Label for="name" sm={2}>
-                Name
-              </Label>
-              <Col sm={10}>
-                <Input
-                  name="name"
-                  id="name"
-                  placeholder="Enter your name"
-                  value={this.state.name}
-                  onChange={this.handleInputChange}
-                  valid={isValid(this.state.fieldErrors.name)}
-                />
-                <FormFeedback>{this.state.fieldErrors.name}</FormFeedback>
-                <FormText color="muted">Using a nickname is fine!</FormText>
-              </Col>
-            </FormGroup>
-            <FormGroup row>
-              <Label for="topic" sm={2}>
-                Topic
-              </Label>
-              <Col sm={10}>
-                <Input
-                  name="topic"
-                  id="topic"
-                  placeholder="Enter a brief topic for your question"
-                  value={this.state.topic}
-                  onChange={this.handleInputChange}
-                  valid={isValid(this.state.fieldErrors.topic)}
-                />
-                <FormFeedback>{this.state.fieldErrors.topic}</FormFeedback>
-              </Col>
-            </FormGroup>
-            <FormGroup row>
-              <Label for="location" sm={2}>
-                Location
-              </Label>
-              <Col sm={10}>
-                <Input
-                  name="location"
-                  id="location"
-                  placeholder="Enter your location (eg. Basement Tables or 0224)"
-                  value={queueLocation}
-                  disabled={fixedLocation}
-                  onChange={this.handleInputChange}
-                  valid={isValid(this.state.fieldErrors.location)}
-                />
-                <FormFeedback>{this.state.fieldErrors.location}</FormFeedback>
-                {fixedLocation && (
-                  <FormText>This is a fixed-location queue.</FormText>
+          </CardHeader>
+          <Collapse isOpen={this.state.isOpen}>
+            <CardBody>
+              <Form onSubmit={this.handleSubmit} autoComplete="off">
+                {isUserCourseStaff && (
+                  <FormGroup row>
+                    <Label for="netid" sm={2}>
+                      Net ID
+                    </Label>
+                    <Col sm={10}>
+                      <Input
+                        name="netid"
+                        id="netid"
+                        placeholder="Enter a Net ID (optional)"
+                        value={this.state.netid}
+                        onChange={this.handleInputChange}
+                        valid={isValid(this.state.fieldErrors.name)}
+                      />
+                      <FormText color="muted">
+                        This allows you to add a question on behalf of a
+                        student.
+                      </FormText>
+                    </Col>
+                  </FormGroup>
                 )}
-              </Col>
-            </FormGroup>
-            <Button
-              block
-              color="primary"
-              type="button"
-              onClick={this.handleSubmit}
-            >
-              Add to queue
-            </Button>
-          </Form>
-        </CardBody>
-      </Card>
+                <FormGroup row>
+                  <Label for="name" sm={2}>
+                    Name
+                  </Label>
+                  <Col sm={10}>
+                    <Input
+                      name="name"
+                      id="name"
+                      placeholder="Enter your name"
+                      value={this.state.name}
+                      onChange={this.handleInputChange}
+                      valid={isValid(this.state.fieldErrors.name)}
+                    />
+                    <FormFeedback>{this.state.fieldErrors.name}</FormFeedback>
+                    <FormText color="muted">Using a nickname is fine!</FormText>
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Label for="topic" sm={2}>
+                    Topic
+                  </Label>
+                  <Col sm={10}>
+                    <Input
+                      name="topic"
+                      id="topic"
+                      placeholder="Enter a brief topic for your question"
+                      value={this.state.topic}
+                      onChange={this.handleInputChange}
+                      valid={isValid(this.state.fieldErrors.topic)}
+                    />
+                    <FormFeedback>{this.state.fieldErrors.topic}</FormFeedback>
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Label for="location" sm={2}>
+                    Location
+                  </Label>
+                  <Col sm={10}>
+                    <Input
+                      name="location"
+                      id="location"
+                      placeholder="Enter your location (eg. Basement Tables or 0224)"
+                      value={queueLocation}
+                      disabled={fixedLocation}
+                      onChange={this.handleInputChange}
+                      valid={isValid(this.state.fieldErrors.location)}
+                    />
+                    <FormFeedback>
+                      {this.state.fieldErrors.location}
+                    </FormFeedback>
+                    {fixedLocation && (
+                      <FormText>This is a fixed-location queue.</FormText>
+                    )}
+                  </Col>
+                </FormGroup>
+                <Button
+                  block
+                  color="primary"
+                  type="button"
+                  onClick={this.handleSubmit}
+                >
+                  Add to queue
+                </Button>
+              </Form>
+            </CardBody>
+          </Collapse>
+        </Card>
+        <style jsx>{`
+          :global(.new-question-expand) {
+            transition: all 400ms;
+          }
+          :global(.new-question-expand.open) {
+            transform: rotateX(180deg);
+          }
+          :global(.new-question-header-clickable) {
+            cursor: pointer;
+          }
+        `}</style>
+      </Fragment>
     )
   }
 }
