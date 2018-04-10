@@ -42,7 +42,8 @@ export default class NewQuestion extends React.Component {
     super(props)
 
     this.state = {
-      name: props.user.name || '',
+      netid: '',
+      name: props.isUserCourseStaff ? '' : props.user.name || '',
       topic: '',
       location: '',
       fieldErrors: {},
@@ -101,7 +102,15 @@ export default class NewQuestion extends React.Component {
       location: this.state.location,
       topic: this.state.topic,
     }
-    this.props.createQuestion(this.props.queueId, question)
+    this.props.createQuestion(this.props.queueId, question).then(() => {
+      // Clear out all fields so user can add a new question
+      this.setState({
+        netid: '',
+        name: this.props.isUserCourseStaff ? '' : this.props.user.name || '',
+        location: '',
+        topic: '',
+      })
+    })
   }
 
   render() {
