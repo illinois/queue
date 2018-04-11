@@ -95,6 +95,7 @@ Queue.propTypes = {
     id: PropTypes.number,
     name: PropTypes.string,
     location: PropTypes.string,
+    courseId: PropTypes.number,
   }),
 }
 

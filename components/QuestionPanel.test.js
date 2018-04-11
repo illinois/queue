@@ -2,6 +2,8 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import QuestionPanel from './QuestionPanel'
+import NewQuestion from './NewQuestion'
+import ActiveQuestionPanel from './ActiveQuestionPanel'
 
 const makeProps = (
   queueId,
@@ -18,15 +20,15 @@ const makeProps = (
 })
 
 describe('<QuestionPanel />', () => {
-  test("doesn't render question panel if user is active staff", () => {
-    const props = makeProps(1, 'Genna', 1, true)
+  test('renders new question panel if user does not have active question', () => {
+    const props = makeProps(1, 'Genna', -1, false)
     const wrapper = shallow(<QuestionPanel {...props} />)
-    expect(wrapper.get(0)).toBeNull()
+    expect(wrapper.find(NewQuestion)).not.toBeNull()
   })
 
-  test('renders question panel if user is not active staff', () => {
+  test('renders active question panel if user has active question', () => {
     const props = makeProps(1, 'Genna', 1, false)
     const wrapper = shallow(<QuestionPanel {...props} />)
-    expect(wrapper.get(0)).not.toBeNull()
+    expect(wrapper.find(ActiveQuestionPanel)).not.toBeNull()
   })
 })

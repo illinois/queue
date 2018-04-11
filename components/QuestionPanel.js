@@ -4,14 +4,7 @@ import PropTypes from 'prop-types'
 import ActiveQuestionPanel from './ActiveQuestionPanel'
 import NewQuestionContainer from '../containers/NewQuestionContainer'
 
-const QuestionPanel = ({
-  queueId,
-  userActiveQuestionId,
-  isUserActiveStaff,
-}) => {
-  if (isUserActiveStaff) {
-    return null
-  }
+const QuestionPanel = ({ queueId, userActiveQuestionId }) => {
   if (userActiveQuestionId !== -1) {
     return (
       <ActiveQuestionPanel
@@ -26,7 +19,6 @@ const QuestionPanel = ({
 QuestionPanel.propTypes = {
   queueId: PropTypes.number.isRequired,
   userActiveQuestionId: PropTypes.number.isRequired,
-  isUserActiveStaff: PropTypes.bool.isRequired,
 }
 
 export default QuestionPanel
