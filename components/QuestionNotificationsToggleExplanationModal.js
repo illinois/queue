@@ -8,10 +8,10 @@ const QuestionNotificationsToggleExplanationModal = props => (
     <ModalBody>
       <h5>For students</h5>
       <p>
-        If you enable notificaitons, you&apos;ll get notifications when your
+        If you enable notifications, you&apos;ll get notifications when your
         question is being answered.
       </p>
-      <h5>For course staff/admins</h5>
+      <h5>For on-duty course staff/admins</h5>
       <p>
         If you enable notifications, you&apos;ll get notifications when a
         student adds a new question to the queue.
