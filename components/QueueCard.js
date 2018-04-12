@@ -27,35 +27,36 @@ const QueueCard = ({ queue, courseName, onDelete, onUpdate, ...rest }) => {
     onUpdate()
   }
 
+  const title = courseName || queueName
+  const showQueueNameInBody = !!courseName
+
   return (
     <Card className="queue-card" {...rest}>
       <CardBody>
-        <CardTitle className="d-flex align-items-center">
-          {courseName}
-          <ShowForCourseStaff courseId={queue.courseId}>
-            <Button
-              color="danger"
-              size="sm"
-              className="mr-1 ml-auto"
-              outline
-              onClick={handleDelete}
-            >
-              Delete
-            </Button>
-          </ShowForCourseStaff>
-          <ShowForCourseStaff courseId={queue.courseId}>
-            <Button
-              color="primary"
-              size="sm"
-              className="mr-0 ml-1"
-              outline
-              onClick={handleUpdate}
-            >
-              Edit
-            </Button>
-          </ShowForCourseStaff>
+        <CardTitle className="d-flex flex-wrap align-items-center">
+          <span className="mb-2 mr-auto pr-3">{title}</span>
+          <div>
+            <ShowForCourseStaff courseId={queue.courseId}>
+              <Button color="danger" size="sm" outline onClick={handleDelete}>
+                Delete
+              </Button>
+            </ShowForCourseStaff>
+            <ShowForCourseStaff courseId={queue.courseId}>
+              <Button
+                color="primary"
+                size="sm"
+                className="mr-0 ml-1"
+                outline
+                onClick={handleUpdate}
+              >
+                Edit
+              </Button>
+            </ShowForCourseStaff>
+          </div>
         </CardTitle>
-        <CardSubtitle className="mb-2">{queueName}</CardSubtitle>
+        {showQueueNameInBody && (
+          <CardSubtitle className="mb-2">{queueName}</CardSubtitle>
+        )}
         <div className="text-muted">
           <FontAwesomeIcon icon={faMapMarker} fixedWidth className="mr-2" />
           {locationText}
@@ -80,11 +81,15 @@ const QueueCard = ({ queue, courseName, onDelete, onUpdate, ...rest }) => {
   )
 }
 
+QueueCard.defaultProps = {
+  courseName: null,
+}
+
 QueueCard.propTypes = {
   queue: PropTypes.shape({
     courseId: PropTypes.number,
   }).isRequired,
-  courseName: PropTypes.string.isRequired,
+  courseName: PropTypes.string,
   onUpdate: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
 }

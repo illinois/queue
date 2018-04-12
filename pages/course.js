@@ -1,35 +1,26 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-  Container,
-  ListGroup,
-  ListGroupItem,
-  Card,
-  CardHeader,
-  CardTitle,
-  Button,
-} from 'reactstrap'
+import { Container, Row, Card, CardBody, Button } from 'reactstrap'
 import withRedux from 'next-redux-wrapper'
-import FlipMove from 'react-flip-move'
 import Error from 'next/error'
 
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
+import faUsers from '@fortawesome/fontawesome-free-solid/faUsers'
 
 import { Link } from '../routes'
 import makeStore from '../redux/makeStore'
 import { fetchCourseRequest, fetchCourse } from '../actions/course'
 import { createQueue, deleteQueue, updateQueue } from '../actions/queue'
-import { isUserCourseStaff } from '../selectors'
 
 import PageWithUser from '../components/PageWithUser'
 import Loading from '../components/Loading'
 import Layout from '../components/Layout'
 import NewQueue from '../components/NewQueue'
-import Queue from '../components/Queue'
-import QueueEdit from '../components/QueueEdit'
+import QueueCardListContainer from '../containers/QueueCardListContainer'
 import ShowForCourseStaff from '../components/ShowForCourseStaff'
 import ConfirmDeleteQueueModal from '../components/ConfirmDeleteQueueModal'
+import CourseShortCodeInfo from '../components/CourseShortCodeInfo'
 
 class Course extends React.Component {
   static async getInitialProps({ isServer, store, query }) {
@@ -48,10 +39,6 @@ class Course extends React.Component {
 
     this.state = {
       showCreateQueuePanel: false,
-      showDeleteQueueModal: false,
-      showEditQueueModal: false,
-      pendingDeleteQueueId: null,
-      pendingEditQueueId: null,
     }
   }
 
@@ -71,55 +58,6 @@ class Course extends React.Component {
       .then(() => this.showCreateQueuePanel(false))
   }
 
-  editQueue(queueId) {
-    this.setState({
-      showEditQueueModal: true,
-      pendingEditQueueId: queueId,
-    })
-  }
-
-  submitQueueEdit(attributes) {
-    const { pendingEditQueueId } = this.state
-    this.props.updateQueue(pendingEditQueueId, attributes).then(() => {
-      this.setState({
-        showEditQueueModal: false,
-        pendingEditQueueId: null,
-      })
-    })
-  }
-
-  queueEditCancel() {
-    this.setState({
-      showEditQueueModal: false,
-      pendingEditQueueId: null,
-    })
-  }
-
-  deleteQueue(queueId) {
-    this.setState({
-      showDeleteQueueModal: true,
-      pendingDeleteQueueId: queueId,
-    })
-  }
-
-  confirmDeleteQueue() {
-    const { pendingDeleteQueueId } = this.state
-    this.props
-      .deleteQueue(this.props.courseId, pendingDeleteQueueId)
-      .then(() => {
-        this.setState({
-          showDeleteQueueModal: false,
-          pendingDeleteQueueId: null,
-        })
-      })
-  }
-
-  toggleDeleteModal() {
-    this.setState({
-      showDeleteQueueModal: !this.state.showDeleteQueueModal,
-    })
-  }
-
   render() {
     if (this.props.isFetching) {
       return <Loading />
@@ -128,93 +66,57 @@ class Course extends React.Component {
       return <Error statusCode={404} />
     }
 
-    let queues
-    if (this.props.course.queues && this.props.course.queues.length > 0) {
-      queues = this.props.course.queues.map(id => {
-        const queue = this.props.queues[id]
-        return (
-          <Queue
-            key={id}
-            onDeleteQueue={queueId => this.deleteQueue(queueId)}
-            onUpdateQueue={queueId => this.editQueue(queueId)}
-            isUserCourseStaff={this.props.isUserCourseStaff}
-            {...queue}
-          />
-        )
-      }, this)
-    } else {
-      queues = (
-        <div>
-          <ListGroupItem className="text-center text-muted pt-4 pb-4">
-            There aren&apos;t any queues right now
-          </ListGroupItem>
-        </div>
-      )
-    }
-
-    const createQueuePanel = (
-      <ListGroupItem>
-        <NewQueue
-          onCreateQueue={queue => this.createQueue(queue)}
-          onCancel={() => this.showCreateQueuePanel(false)}
-        />
-      </ListGroupItem>
-    )
-
-    const createQueueButton = (
-      <ShowForCourseStaff courseId={this.props.courseId}>
-        <ListGroupItem
-          action
-          className="text-muted"
-          onClick={() => this.showCreateQueuePanel(true)}
-        >
-          <FontAwesomeIcon icon={faPlus} className="mr-2" />
-          Create a queue
-        </ListGroupItem>
-      </ShowForCourseStaff>
-    )
-
     return (
       <Layout>
-        <Container fluid>
-          <Card className="courses-card">
-            <CardHeader className="bg-primary text-white d-flex align-items-center">
-              <CardTitle tag="h4" className="mb-0">
-                {this.props.course && this.props.course.name} Queues
-              </CardTitle>
-              <ShowForCourseStaff courseId={this.props.courseId}>
-                <Link
-                  route="courseStaff"
-                  params={{ id: this.props.courseId }}
-                  prefetch
-                  passHref
-                >
-                  <Button tag="a" color="light" size="sm" className="ml-auto">
-                    Manage Staff
-                  </Button>
-                </Link>
-              </ShowForCourseStaff>
-            </CardHeader>
-            <ListGroup flush>
-              <FlipMove
-                enterAnimation="accordionVertical"
-                leaveAnimation="accordionVertical"
-                duration={200}
+        <Container>
+          <div className="d-flex flex-wrap align-items-center mb-4">
+            <h1 className="display-4 d-inline-block mb-0 mt-3 mr-auto pr-3">
+              {this.props.course.name}
+            </h1>
+            <ShowForCourseStaff courseId={this.props.courseId}>
+              <Link
+                route="courseStaff"
+                params={{ id: this.props.courseId }}
+                prefetch
+                passHref
               >
-                {queues}
-                <QueueEdit
-                  queue={this.props.queues[this.state.pendingEditQueueId]}
-                  isOpen={this.state.showEditQueueModal}
-                  onSubmitQueueEdit={attributes =>
-                    this.submitQueueEdit(attributes)
+                <Button tag="a" color="primary" className="mt-3">
+                  <FontAwesomeIcon icon={faUsers} className="mr-2" />
+                  Manage staff
+                </Button>
+              </Link>
+            </ShowForCourseStaff>
+          </div>
+          <div className="d-flex flex-wrap align-items-center mb-4">
+            <h2 className="d-inline-block mb-0 mt-3 mr-auto pr-3">Queues</h2>
+            <ShowForCourseStaff courseId={this.props.courseId}>
+              <Button
+                color="primary"
+                className="mt-3"
+                onClick={() => this.showCreateQueuePanel(true)}
+              >
+                <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                Create queue
+              </Button>
+            </ShowForCourseStaff>
+          </div>
+          {this.state.showCreateQueuePanel && (
+            <Card className="mb-4">
+              <CardBody>
+                <NewQueue
+                  showCourseSelector={false}
+                  onCreateQueue={(queue, courseId) =>
+                    this.createQueue(queue, courseId)
                   }
-                  onCancel={() => this.queueEditCancel()}
+                  onCancel={() => this.showCreateQueuePanel(false)}
                 />
-              </FlipMove>
-              {!this.state.showCreateQueuePanel && createQueueButton}
-              {this.state.showCreateQueuePanel && createQueuePanel}
-            </ListGroup>
-          </Card>
+              </CardBody>
+            </Card>
+          )}
+          <Row className="equal-height mb-5">
+            <QueueCardListContainer queueIds={this.props.course.queues} />
+          </Row>
+          <CourseShortCodeInfo course={this.props.course} />
         </Container>
         {this.state.showDeleteQueueModal && (
           <ConfirmDeleteQueueModal
@@ -250,17 +152,12 @@ Course.propTypes = {
   isFetching: PropTypes.bool,
   createQueue: PropTypes.func.isRequired,
   fetchCourse: PropTypes.func.isRequired,
-  updateQueue: PropTypes.func.isRequired,
-  deleteQueue: PropTypes.func.isRequired,
-  isUserCourseStaff: PropTypes.bool,
-  dispatch: PropTypes.func.isRequired,
 }
 
 Course.defaultProps = {
   course: null,
   queues: null,
   isFetching: true,
-  isUserCourseStaff: false,
 }
 
 const mapStateToProps = (state, ownProps) => {
@@ -269,7 +166,6 @@ const mapStateToProps = (state, ownProps) => {
     course,
     queues: state.queues.queues,
     isFetching: state.courses.isFetching || state.queues.isFetching,
-    isUserCourseStaff: isUserCourseStaff(state, ownProps),
   }
 }
 
