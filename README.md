@@ -11,7 +11,7 @@ At UIUC, this queue is hosted as a free service by Computer Science and EngrIT.
 * View the queue at https://edu.cs.illinois.edu/queue/
 * [Request to have a queue created for your course by filling out this short form](https://forms.illinois.edu/sec/691281)
 
-## Running the Queue from Soruce
+## Running the Queue from Source
 
 ### Running locally in `dev` mode:
 
