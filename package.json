@@ -32,6 +32,7 @@
     "express-session": "^1.15.6",
     "express-urlrewrite": "^1.2.0",
     "express-validator": "^4.3.0",
+    "http-status": "^1.0.1",
     "isomorphic-unfetch": "^2.0.0",
     "json-patch": "^0.7.0",
     "moment": "^2.22.0",
