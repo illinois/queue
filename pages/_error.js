@@ -14,7 +14,10 @@ const styles = {
     background: '#fff',
     fontFamily:
       '-apple-system, BlinkMacSystemFont, Roboto, "Segoe UI", "Fira Sans", Avenir, "Helvetica Neue", "Lucida Grande", sans-serif',
+    width: '100%',
     height: '100vh',
+    position: 'absolute',
+    top: '0',
     textAlign: 'center',
     display: 'flex',
     flexDirection: 'column',
