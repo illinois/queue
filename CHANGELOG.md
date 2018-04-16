@@ -7,7 +7,7 @@ with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
 
-* Custom error page with consistent header, footer, and button to navigate to homepage. ([@JParisFerrer](https://github.com/jparisferrer) in [#103])
+* Custom error page with consistent header, footer, and button to navigate to homepage. ([@JParisFerrer](https://github.com/jparisferrer) in [#103](https://github.com/illinois/queue/pull/103))
 
 ## 10 April 2018
 
