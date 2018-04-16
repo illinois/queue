@@ -10,7 +10,8 @@ class CourseShortCodeInfo extends React.Component {
 
     if (!course || !course.shortcode) return null
 
-    const origin = (typeof document !== 'undefined' && document.origin) || ''
+    const origin =
+      (typeof window !== 'undefined' && window.location.origin) || ''
     const link = `${origin}${baseUrl}/${course.shortcode}`
 
     return (
