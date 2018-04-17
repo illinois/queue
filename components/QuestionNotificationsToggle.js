@@ -1,9 +1,11 @@
 /* eslint-env browser */
-import React from 'react'
-import { Button } from 'reactstrap'
-
+import React, { Fragment } from 'react'
+import { Button, ButtonGroup } from 'reactstrap'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faBell from '@fortawesome/fontawesome-free-solid/faBell'
+import faInfo from '@fortawesome/fontawesome-free-solid/faInfoCircle'
+
+import QuestionNotificationsToggleExplanationModal from './QuestionNotificationsToggleExplanationModal'
 
 class QuestionNotificationsToggle extends React.Component {
   constructor(props) {
@@ -23,6 +25,7 @@ class QuestionNotificationsToggle extends React.Component {
       supported,
       enabled,
       permission,
+      showExplanationModal: false,
     }
 
     // Sync notification setting between tabs
@@ -40,6 +43,12 @@ class QuestionNotificationsToggle extends React.Component {
   setNotificationsEnabled(enabled) {
     localStorage.setItem('notificationsEnabled', enabled ? 'true' : 'false')
     this.setState({ enabled })
+  }
+
+  toggleExplanationModal() {
+    this.setState({
+      showExplanationModal: !this.state.showExplanationModal,
+    })
   }
 
   toggleNotificationsEnabled() {
@@ -92,17 +101,33 @@ class QuestionNotificationsToggle extends React.Component {
     }
 
     return (
-      <Button
-        color={color}
-        block
-        disabled={disabled}
-        className="mb-3 d-flex flex-row justify-content-center align-items-center"
-        style={{ whiteSpace: 'normal' }}
-        onClick={() => this.toggleNotificationsEnabled()}
-      >
-        <FontAwesomeIcon icon={faBell} className="mr-3" />
-        <span>{text}</span>
-      </Button>
+      <Fragment>
+        <ButtonGroup className="mb-3 d-block d-flex flex-row justify-content-center align-items-center">
+          <Button
+            color={color}
+            disabled={disabled}
+            id="notificationButton"
+            className="d-flex flex-row justify-content-center align-items-center"
+            style={{ whiteSpace: 'normal', flex: 1 }}
+            onClick={() => this.toggleNotificationsEnabled()}
+          >
+            <FontAwesomeIcon icon={faBell} className="mr-3" />
+            <span>{text}</span>
+          </Button>
+          <Button
+            color={color}
+            outline
+            className="d-flex align-self-stretch"
+            onClick={() => this.toggleExplanationModal()}
+          >
+            <FontAwesomeIcon icon={faInfo} />
+          </Button>
+        </ButtonGroup>
+        <QuestionNotificationsToggleExplanationModal
+          isOpen={this.state.showExplanationModal}
+          toggle={() => this.toggleExplanationModal()}
+        />
+      </Fragment>
     )
   }
 }
