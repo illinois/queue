@@ -9,6 +9,7 @@ with the current date and the next changes should go under a **[Next]** header.
 
 * Fix course shortcode link to work in browsers besides Chrome. ([@nwalters512](https://github.com/nwalters512) in [#101](https://github.com/illinois/queue/pull/101))
 * Custom error page with consistent header, footer, and button to navigate to homepage. ([@JParisFerrer](https://github.com/jparisferrer) in [#103](https://github.com/illinois/queue/pull/103))
+* Add notifications for students when their question is being answered. ([@zwang180](https://github.com/zwang180) in [#94](https://github.com/illinois/queue/pull/94))
 
 ## 10 April 2018
 
