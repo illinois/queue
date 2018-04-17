@@ -8,7 +8,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
-
+      open: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
       startTime: DataTypes.DATE,
       endTime: DataTypes.DATE,
     },

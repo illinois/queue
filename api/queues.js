@@ -120,7 +120,6 @@ router.patch(
   safeAsync(async (req, res, _next) => {
     const { queue } = res.locals
     const data = matchedData(req)
-
     await queue.update({
       name: data.name,
       location: data.location,
@@ -129,6 +128,32 @@ router.patch(
       where: { id: queue.id },
     })
     res.status(201).send(updatedQueue)
+  })
+)
+
+router.patch(
+  '/:queueId/updateStatus',
+  [
+    requireCourseStaffForQueue,
+    requireQueue,
+    check('open').exists(),
+    failIfErrors,
+  ],
+  safeAsync(async (req, res, _next) => {
+    const { queue } = res.locals
+    const data = matchedData(req)
+    await queue.update({
+      open: data.open,
+    })
+
+    const updatedQueue = await Queue.scope('questionCount').findOne({
+      where: { id: queue.id },
+    })
+    res.status(201).send(updatedQueue)
+
+    //console.log(queue)
+
+    //res.status(201).send(queue)
   })
 )
 

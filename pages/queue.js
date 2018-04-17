@@ -18,7 +18,7 @@ import QuestionPanelContainer from '../containers/QuestionPanelContainer'
 import QuestionListContainer from '../containers/QuestionListContainer'
 import ShowForCourseStaff from '../components/ShowForCourseStaff'
 import QuestionNotificationsToggle from '../components/QuestionNotificationsToggle'
-import QueueStatusToggle from '../components/QueueStatusToggle'
+import QueueStatusToggleContainer from '../containers/QueueStatusToggleContainer'
 
 class Queue extends React.Component {
   static getInitialProps({ isServer, store, query }) {
@@ -75,12 +75,19 @@ class Queue extends React.Component {
             >
               <ShowForCourseStaff queueId={this.props.queueId}>
                 <QuestionNotificationsToggle />
-                <QueueStatusToggle queueId={this.props.queueId} />
+                <QueueStatusToggleContainer queue={this.props.queue} />
               </ShowForCourseStaff>
               <StaffSidebar queueId={this.props.queueId} />
             </Col>
             <Col xs={{ size: 12 }} md={{ size: 8 }} lg={{ size: 9 }}>
-              <QuestionPanelContainer queueId={this.props.queueId} />
+              {this.props.queue.open && (
+                <QuestionPanelContainer queueId={this.props.queueId} />
+              )}
+              {!this.props.queue.open && (
+                <div class="alert alert-danger" role="alert">
+                  This queue is currently closed!{' '}
+                </div>
+              )}
               <QuestionListContainer queueId={this.props.queueId} />
             </Col>
           </Row>
@@ -89,6 +96,7 @@ class Queue extends React.Component {
     )
   }
 }
+// {!this.props.queue.open && }
 
 Queue.propTypes = {
   isFetching: PropTypes.bool.isRequired,
@@ -101,6 +109,7 @@ Queue.propTypes = {
     name: PropTypes.string,
     location: PropTypes.string,
     courseId: PropTypes.number,
+    open: PropTypes.bool,
   }),
 }
 

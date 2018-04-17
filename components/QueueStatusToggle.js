@@ -1,41 +1,22 @@
 /* eslint-env browser */
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Button } from 'reactstrap'
 
 class QueueStatusToggle extends React.Component {
-  constructor(props) {
-    super(props)
-
-    const enabled = window.localStorage.getItem('QueueStatus') === 'true'
-
-    // Sync the notifications state to local storage TODO: change this to not using local storage
-    localStorage.setItem('QueueStatus', enabled ? 'true' : 'false')
-
-    this.state = {
-      enabled,
-    }
-  }
-
-  setQueueStatus(enabled) {
-    localStorage.setItem('QueueStatus', enabled ? 'true' : 'false')
-    this.setState({ enabled })
-  }
-
   toggleQueueStatus() {
-    this.setQueueStatus(!this.state.enabled)
-    // TODO
+    const attributes = { open: !this.props.queue.open }
+    this.props.updateQueueStatus(this.props.queue.id, attributes)
   }
 
   render() {
-    const text = this.state.enabled ? 'Open Queue' : 'Close Queue'
-    const color = this.state.enabled ? 'success' : 'danger'
-    const disabled = false
+    const text = this.props.queue.open ? 'Close Queue' : 'Open Queue'
+    const color = this.props.queue.open ? 'danger' : 'success'
 
     return (
       <Button
         color={color}
         block
-        disabled={disabled}
         className="mb-3 d-flex flex-row justify-content-center align-items-center"
         style={{ whiteSpace: 'normal' }}
         onClick={() => this.toggleQueueStatus()}
@@ -44,6 +25,18 @@ class QueueStatusToggle extends React.Component {
       </Button>
     )
   }
+}
+
+QueueStatusToggle.defaultProps = {
+  queue: null,
+}
+
+QueueStatusToggle.propTypes = {
+  queue: PropTypes.shape({
+    id: PropTypes.number,
+    open: PropTypes.bool,
+  }),
+  updateQueueStatus: PropTypes.func.isRequired,
 }
 
 export default QueueStatusToggle
