@@ -4,7 +4,7 @@
 
 A micro-service queue for holding office hours.
 
-Join the #queue-dev channel on the [UIUC OSS Slack team](illinois-oss.slack.com) to keep up with development!
+Join the #queue-dev channel on the [UIUC OSS Slack team](https://illinois-oss.slack.com) to keep up with development!
 
 ## Using the Queue at Illinois
 
