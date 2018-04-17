@@ -15,6 +15,12 @@ import faUser from '@fortawesome/fontawesome-free-solid/faUser'
 
 import { Link } from '../routes'
 
+const styles = {
+  navbar: {
+    zIndex: '10',
+  },
+}
+
 class Header extends React.Component {
   constructor(props) {
     super(props)
@@ -38,7 +44,13 @@ class Header extends React.Component {
       userName = name ? `${name} (${netid})` : `${netid}`
     }
     return (
-      <Navbar color="dark" dark className="mb-3" expand="sm">
+      <Navbar
+        color="dark"
+        dark
+        className="mb-3"
+        style={styles.navbar}
+        expand="sm"
+      >
         <Link route="index" passHref>
           <NavbarBrand>Queues@Illinois</NavbarBrand>
         </Link>
