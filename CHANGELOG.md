@@ -7,6 +7,8 @@ with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
 
+## 19 April 2018
+
 * Show dev workshop ad on homepage. ([@nwalters512](https://github.com/nwalters512) in [#107](https://github.com/illinois/queue/pull/107))
 
 ## 18 April 2018
