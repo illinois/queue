@@ -27,6 +27,7 @@ import NewCourse from '../components/NewCourse'
 import NewQueue from '../components/NewQueue'
 import ShowForAdmin from '../components/ShowForAdmin'
 import QueueCardListContainer from '../containers/QueueCardListContainer'
+import DevWorkshopAd from '../components/DevWorkshopAd'
 
 class Index extends React.Component {
   static async getInitialProps({ store, isServer }) {
@@ -109,6 +110,7 @@ class Index extends React.Component {
     return (
       <Layout>
         <Container>
+          <DevWorkshopAd />
           <div className="d-flex flex-wrap align-items-center mb-4">
             <h1 className="display-4 d-inline-block mb-0 mt-3 mr-auto pr-3">
               Open queues
