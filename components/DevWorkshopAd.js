@@ -10,7 +10,7 @@ export default () => {
     <Alert color="primary">
       <h6>Want to work on the queue?</h6>
       <p className="mb-0">
-        Join us for a development workshop on Thursday, April 24th at 7PM in
+        Join us for a development workshop on Tuesday, April 24th at 7PM in
         Siebel 2405. We&apos;ll teach you how to run a version of the queue on
         your machine, introduce you to the architecture, go over how to
         contribute, and more!
