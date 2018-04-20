@@ -3,7 +3,7 @@
 import Enzyme from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 
-import { sequelize } from './models'
+import { sequelize } from '../src/models'
 
 Enzyme.configure({ adapter: new Adapter() })
 
