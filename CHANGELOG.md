@@ -8,6 +8,7 @@ with the current date and the next changes should go under a **[Next]** header.
 ## [Next]
 
 * Reorganize directory structure. ([@nwalters512](https://github.com/nwalters512) in [#108](https://github.com/illinois/queue/pull/108))
+<<<<<<< HEAD
 * Remove location from notifications if the queue is a fixed-location queue. ([@redsn0w422](https://github.com/redsn0w422) in [#123](https://github.com/illinois/queue/pull/123))
 * Add `npm run fix-lint-js` to fix linter errors that can be fixed automatically. ([@redsn0w422](https://github.com/redsn0w422) in [#127](https://github.com/illinois/queue/pull/127))
 * Allow a queue to be closed and reopened. ([@genevievehelsel](https://github.com/genevievehelsel) in [#128](https://github.com/illinois/queue/pull/128))
@@ -15,6 +16,7 @@ with the current date and the next changes should go under a **[Next]** header.
 * Upgrade to Next.js 6 and add page transitions. ([@nwalters512](https://github.com/nwalters512) in [#133](https://github.com/illinois/queue/pull/133))
 * Enable Now snapshot deploys on PRs. ([@nwalters512](https://github.com/nwalters512) in [#136](https://github.com/illinois/queue/pull/136))
 * Add logout button. ([@emilojkovic](https://github.com/emilojkovic) in [#124](https://github.com/illinois/queue/pull/124))
+* Remove location from notifications if the queue is a fixed-location queue. ([@redsn0w422](https://github.com/redsn0w422) in [#123](https://github.com/illinois/queue/pull/123))
 
 ## 19 April 2018
 
