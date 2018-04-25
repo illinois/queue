@@ -234,12 +234,7 @@ export default class NewQuestion extends React.Component {
                     )}
                   </Col>
                 </FormGroup>
-                <Button
-                  block
-                  color="primary"
-                  type="button"
-                  onClick={this.handleSubmit}
-                >
+                <Button block color="primary" type="submit">
                   Add to queue
                 </Button>
               </Form>

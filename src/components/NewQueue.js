@@ -104,7 +104,7 @@ class NewQueue extends React.Component {
     }
 
     return (
-      <Form autoComplete="off">
+      <Form onSubmit={this.handleSubmit} autoComplete="off">
         {showCourseSelector && (
           <FormGroup row>
             <Label for="course" sm={3}>
@@ -196,12 +196,7 @@ class NewQueue extends React.Component {
             </Button>
           </Col>
           <Col md={6}>
-            <Button
-              block
-              color="primary"
-              type="button"
-              onClick={() => this.handleSubmit()}
-            >
+            <Button block color="primary" type="submit">
               Create
             </Button>
           </Col>
