@@ -23,7 +23,7 @@ const styles = {
   },
 }
 
-const origin = (typeof window !== 'undefined' && window.location.origin) || ''
+const origin = (typeof this !== 'undefined' && this.location.origin) || ''
 const logoutLink = `${origin}${baseUrl}/Shibboleth.sso/Logout`
 
 class Header extends React.Component {
