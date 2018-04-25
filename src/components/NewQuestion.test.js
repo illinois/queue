@@ -42,7 +42,7 @@ describe('<NewQuestion />', () => {
     doInputChange(wrapper, 'location', 'Right here')
     doInputChange(wrapper, 'topic', 'MP1')
     const submitButton = wrapper.find(Button)
-    submitButton.simulate('click')
+    submitButton.simulate('submit')
     expect(props.createQuestion).toBeCalledWith(50, {
       name: 'My Name',
       location: 'Right here',
@@ -56,7 +56,7 @@ describe('<NewQuestion />', () => {
     doInputChange(wrapper, 'location', 'Right here')
     doInputChange(wrapper, 'topic', 'MP1')
     const submitButton = wrapper.find(Button)
-    submitButton.simulate('click')
+    submitButton.simulate('submit')
     expect(props.createQuestion).not.toBeCalled()
   })
 
@@ -66,7 +66,7 @@ describe('<NewQuestion />', () => {
     doInputChange(wrapper, 'name', 'My Name')
     doInputChange(wrapper, 'topic', 'MP1')
     const submitButton = wrapper.find(Button)
-    submitButton.simulate('click')
+    submitButton.simulate('submit')
     expect(props.createQuestion).not.toBeCalled()
   })
 
@@ -76,7 +76,7 @@ describe('<NewQuestion />', () => {
     doInputChange(wrapper, 'name', 'My Name')
     doInputChange(wrapper, 'location', 'Right here')
     const submitButton = wrapper.find(Button)
-    submitButton.simulate('click')
+    submitButton.simulate('submit')
     expect(props.createQuestion).not.toBeCalled()
   })
 
