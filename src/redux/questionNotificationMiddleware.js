@@ -35,9 +35,18 @@ export default store => next => action => {
     if (isOnDutyStaff(activeStaff, user)) {
       const title = 'New question'
       const { name, location } = action.question
+      const queueId = action.question.queueId
+      const queue = state.queues.queues[queueId]
+      let body = ''
+
+      if (queue.fixedLocation) {
+        body = `Name: ${name}`
+      } else {
+        body = `Name: ${name}\nLocation: ${location}`
+      }
 
       const options = {
-        body: `Name: ${name}\nLocation: ${location}`,
+        body: body,
         icon: `${baseUrl}/static/notif_icon.png`,
       }
       sendNotificationIfEnabled(title, options)
