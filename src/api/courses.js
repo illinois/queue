@@ -85,7 +85,9 @@ router.post(
     requireCourse,
     check('netid', 'netid must be specified')
       .exists()
-      .trim(),
+      .trim()
+      .isLength({ min: 1 })
+      .matches(/^\w+[0-9]?$/),
     failIfErrors,
   ],
   safeAsync(async (req, res, _next) => {
