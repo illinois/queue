@@ -34,8 +34,7 @@ export default store => next => action => {
     // On duty staff cannot ask questions, so no need to filter by askedById
     if (isOnDutyStaff(activeStaff, user)) {
       const title = 'New question'
-      const { name, location } = action.question
-      const queueId = action.question.queueId
+      const { name, location, queueId } = action.question
       const queue = state.queues.queues[queueId]
       let body = ''
 
@@ -46,7 +45,7 @@ export default store => next => action => {
       }
 
       const options = {
-        body: body,
+        body,
         icon: `${baseUrl}/static/notif_icon.png`,
       }
       sendNotificationIfEnabled(title, options)
