@@ -64,24 +64,22 @@ class Header extends React.Component {
         {user && (
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav navbar className="ml-auto">
-              <div className="d-flex justify-content-between">
-                <Link route="userSettings" passHref>
-                  <NavLink className="navbar-text">
-                    <FontAwesomeIcon icon={faUser} className="mr-2" />
-                    {userName}
-                  </NavLink>
-                </Link>
-                {!isDev && (
-                  <Button
-                    color="secondary"
-                    type="button"
-                    className="ml-3"
-                    onClick={() => this.handleLogout()}
-                  >
-                    Logout
-                  </Button>
-                )}
-              </div>
+              <Link route="userSettings" passHref>
+                <NavLink className="navbar-text">
+                  <FontAwesomeIcon icon={faUser} className="mr-2" />
+                  {userName}
+                </NavLink>
+              </Link>
+              {!isDev && (
+                <Button
+                  color="secondary"
+                  type="button"
+                  className="ml-3"
+                  onClick={() => this.handleLogout()}
+                >
+                  Logout
+                </Button>
+              )}
             </Nav>
           </Collapse>
         )}
