@@ -87,7 +87,7 @@ router.post(
       .exists()
       .trim()
       .isLength({ min: 1 })
-      .matches(/^\w+[0-9]?$/),
+      .matches(/^\w+[0-9]?(@illinois\.edu)?$/),
     failIfErrors,
   ],
   safeAsync(async (req, res, _next) => {

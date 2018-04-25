@@ -116,6 +116,22 @@ describe('Courses API', () => {
       expect(res.body.netid).toBe('newnetid')
     })
 
+    test('fails for invalid netid format', async () => {
+      const newUser = { netid: 'new netid' }
+      const res = await request(app)
+        .post('/api/courses/1/staff?forceuser=225staff')
+        .send(newUser)
+      expect(res.statusCode).toBe(422)
+    })
+
+    test('succeeds for course staff', async () => {
+      const newUser = { netid: 'newneti as wvedfd!21' }
+      const res = await request(app)
+        .post('/api/courses/1/staff?forceuser=225staff')
+        .send(newUser)
+      expect(res.statusCode).toBe(422)
+    })
+
     test('fails if netid is missing', async () => {
       const newUser = {}
       const res = await request(app)
