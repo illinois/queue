@@ -55,7 +55,7 @@ class NewCourse extends React.Component {
 
   render() {
     return (
-      <Form autoComplete="off">
+      <Form onSubmit={this.handleCreateCourse} autoComplete="off">
         <FormGroup row>
           <Label for="name" sm={3}>
             Name
@@ -105,12 +105,7 @@ class NewCourse extends React.Component {
             </Button>
           </Col>
           <Col md={6}>
-            <Button
-              block
-              color="primary"
-              type="button"
-              onClick={() => this.handleCreateCourse()}
-            >
+            <Button block color="primary" type="submit">
               Create
             </Button>
           </Col>
