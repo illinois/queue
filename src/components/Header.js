@@ -15,6 +15,7 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faUser from '@fortawesome/fontawesome-free-solid/faUser'
 
 import { Link } from '../routes'
+import { isDev } from '../util'
 
 const styles = {
   navbar: {
@@ -70,14 +71,16 @@ class Header extends React.Component {
                     {userName}
                   </NavLink>
                 </Link>
-                <Button
-                  color="secondary"
-                  type="button"
-                  className="ml-3"
-                  onClick={() => this.handleLogout()}
-                >
-                  Logout
-                </Button>
+                {!isDev && (
+                  <Button
+                    color="secondary"
+                    type="button"
+                    className="ml-3"
+                    onClick={() => this.handleLogout()}
+                  >
+                    Logout
+                  </Button>
+                )}
               </div>
             </Nav>
           </Collapse>
