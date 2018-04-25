@@ -127,6 +127,7 @@ router.patch(
     const updatedQueue = await Queue.scope('questionCount').findOne({
       where: { id: queue.id },
     })
+
     res.status(201).send(updatedQueue)
   })
 )
@@ -141,19 +142,50 @@ router.patch(
   ],
   safeAsync(async (req, res, _next) => {
     const { queue } = res.locals
+    const { id: queueId } = res.locals.queue
     const data = matchedData(req)
     await queue.update({
       open: data.open,
     })
 
-    const updatedQueue = await Queue.scope('questionCount').findOne({
-      where: { id: queue.id },
+    const updatedQueue = await Queue.findOne({
+      where: {
+        id: queueId,
+      },
+      include: [
+        {
+          model: ActiveStaff,
+          required: false,
+          where: {
+            queueId,
+            endTime: null,
+          },
+          attributes: ['id'],
+        },
+        {
+          model: Question,
+          required: false,
+          where: {
+            dequeueTime: null,
+          },
+          attributes: ['id'],
+        },
+      ],
+      order: [[Question, 'id', 'ASC']],
     })
+
+    // .then(queueq =>  {
+    //            queueq.activeStaff = queueq.activeStaff.map(x => x.id)
+    //            queueq.questions = queueq.questions.map(x => x.id)
+    //            queueq.dataValues.activeStaff = queueq.activeStaff.map(x => x.id)
+    //            queueq.dataValues.questions = queueq.questions.map(x => x.id)
+    // })
+    updatedQueue.activeStaff = updatedQueue.activeStaff.map(x => x.id)
+    updatedQueue.questions = updatedQueue.questions.map(x => x.id)
+    // updatedQueue.dataValues.activeStaff = updatedQueue.activeStaff.map(x => x.id)
+    // updatedQueue.dataValues.questions = updatedQueue.questions.map(x => x.id)
+    console.log(updatedQueue)
     res.status(201).send(updatedQueue)
-
-    //console.log(queue)
-
-    //res.status(201).send(queue)
   })
 )
 

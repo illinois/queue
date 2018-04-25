@@ -96,7 +96,6 @@ class Queue extends React.Component {
     )
   }
 }
-// {!this.props.queue.open && }
 
 Queue.propTypes = {
   isFetching: PropTypes.bool.isRequired,
