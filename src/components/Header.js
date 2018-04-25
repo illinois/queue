@@ -15,13 +15,16 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faUser from '@fortawesome/fontawesome-free-solid/faUser'
 
 import { Link } from '../routes'
-import { isDev } from '../util'
+import { baseUrl, isDev } from '../util'
 
 const styles = {
   navbar: {
     zIndex: '10',
   },
 }
+
+const origin = (typeof window !== 'undefined' && window.location.origin) || ''
+const logoutLink = `${origin}${baseUrl}/Shibboleth.sso/Logout`
 
 class Header extends React.Component {
   constructor(props) {
@@ -39,7 +42,7 @@ class Header extends React.Component {
   }
 
   handleLogout() {
-    window.location = 'https://edu.cs.illinois.edu/Shibboleth.sso/Logout'
+    this.location = logoutLink
   }
 
   render() {
