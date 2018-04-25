@@ -24,10 +24,6 @@ class UserProfileSettings extends React.Component {
     this.props.updateUserPreferredName(this.state.name)
   }
 
-  handleLogout() {
-    window.location = 'https://edu.cs.illinois.edu/Shibboleth.sso/Logout'
-  }
-
   render() {
     const { user } = this.props
 
@@ -70,15 +66,6 @@ class UserProfileSettings extends React.Component {
             or have a preferred nickname, you can enter that here. This will be
             used to pre-fill your name when you&apos;re adding a new question.
           </FormText>
-        </div>
-        <div className="d-flex justify-content-center">
-          <Button
-            color="secondary"
-            type="button"
-            onClick={() => this.handleLogout()}
-          >
-            Logout
-          </Button>
         </div>
       </div>
     )

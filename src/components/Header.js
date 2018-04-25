@@ -7,6 +7,7 @@ import {
   Collapse,
   Nav,
   NavLink,
+  Button,
 } from 'reactstrap'
 import { connect } from 'react-redux'
 
@@ -36,6 +37,10 @@ class Header extends React.Component {
     })
   }
 
+  handleLogout() {
+    window.location = 'https://edu.cs.illinois.edu/Shibboleth.sso/Logout'
+  }
+
   render() {
     const { user } = this.props
     let userName
@@ -58,12 +63,22 @@ class Header extends React.Component {
         {user && (
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav navbar className="ml-auto">
-              <Link route="userSettings" passHref>
-                <NavLink className="navbar-text">
-                  <FontAwesomeIcon icon={faUser} className="mr-2" />
-                  {userName}
-                </NavLink>
-              </Link>
+              <div className="d-flex justify-content-between">
+                <Link route="userSettings" passHref>
+                  <NavLink className="navbar-text">
+                    <FontAwesomeIcon icon={faUser} className="mr-2" />
+                    {userName}
+                  </NavLink>
+                </Link>
+                <Button
+                  color="secondary"
+                  type="button"
+                  className="ml-3"
+                  onClick={() => this.handleLogout()}
+                >
+                  Logout
+                </Button>
+              </div>
             </Nav>
           </Collapse>
         )}
@@ -86,5 +101,4 @@ Header.propTypes = {
 const mapStateToProps = ({ user }) => ({
   user: user.user,
 })
-
 export default connect(mapStateToProps, null)(Header)
