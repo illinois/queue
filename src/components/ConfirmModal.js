@@ -21,8 +21,8 @@ ConfirmModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
   confirm: PropTypes.func.isRequired,
-  descText: PropTypes.string.isRequired,
-  confirmText: PropTypes.string.isRequired,
+  descText: PropTypes.string,
+  confirmText: PropTypes.string,
 }
 
 export default ConfirmModal
