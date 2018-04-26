@@ -2,7 +2,9 @@
 
 [![Build Status](https://travis-ci.org/illinois/queue.svg?branch=master)](https://travis-ci.org/illinois/queue)
 
-A micro-service queue for holding office hours (with shibboleth identity management)
+A micro-service queue for holding office hours.
+
+Join the #queue-dev channel on the [UIUC OSS Slack team](https://illinois-oss.slack.com) to keep up with development!
 
 ## Using the Queue at Illinois
 
@@ -11,18 +13,16 @@ At UIUC, this queue is hosted as a free service by Computer Science and EngrIT.
 * View the queue at https://edu.cs.illinois.edu/queue/
 * [Request to have a queue created for your course by filling out this short form](https://forms.illinois.edu/sec/691281)
 
-## Running the Queue from Soruce
+## Running the Queue from Source
 
 ### Running locally in `dev` mode:
 
 * Clone the repository
 * Install [`node` and `npm`](https://nodejs.org/en/download/package-manager/)
-* Install `sqlite3`: `npm install sqlite3` in the `queue` directory
-* Install dependencies: `npm install` in the `queue` directory
-* In `models/index.js`, uncomment `sequelize.sync({force: true})`
-  * Comment this line after the first run if you do not want databases to be dropped and rebuilt on startup
+* Install dependencies: `npm install` in the cloned directory
 * Start the server: `npm run dev`
   * Access the queue from a browser at `localhost:3000`
+  * You can run it on a different port by setting the `PORT` environment variable
 
 ### Multiple users in dev mode
 

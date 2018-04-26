@@ -7,6 +7,20 @@ with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
 
+* Reorganize directory structure. ([@nwalters512](https://github.com/nwalters512) in [#108](https://github.com/illinois/queue/pull/108))
+* Remove location from notifications if the queue is a fixed-location queue. ([@redsn0w422](https://github.com/redsn0w422) in [#123](https://github.com/illinois/queue/pull/123))
+
+## 19 April 2018
+
+* Show dev workshop ad on homepage. ([@nwalters512](https://github.com/nwalters512) in [#107](https://github.com/illinois/queue/pull/107))
+
+## 18 April 2018
+
+* Fix course shortcode link to work in browsers besides Chrome. ([@nwalters512](https://github.com/nwalters512) in [#101](https://github.com/illinois/queue/pull/101))
+* Custom error page with consistent header, footer, and button to navigate to homepage. ([@JParisFerrer](https://github.com/jparisferrer) in [#103](https://github.com/illinois/queue/pull/103))
+* Add notifications for students when their question is being answered. ([@zwang180](https://github.com/zwang180) in [#94](https://github.com/illinois/queue/pull/94))
+* Add University of Illinois/NCSA license. ([@nwalters512](https://github.com/nwalters512) in [#106](https://github.com/illinois/queue/pull/106))
+
 ## 10 April 2018
 
 * Properly handle any errors thrown in the API route handlers. ([@nwalters512](https://github.com/nwalters512) in [#86](https://github.com/illinois/queue/pull/86))
