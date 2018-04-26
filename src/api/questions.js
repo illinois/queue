@@ -57,10 +57,11 @@ router.post(
   ],
   safeAsync(async (req, res, _next) => {
     const data = matchedData(req)
-    const { userAuthz, queue: { id: queueId, courseId, open } } = res.locals
-    console.log(queue)
-    if (!queue.open) {
-      res.status(422).send('This queue is currently closed.')
+    const { userAuthz, queue: { id: queueId, courseId } } = res.locals
+    // make sure queue is open
+    let open = res.locals.queue.open
+    if (!open) {
+      res.status(422).send('This queue is closed')
       return
     }
 
