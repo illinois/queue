@@ -37,7 +37,7 @@ const ClosedQueueCard = ({
   const title = courseName || queueName
   const showQueueNameInBody = !!courseName
   return (
-    <Card className="closed-queue-card" {...rest}>
+    <Card className="closed-queue-card bg-light" {...rest}>
       <CardBody>
         <CardTitle className="d-flex flex-wrap align-items-center">
           <span className="mb-2 mr-auto pr-3">{title}</span>
@@ -75,7 +75,6 @@ const ClosedQueueCard = ({
         .closed-queue-card {
           transition: all 200ms;
           cursor: pointer;
-          background-color: rgba(0, 0, 0, 0.03);
         }
       `}</style>
     </Card>
