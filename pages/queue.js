@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Container, Row, Col } from 'reactstrap'
+import { Container, Row, Col, Card, CardBody } from 'reactstrap'
 import withRedux from 'next-redux-wrapper'
 import Error from 'next/error'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
@@ -84,9 +84,11 @@ class Queue extends React.Component {
                 <QuestionPanelContainer queueId={this.props.queueId} />
               )}
               {!this.props.queue.open && (
-                <div class="alert alert-danger" role="alert">
-                  This queue is currently closed!{' '}
-                </div>
+                <Card className="bg-light mb-3">
+                  <CardBody className="text-center">
+                    This queue is closed.
+                  </CardBody>
+                </Card>
               )}
               <QuestionListContainer queueId={this.props.queueId} />
             </Col>

@@ -4,6 +4,7 @@ import { Col, Card, CardBody } from 'reactstrap'
 
 import { Router } from '../routes'
 
+import ClosedQueueCard from '../components/ClosedQueueCard'
 import QueueCard from '../components/QueueCard'
 import QueueEdit from '../components/QueueEdit'
 import ConfirmDeleteQueueModal from '../components/ConfirmDeleteQueueModal'
@@ -89,24 +90,38 @@ class QueueCardList extends React.Component {
       queues = this.props.queueIds.map(queueId => {
         const queue = this.props.queues[queueId]
         const courseName = this.props.courses[queue.courseId].name
-        return (
-          <CardCol key={queue.id}>
-            <QueueCard
-              queue={queue}
-              courseName={this.props.showCourseName ? courseName : null}
-              onClick={() => handleQueueClick(queue.id)}
-              onDelete={() => this.deleteQueue(queue.courseId, queue.id)}
-              onUpdate={() => this.editQueue(queue.id)}
-            />
-          </CardCol>
-        )
+        if (this.props.openQueue) {
+          return (
+            <CardCol key={queue.id}>
+              <QueueCard
+                queue={queue}
+                courseName={this.props.showCourseName ? courseName : null}
+                onClick={() => handleQueueClick(queue.id)}
+                onDelete={() => this.deleteQueue(queue.courseId, queue.id)}
+                onUpdate={() => this.editQueue(queue.id)}
+              />
+            </CardCol>
+          )
+        } else {
+          return (
+            <CardCol key={queue.id}>
+              <ClosedQueueCard
+                queue={queue}
+                courseName={this.props.showCourseName ? courseName : null}
+                onDelete={() => this.deleteQueue(queue.courseId, queue.id)}
+                onUpdate={() => this.editQueue(queue.id)}
+              />
+            </CardCol>
+          )
+        }
       })
     } else {
       queues = (
         <Col>
           <Card className="bg-light">
             <CardBody className="text-center">
-              There aren&apos;t any open queues right now
+              There aren&apos;t any {this.props.openQueue ? 'open' : 'closed'}{' '}
+              queues right now
             </CardBody>
           </Card>
         </Col>
@@ -150,6 +165,7 @@ QueueCardList.defaultProps = {
   courses: {},
   queues: {},
   showCourseName: false,
+  openQueue: true,
 }
 
 QueueCardList.propTypes = {
@@ -166,6 +182,7 @@ QueueCardList.propTypes = {
     })
   ),
   showCourseName: PropTypes.bool,
+  openQueue: PropTypes.bool,
   updateQueue: PropTypes.func.isRequired,
   deleteQueue: PropTypes.func.isRequired,
 }
