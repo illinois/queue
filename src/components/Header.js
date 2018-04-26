@@ -1,3 +1,4 @@
+/* eslint-env browser */
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
@@ -15,7 +16,7 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faUser from '@fortawesome/fontawesome-free-solid/faUser'
 
 import { Link } from '../routes'
-import { baseUrl, isDev } from '../util'
+import { isDev } from '../util'
 
 const styles = {
   navbar: {
@@ -23,8 +24,8 @@ const styles = {
   },
 }
 
-const origin = (typeof this !== 'undefined' && this.location.origin) || ''
-const logoutLink = `${origin}${baseUrl}/Shibboleth.sso/Logout`
+const origin = (typeof window !== 'undefined' && window.location.origin) || ''
+const logoutLink = `${origin}/Shibboleth.sso/Logout`
 
 class Header extends React.Component {
   constructor(props) {
