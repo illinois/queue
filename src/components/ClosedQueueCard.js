@@ -75,8 +75,7 @@ const ClosedQueueCard = ({
         .closed-queue-card {
           transition: all 200ms;
           cursor: pointer;
-          color: #383d41;
-          background-color: #e2e3e5;
+          background-color: rgba(0, 0, 0, 0.03);
         }
       `}</style>
     </Card>

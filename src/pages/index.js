@@ -177,9 +177,11 @@ class Index extends React.Component {
             </Card>
           )}
           <div className="mb-1">{courseButtons}</div>
-          <h1 className="display-4 d-inline-block mb-0 mt-3 mr-auto pr-3">
-            Closed queues
-          </h1>
+          <div className="d-flex flex-wrap align-items-center mb-4">
+            <h1 className="display-4 d-inline-block mb-0 mt-3 mr-auto pr-3">
+              Closed queues
+            </h1>
+          </div>
           <Row className="equal-height mb-4">
             <QueueCardListContainer
               queueIds={closedQueueIds}
