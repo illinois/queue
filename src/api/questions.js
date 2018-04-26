@@ -57,7 +57,12 @@ router.post(
   ],
   safeAsync(async (req, res, _next) => {
     const data = matchedData(req)
-    const { userAuthz, queue: { id: queueId, courseId } } = res.locals
+    const { userAuthz, queue: { id: queueId, courseId, open } } = res.locals
+    console.log(queue)
+    if (!queue.open) {
+      res.status(422).send('This queue is currently closed.')
+      return
+    }
 
     // First, let's check if the request is coming from course staff and
     // includes a specific netid
