@@ -8,7 +8,7 @@ with the current date and the next changes should go under a **[Next]** header.
 ## [Next]
 
 * Reorganize directory structure. ([@nwalters512](https://github.com/nwalters512) in [#108](https://github.com/illinois/queue/pull/108))
-* Added logout button. ([@emilojkovic](https://github.com/emilojkovic) in [#124](https://github.com/illinois/queue/pull/124))
+* Add logout button. ([@emilojkovic](https://github.com/emilojkovic) in [#124](https://github.com/illinois/queue/pull/124))
 
 ## 19 April 2018
 
