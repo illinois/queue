@@ -10,7 +10,6 @@ import ShowForCourseStaff from './ShowForCourseStaff'
 const ClosedQueueCard = ({
   queue,
   courseName,
-  openQueue,
   onDelete,
   onUpdate,
   ...rest

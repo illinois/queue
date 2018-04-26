@@ -59,8 +59,7 @@ router.post(
     const data = matchedData(req)
     const { userAuthz, queue: { id: queueId, courseId } } = res.locals
     // make sure queue is open
-    let open = res.locals.queue.open
-    if (!open) {
+    if (!res.locals.queue.open) {
       res.status(422).send('This queue is closed')
       return
     }

@@ -102,19 +102,18 @@ class QueueCardList extends React.Component {
               />
             </CardCol>
           )
-        } else {
-          return (
-            <CardCol key={queue.id}>
-              <ClosedQueueCard
-                queue={queue}
-                courseName={this.props.showCourseName ? courseName : null}
-                onClick={() => handleQueueClick(queue.id)}
-                onDelete={() => this.deleteQueue(queue.courseId, queue.id)}
-                onUpdate={() => this.editQueue(queue.id)}
-              />
-            </CardCol>
-          )
         }
+        return (
+          <CardCol key={queue.id}>
+            <ClosedQueueCard
+              queue={queue}
+              courseName={this.props.showCourseName ? courseName : null}
+              onClick={() => handleQueueClick(queue.id)}
+              onDelete={() => this.deleteQueue(queue.courseId, queue.id)}
+              onUpdate={() => this.editQueue(queue.id)}
+            />
+          </CardCol>
+        )
       })
     } else {
       queues = (

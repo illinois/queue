@@ -142,7 +142,6 @@ router.patch(
   ],
   safeAsync(async (req, res, _next) => {
     const { queue } = res.locals
-    const { id: queueId } = res.locals.queue
     const data = matchedData(req)
     await queue.update({
       open: data.open,

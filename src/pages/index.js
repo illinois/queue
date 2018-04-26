@@ -148,7 +148,7 @@ class Index extends React.Component {
             <QueueCardListContainer
               queueIds={openQueueIds}
               showCourseName
-              openQueue={true}
+              openQueue
             />
           </Row>
           <div className="d-flex flex-wrap align-items-center mb-4">
