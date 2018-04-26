@@ -8,6 +8,7 @@ with the current date and the next changes should go under a **[Next]** header.
 ## [Next]
 
 * Reorganize directory structure. ([@nwalters512](https://github.com/nwalters512) in [#108](https://github.com/illinois/queue/pull/108))
+* Enter keypress adds new question, new queue, or new course. ([@emilojkovic](https://github.com/emilojkovic) in [#126](https://github.com/illinois/queue/pull/126))
 
 ## 19 April 2018
 
