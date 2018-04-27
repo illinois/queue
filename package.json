@@ -11,6 +11,7 @@
     "test": "jest",
     "test-sequential": "jest --runInBand",
     "lint-js": "eslint --ext js .",
+    "fix-lint-js": "eslint --ext js . --fix",
     "prettier": "prettier --write \"src/**/*.js\"",
     "prettier-diff": "prettier --list-different \"src/**/*.js\""
   },
