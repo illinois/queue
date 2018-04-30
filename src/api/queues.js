@@ -118,7 +118,9 @@ router.patch(
     check('name')
       .optional({ nullable: true })
       .isLength({ min: 1 }),
-    check('open').optional(),
+    check('open')
+      .optional({ nullable: true })
+      .isBoolean(),
     validateLocation,
     failIfErrors,
   ],
