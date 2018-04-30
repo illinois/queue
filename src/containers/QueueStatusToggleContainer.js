@@ -1,15 +1,11 @@
 import { connect } from 'react-redux'
 
-import { updateQueueStatus } from '../actions/queue'
+import { updateQueue } from '../actions/queue'
 import QueueStatusToggle from '../components/QueueStatusToggle'
 
-function mapStateToProps() {
-  return {}
-}
-
 const mapDispatchToProps = dispatch => ({
-  updateQueueStatus: (queueId, attributes) =>
-    dispatch(updateQueueStatus(queueId, attributes)),
+  updateQueue: (queueId, attributes) =>
+    dispatch(updateQueue(queueId, attributes)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(QueueStatusToggle)
+export default connect(null, mapDispatchToProps)(QueueStatusToggle)

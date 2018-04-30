@@ -4,7 +4,6 @@ import { Col, Card, CardBody } from 'reactstrap'
 
 import { Router } from '../routes'
 
-import ClosedQueueCard from '../components/ClosedQueueCard'
 import QueueCard from '../components/QueueCard'
 import QueueEdit from '../components/QueueEdit'
 import ConfirmDeleteQueueModal from '../components/ConfirmDeleteQueueModal'
@@ -90,23 +89,11 @@ class QueueCardList extends React.Component {
       queues = this.props.queueIds.map(queueId => {
         const queue = this.props.queues[queueId]
         const courseName = this.props.courses[queue.courseId].name
-        if (this.props.openQueue) {
-          return (
-            <CardCol key={queue.id}>
-              <QueueCard
-                queue={queue}
-                courseName={this.props.showCourseName ? courseName : null}
-                onClick={() => handleQueueClick(queue.id)}
-                onDelete={() => this.deleteQueue(queue.courseId, queue.id)}
-                onUpdate={() => this.editQueue(queue.id)}
-              />
-            </CardCol>
-          )
-        }
         return (
           <CardCol key={queue.id}>
-            <ClosedQueueCard
+            <QueueCard
               queue={queue}
+              open={this.props.openQueue}
               courseName={this.props.showCourseName ? courseName : null}
               onClick={() => handleQueueClick(queue.id)}
               onDelete={() => this.deleteQueue(queue.courseId, queue.id)}

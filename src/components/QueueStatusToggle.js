@@ -6,7 +6,7 @@ import { Button } from 'reactstrap'
 class QueueStatusToggle extends React.Component {
   toggleQueueStatus() {
     const attributes = { open: !this.props.queue.open }
-    this.props.updateQueueStatus(this.props.queue.id, attributes)
+    this.props.updateQueue(this.props.queue.id, attributes)
   }
 
   render() {
@@ -36,7 +36,7 @@ QueueStatusToggle.propTypes = {
     id: PropTypes.number,
     open: PropTypes.bool,
   }),
-  updateQueueStatus: PropTypes.func.isRequired,
+  updateQueue: PropTypes.func.isRequired,
 }
 
 export default QueueStatusToggle

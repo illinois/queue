@@ -124,18 +124,18 @@ export function updateQueue(queueId, attributes) {
   }
 }
 
-export function updateQueueStatus(queueId, attributes) {
-  return dispatch => {
-    dispatch(updateQueueRequest(queueId, attributes))
-    return axios.patch(`/api/queues/${queueId}/updateStatus`, attributes).then(
-      res => dispatch(updateQueueSuccess(queueId, res.data)),
-      err => {
-        console.error(err)
-        dispatch(updateQueueFailure(queueId))
-      }
-    )
-  }
-}
+// export function updateQueueStatus(queueId, attributes) {
+//   return dispatch => {
+//     dispatch(updateQueueRequest(queueId, attributes))
+//     return axios.patch(`/api/queues/${queueId}/updateStatus`, attributes).then(
+//       res => dispatch(updateQueueSuccess(queueId, res.data)),
+//       err => {
+//         console.error(err)
+//         dispatch(updateQueueFailure(queueId))
+//       }
+//     )
+//   }
+// }
 
 /**
  * Delete a queue

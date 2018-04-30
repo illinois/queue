@@ -351,13 +351,11 @@ describe('Queues API', () => {
         .send(attributes)
       expect(res.statusCode).toBe(422)
     })
-  })
 
-  describe('PATCH /api/queues/:queueId/updateStatus', () => {
     test('succeeds for course staff to close queue', async () => {
       const attributes = { open: false }
       const res = await request(app)
-        .patch('/api/queues/1/updateStatus?forceuser=225staff')
+        .patch('/api/queues/1?forceuser=225staff')
         .send(attributes)
       expect(res.statusCode).toBe(201)
       expect(res.body.open).toBe(false)
@@ -366,7 +364,7 @@ describe('Queues API', () => {
     test('succeeds for admin to close queue', async () => {
       const attributes = { open: false }
       const res = await request(app)
-        .patch('/api/queues/1/updateStatus?forceuser=admin')
+        .patch('/api/queues/1?forceuser=admin')
         .send(attributes)
       expect(res.statusCode).toBe(201)
       expect(res.body.open).toBe(false)
@@ -375,7 +373,7 @@ describe('Queues API', () => {
     test('fails for non course staff to close queue', async () => {
       const attributes = { open: false }
       const res = await request(app)
-        .patch('/api/queues/1/updateStatus?forceuser=student')
+        .patch('/api/queues/1?forceuser=student')
         .send(attributes)
       expect(res.statusCode).toBe(403)
       const res2 = await request(app).get('/api/queues/1?forceuser=student')

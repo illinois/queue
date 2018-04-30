@@ -19,10 +19,12 @@ const requireCourseStaffForQueue = require('../middleware/requireCourseStaffForQ
 const requireCourseStaff = require('../middleware/requireCourseStaff')
 
 function validateLocation(req, res, next) {
-  check('location').custom(value => {
-    if (!res.locals.queue.fixedLocation) return true
-    return !!value && value.length > 0
-  })(req, res, next)
+  check('location')
+    .optional({ nullable: true })
+    .custom(value => {
+      if (!res.locals.queue.fixedLocation) return true
+      return !!value && value.length > 0
+    })(req, res, next)
 }
 
 // Get all open queues
@@ -113,40 +115,26 @@ router.patch(
   [
     requireCourseStaffForQueue,
     requireQueue,
-    check('name').isLength({ min: 1 }),
+    check('name')
+      .optional({ nullable: true })
+      .isLength({ min: 1 }),
+    check('open').optional(),
     validateLocation,
     failIfErrors,
   ],
   safeAsync(async (req, res, _next) => {
     const { queue } = res.locals
     const data = matchedData(req)
+
     await queue.update({
       name: data.name,
       location: data.location,
+      open: data.open,
     })
     const updatedQueue = await Queue.scope('questionCount').findOne({
       where: { id: queue.id },
     })
-
     res.status(201).send(updatedQueue)
-  })
-)
-
-router.patch(
-  '/:queueId/updateStatus',
-  [
-    requireCourseStaffForQueue,
-    requireQueue,
-    check('open').exists(),
-    failIfErrors,
-  ],
-  safeAsync(async (req, res, _next) => {
-    const { queue } = res.locals
-    const data = matchedData(req)
-    await queue.update({
-      open: data.open,
-    })
-    res.status(201).send(queue)
   })
 )
 
