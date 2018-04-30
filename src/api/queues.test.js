@@ -392,6 +392,17 @@ describe('Queues API', () => {
       expect(res2.body.open).toBe(true)
     })
 
+    test('fails for course staff to change queue status with non boolean (non-empty string)', async () => {
+      const attributes = { open: 'hello' }
+      const res = await request(app)
+        .patch('/api/queues/1?forceuser=225staff')
+        .send(attributes)
+      expect(res.statusCode).toBe(422)
+      const res2 = await request(app).get('/api/queues/1?forceuser=student')
+      expect(res2.statusCode).toBe(200)
+      expect(res2.body.open).toBe(true)
+    })
+
     test('fails for course staff to change queue status with non boolean (integer)', async () => {
       const attributes = { open: 1234 }
       const res = await request(app)
