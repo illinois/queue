@@ -16,6 +16,7 @@ import Layout from '../components/Layout'
 import StaffSidebar from '../components/StaffSidebar'
 import QuestionPanelContainer from '../containers/QuestionPanelContainer'
 import QuestionListContainer from '../containers/QuestionListContainer'
+import ShowForCourseStaff from '../components/ShowForCourseStaff'
 import QuestionNotificationsToggle from '../components/QuestionNotificationsToggle'
 import QueueStatusToggleContainer from '../containers/QueueStatusToggleContainer'
 
@@ -73,7 +74,9 @@ class Queue extends React.Component {
               className="mb-3 mb-md-0"
             >
               <QuestionNotificationsToggle />
-              <QueueStatusToggleContainer queue={this.props.queue} />
+              <ShowForCourseStaff queueId={this.props.queueId}>
+                <QueueStatusToggleContainer queue={this.props.queue} />
+              </ShowForCourseStaff>
               <StaffSidebar queueId={this.props.queueId} />
             </Col>
             <Col xs={{ size: 12 }} md={{ size: 8 }} lg={{ size: 9 }}>

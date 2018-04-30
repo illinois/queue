@@ -5,7 +5,11 @@ import {
   updateQuestionSuccess,
   deleteQuestionSuccess,
 } from '../actions/question'
-import { addQueueStaffSuccess, removeQueueStaffSuccess } from '../actions/queue'
+import {
+  addQueueStaffSuccess,
+  removeQueueStaffSuccess,
+  updateQueueSuccess,
+} from '../actions/queue'
 import { replaceActiveStaff } from '../actions/activeStaff'
 import { normalizeActiveStaff } from '../reducers/normalize'
 import { baseUrl } from '../util'
@@ -38,6 +42,10 @@ const handleActiveStaffDelete = (dispatch, queueId, id) => {
   dispatch(removeQueueStaffSuccess(queueId, null, id))
 }
 
+const handleQueueUpdate = (dispatch, queueId, queue) => {
+  dispatch(updateQueueSuccess(queueId, queue))
+}
+
 export const connectToQueue = (dispatch, queueId) => {
   const socket = io('/queue', socketOpts)
   queueSockets[queueId] = socket
@@ -61,6 +69,9 @@ export const connectToQueue = (dispatch, queueId) => {
   )
   socket.on('activeStaff:delete', ({ id }) =>
     handleActiveStaffDelete(dispatch, queueId, id)
+  )
+  socket.on('queue:update', ({ queue }) =>
+    handleQueueUpdate(dispatch, queueId, queue)
   )
 }
 
