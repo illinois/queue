@@ -380,6 +380,30 @@ describe('Queues API', () => {
       expect(res2.statusCode).toBe(200)
       expect(res2.body.open).toBe(true)
     })
+
+    test('wont allow properties to be set to null', async () => {
+      const attributes = {
+        open: false,
+        name: 'CS 225 Queue 1 Alter',
+        location: 'Where',
+      }
+      const res = await request(app)
+        .patch('/api/queues/1?forceuser=225staff')
+        .send(attributes)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.open).toBe(false)
+      expect(res.body.name).toBe('CS 225 Queue 1 Alter')
+      expect(res.body.location).toBe('Where')
+
+      const attributes2 = { open: null, name: null, location: null }
+      const res2 = await request(app)
+        .patch('/api/queues/1?forceuser=225staff')
+        .send(attributes2)
+      expect(res2.statusCode).toBe(201)
+      expect(res2.body.open).toBe(false)
+      expect(res2.body.name).toBe('CS 225 Queue 1 Alter')
+      expect(res2.body.location).toBe('Where')
+    })
   })
 
   describe('DELETE /api/queues/1', () => {

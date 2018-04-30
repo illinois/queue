@@ -86,7 +86,7 @@ class Queue extends React.Component {
               {!this.props.queue.open && (
                 <Card className="bg-light mb-3">
                   <CardBody className="text-center">
-                    This queue is closed.
+                    This queue is closed. Check back later!
                   </CardBody>
                 </Card>
               )}
