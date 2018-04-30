@@ -403,6 +403,15 @@ describe('Queues API', () => {
       expect(res2.body.open).toBe(false)
       expect(res2.body.name).toBe('CS 225 Queue 1 Alter')
       expect(res2.body.location).toBe('Where')
+
+      const attributes3 = { open: null, name: null }
+      const res3 = await request(app)
+        .patch('/api/queues/1?forceuser=225staff')
+        .send(attributes3)
+      expect(res3.statusCode).toBe(201)
+      expect(res3.body.open).toBe(false)
+      expect(res3.body.name).toBe('CS 225 Queue 1 Alter')
+      expect(res3.body.location).toBe('Where')
     })
   })
 
