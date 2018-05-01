@@ -10,6 +10,7 @@ with the current date and the next changes should go under a **[Next]** header.
 * Reorganize directory structure. ([@nwalters512](https://github.com/nwalters512) in [#108](https://github.com/illinois/queue/pull/108))
 * Remove location from notifications if the queue is a fixed-location queue. ([@redsn0w422](https://github.com/redsn0w422) in [#123](https://github.com/illinois/queue/pull/123))
 * Add `npm run fix-lint-js` to fix linter errors that can be fixed automatically. ([@redsn0w422](https://github.com/redsn0w422) in [#127](https://github.com/illinois/queue/pull/127))
+* Mark questions answered when queue is deleted. ([@warut-vijit](https://github.com/warut-vijit) in [#118](https://github.com/illinois/queue/pull/118))
 
 ## 19 April 2018
 
