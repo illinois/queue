@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Container, Row, Col } from 'reactstrap'
+import { Container, Row, Col, Card, CardBody } from 'reactstrap'
 import withRedux from 'next-redux-wrapper'
 import Error from 'next/error'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
@@ -16,7 +16,9 @@ import Layout from '../components/Layout'
 import StaffSidebar from '../components/StaffSidebar'
 import QuestionPanelContainer from '../containers/QuestionPanelContainer'
 import QuestionListContainer from '../containers/QuestionListContainer'
+import ShowForCourseStaff from '../components/ShowForCourseStaff'
 import QuestionNotificationsToggle from '../components/QuestionNotificationsToggle'
+import QueueStatusToggleContainer from '../containers/QueueStatusToggleContainer'
 
 class Queue extends React.Component {
   static getInitialProps({ isServer, store, query }) {
@@ -72,10 +74,22 @@ class Queue extends React.Component {
               className="mb-3 mb-md-0"
             >
               <QuestionNotificationsToggle />
+              <ShowForCourseStaff queueId={this.props.queueId}>
+                <QueueStatusToggleContainer queue={this.props.queue} />
+              </ShowForCourseStaff>
               <StaffSidebar queueId={this.props.queueId} />
             </Col>
             <Col xs={{ size: 12 }} md={{ size: 8 }} lg={{ size: 9 }}>
-              <QuestionPanelContainer queueId={this.props.queueId} />
+              {this.props.queue.open && (
+                <QuestionPanelContainer queueId={this.props.queueId} />
+              )}
+              {!this.props.queue.open && (
+                <Card className="bg-light mb-3">
+                  <CardBody className="text-center">
+                    This queue is closed. Check back later!
+                  </CardBody>
+                </Card>
+              )}
               <QuestionListContainer queueId={this.props.queueId} />
             </Col>
           </Row>
@@ -96,6 +110,7 @@ Queue.propTypes = {
     name: PropTypes.string,
     location: PropTypes.string,
     courseId: PropTypes.number,
+    open: PropTypes.bool,
   }),
 }
 

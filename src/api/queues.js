@@ -19,10 +19,12 @@ const requireCourseStaffForQueue = require('../middleware/requireCourseStaffForQ
 const requireCourseStaff = require('../middleware/requireCourseStaff')
 
 function validateLocation(req, res, next) {
-  check('location').custom(value => {
-    if (!res.locals.queue.fixedLocation) return true
-    return !!value && value.length > 0
-  })(req, res, next)
+  check('location')
+    .optional({ nullable: true })
+    .custom(value => {
+      if (!res.locals.queue.fixedLocation) return true
+      return !!value && value.length > 0
+    })(req, res, next)
 }
 
 // Get all open queues
@@ -113,7 +115,12 @@ router.patch(
   [
     requireCourseStaffForQueue,
     requireQueue,
-    check('name').isLength({ min: 1 }),
+    check('name')
+      .optional({ nullable: true })
+      .isLength({ min: 1 }),
+    check('open')
+      .optional({ nullable: true })
+      .isBoolean(),
     validateLocation,
     failIfErrors,
   ],
@@ -122,9 +129,11 @@ router.patch(
     const data = matchedData(req)
 
     await queue.update({
-      name: data.name,
-      location: data.location,
+      name: data.name !== null ? data.name : undefined,
+      location: data.location !== null ? data.location : undefined,
+      open: data.open !== null ? data.open : undefined,
     })
+
     const updatedQueue = await Queue.scope('questionCount').findOne({
       where: { id: queue.id },
     })
