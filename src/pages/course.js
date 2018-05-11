@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { Container, Row, Card, CardBody, Button } from 'reactstrap'
-import withRedux from 'next-redux-wrapper'
 import Error from 'next/error'
 
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
@@ -9,13 +9,11 @@ import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
 import faUsers from '@fortawesome/fontawesome-free-solid/faUsers'
 
 import { Link } from '../routes'
-import makeStore from '../redux/makeStore'
 import { fetchCourseRequest, fetchCourse } from '../actions/course'
 import { createQueue, deleteQueue, updateQueue } from '../actions/queue'
 
 import PageWithUser from '../components/PageWithUser'
 import Loading from '../components/Loading'
-import Layout from '../components/Layout'
 import NewQueue from '../components/NewQueue'
 import QueueCardListContainer from '../containers/QueueCardListContainer'
 import ShowForCourseStaff from '../components/ShowForCourseStaff'
@@ -67,7 +65,7 @@ class Course extends React.Component {
     }
 
     return (
-      <Layout>
+      <Fragment>
         <Container>
           <div className="d-flex flex-wrap align-items-center mb-4">
             <h1 className="display-4 d-inline-block mb-0 mt-3 mr-auto pr-3">
@@ -132,7 +130,7 @@ class Course extends React.Component {
             margin: auto;
           }
         `}</style>
-      </Layout>
+      </Fragment>
     )
   }
 }
@@ -178,6 +176,6 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 })
 
-export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
   PageWithUser(Course)
 )

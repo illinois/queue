@@ -1,12 +1,11 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { Container, Row, Card, CardBody, Button } from 'reactstrap'
-import withRedux from 'next-redux-wrapper'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
 
 import { Link } from '../routes'
-import makeStore from '../redux/makeStore'
 import {
   fetchCoursesRequest,
   fetchCourses,
@@ -22,7 +21,6 @@ import { mapObjectToArray } from '../util'
 
 import PageWithUser from '../components/PageWithUser'
 import Loading from '../components/Loading'
-import Layout from '../components/Layout'
 import NewCourse from '../components/NewCourse'
 import NewQueue from '../components/NewQueue'
 import ShowForAdmin from '../components/ShowForAdmin'
@@ -113,7 +111,7 @@ class Index extends React.Component {
       .map(queue => queue.id)
 
     return (
-      <Layout>
+      <Fragment>
         <Container>
           <DevWorkshopAd />
           <div className="d-flex flex-wrap align-items-center mb-4">
@@ -208,7 +206,7 @@ class Index extends React.Component {
             flex: 1;
           }
         `}</style>
-      </Layout>
+      </Fragment>
     )
   }
 }
@@ -254,6 +252,4 @@ const mapDispatchToProps = dispatch => ({
   deleteQueue: (courseId, queueId) => dispatch(deleteQueue(courseId, queueId)),
 })
 
-export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(
-  PageWithUser(Index)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(PageWithUser(Index))
