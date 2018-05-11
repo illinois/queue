@@ -1,12 +1,15 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 
+import Fader from './Fader2'
 import Header from './Header'
+import Footer from './Footer'
 
-const Layout = props => (
+const AppContainer = props => (
   <Fragment>
     <Header />
-    {props.children}
+    <Fader timeout={10000}>{props.children}</Fader>
+    <Footer />
     <style global jsx>{`
       html {
         height: 100%;
@@ -21,8 +24,8 @@ const Layout = props => (
   </Fragment>
 )
 
-Layout.propTypes = {
+AppContainer.propTypes = {
   children: PropTypes.node.isRequired,
 }
 
-export default Layout
+export default AppContainer

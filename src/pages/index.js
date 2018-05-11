@@ -35,6 +35,8 @@ class Index extends React.Component {
     }
   }
 
+  static shouldDelayEnter = true
+
   constructor(props) {
     super(props)
 
@@ -53,6 +55,7 @@ class Index extends React.Component {
         this.setState({
           finishedLoading: true,
         })
+        this.props.onReadyEnter && this.props.onReadyEnter()
       }
     )
   }

@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Error from 'next/error'
+import hoistStatics from 'hoist-non-react-statics'
 
 import { fetchCurrentUser } from '../actions/user'
 import Loading from './Loading'
@@ -96,6 +97,8 @@ export default function(AuthedComponent, permissions) {
   const mapDispatchToProps = dispatch => ({
     fetchUser: () => dispatch(fetchCurrentUser()),
   })
+
+  hoistStatics(PageWithUser, AuthedComponent)
 
   return connect(mapStateToProps, mapDispatchToProps)(PageWithUser)
 }
