@@ -33,7 +33,7 @@ function buildClassName(className, state) {
   }
 }
 
-export default class Fader2 extends React.Component {
+export default class TransitionManager extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -106,7 +106,7 @@ export default class Fader2 extends React.Component {
     })
   }
 
-  readyEnter() {
+  onChildLoaded() {
     console.log('READY ENTER')
   }
 
@@ -146,7 +146,7 @@ export default class Fader2 extends React.Component {
           >
             {children &&
               React.cloneElement(children, {
-                onReadyEnter: () => this.readyEnter(),
+                onLoaded: () => this.onChildLoaded(),
               })}
           </div>
         </Transition>

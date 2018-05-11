@@ -1,14 +1,14 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 
-import Fader from './Fader2'
+import TransitionManager from './TransitionManager'
 import Header from './Header'
 import Footer from './Footer'
 
 const AppContainer = props => (
   <Fragment>
     <Header />
-    <Fader timeout={10000}>{props.children}</Fader>
+    <TransitionManager timeout={300}>{props.children}</TransitionManager>
     <Footer />
     <style global jsx>{`
       html {

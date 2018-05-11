@@ -55,7 +55,7 @@ class Index extends React.Component {
         this.setState({
           finishedLoading: true,
         })
-        this.props.onReadyEnter && this.props.onReadyEnter()
+        if (this.props.onLoaded) this.props.onLoaded()
       }
     )
   }
@@ -230,11 +230,13 @@ Index.propTypes = {
   fetchQueues: PropTypes.func.isRequired,
   createCourse: PropTypes.func.isRequired,
   createQueue: PropTypes.func.isRequired,
+  onLoaded: PropTypes.func,
 }
 
 Index.defaultProps = {
   courses: [],
   queues: [],
+  onLoaded: null,
 }
 
 const mapStateToProps = state => ({
