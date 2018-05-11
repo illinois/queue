@@ -37,7 +37,7 @@ export default class TransitionManager extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      state: 'in',
+      state: 'enter',
       isIn: true,
       renderedChildren: props.children,
     }
@@ -47,12 +47,12 @@ export default class TransitionManager extends React.Component {
     const { renderedChildren, isIn, state } = this.state
     const { children } = this.props
     const needsTransition = shouldTransition(renderedChildren, children)
-    if (needsTransition && isIn && state === 'in') {
+    if (needsTransition && isIn && state === 'entered') {
       console.log('outgoing!')
       this.setState({
         isIn: false,
       })
-    } else if (needsTransition && !isIn && state === 'out') {
+    } else if (needsTransition && !isIn && state === 'exited') {
       console.log('incoming!')
       this.setState({
         isIn: true,
@@ -61,48 +61,45 @@ export default class TransitionManager extends React.Component {
     }
   }
 
-  onEnter(node) {
+  onEnter() {
     console.log('onEnter!')
     this.setState({
-      transitionState: 'enter',
-      node,
+      state: 'enter',
     })
   }
 
   onEntering() {
     console.log('onEntering!')
     this.setState({
-      transitionState: 'entering',
+      state: 'entering',
     })
   }
 
   onEntered() {
     console.log('onEntered!')
     this.setState({
-      state: 'in',
-      transitionState: 'entered',
+      state: 'entered',
     })
   }
 
   onExit() {
     console.log('onExit!')
     this.setState({
-      transitionState: 'exit',
+      state: 'exit',
     })
   }
   onExiting() {
     console.log('onExiting!')
     this.setState({
-      transitionState: 'exiting',
+      state: 'exiting',
     })
   }
 
   onExited() {
     console.log('onExited!')
     this.setState({
-      state: 'out',
       renderedChildren: null,
-      transitionState: 'exited',
+      state: 'exited',
     })
   }
 
@@ -111,11 +108,8 @@ export default class TransitionManager extends React.Component {
   }
 
   render() {
-    const { renderedChildren: children, transitionState } = this.state
-    if (
-      this.state.transitionState === 'entering' ||
-      this.state.transitionState === 'exiting'
-    ) {
+    const { renderedChildren: children, state } = this.state
+    if (this.state.state === 'entering' || this.state.state === 'exiting') {
       // Need to reflow!
       document.body && document.body.scrollTop
     }
@@ -140,10 +134,7 @@ export default class TransitionManager extends React.Component {
           onExiting={() => this.onExiting()}
           onExited={() => this.onExited()}
         >
-          <div
-            className={buildClassName('fade', transitionState)}
-            style={{ position: 'relative' }}
-          >
+          <div className={buildClassName('fade', state)}>
             {children &&
               React.cloneElement(children, {
                 onLoaded: () => this.onChildLoaded(),
