@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Container, Row, Col, Card, CardBody } from 'reactstrap'
-import Error from 'next/error'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faMapMarker from '@fortawesome/fontawesome-free-solid/faMapMarker'
 
@@ -10,7 +9,7 @@ import { fetchQueue, fetchQueueRequest } from '../actions/queue'
 import { connectToQueue, disconnectFromQueue } from '../socket/client'
 
 import PageWithUser from '../components/PageWithUser'
-import Loading from '../components/Loading'
+import Error from '../components/Error'
 import StaffSidebar from '../components/StaffSidebar'
 import QuestionPanelContainer from '../containers/QuestionPanelContainer'
 import QuestionListContainer from '../containers/QuestionListContainer'
@@ -30,8 +29,12 @@ class Queue extends React.Component {
     }
   }
 
+  static shouldDelayEnter = true
+
   componentDidMount() {
-    this.props.fetchQueue(this.props.queueId)
+    this.props.fetchQueue(this.props.queueId).then(() => {
+      if (this.props.onLoaded) this.props.onLoaded()
+    })
   }
 
   componentDidUpdate(prevProps) {
@@ -50,7 +53,7 @@ class Queue extends React.Component {
     const { isFetching, hasQueue } = this.props
 
     if (isFetching) {
-      return <Loading />
+      return null
     }
     if (!isFetching && !hasQueue) {
       return <Error statusCode={404} />
@@ -108,10 +111,12 @@ Queue.propTypes = {
     courseId: PropTypes.number,
     open: PropTypes.bool,
   }),
+  onLoaded: PropTypes.func,
 }
 
 Queue.defaultProps = {
   queue: null,
+  onLoaded: null,
 }
 
 const mapStateToProps = (state, ownProps) => ({

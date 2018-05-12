@@ -86,7 +86,7 @@ class Index extends React.Component {
 
   render() {
     if (!this.state.finishedLoading) {
-      return <Loading />
+      return null
     }
 
     let courseButtons

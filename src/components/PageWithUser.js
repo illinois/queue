@@ -1,11 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import Error from 'next/error'
 import hoistStatics from 'hoist-non-react-statics'
 
+import Error from './Error'
 import { fetchCurrentUser } from '../actions/user'
-import Loading from './Loading'
 
 export default function(AuthedComponent, permissions) {
   class PageWithUser extends React.Component {
@@ -15,21 +14,31 @@ export default function(AuthedComponent, permissions) {
 
     constructor(props) {
       super(props)
+      const { user } = props
       this.state = {
-        isLoading: true,
-        isAuthed: false,
+        isLoading: !user,
+        isAuthed: this.checkAuthz(user),
       }
     }
 
     componentDidMount() {
       // Time to fetch our user!
-      if (!this.user) {
+      if (!this.props.user) {
         this.props.fetchUser()
       }
     }
 
     componentWillReceiveProps(nextProps) {
       const { user } = nextProps
+      if (user) {
+        this.setState({
+          isLoading: false,
+          isAuthed: this.checkAuthz(user),
+        })
+      }
+    }
+
+    checkAuthz(user) {
       if (user) {
         // Perform authz if required
         let authzed = true
@@ -53,17 +62,14 @@ export default function(AuthedComponent, permissions) {
             }
           }
         }
-
-        this.setState({
-          isLoading: false,
-          isAuthed: authzed,
-        })
+        return authzed
       }
+      return false
     }
 
     render() {
       /* eslint-disable no-unused-vars */
-      const { fetchUser, user, ...restProps } = this.props
+      const { fetchUser, ...restProps } = this.props
 
       if (!this.state.isLoading) {
         if (this.state.isAuthed) {
@@ -73,7 +79,7 @@ export default function(AuthedComponent, permissions) {
         return <Error statusCode={403} />
       }
 
-      return <Loading />
+      return null
     }
   }
 
