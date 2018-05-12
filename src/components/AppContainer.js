@@ -8,7 +8,7 @@ import Footer from './Footer'
 const AppContainer = props => (
   <Fragment>
     <Header />
-    <TransitionManager timeout={300}>{props.children}</TransitionManager>
+    <TransitionManager timeout={200}>{props.children}</TransitionManager>
     <Footer />
     <style global jsx>{`
       html {
