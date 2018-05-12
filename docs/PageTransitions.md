@@ -18,9 +18,9 @@ Here's an example of a render method from a Next.js `_app.js` component that use
 render() {
   const { Component, pageProps, router } = this.props
   return (
-    <AppContainer>
+    <TransitionManager>
       <Component {...pageProps} key={router.route} />
-    </AppContainer>
+    </TransitionManager>
   )
 }
 ```
