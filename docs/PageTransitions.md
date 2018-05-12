@@ -40,4 +40,10 @@ If the network is slow, it may take your page a while to load its resources. The
 
 ### Implementation
 
-The `TransitionManager` makes use of the (mostly) excellent [`react-transition-group`](https://github.com/reactjs/react-transition-group) library.
+The `TransitionManager` makes use of the (mostly) excellent [`react-transition-group`](https://github.com/reactjs/react-transition-group) library. However, it seemed to have issues with applying classes when the component mounted inside a `CSSTransition` changed, so I opted to manually apply classes to a container around the child in order to work around this.
+
+We track several bits of state, including the current children (the children from `props.children`), the next children (the children that will be animated in next, if they exist), and the rendered children (the children that this component is currently rendering). Note that we may not actually be rendering the children from `props.children` if we're currently animating an old child off the screen.
+
+We use `setState` inside `componentDidUpdate` to help drive our component's state. This is definitely not idiomatic React, but it made the state transitions easy to reason about.
+
+We use a `Transition` component to drive transitions. Inside its various `on[Enter/Entering/etc.]` callbacks, we update our component's state and then wait for `componentDidUpdate` to potentially transition to a new state by changing the children of the `Transition` component or toggling its `in` property.
