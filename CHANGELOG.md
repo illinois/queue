@@ -12,7 +12,7 @@ with the current date and the next changes should go under a **[Next]** header.
 * Add `npm run fix-lint-js` to fix linter errors that can be fixed automatically. ([@redsn0w422](https://github.com/redsn0w422) in [#127](https://github.com/illinois/queue/pull/127))
 * Allow a queue to be closed and reopened. ([@genevievehelsel](https://github.com/genevievehelsel) in [#128](https://github.com/illinois/queue/pull/128))
 * Fix confirm modal `PropTypes` to make `descText` and `confirmText` not required. ([@josh-byster](https://github.com/josh-byster), [@PradyumnaShome](https://github.com/PradyumnaShome), and [@jrogge](https://github.com/jrogge) in [#130](https://github.com/illinois/queue/pull/130))
-
+* Upgrade to Next.js 6 and add page transitions. ([@nwalters512](https://github.com/nwalters512) in [#133](https://github.com/illinois/queue/pull/133))
 
 ## 19 April 2018
 
