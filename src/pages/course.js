@@ -13,7 +13,6 @@ import { fetchCourseRequest, fetchCourse } from '../actions/course'
 import { createQueue, deleteQueue, updateQueue } from '../actions/queue'
 
 import PageWithUser from '../components/PageWithUser'
-import Loading from '../components/Loading'
 import NewQueue from '../components/NewQueue'
 import QueueCardListContainer from '../containers/QueueCardListContainer'
 import ShowForCourseStaff from '../components/ShowForCourseStaff'
@@ -32,6 +31,8 @@ class Course extends React.Component {
     }
   }
 
+  static shouldDelayEnter = true
+
   constructor(props) {
     super(props)
 
@@ -41,7 +42,11 @@ class Course extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchCourse(this.props.courseId)
+    this.props.fetchCourse(this.props.courseId).then(() => {
+      if (this.props.onLoaded) {
+        this.props.onLoaded()
+      }
+    })
   }
 
   showCreateQueuePanel(state) {
@@ -58,7 +63,7 @@ class Course extends React.Component {
 
   render() {
     if (this.props.isFetching) {
-      return <Loading />
+      return null
     }
     if (!this.props.isFetching && !this.props.course) {
       return <Error statusCode={404} />
@@ -150,12 +155,14 @@ Course.propTypes = {
   isFetching: PropTypes.bool,
   createQueue: PropTypes.func.isRequired,
   fetchCourse: PropTypes.func.isRequired,
+  onLoaded: PropTypes.func,
 }
 
 Course.defaultProps = {
   course: null,
   queues: null,
   isFetching: true,
+  onLoaded: false,
 }
 
 const mapStateToProps = (state, ownProps) => {

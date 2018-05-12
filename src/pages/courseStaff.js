@@ -20,7 +20,6 @@ import {
 } from '../actions/course'
 
 import PageWithUser from '../components/PageWithUser'
-import Loading from '../components/Loading'
 import AddStaff from '../components/AddStaff'
 import CourseStaffMember from '../components/CourseStaffMember'
 
@@ -36,8 +35,14 @@ class CourseStaff extends React.Component {
     }
   }
 
+  static shouldDelayEnter = true
+
   componentDidMount() {
-    this.props.fetchCourse(this.props.courseId)
+    this.props.fetchCourse(this.props.courseId).then(() => {
+      if (this.props.onLoaded) {
+        this.props.onLoaded()
+      }
+    })
   }
 
   addStaff(staff) {
@@ -48,7 +53,7 @@ class CourseStaff extends React.Component {
 
   render() {
     if (this.props.isFetching) {
-      return <Loading />
+      return null
     }
     if (!this.props.isFetching && !this.props.course) {
       return <Error statusCode={404} />
@@ -114,6 +119,7 @@ class CourseStaff extends React.Component {
 
 CourseStaff.defaultProps = {
   course: null,
+  onLoaded: null,
 }
 
 CourseStaff.propTypes = {
@@ -133,6 +139,7 @@ CourseStaff.propTypes = {
       name: PropTypes.string,
     })
   ).isRequired,
+  onLoaded: PropTypes.func,
 }
 
 const mapStateToProps = (state, { courseId }) => ({

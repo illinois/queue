@@ -20,7 +20,6 @@ import {
 import { mapObjectToArray } from '../util'
 
 import PageWithUser from '../components/PageWithUser'
-import Loading from '../components/Loading'
 import NewCourse from '../components/NewCourse'
 import NewQueue from '../components/NewQueue'
 import ShowForAdmin from '../components/ShowForAdmin'
