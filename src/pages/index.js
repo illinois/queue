@@ -1,12 +1,11 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { Container, Row, Card, CardBody, Button } from 'reactstrap'
-import withRedux from 'next-redux-wrapper'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
 
 import { Link } from '../routes'
-import makeStore from '../redux/makeStore'
 import {
   fetchCoursesRequest,
   fetchCourses,
@@ -21,8 +20,6 @@ import {
 import { mapObjectToArray } from '../util'
 
 import PageWithUser from '../components/PageWithUser'
-import Loading from '../components/Loading'
-import Layout from '../components/Layout'
 import NewCourse from '../components/NewCourse'
 import NewQueue from '../components/NewQueue'
 import ShowForAdmin from '../components/ShowForAdmin'
@@ -36,6 +33,8 @@ class Index extends React.Component {
       store.dispatch(fetchCoursesRequest())
     }
   }
+
+  static shouldDelayEnter = true
 
   constructor(props) {
     super(props)
@@ -55,6 +54,7 @@ class Index extends React.Component {
         this.setState({
           finishedLoading: true,
         })
+        if (this.props.onLoaded) this.props.onLoaded()
       }
     )
   }
@@ -85,7 +85,7 @@ class Index extends React.Component {
 
   render() {
     if (!this.state.finishedLoading) {
-      return <Loading />
+      return null
     }
 
     let courseButtons
@@ -113,7 +113,7 @@ class Index extends React.Component {
       .map(queue => queue.id)
 
     return (
-      <Layout>
+      <Fragment>
         <Container>
           <DevWorkshopAd />
           <div className="d-flex flex-wrap align-items-center mb-4">
@@ -208,7 +208,7 @@ class Index extends React.Component {
             flex: 1;
           }
         `}</style>
-      </Layout>
+      </Fragment>
     )
   }
 }
@@ -229,11 +229,13 @@ Index.propTypes = {
   fetchQueues: PropTypes.func.isRequired,
   createCourse: PropTypes.func.isRequired,
   createQueue: PropTypes.func.isRequired,
+  onLoaded: PropTypes.func,
 }
 
 Index.defaultProps = {
   courses: [],
   queues: [],
+  onLoaded: null,
 }
 
 const mapStateToProps = state => ({
@@ -254,6 +256,4 @@ const mapDispatchToProps = dispatch => ({
   deleteQueue: (courseId, queueId) => dispatch(deleteQueue(courseId, queueId)),
 })
 
-export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(
-  PageWithUser(Index)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(PageWithUser(Index))

@@ -47,7 +47,7 @@ class Header extends React.Component {
       <Navbar
         color="dark"
         dark
-        className="mb-3"
+        className="mb-3 fixed-top"
         style={styles.navbar}
         expand="sm"
       >

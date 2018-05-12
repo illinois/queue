@@ -1,4 +1,5 @@
 module.exports = {
+  parser: 'babel-eslint',
   extends: ['airbnb', 'prettier', 'prettier/react'],
   rules: {
     'no-unused-vars': [

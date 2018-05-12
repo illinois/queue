@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import {
   Container,
@@ -8,7 +8,7 @@ import {
   ListGroup,
   ListGroupItem,
 } from 'reactstrap'
-import withRedux from 'next-redux-wrapper'
+import { connect } from 'react-redux'
 import FlipMove from 'react-flip-move'
 import Error from 'next/error'
 
@@ -18,11 +18,8 @@ import {
   addCourseStaff,
   removeCourseStaff,
 } from '../actions/course'
-import makeStore from '../redux/makeStore'
 
 import PageWithUser from '../components/PageWithUser'
-import Loading from '../components/Loading'
-import Layout from '../components/Layout'
 import AddStaff from '../components/AddStaff'
 import CourseStaffMember from '../components/CourseStaffMember'
 
@@ -38,8 +35,14 @@ class CourseStaff extends React.Component {
     }
   }
 
+  static shouldDelayEnter = true
+
   componentDidMount() {
-    this.props.fetchCourse(this.props.courseId)
+    this.props.fetchCourse(this.props.courseId).then(() => {
+      if (this.props.onLoaded) {
+        this.props.onLoaded()
+      }
+    })
   }
 
   addStaff(staff) {
@@ -50,7 +53,7 @@ class CourseStaff extends React.Component {
 
   render() {
     if (this.props.isFetching) {
-      return <Loading />
+      return null
     }
     if (!this.props.isFetching && !this.props.course) {
       return <Error statusCode={404} />
@@ -81,7 +84,7 @@ class CourseStaff extends React.Component {
     }
 
     return (
-      <Layout>
+      <Fragment>
         <Container fluid>
           <Card className="staff-card">
             <CardHeader className="bg-primary text-white d-flex align-items-center">
@@ -109,13 +112,14 @@ class CourseStaff extends React.Component {
             margin: auto;
           }
         `}</style>
-      </Layout>
+      </Fragment>
     )
   }
 }
 
 CourseStaff.defaultProps = {
   course: null,
+  onLoaded: null,
 }
 
 CourseStaff.propTypes = {
@@ -135,6 +139,7 @@ CourseStaff.propTypes = {
       name: PropTypes.string,
     })
   ).isRequired,
+  onLoaded: PropTypes.func,
 }
 
 const mapStateToProps = (state, { courseId }) => ({
@@ -153,6 +158,6 @@ const mapDispatchToProps = dispatch => ({
 })
 
 const permissions = { requireCourseStaff: true }
-export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
   PageWithUser(CourseStaff, permissions)
 )

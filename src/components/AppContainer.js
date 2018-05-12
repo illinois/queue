@@ -1,13 +1,14 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 
+import TransitionManager from './TransitionManager'
 import Header from './Header'
 import Footer from './Footer'
 
-const Layout = props => (
+const AppContainer = props => (
   <Fragment>
     <Header />
-    {props.children}
+    <TransitionManager timeout={200}>{props.children}</TransitionManager>
     <Footer />
     <style global jsx>{`
       html {
@@ -16,14 +17,15 @@ const Layout = props => (
       body {
         min-height: 100%;
         position: relative;
+        padding-top: 4.5rem;
         padding-bottom: 5rem;
       }
     `}</style>
   </Fragment>
 )
 
-Layout.propTypes = {
+AppContainer.propTypes = {
   children: PropTypes.node.isRequired,
 }
 
-export default Layout
+export default AppContainer
