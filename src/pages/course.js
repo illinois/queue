@@ -30,7 +30,7 @@ class Course extends React.Component {
     }
   }
 
-  static shouldDelayEnter = true
+  static pageTransitionDelayEnter = true
 
   constructor(props) {
     super(props)
@@ -42,8 +42,8 @@ class Course extends React.Component {
 
   componentDidMount() {
     this.props.fetchCourse(this.props.courseId).then(() => {
-      if (this.props.onLoaded) {
-        this.props.onLoaded()
+      if (this.props.pageTransitionReadyToEnter) {
+        this.props.pageTransitionReadyToEnter()
       }
     })
   }
@@ -154,14 +154,14 @@ Course.propTypes = {
   isFetching: PropTypes.bool,
   createQueue: PropTypes.func.isRequired,
   fetchCourse: PropTypes.func.isRequired,
-  onLoaded: PropTypes.func,
+  pageTransitionReadyToEnter: PropTypes.func,
 }
 
 Course.defaultProps = {
   course: null,
   queues: null,
   isFetching: true,
-  onLoaded: false,
+  pageTransitionReadyToEnter: false,
 }
 
 const mapStateToProps = (state, ownProps) => {
