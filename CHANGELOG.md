@@ -14,6 +14,7 @@ with the current date and the next changes should go under a **[Next]** header.
 * Fix confirm modal `PropTypes` to make `descText` and `confirmText` not required. ([@josh-byster](https://github.com/josh-byster), [@PradyumnaShome](https://github.com/PradyumnaShome), and [@jrogge](https://github.com/jrogge) in [#130](https://github.com/illinois/queue/pull/130))
 * Upgrade to Next.js 6 and add page transitions. ([@nwalters512](https://github.com/nwalters512) in [#133](https://github.com/illinois/queue/pull/133))
 * Enable Now snapshot deploys on PRs. ([@nwalters512](https://github.com/nwalters512) in [#136](https://github.com/illinois/queue/pull/136))
+* Switch to using our [next-page-transitions](https://github.com/illinois/next-page-transitions) library. ([@nwalters512](https://github.com/nwalters512) in [#134](https://github.com/illinois/queue/pull/134))
 
 ## 19 April 2018
 
