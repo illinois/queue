@@ -41,7 +41,7 @@
     "moment": "^2.22.2",
     "mysql2": "^1.5.3",
     "next": "^6.1.1",
-    "next-page-transitions": "^1.0.0-alpha.2",
+    "next-page-transitions": "^1.0.0-alpha.3",
     "next-redux-wrapper": "^2.0.0",
     "next-routes": "^1.4.2",
     "normalizr": "^3.2.4",

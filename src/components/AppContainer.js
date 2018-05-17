@@ -22,6 +22,7 @@ const AppContainer = props => {
           exit: 0,
         }}
         loadingClassNames="indicator"
+        monkeyPatchScrolling
       >
         {props.children}
       </PageTransition>
