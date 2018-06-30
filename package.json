@@ -7,7 +7,7 @@
     "dev": "node src/server.js",
     "dev-watch": "nodemon src/server.js",
     "build": "rimraf build && cpx \"src\\**\\*\" build && next build build",
-    "start": "node build/server.js",
+    "start": "NODE_ENV=production node build/server.js",
     "now-start": "NODE_ENV=now node build/server.js",
     "test": "NODE_ENV=test jest",
     "test-sequential": "jest --runInBand",
