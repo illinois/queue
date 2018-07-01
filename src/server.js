@@ -14,7 +14,8 @@ const routes = require('./routes')
 const serverSocket = require('./socket/server')
 const { baseUrl } = require('./util')
 
-const DEV = ['production', 'staging'].indexOf(process.env.NODE_ENV) === -1
+const DEV =
+  ['now', 'staging', 'production'].indexOf(process.env.NODE_ENV) === -1
 const PORT = process.env.PORT || 3000
 
 const nextApp = nextJs({ dev: DEV, dir: DEV ? 'src' : 'build' })
