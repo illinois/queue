@@ -45,9 +45,9 @@ class QuestionNotificationsToggle extends React.Component {
   }
 
   toggleExplanationModal() {
-    this.setState({
-      showExplanationModal: !this.state.showExplanationModal,
-    })
+    this.setState(prevState => ({
+      showExplanationModal: !prevState.showExplanationModal,
+    }))
   }
 
   toggleNotificationsEnabled() {

@@ -59,9 +59,7 @@ export default class NewQuestion extends React.Component {
       // This isn't toggleable for normal users
       return
     }
-    this.setState({
-      isOpen: !this.state.isOpen,
-    })
+    this.setState(prevState => ({ isOpen: !prevState.isOpen }))
   }
 
   handleInputChange(event) {

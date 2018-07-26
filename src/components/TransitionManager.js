@@ -149,6 +149,7 @@ export default class TransitionManager extends React.Component {
       state: 'exit',
     })
   }
+
   onExiting() {
     this.setState({
       state: 'exiting',

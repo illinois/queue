@@ -20,9 +20,7 @@ class ActiveQuestionPanel extends React.Component {
   }
 
   toggle() {
-    this.setState({
-      modalOpen: !this.state.modalOpen,
-    })
+    this.setState(prevState => ({ modalOpen: !prevState.modalOpen }))
   }
 
   deleteQuestion() {

@@ -4,9 +4,9 @@ import { Col, Card, CardBody } from 'reactstrap'
 
 import { Router } from '../routes'
 
-import QueueCard from '../components/QueueCard'
-import QueueEdit from '../components/QueueEdit'
-import ConfirmDeleteQueueModal from '../components/ConfirmDeleteQueueModal'
+import QueueCard from './QueueCard'
+import QueueEdit from './QueueEdit'
+import ConfirmDeleteQueueModal from './ConfirmDeleteQueueModal'
 
 /* eslint-disable react/prefer-stateless-function */
 class QueueCardList extends React.Component {
@@ -63,9 +63,9 @@ class QueueCardList extends React.Component {
   }
 
   toggleDeleteModal() {
-    this.setState({
-      showDeleteQueueModal: !this.state.showDeleteQueueModal,
-    })
+    this.setState(prevState => ({
+      showDeleteQueueModal: !prevState.showDeleteQueueModal,
+    }))
   }
 
   render() {
