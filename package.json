@@ -48,7 +48,7 @@
     "prop-types": "^15.6.1",
     "react": "^16.3.0",
     "react-dom": "^16.3.0",
-    "react-flip-move": "^3.0.1",
+    "react-flip-move": "^3.0.2",
     "react-fontawesome": "^1.6.1",
     "react-moment": "^0.7.9",
     "react-popper": "^0.7.5",
