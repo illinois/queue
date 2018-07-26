@@ -33,7 +33,7 @@
     "express": "^4.16.3",
     "express-session": "^1.15.6",
     "express-urlrewrite": "^1.2.0",
-    "express-validator": "^4.3.0",
+    "express-validator": "^5.3.0",
     "hoist-non-react-statics": "^2.5.5",
     "http-status": "^1.2.0",
     "isomorphic-unfetch": "^2.1.0",
