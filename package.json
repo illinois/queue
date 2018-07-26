@@ -11,8 +11,8 @@
     "now-start": "NODE_ENV=now node build/server.js",
     "test": "NODE_ENV=test jest",
     "test-sequential": "jest --runInBand",
-    "lint-js": "eslint --ext js .",
-    "fix-lint-js": "eslint --ext js . --fix",
+    "lint": "eslint --ext js ./src",
+    "fix-lint": "npm run lint -- --fix",
     "prettier": "prettier --write \"src/**/*.js\"",
     "prettier-diff": "prettier --list-different \"src/**/*.js\""
   },
