@@ -44,7 +44,7 @@
     "next-redux-wrapper": "^2.0.0-beta.4",
     "next-routes": "^1.4.2",
     "normalizr": "^3.2.4",
-    "pg": "^7.4.1",
+    "pg": "^7.4.3",
     "prop-types": "^15.6.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
