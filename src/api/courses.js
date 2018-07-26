@@ -23,7 +23,9 @@ router.get(
   [requireCourse, failIfErrors],
   safeAsync(async (req, res, _next) => {
     const { id: courseId } = res.locals.course
-    const { locals: { userAuthz } } = res
+    const {
+      locals: { userAuthz },
+    } = res
 
     const includes = []
     // Only include list of course staff for other course staff or admins

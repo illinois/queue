@@ -158,6 +158,7 @@ const mapDispatchToProps = dispatch => ({
 })
 
 const permissions = { requireCourseStaff: true }
-export default connect(mapStateToProps, mapDispatchToProps)(
-  PageWithUser(CourseStaff, permissions)
-)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PageWithUser(CourseStaff, permissions))

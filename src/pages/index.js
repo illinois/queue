@@ -256,4 +256,7 @@ const mapDispatchToProps = dispatch => ({
   deleteQueue: (courseId, queueId) => dispatch(deleteQueue(courseId, queueId)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(PageWithUser(Index))
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PageWithUser(Index))

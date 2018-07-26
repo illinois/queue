@@ -22,4 +22,7 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewQuestion)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NewQuestion)

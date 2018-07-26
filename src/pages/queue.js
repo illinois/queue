@@ -130,4 +130,7 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(PageWithUser(Queue))
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PageWithUser(Queue))

@@ -182,6 +182,7 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  PageWithUser(Course)
-)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PageWithUser(Course))

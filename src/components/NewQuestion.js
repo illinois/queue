@@ -114,7 +114,10 @@ export default class NewQuestion extends React.Component {
   }
 
   render() {
-    const { queue: { location, fixedLocation }, isUserCourseStaff } = this.props
+    const {
+      queue: { location, fixedLocation },
+      isUserCourseStaff,
+    } = this.props
 
     const queueLocation = fixedLocation ? location : this.state.location
 

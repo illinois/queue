@@ -8,4 +8,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(updateQueue(queueId, attributes)),
 })
 
-export default connect(null, mapDispatchToProps)(QueueStatusToggle)
+export default connect(
+  null,
+  mapDispatchToProps
+)(QueueStatusToggle)
