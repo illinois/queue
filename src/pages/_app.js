@@ -21,7 +21,6 @@ class MyApp extends React.Component {
   render() {
     /* eslint-disable react/prop-types */
     const { Component, pageProps, router, store } = this.props
-    console.log(store)
     return (
       <Provider store={store}>
         <AppContainer>
