@@ -5,7 +5,7 @@ const router = require('express').Router({
 const { check, oneOf } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 
-const { Queue, ActiveStaff, Question, User } = require('../models')
+const { Queue, ActiveStaff, Question, User, Course } = require('../models')
 const safeAsync = require('../middleware/safeAsync')
 
 const {
@@ -100,6 +100,10 @@ router.get(
           where: {
             dequeueTime: null,
           },
+        },
+        {
+          model: Course,
+          attributes: ['name'],
         },
       ],
       order: [[Question, 'id', 'ASC']],

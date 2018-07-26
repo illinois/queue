@@ -59,9 +59,13 @@ class Queue extends React.Component {
       return <Error statusCode={404} />
     }
     const locationText = this.props.queue.location || 'No location specified'
+    const courseName = this.props.queue.course.name || '?'
+    const queueName = this.props.queue.name || '?'
     return (
       <Container fluid>
-        <h3>{this.props.queue.name}</h3>
+        <h3>
+          {courseName} — {queueName}
+        </h3>
         <h5 className="mb-3 text-muted">
           <FontAwesomeIcon icon={faMapMarker} fixedWidth className="mr-2" />
           {locationText}
