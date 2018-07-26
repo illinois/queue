@@ -61,7 +61,9 @@ class Queue extends React.Component {
     const locationText = this.props.queue.location || 'No location specified'
     return (
       <Container fluid>
-        <h3>{this.props.queue.name}</h3>
+        <h3>
+          {this.props.queue.course.name} — {this.props.queue.name}
+        </h3>
         <h5 className="mb-3 text-muted">
           <FontAwesomeIcon icon={faMapMarker} fixedWidth className="mr-2" />
           {locationText}
@@ -108,6 +110,7 @@ Queue.propTypes = {
     id: PropTypes.number,
     name: PropTypes.string,
     location: PropTypes.string,
+    courseName: PropTypes.string,
     courseId: PropTypes.number,
     open: PropTypes.bool,
   }),
