@@ -36,7 +36,7 @@
     "express-validator": "^4.3.0",
     "hoist-non-react-statics": "^2.5.5",
     "http-status": "^1.2.0",
-    "isomorphic-unfetch": "^2.0.0",
+    "isomorphic-unfetch": "^2.1.0",
     "json-patch": "^0.7.0",
     "moment": "^2.22.0",
     "mysql2": "^1.5.3",
