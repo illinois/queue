@@ -15,8 +15,8 @@ import {
   FormFeedback,
 } from 'reactstrap'
 import classNames from 'classnames'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faChevronDown from '@fortawesome/fontawesome-free-solid/faChevronDown'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
 import constants from '../constants'
 

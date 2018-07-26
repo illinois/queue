@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import { ListGroup, ListGroupItem } from 'reactstrap'
 import FlipMove from 'react-flip-move'
 
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import Question from './Question'
 import QuestionFeedback from './QuestionFeedback'

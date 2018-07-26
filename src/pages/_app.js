@@ -1,9 +1,13 @@
 /* eslint-env browser */
 import React from 'react'
 import withRedux from 'next-redux-wrapper'
+import { config } from '@fortawesome/fontawesome-svg-core'
 
 import makeStore from '../redux/makeStore'
 import AppContainer from '../components/AppContainer'
+
+// We add this during SSR in _document.js
+config.autoAddCss = false
 
 class MyApp extends React.Component {
   static async getInitialProps({ Component, ctx }) {
