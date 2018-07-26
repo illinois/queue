@@ -1,5 +1,6 @@
 /* eslint-env browser */
 import React from 'react'
+import { Provider } from 'react-redux'
 import withRedux from 'next-redux-wrapper'
 import { config } from '@fortawesome/fontawesome-svg-core'
 
@@ -19,11 +20,14 @@ class MyApp extends React.Component {
 
   render() {
     /* eslint-disable react/prop-types */
-    const { Component, pageProps, router } = this.props
+    const { Component, pageProps, router, store } = this.props
+    console.log(store)
     return (
-      <AppContainer>
-        <Component {...pageProps} key={router.route} />
-      </AppContainer>
+      <Provider store={store}>
+        <AppContainer>
+          <Component {...pageProps} key={router.route} />
+        </AppContainer>
+      </Provider>
     )
   }
 }
