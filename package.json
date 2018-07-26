@@ -65,7 +65,7 @@
     "socket.io-client": "^2.1.1",
     "styled-jsx": "^2.2.7",
     "umzug": "^2.1.0",
-    "validator": "^9.4.1",
+    "validator": "^10.4.0",
     "winston": "^3.0.0"
   },
   "devDependencies": {
