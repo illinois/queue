@@ -14,6 +14,7 @@ with the current date and the next changes should go under a **[Next]** header.
 * Fix confirm modal `PropTypes` to make `descText` and `confirmText` not required. ([@josh-byster](https://github.com/josh-byster), [@PradyumnaShome](https://github.com/PradyumnaShome), and [@jrogge](https://github.com/jrogge) in [#130](https://github.com/illinois/queue/pull/130))
 * Upgrade to Next.js 6 and add page transitions. ([@nwalters512](https://github.com/nwalters512) in [#133](https://github.com/illinois/queue/pull/133))
 * Enable Now snapshot deploys on PRs. ([@nwalters512](https://github.com/nwalters512) in [#136](https://github.com/illinois/queue/pull/136))
+* Added course name to queue page next to queue name. ([@LucasMess](https://github.com/LucasMess) in [#138](https://github.com/illinois/queue/pull/138))
 
 ## 19 April 2018
 

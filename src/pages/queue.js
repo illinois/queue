@@ -114,6 +114,9 @@ Queue.propTypes = {
     location: PropTypes.string,
     courseId: PropTypes.number,
     open: PropTypes.bool,
+    course: PropTypes.shape({
+      name: PropTypes.string,
+    }),
   }),
   onLoaded: PropTypes.func,
 }
