@@ -65,7 +65,7 @@ class Queue extends React.Component {
     let courseName = '(Course name not found)'
     if (
       this.props.queue.course !== undefined &&
-      this.props.queue.course.name != undefined
+      this.props.queue.course.name !== undefined
     ) {
       courseName = this.props.queue.course.name
     }
