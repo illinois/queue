@@ -59,8 +59,17 @@ class Queue extends React.Component {
       return <Error statusCode={404} />
     }
     const locationText = this.props.queue.location || 'No location specified'
-    const courseName = this.props.queue.course.name || '?'
     const queueName = this.props.queue.name || '?'
+
+    // Using let since course and name can be undefined.
+    let courseName = '(Course name not found)'
+    if (
+      this.props.queue.course !== undefined &&
+      this.props.queue.course.name != undefined
+    ) {
+      courseName = this.props.queue.course.name
+    }
+
     return (
       <Container fluid>
         <h3>

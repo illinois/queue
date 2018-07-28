@@ -31,7 +31,15 @@ function validateLocation(req, res, next) {
 router.get(
   '/',
   safeAsync(async (req, res, _next) => {
-    const queues = await Queue.scope('questionCount').findAll()
+    // The include below will let the course name be available from the queue page.
+    const queues = await Queue.scope('questionCount').findAll({
+      include: [
+        {
+          model: Course,
+          attributes: ['name'],
+        },
+      ],
+    })
     res.json(queues)
   })
 )
