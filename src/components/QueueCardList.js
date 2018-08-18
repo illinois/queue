@@ -4,9 +4,9 @@ import { Col, Card, CardBody } from 'reactstrap'
 
 import { Router } from '../routes'
 
-import QueueCard from '../components/QueueCard'
-import QueueEdit from '../components/QueueEdit'
-import ConfirmDeleteQueueModal from '../components/ConfirmDeleteQueueModal'
+import QueueCard from './QueueCard'
+import QueueEdit from './QueueEdit'
+import ConfirmDeleteQueueModal from './ConfirmDeleteQueueModal'
 
 /* eslint-disable react/prefer-stateless-function */
 class QueueCardList extends React.Component {
@@ -63,9 +63,9 @@ class QueueCardList extends React.Component {
   }
 
   toggleDeleteModal() {
-    this.setState({
-      showDeleteQueueModal: !this.state.showDeleteQueueModal,
-    })
+    this.setState(prevState => ({
+      showDeleteQueueModal: !prevState.showDeleteQueueModal,
+    }))
   }
 
   render() {
@@ -93,6 +93,7 @@ class QueueCardList extends React.Component {
           <CardCol key={queue.id}>
             <QueueCard
               queue={queue}
+              open={this.props.openQueue}
               courseName={this.props.showCourseName ? courseName : null}
               onClick={() => handleQueueClick(queue.id)}
               onDelete={() => this.deleteQueue(queue.courseId, queue.id)}
@@ -106,7 +107,8 @@ class QueueCardList extends React.Component {
         <Col>
           <Card className="bg-light">
             <CardBody className="text-center">
-              There aren&apos;t any open queues right now
+              There aren&apos;t any {this.props.openQueue ? 'open' : 'closed'}{' '}
+              queues right now
             </CardBody>
           </Card>
         </Col>
@@ -150,6 +152,7 @@ QueueCardList.defaultProps = {
   courses: {},
   queues: {},
   showCourseName: false,
+  openQueue: true,
 }
 
 QueueCardList.propTypes = {
@@ -166,6 +169,7 @@ QueueCardList.propTypes = {
     })
   ),
   showCourseName: PropTypes.bool,
+  openQueue: PropTypes.bool,
   updateQueue: PropTypes.func.isRequired,
   deleteQueue: PropTypes.func.isRequired,
 }

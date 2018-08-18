@@ -7,11 +7,13 @@ const rewrite = require('express-urlrewrite')
 const { baseUrl } = require('./util')
 
 const DEV = ['production', 'staging'].indexOf(process.env.NODE_ENV) === -1
+const NOW = process.env.NODE_ENV === 'now'
 
 // In production, all concepts of "sessions" will be handled by checking the
 // eppn header from Shib. In dev, to support multiple users for testing, we
-// use session middleware.
-if (DEV) {
+// use session middleware. For PR deploys to now, we won't have Shib in front
+// of us, so we'll also use our own sessions there.
+if (DEV || NOW) {
   app.use(
     session({
       secret: 'this is not a secret',
@@ -35,7 +37,7 @@ app.use(require('./middleware/prettyPrintJson'))
 // In dev, we need all requests to flow through the authn middleware so that
 // we can properly handle a forceuser query param on a page load.
 // In production, we only need this for the API routes; everything else is just statics.
-if (DEV) {
+if (DEV || NOW) {
   app.use(baseUrl, require('./middleware/authnDev'))
 } else {
   app.use(`${baseUrl}/api`, require('./middleware/authn'))

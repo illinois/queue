@@ -33,6 +33,12 @@ module.exports.createTestQueues = async () => {
       location: 'Everywhere',
       courseId: 1,
     },
+    {
+      name: 'CS225 Closed',
+      open: false,
+      location: 'Everywhere',
+      courseId: 1,
+    },
   ])
 }
 

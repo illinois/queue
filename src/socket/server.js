@@ -1,5 +1,5 @@
 const sequelizeStream = require('sequelize-stream')
-const { sequelize, Question, User, ActiveStaff } = require('../models')
+const { sequelize, Question, User, ActiveStaff, Queue } = require('../models')
 
 let io = null
 let queueNamespace = null
@@ -96,6 +96,22 @@ const handleActiveStaffEvent = (event, instance) => {
   }
 }
 
+const handleQueueUpdate = id => {
+  Queue.findOne({ where: { id } }).then(queue => {
+    queueNamespace.to(`queue-${id}`).emit('queue:update', { id, queue })
+  })
+}
+
+const handleQueueEvent = (event, instance) => {
+  switch (event) {
+    case 'update':
+      handleQueueUpdate(instance.id)
+      break
+    default:
+    // Do nothing
+  }
+}
+
 const stream = sequelizeStream(sequelize)
 stream.on('data', data => {
   const { event, instance } = data
@@ -103,6 +119,8 @@ stream.on('data', data => {
     handleQuestionEvent(event, instance)
   } else if (instance instanceof ActiveStaff) {
     handleActiveStaffEvent(event, instance)
+  } else if (instance instanceof Queue) {
+    handleQueueEvent(event, instance)
   }
 })
 

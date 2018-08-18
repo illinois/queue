@@ -2,7 +2,7 @@
 import React from 'react'
 import Document, { Head, Main, NextScript } from 'next/document'
 import flush from 'styled-jsx/server'
-import FontAwesome from '@fortawesome/fontawesome'
+import { dom } from '@fortawesome/fontawesome-svg-core'
 
 import { baseUrl, isDev } from '../util'
 
@@ -46,8 +46,8 @@ export default class MyDocument extends Document {
             crossOrigin="use-credentials"
             href={manifestPath}
           />
-          <style>{FontAwesome.dom.css()}</style>
           <title>Queues@Illinois</title>
+          <style>{dom.css()}</style>
           <link rel="icon" href={faviconPath} type="image/png" />
           {baseUrl && <script dangerouslySetInnerHTML={script} />}
         </Head>

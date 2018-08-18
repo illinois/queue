@@ -1,21 +1,17 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { Container, Row, Card, CardBody, Button } from 'reactstrap'
-import withRedux from 'next-redux-wrapper'
 import Error from 'next/error'
 
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
-import faUsers from '@fortawesome/fontawesome-free-solid/faUsers'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus, faUsers } from '@fortawesome/free-solid-svg-icons'
 
 import { Link } from '../routes'
-import makeStore from '../redux/makeStore'
 import { fetchCourseRequest, fetchCourse } from '../actions/course'
 import { createQueue, deleteQueue, updateQueue } from '../actions/queue'
 
 import PageWithUser from '../components/PageWithUser'
-import Loading from '../components/Loading'
-import Layout from '../components/Layout'
 import NewQueue from '../components/NewQueue'
 import QueueCardListContainer from '../containers/QueueCardListContainer'
 import ShowForCourseStaff from '../components/ShowForCourseStaff'
@@ -34,6 +30,8 @@ class Course extends React.Component {
     }
   }
 
+  static shouldDelayEnter = true
+
   constructor(props) {
     super(props)
 
@@ -43,7 +41,11 @@ class Course extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchCourse(this.props.courseId)
+    this.props.fetchCourse(this.props.courseId).then(() => {
+      if (this.props.onLoaded) {
+        this.props.onLoaded()
+      }
+    })
   }
 
   showCreateQueuePanel(state) {
@@ -60,14 +62,14 @@ class Course extends React.Component {
 
   render() {
     if (this.props.isFetching) {
-      return <Loading />
+      return null
     }
     if (!this.props.isFetching && !this.props.course) {
       return <Error statusCode={404} />
     }
 
     return (
-      <Layout>
+      <Fragment>
         <Container>
           <div className="d-flex flex-wrap align-items-center mb-4">
             <h1 className="display-4 d-inline-block mb-0 mt-3 mr-auto pr-3">
@@ -132,7 +134,7 @@ class Course extends React.Component {
             margin: auto;
           }
         `}</style>
-      </Layout>
+      </Fragment>
     )
   }
 }
@@ -152,12 +154,14 @@ Course.propTypes = {
   isFetching: PropTypes.bool,
   createQueue: PropTypes.func.isRequired,
   fetchCourse: PropTypes.func.isRequired,
+  onLoaded: PropTypes.func,
 }
 
 Course.defaultProps = {
   course: null,
   queues: null,
   isFetching: true,
+  onLoaded: false,
 }
 
 const mapStateToProps = (state, ownProps) => {
@@ -178,6 +182,7 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 })
 
-export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(
-  PageWithUser(Course)
-)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PageWithUser(Course))

@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import { ListGroup, ListGroupItem } from 'reactstrap'
 import FlipMove from 'react-flip-move'
 
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import Question from './Question'
 import QuestionFeedback from './QuestionFeedback'
@@ -94,15 +94,13 @@ class QuestionList extends React.Component {
   }
 
   toggleLeaveModal() {
-    this.setState({
-      showLeaveModal: !this.state.showLeaveModal,
-    })
+    this.setState(prevState => ({ showLeaveModal: !prevState.showLeaveModal }))
   }
 
   toggleDeleteModal() {
-    this.setState({
-      showDeleteModal: !this.state.showDeleteModal,
-    })
+    this.setState(prevState => ({
+      showDeleteModal: !prevState.showDeleteModal,
+    }))
   }
 
   handleConfirmedDeletion() {
@@ -114,9 +112,9 @@ class QuestionList extends React.Component {
   }
 
   toggleCancelModal() {
-    this.setState({
-      showCancelModal: !this.state.showCancelModal,
-    })
+    this.setState(prevState => ({
+      showCancelModal: !prevState.showCancelModal,
+    }))
   }
 
   cancelQuestion(questionId) {

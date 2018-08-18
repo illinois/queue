@@ -139,4 +139,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch(removeQueueStaff(ownProps.queueId, ...args)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(StaffSidebar)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(StaffSidebar)

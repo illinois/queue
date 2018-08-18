@@ -1,12 +1,12 @@
 /* eslint global-require: "off", no-console: "off" */
 require('dotenv').config()
 
-const app = require('./app')
-const server = require('http').Server(app)
+const { Server } = require('http')
 const io = require('socket.io')
 const nextJs = require('next')
 const co = require('co')
 
+const app = require('./app')
 const logger = require('./util/logger')
 const models = require('./models')
 const migrations = require('./migrations/util')
@@ -14,7 +14,8 @@ const routes = require('./routes')
 const serverSocket = require('./socket/server')
 const { baseUrl } = require('./util')
 
-const DEV = ['production', 'staging'].indexOf(process.env.NODE_ENV) === -1
+const DEV =
+  ['now', 'staging', 'production'].indexOf(process.env.NODE_ENV) === -1
 const PORT = process.env.PORT || 3000
 
 const nextApp = nextJs({ dev: DEV, dir: DEV ? 'src' : 'build' })
@@ -27,6 +28,9 @@ co(function*() {
 
   // Initialize the database
   yield migrations.performMigrations(models.sequelize)
+
+  // Initialize the server
+  const server = Server(app)
 
   // Websocket stuff
   const socket = io(server, { path: `${baseUrl}/socket.io` })

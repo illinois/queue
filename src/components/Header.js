@@ -12,8 +12,8 @@ import {
 } from 'reactstrap'
 import { connect } from 'react-redux'
 
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faUser from '@fortawesome/fontawesome-free-solid/faUser'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUser } from '@fortawesome/free-solid-svg-icons'
 
 import { Link } from '../routes'
 import { isDev } from '../util'
@@ -37,9 +37,7 @@ class Header extends React.Component {
   }
 
   toggle() {
-    this.setState({
-      isOpen: !this.state.isOpen,
-    })
+    this.setState(prevState => ({ isOpen: !prevState.isOpen }))
   }
 
   handleLogout() {
@@ -57,7 +55,7 @@ class Header extends React.Component {
       <Navbar
         color="dark"
         dark
-        className="mb-3"
+        className="mb-3 fixed-top"
         style={styles.navbar}
         expand="sm"
       >
@@ -106,4 +104,8 @@ Header.propTypes = {
 const mapStateToProps = ({ user }) => ({
   user: user.user,
 })
-export default connect(mapStateToProps, null)(Header)
+
+export default connect(
+  mapStateToProps,
+  null
+)(Header)
