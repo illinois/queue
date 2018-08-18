@@ -34,7 +34,7 @@ class Index extends React.Component {
     }
   }
 
-  static shouldDelayEnter = true
+  static pageTransitionDelayEnter = true
 
   constructor(props) {
     super(props)
@@ -54,7 +54,9 @@ class Index extends React.Component {
         this.setState({
           finishedLoading: true,
         })
-        if (this.props.onLoaded) this.props.onLoaded()
+        if (this.props.pageTransitionReadyToEnter) {
+          this.props.pageTransitionReadyToEnter()
+        }
       }
     )
   }
@@ -229,13 +231,13 @@ Index.propTypes = {
   fetchQueues: PropTypes.func.isRequired,
   createCourse: PropTypes.func.isRequired,
   createQueue: PropTypes.func.isRequired,
-  onLoaded: PropTypes.func,
+  pageTransitionReadyToEnter: PropTypes.func,
 }
 
 Index.defaultProps = {
   courses: [],
   queues: [],
-  onLoaded: null,
+  pageTransitionReadyToEnter: null,
 }
 
 const mapStateToProps = state => ({

@@ -29,11 +29,13 @@ class Queue extends React.Component {
     }
   }
 
-  static shouldDelayEnter = true
+  static pageTransitionDelayEnter = true
 
   componentDidMount() {
     this.props.fetchQueue(this.props.queueId).then(() => {
-      if (this.props.onLoaded) this.props.onLoaded()
+      if (this.props.pageTransitionReadyToEnter) {
+        this.props.pageTransitionReadyToEnter()
+      }
     })
   }
 
@@ -111,12 +113,12 @@ Queue.propTypes = {
     courseId: PropTypes.number,
     open: PropTypes.bool,
   }),
-  onLoaded: PropTypes.func,
+  pageTransitionReadyToEnter: PropTypes.func,
 }
 
 Queue.defaultProps = {
   queue: null,
-  onLoaded: null,
+  pageTransitionReadyToEnter: null,
 }
 
 const mapStateToProps = (state, ownProps) => ({
