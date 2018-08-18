@@ -1,9 +1,8 @@
 /* eslint-env browser */
 import React, { Fragment } from 'react'
 import { Button, ButtonGroup } from 'reactstrap'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faBell from '@fortawesome/fontawesome-free-solid/faBell'
-import faInfo from '@fortawesome/fontawesome-free-solid/faInfoCircle'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBell, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 
 import QuestionNotificationsToggleExplanationModal from './QuestionNotificationsToggleExplanationModal'
 
@@ -46,9 +45,9 @@ class QuestionNotificationsToggle extends React.Component {
   }
 
   toggleExplanationModal() {
-    this.setState({
-      showExplanationModal: !this.state.showExplanationModal,
-    })
+    this.setState(prevState => ({
+      showExplanationModal: !prevState.showExplanationModal,
+    }))
   }
 
   toggleNotificationsEnabled() {
@@ -120,7 +119,7 @@ class QuestionNotificationsToggle extends React.Component {
             className="d-flex align-self-stretch"
             onClick={() => this.toggleExplanationModal()}
           >
-            <FontAwesomeIcon icon={faInfo} />
+            <FontAwesomeIcon icon={faInfoCircle} />
           </Button>
         </ButtonGroup>
         <QuestionNotificationsToggleExplanationModal

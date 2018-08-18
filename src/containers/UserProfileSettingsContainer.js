@@ -12,4 +12,7 @@ const mapDispatchToProps = dispatch => ({
   updateUserPreferredName: name => dispatch(updateUserPreferredName(name)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserProfileSettings)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(UserProfileSettings)

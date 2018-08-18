@@ -13,4 +13,7 @@ const mapStateToProps = state => ({
   isAdmin: isUserAdmin(state),
 })
 
-export default connect(mapStateToProps, null)(ShowForAdmin)
+export default connect(
+  mapStateToProps,
+  null
+)(ShowForAdmin)

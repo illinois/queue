@@ -235,4 +235,7 @@ const mapStateToProps = state => ({
   courses: mapObjectToArray(state.courses.courses),
 })
 
-export default connect(mapStateToProps, null)(NewQueue)
+export default connect(
+  mapStateToProps,
+  null
+)(NewQueue)

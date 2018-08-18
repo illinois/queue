@@ -106,5 +106,8 @@ export default function(AuthedComponent, permissions) {
 
   hoistStatics(PageWithUser, AuthedComponent)
 
-  return connect(mapStateToProps, mapDispatchToProps)(PageWithUser)
+  return connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(PageWithUser)
 }

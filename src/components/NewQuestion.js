@@ -15,8 +15,8 @@ import {
   FormFeedback,
 } from 'reactstrap'
 import classNames from 'classnames'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faChevronDown from '@fortawesome/fontawesome-free-solid/faChevronDown'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
 import constants from '../constants'
 
@@ -59,9 +59,7 @@ export default class NewQuestion extends React.Component {
       // This isn't toggleable for normal users
       return
     }
-    this.setState({
-      isOpen: !this.state.isOpen,
-    })
+    this.setState(prevState => ({ isOpen: !prevState.isOpen }))
   }
 
   handleInputChange(event) {
@@ -114,7 +112,10 @@ export default class NewQuestion extends React.Component {
   }
 
   render() {
-    const { queue: { location, fixedLocation }, isUserCourseStaff } = this.props
+    const {
+      queue: { location, fixedLocation },
+      isUserCourseStaff,
+    } = this.props
 
     const queueLocation = fixedLocation ? location : this.state.location
 

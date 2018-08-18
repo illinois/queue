@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Container, Row, Col, Card, CardBody } from 'reactstrap'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faMapMarker from '@fortawesome/fontawesome-free-solid/faMapMarker'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faMapMarker } from '@fortawesome/free-solid-svg-icons'
 
 import { fetchQueue, fetchQueueRequest } from '../actions/queue'
 import { connectToQueue, disconnectFromQueue } from '../socket/client'
@@ -130,4 +130,7 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(PageWithUser(Queue))
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PageWithUser(Queue))

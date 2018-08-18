@@ -1,9 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Card, CardBody, CardTitle, CardSubtitle, Button } from 'reactstrap'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faMapMarker from '@fortawesome/fontawesome-free-solid/faMapMarker'
-import faQuestion from '@fortawesome/fontawesome-free-solid/faQuestionCircle'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  faMapMarker,
+  faQuestionCircle,
+} from '@fortawesome/free-solid-svg-icons'
 
 import ShowForCourseStaff from './ShowForCourseStaff'
 
@@ -71,7 +73,11 @@ const QueueCard = ({
           <FontAwesomeIcon icon={faMapMarker} fixedWidth className="mr-2" />
           {locationText}
           <br />
-          <FontAwesomeIcon icon={faQuestion} fixedWidth className="mr-2" />
+          <FontAwesomeIcon
+            icon={faQuestionCircle}
+            fixedWidth
+            className="mr-2"
+          />
           {questionCountText}
         </div>
       </CardBody>

@@ -10,8 +10,8 @@ import {
 } from 'reactstrap'
 import { connect } from 'react-redux'
 
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faUser from '@fortawesome/fontawesome-free-solid/faUser'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUser } from '@fortawesome/free-solid-svg-icons'
 
 import { Link } from '../routes'
 
@@ -31,9 +31,7 @@ class Header extends React.Component {
   }
 
   toggle() {
-    this.setState({
-      isOpen: !this.state.isOpen,
-    })
+    this.setState(prevState => ({ isOpen: !prevState.isOpen }))
   }
 
   render() {
@@ -87,4 +85,7 @@ const mapStateToProps = ({ user }) => ({
   user: user.user,
 })
 
-export default connect(mapStateToProps, null)(Header)
+export default connect(
+  mapStateToProps,
+  null
+)(Header)

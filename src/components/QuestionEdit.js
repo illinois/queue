@@ -103,7 +103,9 @@ class QuestionEdit extends React.Component {
   }
 
   render() {
-    const { queue: { location, fixedLocation } } = this.props
+    const {
+      queue: { location, fixedLocation },
+    } = this.props
 
     const queueLocation = fixedLocation ? location : this.state.location
 
