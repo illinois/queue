@@ -40,10 +40,6 @@ class Header extends React.Component {
     this.setState(prevState => ({ isOpen: !prevState.isOpen }))
   }
 
-  handleLogout() {
-    this.location = logoutLink
-  }
-
   render() {
     const { user } = this.props
     let userName
@@ -77,7 +73,7 @@ class Header extends React.Component {
                   color="secondary"
                   type="button"
                   className="ml-3"
-                  onClick={() => this.handleLogout()}
+                  onClick={(window.location = logoutLink)}
                 >
                   Logout
                 </Button>
