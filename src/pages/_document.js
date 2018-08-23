@@ -23,7 +23,7 @@ export default class MyDocument extends Document {
     // If we're deployed to anywhere other than the server root, we'll have to
     // store our root path that here so that the client can access it.
     const script = {
-      __html: `window.BASE_URL = '${baseUrl}'; window.IS_DEV = '${isDev}';`,
+      __html: `window.BASE_URL = '${baseUrl}'; window.IS_DEV = ${isDev};`,
     }
     const faviconPath = `${baseUrl}/static/favicon.ico`
     const manifestPath = `${baseUrl}/static/manifest.json`
