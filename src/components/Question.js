@@ -42,7 +42,7 @@ class Question extends React.Component {
               </Button>
             )}
             <Button color="light" onClick={() => this.props.cancelQuestion()}>
-              Cancel
+              Stop Answering
             </Button>
           </Fragment>
         )

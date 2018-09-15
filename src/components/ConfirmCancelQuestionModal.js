@@ -7,7 +7,7 @@ const ConfirmCancelQuestionModal = props => (
     isOpen={props.isOpen}
     toggle={props.toggle}
     confirm={props.confirm}
-    descText="You will stop answering this question and this question will stay in the queue"
+    descText="You will stop answering this question but this question will stay in the queue."
     confirmText="Stop Answering"
     optionalCancelText="Resume Answering"
   />
