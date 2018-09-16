@@ -123,10 +123,10 @@ describe('<Question />', () => {
     expect(findButton(wrapper, 'Delete')).toHaveLength(1)
   })
 
-  test('hides "Finish Answering" and "Cancel" buttons for standard user', () => {
+  test('hides "Finish Answering" and "Stop Answering" buttons for standard user', () => {
     const wrapper = makeWrapper({ beingAnswered: true })
     expect(findButton(wrapper, 'Finish Answering')).toHaveLength(0)
-    expect(findButton(wrapper, 'Cancel')).toHaveLength(0)
+    expect(findButton(wrapper, 'Stop Answering')).toHaveLength(0)
   })
 
   test('shows "Cancel" button for course staff when being answered', () => {
@@ -145,14 +145,14 @@ describe('<Question />', () => {
     expect(findButton(wrapper, 'Finish Answering')).toHaveLength(0)
   })
 
-  test('shows "Finish Answering" and "Cancel" for course staff who is answering question', () => {
+  test('shows "Finish Answering" and "Stop Answering" for course staff who is answering question', () => {
     const wrapper = makeWrapper({
       beingAnswered: true,
       isUserCourseStaff: true,
       isUserAnsweringQuestion: true,
     })
     expect(findButton(wrapper, 'Finish Answering')).toHaveLength(1)
-    expect(findButton(wrapper, 'Cancel')).toHaveLength(1)
+    expect(findButton(wrapper, 'Stop Answering')).toHaveLength(1)
   })
 
   test('shows name of person answering question', () => {
