@@ -66,8 +66,7 @@
     "styled-jsx": "^2.2.7",
     "umzug": "^2.1.0",
     "validator": "^10.4.0",
-    "winston": "^3.0.0",
-    "yarn": "^1.9.4"
+    "winston": "^3.0.0"
   },
   "devDependencies": {
     "babel-core": "^7.0.0-bridge.0",
