@@ -127,7 +127,7 @@ class QuestionList extends React.Component {
 
   cancelQuestion(questionId) {
     const question = this.props.questions[questionId]
-    if (this.props.userId == question.answeredById) {
+    if (this.props.userId === question.answeredById) {
       this.setState({
         showStopAnswerModal: true,
         cancelId: questionId,
