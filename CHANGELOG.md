@@ -7,6 +7,8 @@ with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
 
+* Add open and closed cards to course pages. ([@genevievehelsel](https://github.com/genevievehelsel) in [#142](https://github.com/illinois/queue/pull/142))
+
 ## 5 September 2018
 
 * Reorganize directory structure. ([@nwalters512](https://github.com/nwalters512) in [#108](https://github.com/illinois/queue/pull/108))
