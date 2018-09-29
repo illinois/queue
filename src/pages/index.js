@@ -92,6 +92,17 @@ class Index extends React.Component {
 
     let courseButtons
     if (this.props.courses && this.props.courses.length > 0) {
+      // sort the courses by name
+      this.props.courses.sort((obj1, obj2) => {
+        if (obj1.name < obj2.name) {
+          return -1
+        } else if (obj1.name > obj2.name) {
+          return 1
+        } else {
+          return 0
+        }
+      })
+
       courseButtons = this.props.courses.map(course => (
         <Link
           route="course"
