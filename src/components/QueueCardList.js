@@ -73,6 +73,11 @@ class QueueCardList extends React.Component {
     const queueR = this.props.queues[r]
     const courseNameL = this.props.courses[queueL.courseId].name
     const courseNameR = this.props.courses[queueR.courseId].name
+
+    if (courseNameL === courseNameR) {
+      return queueL.name > queueR.name
+    }
+
     return courseNameL > courseNameR
   }
 
