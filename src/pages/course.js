@@ -190,7 +190,9 @@ const mapStateToProps = (state, ownProps) => {
   const course = state.courses.courses[ownProps.courseId]
   return {
     course,
-    queues: mapObjectToArray(state.queues.queues),
+    queues: mapObjectToArray(state.queues.queues).sort((a, b) => {
+      return a.name > b.name
+    }),
     isFetching: state.courses.isFetching || state.queues.isFetching,
   }
 }
