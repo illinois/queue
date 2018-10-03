@@ -96,11 +96,12 @@ class Index extends React.Component {
       this.props.courses.sort((obj1, obj2) => {
         if (obj1.name < obj2.name) {
           return -1
-        } else if (obj1.name > obj2.name) {
-          return 1
-        } else {
-          return 0
         }
+
+        if (obj1.name > obj2.name) {
+          return 1
+        }
+        return 0
       })
 
       courseButtons = this.props.courses.map(course => (

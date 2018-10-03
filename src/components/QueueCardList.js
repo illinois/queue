@@ -95,17 +95,19 @@ class QueueCardList extends React.Component {
         // compare the class name first
         if (courseName1 < courseName2) {
           return -1
-        } else if (courseName1 > courseName2) {
-          return 1
-        } else {
-          // if the class name are the same, compare queue name
-          if (queue1.name < queue2.name) {
-            return -1
-          } else if (queue1.name > queue2.name) {
-            return 2
-          }
-          return 0
         }
+        if (courseName1 > courseName2) {
+          return 1
+        }
+
+        // if the class name are the same, compare queue name
+        if (queue1.name < queue2.name) {
+          return -1
+        }
+        if (queue1.name > queue2.name) {
+          return 1
+        }
+        return 0
       })
       queues = this.props.queueIds.map(queueId => {
         const queue = this.props.queues[queueId]
