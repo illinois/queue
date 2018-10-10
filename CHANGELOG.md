@@ -7,10 +7,10 @@ with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
 
-* Fix bug on course page with queues shown. ([@genevievehelsel](https://github.com/genevievehelsel) in [#145](https://github.com/illinois/queue/pull/145))
 * Add open and closed cards to course pages. ([@genevievehelsel](https://github.com/genevievehelsel) in [#142](https://github.com/illinois/queue/pull/142))
 * Upgrade to Next 7 and React 16.5.2. ([@nwalters512](https://github.com/nwalters512) in [#143](https://github.com/illinois/queue/pull/143))
 * Sort queues and courses by name. ([@genevievehelsel](https://github.com/genevievehelsel) in [#144](https://github.com/illinois/queue/pull/144))
+* Fix bug on course page with queues shown. ([@genevievehelsel](https://github.com/genevievehelsel) in [#145](https://github.com/illinois/queue/pull/145))
 
 ## 5 September 2018
 
