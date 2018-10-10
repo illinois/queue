@@ -17,7 +17,7 @@ import QueueMessageContainer from '../containers/QueueMessageContainer'
 import ShowForCourseStaff from '../components/ShowForCourseStaff'
 import QuestionNotificationsToggle from '../components/QuestionNotificationsToggle'
 import QueueStatusToggleContainer from '../containers/QueueStatusToggleContainer'
-import QueueMessageEnabledToggleContainer from '../containers/QueueMessageEnabledToggleContainer';
+import QueueMessageEnabledToggleContainer from '../containers/QueueMessageEnabledToggleContainer'
 
 class Queue extends React.Component {
   static getInitialProps({ isServer, store, query }) {

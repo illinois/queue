@@ -137,7 +137,8 @@ router.patch(
       location: data.location !== null ? data.location : undefined,
       open: data.open !== null ? data.open : undefined,
       message: data.message !== null ? data.message : undefined,
-      messageEnabled: data.messageEnabled !== null ? data.messageEnabled : undefined,
+      messageEnabled:
+        data.messageEnabled !== null ? data.messageEnabled : undefined,
     })
 
     const updatedQueue = await Queue.scope('questionCount').findOne({

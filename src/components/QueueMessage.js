@@ -55,25 +55,37 @@ class QueueMessage extends React.Component {
     if (editing) {
       content = (
         <>
-          <Input type="textarea" name="text" rows="6" value={editedMessage} onChange={this.onMessageChanged} />
+          <Input
+            type="textarea"
+            name="text"
+            rows="6"
+            value={editedMessage}
+            onChange={this.onMessageChanged}
+          />
           <FormText color="muted">
             You can use Markdown to format this message.
           </FormText>
         </>
       )
-      button = <Button color="primary" onClick={this.onFinishEdit}>Save</Button>
+      button = (
+        <Button color="primary" onClick={this.onFinishEdit}>
+          Save
+        </Button>
+      )
     } else {
       content = <ReactMarkdown source={message} />
-      button = <Button color="primary" onClick={this.onStartEdit}>Edit</Button>
+      button = (
+        <Button color="primary" onClick={this.onStartEdit}>
+          Edit
+        </Button>
+      )
     }
 
     return (
       <Alert color="primary">
         <h6 className="alert-heading">A message from the queue staff</h6>
         {content}
-        {isUserCourseStaff && (
-          <div className="mt-3">{button}</div>
-        )}
+        {isUserCourseStaff && <div className="mt-3">{button}</div>}
       </Alert>
     )
   }

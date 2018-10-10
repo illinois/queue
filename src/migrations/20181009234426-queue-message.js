@@ -1,15 +1,17 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.addColumn('queues', 'message', {
-      type: Sequelize.TEXT,
-      after: 'open',
-    }).then(() => {
-      return queryInterface.addColumn('queues', 'messageEnabled', {
-        type: Sequelize.BOOLEAN,
-        after: 'message',
-        defaultValue: false,
+    return queryInterface
+      .addColumn('queues', 'message', {
+        type: Sequelize.TEXT,
+        after: 'open',
       })
-    })
+      .then(() => {
+        return queryInterface.addColumn('queues', 'messageEnabled', {
+          type: Sequelize.BOOLEAN,
+          after: 'message',
+          defaultValue: false,
+        })
+      })
   },
 
   down: (queryInterface, _Sequelize) => {
