@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Alert, Button, Input } from 'reactstrap'
+import { Alert, Button, FormText, Input } from 'reactstrap'
+import ReactMarkdown from 'react-markdown'
 
 class QueueMessage extends React.Component {
   constructor(props) {
@@ -52,10 +53,17 @@ class QueueMessage extends React.Component {
     let content
     let button
     if (editing) {
-      content = <Input type="textarea" name="text" value={editedMessage} onChange={this.onMessageChanged} />
+      content = (
+        <>
+          <Input type="textarea" name="text" rows="6" value={editedMessage} onChange={this.onMessageChanged} />
+          <FormText color="muted">
+            You can use Markdown to format this message.
+          </FormText>
+        </>
+      )
       button = <Button color="primary" onClick={this.onFinishEdit}>Save</Button>
     } else {
-      content = message
+      content = <ReactMarkdown source={message} />
       button = <Button color="primary" onClick={this.onStartEdit}>Edit</Button>
     }
 
