@@ -1,11 +1,14 @@
-/* eslint-env browser */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Button } from 'reactstrap'
+import 'react-toggle/style.css'
 
 class QueueStatusToggle extends React.Component {
   toggleQueueStatus() {
-    const attributes = { open: !this.props.queue.open }
+    const attributes = {
+      open: !this.props.queue.open,
+      message: this.props.queue.open ? 'Closed' : 'Open',
+    }
     this.props.updateQueue(this.props.queue.id, attributes)
   }
 

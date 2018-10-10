@@ -121,6 +121,10 @@ router.patch(
     check('open')
       .optional({ nullable: true })
       .isBoolean(),
+    check('message').optional({ nullable: true }),
+    check('messageEnabled')
+      .optional({ nullable: true })
+      .isBoolean(),
     validateLocation,
     failIfErrors,
   ],
@@ -132,6 +136,9 @@ router.patch(
       name: data.name !== null ? data.name : undefined,
       location: data.location !== null ? data.location : undefined,
       open: data.open !== null ? data.open : undefined,
+      message: data.message !== null ? data.message : undefined,
+      messageEnabled:
+        data.messageEnabled !== null ? data.messageEnabled : undefined,
     })
 
     const updatedQueue = await Queue.scope('questionCount').findOne({
