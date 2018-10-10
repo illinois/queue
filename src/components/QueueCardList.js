@@ -90,10 +90,8 @@ class QueueCardList extends React.Component {
     if (courseNameL < courseNameR) {
       return -1
     }
-    if (courseNameL > courseNameR) {
-      return 1
-    }
-    return 0
+
+    return 1
   }
 
   render() {
