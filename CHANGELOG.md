@@ -9,6 +9,7 @@ with the current date and the next changes should go under a **[Next]** header.
 
 * Add open and closed cards to course pages. ([@genevievehelsel](https://github.com/genevievehelsel) in [#142](https://github.com/illinois/queue/pull/142))
 * Upgrade to Next 7 and React 16.5.2. ([@nwalters512](https://github.com/nwalters512) in [#143](https://github.com/illinois/queue/pull/143))
+* Add ability to write custom messages on queues. ([@nwalters512](https://github.com/nwalters512) in [#148](https://github.com/illinois/queue/pull/148))
 
 ## 5 September 2018
 
