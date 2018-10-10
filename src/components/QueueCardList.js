@@ -68,6 +68,19 @@ class QueueCardList extends React.Component {
     }))
   }
 
+  queueSorter(l, r) {
+    const queueL = this.props.queues[l]
+    const queueR = this.props.queues[r]
+    const courseNameL = this.props.courses[queueL.courseId].name
+    const courseNameR = this.props.courses[queueR.courseId].name
+
+    if (courseNameL === courseNameR) {
+      return queueL.name > queueR.name
+    }
+
+    return courseNameL > courseNameR
+  }
+
   render() {
     const CardCol = ({ children, ...rest }) => (
       <Col
@@ -86,6 +99,9 @@ class QueueCardList extends React.Component {
       const handleQueueClick = id => {
         Router.pushRoute('queue', { id })
       }
+
+      this.props.queueIds.sort(this.queueSorter.bind(this))
+
       queues = this.props.queueIds.map(queueId => {
         const queue = this.props.queues[queueId]
         const courseName = this.props.courses[queue.courseId].name
