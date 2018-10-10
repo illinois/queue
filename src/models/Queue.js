@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: true,
       },
       message: DataTypes.TEXT,
+      messageEnabled: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
       startTime: DataTypes.DATE,
       endTime: DataTypes.DATE,
     },
