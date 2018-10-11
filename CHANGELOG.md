@@ -7,6 +7,8 @@ with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
 
+* Log errors to `stdout` instead of `stderr`. ([@nwalters512](https://github.com/nwalters512) in [#152](https://github.com/illinois/queue/pull/152))
+
 ## 11 October 2018
 
 * Fix queues and course sorting. ([@genevievehelsel](https://github.com/genevievehelsel) in [#150](https://github.com/illinois/queue/pull/150))
