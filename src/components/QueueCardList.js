@@ -71,14 +71,27 @@ class QueueCardList extends React.Component {
   queueSorter(l, r) {
     const queueL = this.props.queues[l]
     const queueR = this.props.queues[r]
-    const courseNameL = this.props.courses[queueL.courseId].name
-    const courseNameR = this.props.courses[queueR.courseId].name
+    const courseNameL = this.props.courses[queueL.courseId].name.toLowerCase()
+    const courseNameR = this.props.courses[queueR.courseId].name.toLowerCase()
 
     if (courseNameL === courseNameR) {
-      return queueL.name > queueR.name
+      const queueNameL = this.props.queues[l].name.toLowerCase()
+      const queueNameR = this.props.queues[r].name.toLowerCase()
+
+      if (queueNameL < queueNameR) {
+        return -1
+      }
+      if (queueNameL > queueNameR) {
+        return 1
+      }
+      return 0
     }
 
-    return courseNameL > courseNameR
+    if (courseNameL < courseNameR) {
+      return -1
+    }
+
+    return 1
   }
 
   render() {
