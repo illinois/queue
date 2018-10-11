@@ -9,5 +9,7 @@ module.exports = createLogger({
     align(),
     printf(info => `${info.timestamp} [${info.level}]: ${info.message}`)
   ),
-  transports: [new transports.Console()],
+  transports: [new transports.Console({
+    stderrLevels: ['error'],
+  })],
 })
