@@ -7,7 +7,6 @@ class QueueStatusToggle extends React.Component {
   toggleQueueStatus() {
     const attributes = {
       open: !this.props.queue.open,
-      message: this.props.queue.open ? 'Closed' : 'Open',
     }
     this.props.updateQueue(this.props.queue.id, attributes)
   }
