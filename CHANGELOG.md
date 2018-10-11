@@ -7,6 +7,8 @@ with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
 
+## 11 October 2018
+
 * Fix queues and course sorting. ([@genevievehelsel](https://github.com/genevievehelsel) in [#150](https://github.com/illinois/queue/pull/150))
 * Remove message code from API prototyping phase. ([@nwalters512](https://github.com/nwalters512) in [#151](https://github.com/illinois/queue/pull/151))
 
