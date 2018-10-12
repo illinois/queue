@@ -13,9 +13,11 @@ import Error from '../components/Error'
 import StaffSidebar from '../components/StaffSidebar'
 import QuestionPanelContainer from '../containers/QuestionPanelContainer'
 import QuestionListContainer from '../containers/QuestionListContainer'
+import QueueMessageContainer from '../containers/QueueMessageContainer'
 import ShowForCourseStaff from '../components/ShowForCourseStaff'
 import QuestionNotificationsToggle from '../components/QuestionNotificationsToggle'
 import QueueStatusToggleContainer from '../containers/QueueStatusToggleContainer'
+import QueueMessageEnabledToggleContainer from '../containers/QueueMessageEnabledToggleContainer'
 
 class Queue extends React.Component {
   static getInitialProps({ isServer, store, query }) {
@@ -29,11 +31,13 @@ class Queue extends React.Component {
     }
   }
 
-  static shouldDelayEnter = true
+  static pageTransitionDelayEnter = true
 
   componentDidMount() {
     this.props.fetchQueue(this.props.queueId).then(() => {
-      if (this.props.onLoaded) this.props.onLoaded()
+      if (this.props.pageTransitionReadyToEnter) {
+        this.props.pageTransitionReadyToEnter()
+      }
     })
   }
 
@@ -76,10 +80,14 @@ class Queue extends React.Component {
             <QuestionNotificationsToggle />
             <ShowForCourseStaff queueId={this.props.queueId}>
               <QueueStatusToggleContainer queue={this.props.queue} />
+              <QueueMessageEnabledToggleContainer queue={this.props.queue} />
             </ShowForCourseStaff>
             <StaffSidebar queueId={this.props.queueId} />
           </Col>
           <Col xs={{ size: 12 }} md={{ size: 8 }} lg={{ size: 9 }}>
+            {this.props.queue.messageEnabled && (
+              <QueueMessageContainer queueId={this.props.queueId} />
+            )}
             {this.props.queue.open && (
               <QuestionPanelContainer queueId={this.props.queueId} />
             )}
@@ -110,13 +118,15 @@ Queue.propTypes = {
     location: PropTypes.string,
     courseId: PropTypes.number,
     open: PropTypes.bool,
+    message: PropTypes.string,
+    messageEnabled: PropTypes.bool,
   }),
-  onLoaded: PropTypes.func,
+  pageTransitionReadyToEnter: PropTypes.func,
 }
 
 Queue.defaultProps = {
   queue: null,
-  onLoaded: null,
+  pageTransitionReadyToEnter: null,
 }
 
 const mapStateToProps = (state, ownProps) => ({

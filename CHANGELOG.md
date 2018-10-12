@@ -7,6 +7,24 @@ with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
 
+* Log errors to `stdout` instead of `stderr`. ([@nwalters512](https://github.com/nwalters512) in [#152](https://github.com/illinois/queue/pull/152))
+* Add logout button. ([@emilojkovic](https://github.com/emilojkovic) in [#124](https://github.com/illinois/queue/pull/124))
+
+## 11 October 2018
+
+* Fix queues and course sorting. ([@genevievehelsel](https://github.com/genevievehelsel) in [#150](https://github.com/illinois/queue/pull/150))
+* Remove message code from API prototyping phase. ([@nwalters512](https://github.com/nwalters512) in [#151](https://github.com/illinois/queue/pull/151))
+
+## 10 October 2018
+
+* Add open and closed cards to course pages. ([@genevievehelsel](https://github.com/genevievehelsel) in [#142](https://github.com/illinois/queue/pull/142))
+* Upgrade to Next 7 and React 16.5.2. ([@nwalters512](https://github.com/nwalters512) in [#143](https://github.com/illinois/queue/pull/143))
+* Sort queues and courses by name. ([@genevievehelsel](https://github.com/genevievehelsel) in [#144](https://github.com/illinois/queue/pull/144))
+* Fix bug on course page with queues shown. ([@genevievehelsel](https://github.com/genevievehelsel) in [#145](https://github.com/illinois/queue/pull/145))
+* Add ability to write custom messages on queues. ([@nwalters512](https://github.com/nwalters512) in [#148](https://github.com/illinois/queue/pull/148))
+
+## 5 September 2018
+
 * Reorganize directory structure. ([@nwalters512](https://github.com/nwalters512) in [#108](https://github.com/illinois/queue/pull/108))
 * Remove location from notifications if the queue is a fixed-location queue. ([@redsn0w422](https://github.com/redsn0w422) in [#123](https://github.com/illinois/queue/pull/123))
 * Add `npm run fix-lint-js` to fix linter errors that can be fixed automatically. ([@redsn0w422](https://github.com/redsn0w422) in [#127](https://github.com/illinois/queue/pull/127))
@@ -14,8 +32,7 @@ with the current date and the next changes should go under a **[Next]** header.
 * Fix confirm modal `PropTypes` to make `descText` and `confirmText` not required. ([@josh-byster](https://github.com/josh-byster), [@PradyumnaShome](https://github.com/PradyumnaShome), and [@jrogge](https://github.com/jrogge) in [#130](https://github.com/illinois/queue/pull/130))
 * Upgrade to Next.js 6 and add page transitions. ([@nwalters512](https://github.com/nwalters512) in [#133](https://github.com/illinois/queue/pull/133))
 * Enable Now snapshot deploys on PRs. ([@nwalters512](https://github.com/nwalters512) in [#136](https://github.com/illinois/queue/pull/136))
-* Add logout button. ([@emilojkovic](https://github.com/emilojkovic) in [#124](https://github.com/illinois/queue/pull/124))
-* Remove location from notifications if the queue is a fixed-location queue. ([@redsn0w422](https://github.com/redsn0w422) in [#123](https://github.com/illinois/queue/pull/123))
+* Switch to using our [next-page-transitions](https://github.com/illinois/next-page-transitions) library. ([@nwalters512](https://github.com/nwalters512) in [#134](https://github.com/illinois/queue/pull/134))
 
 ## 19 April 2018
 
