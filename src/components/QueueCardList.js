@@ -86,29 +86,6 @@ class QueueCardList extends React.Component {
       const handleQueueClick = id => {
         Router.pushRoute('queue', { id })
       }
-      this.props.queueIds.sort((id1, id2) => {
-        const queue1 = this.props.queues[id1]
-        const courseName1 = this.props.courses[queue1.courseId].name
-        const queue2 = this.props.queues[id2]
-        const courseName2 = this.props.courses[queue2.courseId].name
-
-        // compare the class name first
-        if (courseName1 < courseName2) {
-          return -1
-        }
-        if (courseName1 > courseName2) {
-          return 1
-        }
-
-        // if the class name are the same, compare queue name
-        if (queue1.name < queue2.name) {
-          return -1
-        }
-        if (queue1.name > queue2.name) {
-          return 1
-        }
-        return 0
-      })
       queues = this.props.queueIds.map(queueId => {
         const queue = this.props.queues[queueId]
         const courseName = this.props.courses[queue.courseId].name
