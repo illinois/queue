@@ -7,8 +7,20 @@ with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
 
+* Log errors to `stdout` instead of `stderr`. ([@nwalters512](https://github.com/nwalters512) in [#152](https://github.com/illinois/queue/pull/152))
+
+## 11 October 2018
+
+* Fix queues and course sorting. ([@genevievehelsel](https://github.com/genevievehelsel) in [#150](https://github.com/illinois/queue/pull/150))
+* Remove message code from API prototyping phase. ([@nwalters512](https://github.com/nwalters512) in [#151](https://github.com/illinois/queue/pull/151))
+
+## 10 October 2018
+
 * Add open and closed cards to course pages. ([@genevievehelsel](https://github.com/genevievehelsel) in [#142](https://github.com/illinois/queue/pull/142))
 * Upgrade to Next 7 and React 16.5.2. ([@nwalters512](https://github.com/nwalters512) in [#143](https://github.com/illinois/queue/pull/143))
+* Sort queues and courses by name. ([@genevievehelsel](https://github.com/genevievehelsel) in [#144](https://github.com/illinois/queue/pull/144))
+* Fix bug on course page with queues shown. ([@genevievehelsel](https://github.com/genevievehelsel) in [#145](https://github.com/illinois/queue/pull/145))
+* Add ability to write custom messages on queues. ([@nwalters512](https://github.com/nwalters512) in [#148](https://github.com/illinois/queue/pull/148))
 
 ## 5 September 2018
 

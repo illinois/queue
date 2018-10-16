@@ -68,6 +68,32 @@ class QueueCardList extends React.Component {
     }))
   }
 
+  queueSorter(l, r) {
+    const queueL = this.props.queues[l]
+    const queueR = this.props.queues[r]
+    const courseNameL = this.props.courses[queueL.courseId].name.toLowerCase()
+    const courseNameR = this.props.courses[queueR.courseId].name.toLowerCase()
+
+    if (courseNameL === courseNameR) {
+      const queueNameL = this.props.queues[l].name.toLowerCase()
+      const queueNameR = this.props.queues[r].name.toLowerCase()
+
+      if (queueNameL < queueNameR) {
+        return -1
+      }
+      if (queueNameL > queueNameR) {
+        return 1
+      }
+      return 0
+    }
+
+    if (courseNameL < courseNameR) {
+      return -1
+    }
+
+    return 1
+  }
+
   render() {
     const CardCol = ({ children, ...rest }) => (
       <Col
@@ -86,6 +112,9 @@ class QueueCardList extends React.Component {
       const handleQueueClick = id => {
         Router.pushRoute('queue', { id })
       }
+
+      this.props.queueIds.sort(this.queueSorter.bind(this))
+
       queues = this.props.queueIds.map(queueId => {
         const queue = this.props.queues[queueId]
         const courseName = this.props.courses[queue.courseId].name

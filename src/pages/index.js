@@ -244,7 +244,17 @@ const mapStateToProps = state => ({
   showCreateQueueButton:
     state.user.user &&
     (state.user.user.isAdmin || state.user.user.staffAssignments.length > 0),
-  courses: mapObjectToArray(state.courses.courses),
+  courses: mapObjectToArray(state.courses.courses).sort((a, b) => {
+    const x = a.name.toLowerCase()
+    const y = b.name.toLowerCase()
+    if (x < y) {
+      return -1
+    }
+    if (x > y) {
+      return 1
+    }
+    return 0
+  }),
   queues: mapObjectToArray(state.queues.queues),
 })
 

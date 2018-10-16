@@ -71,9 +71,11 @@ class Course extends React.Component {
 
     const openQueueIds = this.props.queues
       .filter(queue => queue.open)
+      .filter(queue => queue.courseId === this.props.courseId)
       .map(queue => queue.id)
     const closedQueueIds = this.props.queues
       .filter(queue => !queue.open)
+      .filter(queue => queue.courseId === this.props.courseId)
       .map(queue => queue.id)
 
     return (
@@ -171,6 +173,7 @@ Course.propTypes = {
       name: PropTypes.string,
       location: PropTypes.location,
       open: PropTypes.boolean,
+      courseId: PropTypes.number,
     })
   ),
   isFetching: PropTypes.bool,

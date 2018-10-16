@@ -51,6 +51,7 @@
     "react-dom": "^16.5.2",
     "react-flip-move": "^3.0.2",
     "react-fontawesome": "^1.6.1",
+    "react-markdown": "^4.0.2",
     "react-moment": "^0.7.9",
     "react-redux": "^5.0.7",
     "react-toggle": "^4.0.2",
