@@ -48,7 +48,7 @@ class Question extends React.Component {
         buttonCluster = (
           <Fragment>
             <Button color="light" onClick={() => this.props.cancelQuestion()}>
-              Cancel
+              Interrupt
             </Button>
           </Fragment>
         )
