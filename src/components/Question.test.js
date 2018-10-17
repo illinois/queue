@@ -134,7 +134,7 @@ describe('<Question />', () => {
       beingAnswered: true,
       isUserCourseStaff: true,
     })
-    expect(findButton(wrapper, 'Cancel')).toHaveLength(1)
+    expect(findButton(wrapper, 'Interrupt')).toHaveLength(1)
   })
 
   test('hides "Finish Answering" button for other course staff when being answered', () => {
