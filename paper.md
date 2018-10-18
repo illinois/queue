@@ -6,7 +6,7 @@ tags:
   - nodejs
 authors:
   - name: Genevieve Helsel
-    orcid: 0000-0000-0000-0000   # TODO
+    orcid: 0000-0003-2418-1566
     affiliation: 1
   - name: Nathan Walters
     orcid: 0000-0002-5244-9155
