@@ -2,7 +2,7 @@ const routes = require('next-routes')()
 const { withBaseUrl } = require('./util')
 
 routes
-  .add('index', withBaseUrl('/'))
+  .add('index', withBaseUrl(''))
   .add('queue', withBaseUrl('/queue/:id'))
   .add('createCourse', withBaseUrl('/course/create'))
   .add('course', withBaseUrl('/course/:id'))
