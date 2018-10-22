@@ -11,6 +11,7 @@ import QuestionFeedback from './QuestionFeedback'
 import ConfirmLeaveQueueModal from './ConfirmLeaveQueueModal'
 import ConfirmDeleteQuestionModal from './ConfirmDeleteQuestionModal'
 import ConfirmCancelQuestionModal from './ConfirmCancelQuestionModal'
+import ConfirmStopAnsweringQuestionModal from './ConfirmStopAnsweringQuestionModal'
 import QuestionEdit from './QuestionEdit'
 
 class QuestionList extends React.Component {
@@ -22,6 +23,7 @@ class QuestionList extends React.Component {
       showLeaveModal: false,
       showDeleteModal: false,
       showCancelModal: false,
+      showStopAnswerModal: false,
       showQuestionEditModal: false,
       attributeId: null,
       feedbackId: null,
@@ -117,11 +119,25 @@ class QuestionList extends React.Component {
     }))
   }
 
+  toggleStopAnswerModal() {
+    this.setState(prevState => ({
+      showStopAnswerModal: !prevState.showStopAnswerModal,
+    }))
+  }
+
   cancelQuestion(questionId) {
-    this.setState({
-      showCancelModal: true,
-      cancelId: questionId,
-    })
+    const question = this.props.questions[questionId]
+    if (this.props.userId === question.answeredById) {
+      this.setState({
+        showStopAnswerModal: true,
+        cancelId: questionId,
+      })
+    } else {
+      this.setState({
+        showCancelModal: true,
+        cancelId: questionId,
+      })
+    }
   }
 
   startQuestion(questionId) {
@@ -132,6 +148,7 @@ class QuestionList extends React.Component {
     this.props.updateQuestionBeingAnswered(this.state.cancelId, false)
     this.setState({
       showCancelModal: false,
+      showStopAnswerModal: false,
     })
   }
 
@@ -211,6 +228,11 @@ class QuestionList extends React.Component {
         <ConfirmCancelQuestionModal
           isOpen={this.state.showCancelModal}
           toggle={() => this.toggleCancelModal()}
+          confirm={() => this.handleConfirmedCancellation()}
+        />
+        <ConfirmStopAnsweringQuestionModal
+          isOpen={this.state.showStopAnswerModal}
+          toggle={() => this.toggleStopAnswerModal()}
           confirm={() => this.handleConfirmedCancellation()}
         />
         <QuestionEdit

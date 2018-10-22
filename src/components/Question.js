@@ -29,20 +29,26 @@ class Question extends React.Component {
 
     let buttonCluster
     if (beingAnswered) {
-      if (isUserCourseStaff) {
+      if (isUserCourseStaff && isUserAnsweringQuestion) {
         buttonCluster = (
           <Fragment>
-            {isUserAnsweringQuestion && (
-              <Button
-                color="primary"
-                className="mr-2"
-                onClick={() => this.props.finishedAnswering(id)}
-              >
-                Finish Answering
-              </Button>
-            )}
+            <Button
+              color="primary"
+              className="mr-2"
+              onClick={() => this.props.finishedAnswering(id)}
+            >
+              Finish Answering
+            </Button>
             <Button color="light" onClick={() => this.props.cancelQuestion()}>
-              Cancel
+              Stop Answering
+            </Button>
+          </Fragment>
+        )
+      } else if (isUserCourseStaff && !isUserAnsweringQuestion) {
+        buttonCluster = (
+          <Fragment>
+            <Button color="light" onClick={() => this.props.cancelQuestion()}>
+              Interrupt
             </Button>
           </Fragment>
         )
