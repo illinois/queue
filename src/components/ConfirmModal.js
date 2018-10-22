@@ -11,7 +11,7 @@ const ConfirmModal = props => (
         {props.confirmText}
       </Button>
       <Button color="secondary" onClick={props.toggle}>
-        Cancel
+        {props.optionalCancelText}
       </Button>
     </ModalFooter>
   </Modal>
@@ -23,6 +23,11 @@ ConfirmModal.propTypes = {
   confirm: PropTypes.func.isRequired,
   descText: PropTypes.string.isRequired,
   confirmText: PropTypes.string.isRequired,
+  optionalCancelText: PropTypes.string,
+}
+
+ConfirmModal.defaultProps = {
+  optionalCancelText: 'Cancel',
 }
 
 export default ConfirmModal
