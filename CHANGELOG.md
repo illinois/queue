@@ -7,6 +7,8 @@ with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
 
+## 22 October 2018
+
 * Log errors to `stdout` instead of `stderr`. ([@nwalters512](https://github.com/nwalters512) in [#152](https://github.com/illinois/queue/pull/152))
 * Add hack night advertisement banner. ([@genevievehelsel](https://github.com/genevievehelsel) in [#157](https://github.com/illinois/queue/pull/157))
 * Changed cancel question modal to contain clearer messages. ([@Xiangmingchen](https://github.com/Xiangmingchen) in [#141](https://github.com/illinois/queue/pull/141))
