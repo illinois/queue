@@ -10,19 +10,19 @@ Join the #queue-dev channel on the [UIUC OSS Slack team](https://illinois-oss.sl
 
 At UIUC, this queue is hosted as a free service by Computer Science and EngrIT.
 
-- View the queue at https://edu.cs.illinois.edu/queue/
-- [Request to have a queue created for your course by filling out this short form](https://forms.illinois.edu/sec/691281)
+* View the queue at https://edu.cs.illinois.edu/queue/
+* [Request to have a queue created for your course by filling out this short form](https://forms.illinois.edu/sec/691281)
 
 ## Running the Queue from Source
 
 ### Running locally in `dev` mode:
 
-- Clone the repository
-- Install [`node` and `npm`](https://nodejs.org/en/download/package-manager/)
-- Install dependencies: `npm install` in the cloned directory
-- Start the server: `npm run dev`
-  - Access the queue from a browser at `localhost:3000`
-  - You can run it on a different port by setting the `PORT` environment variable
+* Clone the repository
+* Install [`node` and `npm`](https://nodejs.org/en/download/package-manager/)
+* Install dependencies: `npm install` in the cloned directory
+* Start the server: `npm run dev`
+  * Access the queue from a browser at `localhost:3000`
+  * You can run it on a different port by setting the `PORT` environment variable
 
 ### Multiple users in dev mode
 
@@ -42,8 +42,8 @@ multiple incognito windows.
 
 Several configuration options are exposed via environment variables:
 
-- `PORT`: controls which port the app will be served from.
-- `BASE_URL`: allows the app to be served from somewhere other than the server
+* `PORT`: controls which port the app will be served from.
+* `BASE_URL`: allows the app to be served from somewhere other than the server
   root. This affects asset and API routes, websocket endpoints, generated links,
   and more. Note that for this to work effectively, the app must still receive
   the base URL as part of the request; this is important if the app is
