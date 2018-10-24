@@ -27,6 +27,7 @@ class NewQueue extends React.Component {
       name: '',
       location: '',
       fixedLocation: false,
+      isConfidential: false,
       fieldErrors: {},
     }
 
@@ -76,6 +77,7 @@ class NewQueue extends React.Component {
       name: this.state.name,
       location: this.state.location,
       fixedLocation: this.state.fixedLocation,
+      isConfidential: this.state.isConfidential
     }
 
     let courseId
@@ -157,6 +159,22 @@ class NewQueue extends React.Component {
             <FormText color="muted">
               If a queue is marked as fixed-location, students won&apos;t be
               able to set their own location.
+            </FormText>
+          </Col>
+        </FormGroup>
+        <FormGroup row>
+          <Label for="fixedLocation" sm={3}>
+            Confidential Queue
+          </Label>
+          <Col sm={9}>
+            <Toggle
+              name="isConfidential"
+              defaultChecked={false}
+              onChange={this.handleInputChange}
+            />
+            <FormText color="muted">
+              If a queue is marked as confidential, students will see other
+              students and questions as anonymous.
             </FormText>
           </Col>
         </FormGroup>
