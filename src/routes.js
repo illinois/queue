@@ -8,7 +8,7 @@ const { baseUrl, withBaseUrl } = require('./util')
 if (baseUrl === '') {
   routes.add('index', '/')
 } else {
-  routes.add('index', withBaseUrl('/'))
+  routes.add('index', withBaseUrl(''))
 }
 routes
   .add('queue', withBaseUrl('/queue/:id'))
