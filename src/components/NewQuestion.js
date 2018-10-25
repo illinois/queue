@@ -56,7 +56,7 @@ export default class NewQuestion extends React.Component {
   }
 
   handleKeyPress(e) {
-    if (e.key == 'Enter') {
+    if (e.key === 'Enter') {
       this.handleSubmit()
     }
   }

@@ -33,8 +33,8 @@ class NewCourse extends React.Component {
   }
 
   handleKeyPress(e) {
-    if (e.key == 'Enter') {
-      this.handleSubmit()
+    if (e.key === 'Enter') {
+      this.handleCreateCourse()
     }
   }
 
