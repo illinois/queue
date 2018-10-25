@@ -52,6 +52,13 @@ export default class NewQuestion extends React.Component {
 
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleKeyPress = this.handleKeyPress.bind(this)
+  }
+
+  handleKeyPress(e) {
+    if (e.key == 'Enter') {
+      this.handleSubmit()
+    }
   }
 
   onCardHeaderClick() {
@@ -171,6 +178,7 @@ export default class NewQuestion extends React.Component {
                         placeholder="Enter a Net ID (optional)"
                         value={this.state.netid}
                         onChange={this.handleInputChange}
+                        onKeyDown={this.handleKeyPress}
                         valid={isValid(this.state.fieldErrors.name)}
                       />
                       <FormText color="muted">
@@ -191,6 +199,7 @@ export default class NewQuestion extends React.Component {
                       placeholder={namePlaceholder}
                       value={this.state.name}
                       onChange={this.handleInputChange}
+                      onKeyDown={this.handleKeyPress}
                       valid={isValid(this.state.fieldErrors.name)}
                     />
                     <FormFeedback>{this.state.fieldErrors.name}</FormFeedback>
@@ -208,6 +217,7 @@ export default class NewQuestion extends React.Component {
                       placeholder={topicPlaceholder}
                       value={this.state.topic}
                       onChange={this.handleInputChange}
+                      onKeyDown={this.handleKeyPress}
                       valid={isValid(this.state.fieldErrors.topic)}
                     />
                     <FormFeedback>{this.state.fieldErrors.topic}</FormFeedback>
@@ -225,6 +235,7 @@ export default class NewQuestion extends React.Component {
                       value={queueLocation}
                       disabled={fixedLocation}
                       onChange={this.handleInputChange}
+                      onKeyDown={this.handleKeyPress}
                       valid={isValid(this.state.fieldErrors.location)}
                     />
                     <FormFeedback>
