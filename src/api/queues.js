@@ -63,6 +63,7 @@ router.post(
       name: data.name,
       location: data.location,
       fixedLocation: data.fixedLocation === true,
+      isConfidential: req.body.isConfidential === true,
       courseId,
       createdByUserId: res.locals.userAuthn.id,
     })
@@ -131,7 +132,7 @@ router.patch(
   safeAsync(async (req, res, _next) => {
     const { queue } = res.locals
     const data = matchedData(req)
-
+    
     await queue.update({
       name: data.name !== null ? data.name : undefined,
       location: data.location !== null ? data.location : undefined,

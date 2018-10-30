@@ -116,6 +116,7 @@ Queue.propTypes = {
     id: PropTypes.number,
     name: PropTypes.string,
     location: PropTypes.string,
+    isConfidential: PropTypes.bool,
     courseId: PropTypes.number,
     open: PropTypes.bool,
     message: PropTypes.string,

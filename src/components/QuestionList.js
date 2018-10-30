@@ -161,6 +161,7 @@ class QuestionList extends React.Component {
           return (
             <Question
               key={questionId}
+              isConfidential={this.props.queue.isConfidential}
               isUserCourseStaff={this.props.isUserCourseStaff}
               isUserActiveStaffForQueue={this.props.isUserActiveStaffForQueue}
               isUserAnsweringQuestion={
@@ -253,6 +254,7 @@ QuestionList.propTypes = {
   queue: PropTypes.shape({
     questions: PropTypes.arrayOf(PropTypes.number),
     fixedLocation: PropTypes.bool,
+    isConfidential: PropTypes.bool,
   }),
   questions: PropTypes.objectOf(
     PropTypes.shape({

@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faMapMarker,
   faQuestionCircle,
+  faEyeSlash,
 } from '@fortawesome/free-solid-svg-icons'
 
 import ShowForCourseStaff from './ShowForCourseStaff'
@@ -17,7 +18,7 @@ const QueueCard = ({
   onUpdate,
   ...rest
 }) => {
-  const { name: queueName, location, questionCount } = queue
+  const { name: queueName, location, questionCount, isConfidential } = queue
 
   const questionCountText = `${questionCount} Question${
     questionCount !== 1 ? 's' : ''
@@ -67,7 +68,12 @@ const QueueCard = ({
           </div>
         </CardTitle>
         {showQueueNameInBody && (
-          <CardSubtitle className="mb-2">{queueName}</CardSubtitle>
+          <CardSubtitle className="mb-2">
+            {queueName}
+            {isConfidential && (
+              <FontAwesomeIcon icon={faEyeSlash} size="sm" className="ml-2" />
+            )}
+          </CardSubtitle>
         )}
         <div className="text-muted">
           <FontAwesomeIcon icon={faMapMarker} fixedWidth className="mr-2" />

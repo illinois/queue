@@ -163,7 +163,7 @@ class NewQueue extends React.Component {
           </Col>
         </FormGroup>
         <FormGroup row>
-          <Label for="fixedLocation" sm={3}>
+          <Label for="isConfidential" sm={3}>
             Confidential Queue
           </Label>
           <Col sm={9}>
