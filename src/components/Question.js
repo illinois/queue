@@ -104,7 +104,7 @@ class Question extends React.Component {
     let studentName
     let studentTopic
     let studentLocation
-    if (!isConfidential || isUserCourseStaff) {
+    if (!isConfidential || isUserCourseStaff || didUserAskQuestion) {
       studentName = (
         <strong className="d-block">
           <span title="Name">{name}</span>
@@ -118,10 +118,10 @@ class Question extends React.Component {
       )
       studentTopic = <ParrotText text={topic} />
       studentLocation = (
-        <div>
+        <span>
           <span title="Location">{location}</span>
           <span className="mr-2 ml-2">&bull;</span>
-        </div>
+        </span>
       )
     } else if (isConfidential) {
       studentName = (
