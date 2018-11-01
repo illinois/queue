@@ -173,8 +173,8 @@ class NewQueue extends React.Component {
               onChange={this.handleInputChange}
             />
             <FormText color="muted">
-              If a queue is marked as confidential, students will see other
-              students and questions as anonymous.
+              If a queue is marked as confidential, students won&apos;t be able to
+              see other student names and topics.
             </FormText>
           </Col>
         </FormGroup>
