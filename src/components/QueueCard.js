@@ -47,7 +47,17 @@ const QueueCard = ({
     >
       <CardBody>
         <CardTitle className="d-flex flex-wrap align-items-center">
-          <span className="mb-2 mr-auto pr-3">{title}</span>
+          <span className="mb-2 mr-auto pr-3">
+            {isConfidential &&
+              !showQueueNameInBody && (
+                <FontAwesomeIcon
+                  icon={faEyeSlash}
+                  fixedWidth
+                  className="mr-2"
+                />
+              )}
+            {title}
+          </span>
           <div>
             <ShowForCourseStaff courseId={queue.courseId}>
               <Button color="danger" size="sm" outline onClick={handleDelete}>
@@ -69,10 +79,10 @@ const QueueCard = ({
         </CardTitle>
         {showQueueNameInBody && (
           <CardSubtitle className="mb-2">
-            {queueName}
             {isConfidential && (
-              <FontAwesomeIcon icon={faEyeSlash} size="sm" className="ml-2" />
+              <FontAwesomeIcon icon={faEyeSlash} fixedWidth className="mr-2" />
             )}
+            {queueName}
           </CardSubtitle>
         )}
         <div className="text-muted">
