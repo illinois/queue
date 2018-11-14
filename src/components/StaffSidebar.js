@@ -8,6 +8,7 @@ import { addQueueStaff, removeQueueStaff } from '../actions/queue'
 import {
   isUserCourseStaffForQueue,
   isUserActiveStaffForQueue,
+  isUserAdmin,
 } from '../selectors'
 import StaffMember from './StaffMember'
 
@@ -46,7 +47,7 @@ const StaffSidebar = props => {
   }
 
   let button = null
-  if (props.isUserCourseStaff) {
+  if (props.isUserCourseStaff || props.isUserAdmin) {
     if (props.isUserActiveStaff) {
       button = (
         <Button block color="danger" onClick={() => removeCurrentUser()}>
@@ -94,6 +95,7 @@ StaffSidebar.defaultProps = {
   activeStaff: {},
   isUserCourseStaff: false,
   isUserActiveStaff: false,
+  isUserAdmin: false,
 }
 
 StaffSidebar.propTypes = {
@@ -122,6 +124,7 @@ StaffSidebar.propTypes = {
   removeStaff: PropTypes.func.isRequired,
   isUserCourseStaff: PropTypes.bool,
   isUserActiveStaff: PropTypes.bool,
+  isUserAdmin: PropTypes.bool,
 }
 
 const mapStateToProps = (state, props) => ({
@@ -131,6 +134,7 @@ const mapStateToProps = (state, props) => ({
   queue: state.queues.queues[props.queueId],
   isUserCourseStaff: isUserCourseStaffForQueue(state, props),
   isUserActiveStaff: isUserActiveStaffForQueue(state, props),
+  isUserAdmin: isUserAdmin(state),
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
