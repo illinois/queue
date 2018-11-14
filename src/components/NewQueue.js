@@ -232,7 +232,17 @@ NewQueue.propTypes = {
 
 const mapStateToProps = state => ({
   user: state.user.user,
-  courses: mapObjectToArray(state.courses.courses),
+  courses: mapObjectToArray(state.courses.courses).sort((a, b) => {
+    const x = a.name.toLowerCase()
+    const y = b.name.toLowerCase()
+    if (x < y) {
+      return -1
+    }
+    if (x > y) {
+      return 1
+    }
+    return 0
+  }),
 })
 
 export default connect(
