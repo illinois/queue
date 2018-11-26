@@ -11,6 +11,7 @@ with the current date and the next changes should go under a **[Next]** header.
 
 * Add enters to submit new question, new course, or new queue. ([@rohinb2](https://github.com/rohinb2) in [#161](https://github.com/illinois/queue/pull/161))
 * Fix index route with empty base URL. ([@nwalters512](https://github.com/nwalters512) in [#160](https://github.com/illinois/queue/pull/160))
+* Allow an admin to join any course. ([@genevievehelsel](https://github.com/genevievehelsel) in [#164](https://github.com/illinois/queue/pull/164))
 
 ## 22 October 2018
 
