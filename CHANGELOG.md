@@ -8,6 +8,9 @@ with the current date and the next changes should go under a **[Next]** header.
 ## [Next]
 
 * Fix index route with empty base URL. ([@nwalters512](https://github.com/nwalters512) in [#160](https://github.com/illinois/queue/pull/160))
+* Sort courses in "Create a queue" panel.
+([@ApoorvaDixit](https://github.com/ApoorvaDixit) in
+[#167](https://github.com/illinois/queue/pull/167))
 
 ## 22 October 2018
 
