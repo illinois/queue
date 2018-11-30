@@ -12,6 +12,7 @@ with the current date and the next changes should go under a **[Next]** header.
 * Sort courses in "Create a queue" panel.
 ([@ApoorvaDixit](https://github.com/ApoorvaDixit) in
 [#167](https://github.com/illinois/queue/pull/167))
+* Updated API documentation. ([@genevievehelsel](https://github.com/genevievehelsel) in [#170](https://github.com/illinois/queue/pull/170))
 
 ## 22 October 2018
 
