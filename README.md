@@ -38,7 +38,7 @@ If you wish to report a bug, feature request, etc., please open a new issue (fir
 
 ### Multiple users in dev mode
 
-In production, all auth is done my Shibboleth, and we just read out of the `eppn` header
+In production, all auth is done by Shibboleth, and we just read out of the `eppn` header
 to get a student's identity. In dev mode, we still want to be able to test with multiple
 users (for instance, to assert that user roles work correctly, or to ensue that syncing
 between multiple clients works correctly). To achieve that, we use `express-session` to
