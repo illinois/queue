@@ -1,5 +1,5 @@
 ---
-title: "A micro-service digital queue using with Shibboleth authentication" 
+title: "A micro-service digital queue with Shibboleth authentication" 
 tags:
   - office hours
   - queue
