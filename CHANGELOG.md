@@ -13,6 +13,7 @@ with the current date and the next changes should go under a **[Next]** header.
 * Fix readme typo and prettierignore. ([@genevievehelsel](https://github.com/genevievehelsel) in [#159](https://github.com/illinois/queue/pull/159))
 * Sort courses in "Create a queue" panel. ([@ApoorvaDixit](https://github.com/ApoorvaDixit) in [#167](https://github.com/illinois/queue/pull/167))
 * Update README. ([@genevievehelsel](https://github.com/genevievehelsel) in [#171](https://github.com/illinois/queue/pull/171))
+* Alert last on duty staff of option to close queue when leaving. ([@AlpriElse](https://github.com/AlpriElse) in [#173](https://github.com/illinois/queue/pull/173))
 
 ## 22 October 2018
 
