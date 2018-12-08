@@ -23,7 +23,7 @@ affiliations:
  - name: Department of Statistics, University of Illinois at Urbana-Champaign
    index: 2
 date: 26 October 2018
-#bibliography: paper.bib
+bibliography: paper.bib
 ---
 
 # Summary
