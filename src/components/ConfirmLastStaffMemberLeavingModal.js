@@ -4,7 +4,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'
 
 const ConfirmLastStaffMemberLeavingModal = props => (
   <Modal isOpen={props.isOpen} toggle={props.toggle}>
-    <ModalHeader>You're the last on duty staff member!</ModalHeader>
+    <ModalHeader>You&#39;re the last on duty staff member!</ModalHeader>
     <ModalBody>Would you like to close the queue?</ModalBody>
     <ModalFooter>
       <Button color="danger" onClick={props.confirm}>
