@@ -13,6 +13,7 @@ import {
   Button,
   FormFeedback,
 } from 'reactstrap'
+import Toggle from 'react-toggle'
 
 const fields = [
   {
@@ -35,6 +36,7 @@ class QueueEdit extends React.Component {
       name: '',
       location: '',
       fixedLocation: false,
+      isConfidential: false,
       isFieldValid: {},
     }
 
@@ -50,15 +52,22 @@ class QueueEdit extends React.Component {
         name: nextProps.queue.name,
         location: nextProps.queue.location,
         fixedLocation: nextProps.queue.fixedLocation,
+        isConfidential: nextProps.queue.isConfidential,
         isFieldValid: {},
       })
     }
   }
 
   handleInputChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value,
-    })
+    if (event.target.type === 'checkbox') {
+      this.setState({
+        [event.target.name]: event.target.checked,
+      })
+    } else {
+      this.setState({
+        [event.target.name]: event.target.value,
+      })
+    }
   }
 
   handleCancel() {
@@ -92,6 +101,7 @@ class QueueEdit extends React.Component {
     const attributes = {
       name: this.state.name,
       location: this.state.location,
+      isConfidential: this.state.isConfidential,
     }
     this.props.onSubmitQueueEdit(attributes)
   }
@@ -142,6 +152,18 @@ class QueueEdit extends React.Component {
                 <FormFeedback>{this.state.isFieldValid.location}</FormFeedback>
               </Col>
             </FormGroup>
+            <FormGroup row>
+              <Label for="isConfidential" sm={4}>
+                Confidential
+              </Label>
+              <Col className="mt-1" sm={8}>
+                <Toggle
+                  name="isConfidential"
+                  defaultChecked={this.state.isConfidential}
+                  onChange={this.handleInputChange}
+                />
+              </Col>
+            </FormGroup>
           </Form>
         </ModalBody>
         <ModalFooter>
@@ -162,6 +184,7 @@ QueueEdit.propTypes = {
     name: PropTypes.string,
     location: PropTypes.string,
     fixedLocation: PropTypes.bool,
+    isConfidential: PropTypes.bool,
   }),
   isOpen: PropTypes.bool.isRequired,
   onCancel: PropTypes.func.isRequired,

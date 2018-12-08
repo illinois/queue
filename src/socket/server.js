@@ -26,9 +26,19 @@ const sendInitialState = (queueId, callback) => {
     callback({ questions, activeStaff })
   })
 }
-
+const blankQuestion = {
+  askedBy: {
+    netid: ''
+  },
+  askedById: '',
+  comments: null,
+  location: '',
+  name: '',
+  topic: ''
+}
 const handleQuestionCreate = (id, queueId) => {
   Question.findOne({ where: { id } }).then(question => {
+    console.log(Queue.isConfidential);
     queueNamespace
       .to(`queue-${queueId}`)
       .emit('question:create', { id, question })
@@ -114,7 +124,9 @@ const handleQueueEvent = (event, instance) => {
 
 const stream = sequelizeStream(sequelize)
 stream.on('data', data => {
+  console.log(data);
   const { event, instance } = data
+  // Need to have isConfidential in  question?
   if (instance instanceof Question) {
     handleQuestionEvent(event, instance)
   } else if (instance instanceof ActiveStaff) {
@@ -131,6 +143,7 @@ module.exports = newIo => {
   queueNamespace.on('connection', socket => {
     socket.on('join', (msg, callback) => {
       if ('queueId' in msg) {
+        // try looking at msg to see if tells us conf, other wise try with queue. might need to include conf in question model
         const { queueId } = msg
         socket.join(`queue-${queueId}`)
         sendInitialState(queueId, callback)

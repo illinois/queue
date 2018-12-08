@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Container, Row, Col, Card, CardBody } from 'reactstrap'
+import { Container, Row, Col, Card, CardBody, UncontrolledTooltip } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMapMarker } from '@fortawesome/free-solid-svg-icons'
+import { faMapMarker, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
 import { fetchQueue, fetchQueueRequest } from '../actions/queue'
 import { connectToQueue, disconnectFromQueue } from '../socket/client'
@@ -65,7 +65,23 @@ class Queue extends React.Component {
     const locationText = this.props.queue.location || 'No location specified'
     return (
       <Container fluid>
-        <h3>{this.props.queue.name}</h3>
+        <h3>
+          {this.props.queue.isConfidential && (
+            <span>
+              <FontAwesomeIcon
+                icon={faEyeSlash}
+                fixedWidth
+                className="mr-2"
+                id="confidentialIcon"
+              />
+              <UncontrolledTooltip placement="bottom" target="confidentialIcon">
+                This is a confidential queue! Students won&apos;t be able to see
+                other student names and topics.
+              </UncontrolledTooltip>
+            </span>
+          )}
+          {this.props.queue.name}
+        </h3>
         <h5 className="mb-3 text-muted">
           <FontAwesomeIcon icon={faMapMarker} fixedWidth className="mr-2" />
           {locationText}

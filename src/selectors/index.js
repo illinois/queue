@@ -25,7 +25,9 @@ export const getActiveStaff = createSelector(
 export const isUserActiveStaffForQueue = createSelector(
   [queueSelector, activeStaffSelector, userSelector],
   (queue, activeStaff, user) => {
+    console.log(queue)
     if (!queue || !queue.activeStaff) {
+      console.log("false")
       return false
     }
     const idx = queue.activeStaff.findIndex(
