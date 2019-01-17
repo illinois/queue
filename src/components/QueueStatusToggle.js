@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Button } from 'reactstrap'
-import 'react-toggle/style.css'
 
 class QueueStatusToggle extends React.Component {
   toggleQueueStatus() {

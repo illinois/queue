@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {
   Col,
+  CustomInput,
   Form,
   FormGroup,
   FormText,
@@ -10,8 +11,6 @@ import {
   Input,
   Button,
 } from 'reactstrap'
-import Toggle from 'react-toggle'
-import 'react-toggle/style.css'
 import { connect } from 'react-redux'
 
 import { mapObjectToArray } from '../util'
@@ -149,7 +148,9 @@ class NewQueue extends React.Component {
             Fixed location
           </Label>
           <Col sm={9}>
-            <Toggle
+            <CustomInput
+              id="fixedLocation"
+              type="switch"
               name="fixedLocation"
               defaultChecked={false}
               onChange={this.handleInputChange}
