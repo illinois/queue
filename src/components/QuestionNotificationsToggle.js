@@ -107,7 +107,7 @@ class QuestionNotificationsToggle extends React.Component {
             disabled={disabled}
             id="notificationButton"
             className="d-flex flex-row justify-content-center align-items-center"
-            style={{ whiteSpace: 'normal', flex: 1 }}
+            style={{ whiteSpace: 'normal', flex: 20 }}
             onClick={() => this.toggleNotificationsEnabled()}
           >
             <FontAwesomeIcon icon={faBell} className="mr-3" />
@@ -116,7 +116,8 @@ class QuestionNotificationsToggle extends React.Component {
           <Button
             color={color}
             outline
-            className="d-flex align-self-stretch"
+            className="d-flex flex-row justify-content-center align-items-center align-self-stretch"
+            style={{ whiteSpace: 'normal', flex: 1 }}
             onClick={() => this.toggleExplanationModal()}
           >
             <FontAwesomeIcon icon={faInfoCircle} />
