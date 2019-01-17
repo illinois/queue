@@ -13,6 +13,7 @@ with the current date and the next changes should go under a **[Next]** header.
 * Fix readme typo and prettierignore. ([@genevievehelsel](https://github.com/genevievehelsel) in [#159](https://github.com/illinois/queue/pull/159))
 * Sort courses in "Create a queue" panel. ([@ApoorvaDixit](https://github.com/ApoorvaDixit) in [#167](https://github.com/illinois/queue/pull/167))
 * Update README. ([@genevievehelsel](https://github.com/genevievehelsel) in [#171](https://github.com/illinois/queue/pull/171))
+* Replace `react-toggle` with native Bootstrap 4.2.1 components. ([@james9909](https://github.com/james9909) in [#176](https://github.com/illinois/queue/pull/176))
 
 ## 22 October 2018
 
