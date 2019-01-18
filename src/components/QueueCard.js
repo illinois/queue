@@ -45,8 +45,8 @@ const QueueCard = ({
       {...rest}
     >
       <CardBody>
-        <CardTitle tag="h5" className="d-flex flex-wrap align-items-center">
-          <span className="mb-2 mr-auto pr-3">{title}</span>
+        <CardTitle className="d-flex flex-wrap align-items-center">
+          <span className="h5 mb-2 mr-auto pr-3">{title}</span>
           <div>
             <ShowForCourseStaff courseId={queue.courseId}>
               <Button color="danger" size="sm" outline onClick={handleDelete}>
