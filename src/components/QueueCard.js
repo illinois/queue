@@ -45,7 +45,7 @@ const QueueCard = ({
       {...rest}
     >
       <CardBody>
-        <CardTitle className="d-flex flex-wrap align-items-center">
+        <CardTitle tag="h5" className="d-flex flex-wrap align-items-center">
           <span className="mb-2 mr-auto pr-3">{title}</span>
           <div>
             <ShowForCourseStaff courseId={queue.courseId}>
