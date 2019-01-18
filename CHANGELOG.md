@@ -6,6 +6,7 @@ When a new version is deployed, the changes since the last deploy should be labe
 with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
+* Fix regression where course names on `QueueCard`s would not be bold. ([@james9909](https://github.com/james9909) in [#178](https://github.com/illinois/queue/pull/178))
 
 ## 17 January 2019
 
