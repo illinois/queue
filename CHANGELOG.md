@@ -7,13 +7,17 @@ with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
 
+* Alert last on duty staff of option to close queue when leaving. ([@AlpriElse](https://github.com/AlpriElse) in [#173](https://github.com/illinois/queue/pull/173))
+
+## 17 January 2019
+
 * Fix index route with empty base URL. ([@nwalters512](https://github.com/nwalters512) in [#160](https://github.com/illinois/queue/pull/160))
 * Allow an admin to join any course. ([@genevievehelsel](https://github.com/genevievehelsel) in [#164](https://github.com/illinois/queue/pull/164))
 * Updated API documentation. ([@genevievehelsel](https://github.com/genevievehelsel) in [#170](https://github.com/illinois/queue/pull/170))
 * Fix readme typo and prettierignore. ([@genevievehelsel](https://github.com/genevievehelsel) in [#159](https://github.com/illinois/queue/pull/159))
 * Sort courses in "Create a queue" panel. ([@ApoorvaDixit](https://github.com/ApoorvaDixit) in [#167](https://github.com/illinois/queue/pull/167))
 * Update README. ([@genevievehelsel](https://github.com/genevievehelsel) in [#171](https://github.com/illinois/queue/pull/171))
-* Alert last on duty staff of option to close queue when leaving. ([@AlpriElse](https://github.com/AlpriElse) in [#173](https://github.com/illinois/queue/pull/173))
+* Replace `react-toggle` with native Bootstrap 4.2.1 components. ([@james9909](https://github.com/james9909) in [#176](https://github.com/illinois/queue/pull/176))
 
 ## 22 October 2018
 
