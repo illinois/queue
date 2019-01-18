@@ -7,6 +7,7 @@ with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
 
+* Alert last on duty staff of option to close queue when leaving. ([@AlpriElse](https://github.com/AlpriElse) in [#173](https://github.com/illinois/queue/pull/173))
 * Use enter key to submit new question, new course, or new queue. ([@rohinb2](https://github.com/rohinb2) in [#161](https://github.com/illinois/queue/pull/161))
 
 ## 17 January 2019
