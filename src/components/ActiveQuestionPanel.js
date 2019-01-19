@@ -20,9 +20,7 @@ class ActiveQuestionPanel extends React.Component {
   }
 
   toggle() {
-    this.setState({
-      modalOpen: !this.state.modalOpen,
-    })
+    this.setState(prevState => ({ modalOpen: !prevState.modalOpen }))
   }
 
   deleteQuestion() {
@@ -70,4 +68,7 @@ const mapDispatchToProps = (dispatch, { queueId, questionId }) => ({
   deleteQuestion: () => dispatch(deleteQuestion(queueId, questionId)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ActiveQuestionPanel)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ActiveQuestionPanel)

@@ -1,9 +1,8 @@
 /* eslint-env browser */
 import React, { Fragment } from 'react'
 import { Button, ButtonGroup } from 'reactstrap'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faBell from '@fortawesome/fontawesome-free-solid/faBell'
-import faInfo from '@fortawesome/fontawesome-free-solid/faInfoCircle'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBell, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 
 import QuestionNotificationsToggleExplanationModal from './QuestionNotificationsToggleExplanationModal'
 
@@ -46,9 +45,9 @@ class QuestionNotificationsToggle extends React.Component {
   }
 
   toggleExplanationModal() {
-    this.setState({
-      showExplanationModal: !this.state.showExplanationModal,
-    })
+    this.setState(prevState => ({
+      showExplanationModal: !prevState.showExplanationModal,
+    }))
   }
 
   toggleNotificationsEnabled() {
@@ -108,7 +107,7 @@ class QuestionNotificationsToggle extends React.Component {
             disabled={disabled}
             id="notificationButton"
             className="d-flex flex-row justify-content-center align-items-center"
-            style={{ whiteSpace: 'normal', flex: 1 }}
+            style={{ whiteSpace: 'normal', flex: 20 }}
             onClick={() => this.toggleNotificationsEnabled()}
           >
             <FontAwesomeIcon icon={faBell} className="mr-3" />
@@ -117,10 +116,11 @@ class QuestionNotificationsToggle extends React.Component {
           <Button
             color={color}
             outline
-            className="d-flex align-self-stretch"
+            className="d-flex flex-row justify-content-center align-items-center align-self-stretch"
+            style={{ whiteSpace: 'normal', flex: 1 }}
             onClick={() => this.toggleExplanationModal()}
           >
-            <FontAwesomeIcon icon={faInfo} />
+            <FontAwesomeIcon icon={faInfoCircle} />
           </Button>
         </ButtonGroup>
         <QuestionNotificationsToggleExplanationModal

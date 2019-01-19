@@ -15,8 +15,7 @@ const config = JSON.parse(
 module.exports.initSequelize = sequelize => {
   const models = {}
 
-  fs
-    .readdirSync(__dirname)
+  fs.readdirSync(__dirname)
     .filter(
       file =>
         file.indexOf('.') !== 0 &&

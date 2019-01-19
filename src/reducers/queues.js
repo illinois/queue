@@ -175,11 +175,15 @@ const queues = (state = defaultState, action) => {
     }
     case UPDATE_QUEUE.SUCCESS: {
       const { queue } = action
+      const originalQueue = state.queues[queue.id]
       return {
         ...state,
         queues: {
           ...state.queues,
-          [queue.id]: queue,
+          [queue.id]: {
+            ...originalQueue,
+            ...queue,
+          },
         },
       }
     }

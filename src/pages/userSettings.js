@@ -1,11 +1,8 @@
 import React from 'react'
-import withRedux from 'next-redux-wrapper'
+import { connect } from 'react-redux'
 import { Container, Card, CardHeader, CardTitle, CardBody } from 'reactstrap'
 
-import makeStore from '../redux/makeStore'
-
 import PageWithUser from '../components/PageWithUser'
-import Layout from '../components/Layout'
 import UserProfileSettingsContainer from '../containers/UserProfileSettingsContainer'
 
 class UserSettings extends React.Component {
@@ -15,20 +12,18 @@ class UserSettings extends React.Component {
 
   render() {
     return (
-      <Layout>
-        <Container fluid>
-          <Card className="settings-card">
-            <CardHeader className="bg-primary text-white d-flex align-items-center">
-              <CardTitle tag="h4" className="mb-0">
-                Settings
-              </CardTitle>
-            </CardHeader>
-            <CardBody>
-              <CardTitle tag="h5">User profile</CardTitle>
-              <UserProfileSettingsContainer />
-            </CardBody>
-          </Card>
-        </Container>
+      <Container fluid>
+        <Card className="settings-card">
+          <CardHeader className="bg-primary text-white d-flex align-items-center">
+            <CardTitle tag="h4" className="mb-0">
+              Settings
+            </CardTitle>
+          </CardHeader>
+          <CardBody>
+            <CardTitle tag="h5">User profile</CardTitle>
+            <UserProfileSettingsContainer />
+          </CardBody>
+        </Card>
         <style jsx>{`
           :global(.settings-card) {
             width: 100%;
@@ -36,7 +31,7 @@ class UserSettings extends React.Component {
             margin: auto;
           }
         `}</style>
-      </Layout>
+      </Container>
     )
   }
 }
@@ -47,6 +42,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default withRedux(makeStore, mapStateToProps, null)(
-  PageWithUser(UserSettings)
-)
+export default connect(mapStateToProps)(PageWithUser(UserSettings))

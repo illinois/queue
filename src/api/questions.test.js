@@ -63,6 +63,14 @@ describe('Questions API', () => {
       expect(res.body.askedBy.netid).toBe('otherstudent')
     })
 
+    test('fails for student with well-formed request but the queue is closed', async () => {
+      const question = { name: 'a', location: 'b', topic: 'c' }
+      const res = await request(app)
+        .post('/api/queues/4/questions?forceuser=otherstudent')
+        .send(question)
+      expect(res.statusCode).toBe(422)
+    })
+
     test('fails for student with specific netid', async () => {
       const question = {
         name: 'a',

@@ -1,21 +1,18 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { Container, Row, Card, CardBody, Button } from 'reactstrap'
-import withRedux from 'next-redux-wrapper'
 import Error from 'next/error'
 
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
-import faUsers from '@fortawesome/fontawesome-free-solid/faUsers'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus, faUsers } from '@fortawesome/free-solid-svg-icons'
 
 import { Link } from '../routes'
-import makeStore from '../redux/makeStore'
 import { fetchCourseRequest, fetchCourse } from '../actions/course'
 import { createQueue, deleteQueue, updateQueue } from '../actions/queue'
+import { mapObjectToArray } from '../util'
 
 import PageWithUser from '../components/PageWithUser'
-import Loading from '../components/Loading'
-import Layout from '../components/Layout'
 import NewQueue from '../components/NewQueue'
 import QueueCardListContainer from '../containers/QueueCardListContainer'
 import ShowForCourseStaff from '../components/ShowForCourseStaff'
@@ -34,6 +31,8 @@ class Course extends React.Component {
     }
   }
 
+  static pageTransitionDelayEnter = true
+
   constructor(props) {
     super(props)
 
@@ -43,7 +42,11 @@ class Course extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchCourse(this.props.courseId)
+    this.props.fetchCourse(this.props.courseId).then(() => {
+      if (this.props.pageTransitionReadyToEnter) {
+        this.props.pageTransitionReadyToEnter()
+      }
+    })
   }
 
   showCreateQueuePanel(state) {
@@ -60,14 +63,23 @@ class Course extends React.Component {
 
   render() {
     if (this.props.isFetching) {
-      return <Loading />
+      return null
     }
     if (!this.props.isFetching && !this.props.course) {
       return <Error statusCode={404} />
     }
 
+    const openQueueIds = this.props.queues
+      .filter(queue => queue.open)
+      .filter(queue => queue.courseId === this.props.courseId)
+      .map(queue => queue.id)
+    const closedQueueIds = this.props.queues
+      .filter(queue => !queue.open)
+      .filter(queue => queue.courseId === this.props.courseId)
+      .map(queue => queue.id)
+
     return (
-      <Layout>
+      <Fragment>
         <Container>
           <div className="d-flex flex-wrap align-items-center mb-4">
             <h1 className="display-4 d-inline-block mb-0 mt-3 mr-auto pr-3">
@@ -88,7 +100,9 @@ class Course extends React.Component {
             </ShowForCourseStaff>
           </div>
           <div className="d-flex flex-wrap align-items-center mb-4">
-            <h2 className="d-inline-block mb-0 mt-3 mr-auto pr-3">Queues</h2>
+            <h2 className="d-inline-block mb-0 mt-3 mr-auto pr-3">
+              Open Queues
+            </h2>
             <ShowForCourseStaff courseId={this.props.courseId}>
               <Button
                 color="primary"
@@ -114,7 +128,18 @@ class Course extends React.Component {
             </Card>
           )}
           <Row className="equal-height mb-5">
-            <QueueCardListContainer queueIds={this.props.course.queues} />
+            <QueueCardListContainer queueIds={openQueueIds} openQueue />
+          </Row>
+          <div className="d-flex flex-wrap align-items-center mb-4">
+            <h2 className="d-inline-block mb-0 mt-3 mr-auto pr-3">
+              Closed Queues
+            </h2>
+          </div>
+          <Row className="equal-height mb-5">
+            <QueueCardListContainer
+              queueIds={closedQueueIds}
+              openQueue={false}
+            />
           </Row>
           <CourseShortCodeInfo course={this.props.course} />
         </Container>
@@ -132,7 +157,7 @@ class Course extends React.Component {
             margin: auto;
           }
         `}</style>
-      </Layout>
+      </Fragment>
     )
   }
 }
@@ -143,28 +168,32 @@ Course.propTypes = {
     name: PropTypes.string,
     queues: PropTypes.arrayOf(PropTypes.number),
   }),
-  queues: PropTypes.objectOf(
+  queues: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string,
       location: PropTypes.location,
+      open: PropTypes.boolean,
+      courseId: PropTypes.number,
     })
   ),
   isFetching: PropTypes.bool,
   createQueue: PropTypes.func.isRequired,
   fetchCourse: PropTypes.func.isRequired,
+  pageTransitionReadyToEnter: PropTypes.func,
 }
 
 Course.defaultProps = {
   course: null,
-  queues: null,
+  queues: [],
   isFetching: true,
+  pageTransitionReadyToEnter: false,
 }
 
 const mapStateToProps = (state, ownProps) => {
   const course = state.courses.courses[ownProps.courseId]
   return {
     course,
-    queues: state.queues.queues,
+    queues: mapObjectToArray(state.queues.queues),
     isFetching: state.courses.isFetching || state.queues.isFetching,
   }
 }
@@ -178,6 +207,7 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 })
 
-export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(
-  PageWithUser(Course)
-)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PageWithUser(Course))

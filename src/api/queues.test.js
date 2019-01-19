@@ -15,7 +15,7 @@ describe('Queues API', () => {
     const doGetTest = async user => {
       const res = await request(app).get(`/api/queues?forceuser=${user}`)
       expect(res.statusCode).toBe(200)
-      expect(res.body.length).toEqual(3)
+      expect(res.body.length).toEqual(4)
       expect(res.body[0].name).toBe('CS225 Queue')
       expect(res.body[1].name).toBe('CS241 Queue')
       expect(res.body[0].location).toBe('Here')
@@ -351,6 +351,101 @@ describe('Queues API', () => {
         .send(attributes)
       expect(res.statusCode).toBe(422)
     })
+
+    test('succeeds for course staff to close queue', async () => {
+      const attributes = { open: false }
+      const res = await request(app)
+        .patch('/api/queues/1?forceuser=225staff')
+        .send(attributes)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.open).toBe(false)
+    })
+
+    test('succeeds for admin to close queue', async () => {
+      const attributes = { open: false }
+      const res = await request(app)
+        .patch('/api/queues/1?forceuser=admin')
+        .send(attributes)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.open).toBe(false)
+    })
+
+    test('fails for non course staff to close queue', async () => {
+      const attributes = { open: false }
+      const res = await request(app)
+        .patch('/api/queues/1?forceuser=student')
+        .send(attributes)
+      expect(res.statusCode).toBe(403)
+      const res2 = await request(app).get('/api/queues/1?forceuser=student')
+      expect(res2.statusCode).toBe(200)
+      expect(res2.body.open).toBe(true)
+    })
+
+    test('fails for course staff to change queue status with non boolean (empty string)', async () => {
+      const attributes = { open: '' }
+      const res = await request(app)
+        .patch('/api/queues/1?forceuser=225staff')
+        .send(attributes)
+      expect(res.statusCode).toBe(422)
+      const res2 = await request(app).get('/api/queues/1?forceuser=student')
+      expect(res2.statusCode).toBe(200)
+      expect(res2.body.open).toBe(true)
+    })
+
+    test('fails for course staff to change queue status with non boolean (non-empty string)', async () => {
+      const attributes = { open: 'hello' }
+      const res = await request(app)
+        .patch('/api/queues/1?forceuser=225staff')
+        .send(attributes)
+      expect(res.statusCode).toBe(422)
+      const res2 = await request(app).get('/api/queues/1?forceuser=student')
+      expect(res2.statusCode).toBe(200)
+      expect(res2.body.open).toBe(true)
+    })
+
+    test('fails for course staff to change queue status with non boolean (integer)', async () => {
+      const attributes = { open: 1234 }
+      const res = await request(app)
+        .patch('/api/queues/1?forceuser=225staff')
+        .send(attributes)
+      expect(res.statusCode).toBe(422)
+      const res2 = await request(app).get('/api/queues/1?forceuser=student')
+      expect(res2.statusCode).toBe(200)
+      expect(res2.body.open).toBe(true)
+    })
+
+    test('wont allow properties to be set to null', async () => {
+      const attributes = {
+        open: false,
+        name: 'CS 225 Queue 1 Alter',
+        location: 'Where',
+      }
+      const res = await request(app)
+        .patch('/api/queues/1?forceuser=225staff')
+        .send(attributes)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.open).toBe(false)
+      expect(res.body.name).toBe('CS 225 Queue 1 Alter')
+      expect(res.body.location).toBe('Where')
+
+      const attributes2 = { open: null, name: null, location: null }
+      const res2 = await request(app)
+        .patch('/api/queues/1?forceuser=225staff')
+        .send(attributes2)
+      expect(res2.statusCode).toBe(201)
+      expect(res2.body.open).toBe(false)
+      expect(res2.body.name).toBe('CS 225 Queue 1 Alter')
+      expect(res2.body.location).toBe('Where')
+
+      const attributes3 = { open: null, name: null }
+      const res3 = await request(app)
+        .patch('/api/queues/1?forceuser=225staff')
+        .send(attributes3)
+      expect(res3.statusCode).toBe(201)
+      expect(res3.body.open).toBe(false)
+      expect(res3.body.name).toBe('CS 225 Queue 1 Alter')
+      expect(res3.body.location).toBe('Where')
+    })
   })
 
   describe('DELETE /api/queues/1', () => {
@@ -359,7 +454,7 @@ describe('Queues API', () => {
       expect(res.statusCode).toBe(202)
       const res2 = await request(app).get('/api/queues')
       expect(res2.statusCode).toBe(200)
-      expect(res2.body).toHaveLength(2)
+      expect(res2.body).toHaveLength(3)
       expect(res2.body[0].id).toBe(2)
     })
 
@@ -368,7 +463,7 @@ describe('Queues API', () => {
       expect(res.statusCode).toBe(202)
       const res2 = await request(app).get('/api/queues')
       expect(res2.statusCode).toBe(200)
-      expect(res2.body).toHaveLength(2)
+      expect(res2.body).toHaveLength(3)
       expect(res2.body[0].id).toBe(2)
     })
 
@@ -378,7 +473,7 @@ describe('Queues API', () => {
       expect(res.body).toEqual({})
       const res2 = await request(app).get('/api/queues')
       expect(res2.statusCode).toBe(200)
-      expect(res2.body).toHaveLength(3)
+      expect(res2.body).toHaveLength(4)
       expect(res2.body[0].id).toBe(1)
       expect(res2.body[1].id).toBe(2)
     })
@@ -389,7 +484,7 @@ describe('Queues API', () => {
       expect(res.body).toEqual({})
       const res2 = await request(app).get('/api/queues')
       expect(res2.statusCode).toBe(200)
-      expect(res2.body).toHaveLength(3)
+      expect(res2.body).toHaveLength(4)
       expect(res2.body[0].id).toBe(1)
       expect(res2.body[1].id).toBe(2)
     })
@@ -463,7 +558,7 @@ describe('Queues API', () => {
       expect(res.statusCode).toBe(202)
       const res2 = await request(app).get('/api/queues')
       expect(res2.statusCode).toBe(200)
-      expect(res2.body).toHaveLength(2)
+      expect(res2.body).toHaveLength(3)
     })
 
     test('succeeds for admin', async () => {
@@ -471,7 +566,7 @@ describe('Queues API', () => {
       expect(res.statusCode).toBe(202)
       const res2 = await request(app).get('/api/queues')
       expect(res2.statusCode).toBe(200)
-      expect(res2.body).toHaveLength(2)
+      expect(res2.body).toHaveLength(3)
     })
 
     test('fails for course staff of different course', async () => {
@@ -480,7 +575,7 @@ describe('Queues API', () => {
       expect(res.body).toEqual({})
       const res2 = await request(app).get('/api/queues')
       expect(res2.statusCode).toBe(200)
-      expect(res2.body).toHaveLength(3)
+      expect(res2.body).toHaveLength(4)
     })
 
     test('fails for student', async () => {
@@ -489,7 +584,7 @@ describe('Queues API', () => {
       expect(res.body).toEqual({})
       const res2 = await request(app).get('/api/queues')
       expect(res2.statusCode).toBe(200)
-      expect(res2.body).toHaveLength(3)
+      expect(res2.body).toHaveLength(4)
     })
   })
 })

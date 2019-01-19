@@ -9,6 +9,11 @@
     "storage": ":memory:",
     "logging": false
   },
+  "now": {
+    "dialect": "sqlite",
+    "storage": "/tmp/now.sqlite",
+    "logging": false
+  },
   "staging": {
     "dialect": "sqlite",
     "storage": "./staging.sqlite",

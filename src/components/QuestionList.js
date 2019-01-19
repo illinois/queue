@@ -3,14 +3,15 @@ import PropTypes from 'prop-types'
 import { ListGroup, ListGroupItem } from 'reactstrap'
 import FlipMove from 'react-flip-move'
 
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import Question from './Question'
 import QuestionFeedback from './QuestionFeedback'
 import ConfirmLeaveQueueModal from './ConfirmLeaveQueueModal'
 import ConfirmDeleteQuestionModal from './ConfirmDeleteQuestionModal'
 import ConfirmCancelQuestionModal from './ConfirmCancelQuestionModal'
+import ConfirmStopAnsweringQuestionModal from './ConfirmStopAnsweringQuestionModal'
 import QuestionEdit from './QuestionEdit'
 
 class QuestionList extends React.Component {
@@ -22,6 +23,7 @@ class QuestionList extends React.Component {
       showLeaveModal: false,
       showDeleteModal: false,
       showCancelModal: false,
+      showStopAnswerModal: false,
       showQuestionEditModal: false,
       attributeId: null,
       feedbackId: null,
@@ -94,15 +96,13 @@ class QuestionList extends React.Component {
   }
 
   toggleLeaveModal() {
-    this.setState({
-      showLeaveModal: !this.state.showLeaveModal,
-    })
+    this.setState(prevState => ({ showLeaveModal: !prevState.showLeaveModal }))
   }
 
   toggleDeleteModal() {
-    this.setState({
-      showDeleteModal: !this.state.showDeleteModal,
-    })
+    this.setState(prevState => ({
+      showDeleteModal: !prevState.showDeleteModal,
+    }))
   }
 
   handleConfirmedDeletion() {
@@ -114,16 +114,30 @@ class QuestionList extends React.Component {
   }
 
   toggleCancelModal() {
-    this.setState({
-      showCancelModal: !this.state.showCancelModal,
-    })
+    this.setState(prevState => ({
+      showCancelModal: !prevState.showCancelModal,
+    }))
+  }
+
+  toggleStopAnswerModal() {
+    this.setState(prevState => ({
+      showStopAnswerModal: !prevState.showStopAnswerModal,
+    }))
   }
 
   cancelQuestion(questionId) {
-    this.setState({
-      showCancelModal: true,
-      cancelId: questionId,
-    })
+    const question = this.props.questions[questionId]
+    if (this.props.userId === question.answeredById) {
+      this.setState({
+        showStopAnswerModal: true,
+        cancelId: questionId,
+      })
+    } else {
+      this.setState({
+        showCancelModal: true,
+        cancelId: questionId,
+      })
+    }
   }
 
   startQuestion(questionId) {
@@ -134,6 +148,7 @@ class QuestionList extends React.Component {
     this.props.updateQuestionBeingAnswered(this.state.cancelId, false)
     this.setState({
       showCancelModal: false,
+      showStopAnswerModal: false,
     })
   }
 
@@ -213,6 +228,11 @@ class QuestionList extends React.Component {
         <ConfirmCancelQuestionModal
           isOpen={this.state.showCancelModal}
           toggle={() => this.toggleCancelModal()}
+          confirm={() => this.handleConfirmedCancellation()}
+        />
+        <ConfirmStopAnsweringQuestionModal
+          isOpen={this.state.showStopAnswerModal}
+          toggle={() => this.toggleStopAnswerModal()}
           confirm={() => this.handleConfirmedCancellation()}
         />
         <QuestionEdit

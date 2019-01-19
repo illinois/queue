@@ -1,12 +1,11 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { Container, Row, Card, CardBody, Button } from 'reactstrap'
-import withRedux from 'next-redux-wrapper'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 import { Link } from '../routes'
-import makeStore from '../redux/makeStore'
 import {
   fetchCoursesRequest,
   fetchCourses,
@@ -21,8 +20,6 @@ import {
 import { mapObjectToArray } from '../util'
 
 import PageWithUser from '../components/PageWithUser'
-import Loading from '../components/Loading'
-import Layout from '../components/Layout'
 import NewCourse from '../components/NewCourse'
 import NewQueue from '../components/NewQueue'
 import ShowForAdmin from '../components/ShowForAdmin'
@@ -36,6 +33,8 @@ class Index extends React.Component {
       store.dispatch(fetchCoursesRequest())
     }
   }
+
+  static pageTransitionDelayEnter = true
 
   constructor(props) {
     super(props)
@@ -55,6 +54,9 @@ class Index extends React.Component {
         this.setState({
           finishedLoading: true,
         })
+        if (this.props.pageTransitionReadyToEnter) {
+          this.props.pageTransitionReadyToEnter()
+        }
       }
     )
   }
@@ -85,7 +87,7 @@ class Index extends React.Component {
 
   render() {
     if (!this.state.finishedLoading) {
-      return <Loading />
+      return null
     }
 
     let courseButtons
@@ -105,10 +107,15 @@ class Index extends React.Component {
       ))
     }
 
-    const queueIds = this.props.queues.map(queue => queue.id)
+    const openQueueIds = this.props.queues
+      .filter(queue => queue.open)
+      .map(queue => queue.id)
+    const closedQueueIds = this.props.queues
+      .filter(queue => !queue.open)
+      .map(queue => queue.id)
 
     return (
-      <Layout>
+      <Fragment>
         <Container>
           <DevWorkshopAd />
           <div className="d-flex flex-wrap align-items-center mb-4">
@@ -140,7 +147,11 @@ class Index extends React.Component {
             </Card>
           )}
           <Row className="equal-height mb-4">
-            <QueueCardListContainer queueIds={queueIds} showCourseName />
+            <QueueCardListContainer
+              queueIds={openQueueIds}
+              showCourseName
+              openQueue
+            />
           </Row>
           <div className="d-flex flex-wrap align-items-center mb-4">
             <h3 className="d-inline-block mb-0 mt-3 mr-auto pr-3">
@@ -168,6 +179,18 @@ class Index extends React.Component {
             </Card>
           )}
           <div className="mb-1">{courseButtons}</div>
+          <div className="d-flex flex-wrap align-items-center mb-4">
+            <h1 className="display-4 d-inline-block mb-0 mt-3 mr-auto pr-3">
+              Closed queues
+            </h1>
+          </div>
+          <Row className="equal-height mb-4">
+            <QueueCardListContainer
+              queueIds={closedQueueIds}
+              showCourseName
+              openQueue={false}
+            />
+          </Row>
         </Container>
         <style global jsx>{`
           .courses-card {
@@ -187,7 +210,7 @@ class Index extends React.Component {
             flex: 1;
           }
         `}</style>
-      </Layout>
+      </Fragment>
     )
   }
 }
@@ -208,18 +231,30 @@ Index.propTypes = {
   fetchQueues: PropTypes.func.isRequired,
   createCourse: PropTypes.func.isRequired,
   createQueue: PropTypes.func.isRequired,
+  pageTransitionReadyToEnter: PropTypes.func,
 }
 
 Index.defaultProps = {
   courses: [],
   queues: [],
+  pageTransitionReadyToEnter: null,
 }
 
 const mapStateToProps = state => ({
   showCreateQueueButton:
     state.user.user &&
     (state.user.user.isAdmin || state.user.user.staffAssignments.length > 0),
-  courses: mapObjectToArray(state.courses.courses),
+  courses: mapObjectToArray(state.courses.courses).sort((a, b) => {
+    const x = a.name.toLowerCase()
+    const y = b.name.toLowerCase()
+    if (x < y) {
+      return -1
+    }
+    if (x > y) {
+      return 1
+    }
+    return 0
+  }),
   queues: mapObjectToArray(state.queues.queues),
 })
 
@@ -233,6 +268,7 @@ const mapDispatchToProps = dispatch => ({
   deleteQueue: (courseId, queueId) => dispatch(deleteQueue(courseId, queueId)),
 })
 
-export default withRedux(makeStore, mapStateToProps, mapDispatchToProps)(
-  PageWithUser(Index)
-)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PageWithUser(Index))

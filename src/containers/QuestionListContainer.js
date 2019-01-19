@@ -40,4 +40,7 @@ const mapDispatchToProps = (dispatch, { queueId }) => ({
     dispatch(finishAnsweringQuestion(queueId, questionId, feedback)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(QuestionList)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(QuestionList)
