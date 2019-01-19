@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {
   Col,
+  CustomInput,
   Form,
   FormGroup,
   FormText,
@@ -10,8 +11,6 @@ import {
   Input,
   Button,
 } from 'reactstrap'
-import Toggle from 'react-toggle'
-import 'react-toggle/style.css'
 import { connect } from 'react-redux'
 
 import { mapObjectToArray } from '../util'
@@ -32,6 +31,13 @@ class NewQueue extends React.Component {
 
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleKeyPress = this.handleKeyPress.bind(this)
+  }
+
+  handleKeyPress(e) {
+    if (e.key === 'Enter') {
+      this.handleSubmit()
+    }
   }
 
   handleInputChange(event) {
@@ -138,6 +144,7 @@ class NewQueue extends React.Component {
               name="name"
               placeholder="Office Hours"
               onChange={this.handleInputChange}
+              onKeyDown={this.handleKeyPress}
               value={this.state.name}
               valid={isValid(this.state.fieldErrors.name)}
             />
@@ -149,7 +156,9 @@ class NewQueue extends React.Component {
             Fixed location
           </Label>
           <Col sm={9}>
-            <Toggle
+            <CustomInput
+              id="fixedLocation"
+              type="switch"
               name="fixedLocation"
               defaultChecked={false}
               onChange={this.handleInputChange}
@@ -170,6 +179,7 @@ class NewQueue extends React.Component {
               name="location"
               placeholder="Siebel 0222"
               onChange={this.handleInputChange}
+              onKeyDown={this.handleKeyPress}
               value={this.state.location}
               valid={isValid(this.state.fieldErrors.location)}
             />
@@ -232,7 +242,17 @@ NewQueue.propTypes = {
 
 const mapStateToProps = state => ({
   user: state.user.user,
-  courses: mapObjectToArray(state.courses.courses),
+  courses: mapObjectToArray(state.courses.courses).sort((a, b) => {
+    const x = a.name.toLowerCase()
+    const y = b.name.toLowerCase()
+    if (x < y) {
+      return -1
+    }
+    if (x > y) {
+      return 1
+    }
+    return 0
+  }),
 })
 
 export default connect(

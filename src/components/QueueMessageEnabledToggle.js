@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Toggle from 'react-toggle'
+import { CustomInput } from 'reactstrap'
 
 class QueueMessageEnabledToggle extends React.Component {
   constructor(props) {
@@ -19,8 +19,9 @@ class QueueMessageEnabledToggle extends React.Component {
     return (
       <div className="mb-3 d-flex">
         <span className="mr-auto">Show staff message</span>
-        <Toggle
-          defaultChecked={false}
+        <CustomInput
+          id="messageEnabled"
+          type="switch"
           onChange={this.handleCheckChanged}
           checked={this.props.queue.messageEnabled}
         />

@@ -7,8 +7,26 @@ with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
 
-* Log errors to `stdout` instead of `stderr`. ([@nwalters512](https://github.com/nwalters512) in [#152](https://github.com/illinois/queue/pull/152))
+* Alert last on duty staff of option to close queue when leaving. ([@AlpriElse](https://github.com/AlpriElse) in [#173](https://github.com/illinois/queue/pull/173))
+* Use enter key to submit new question, new course, or new queue. ([@rohinb2](https://github.com/rohinb2) in [#161](https://github.com/illinois/queue/pull/161))
 * Add logout button. ([@emilojkovic](https://github.com/emilojkovic) in [#124](https://github.com/illinois/queue/pull/124))
+
+## 17 January 2019
+
+* Fix index route with empty base URL. ([@nwalters512](https://github.com/nwalters512) in [#160](https://github.com/illinois/queue/pull/160))
+* Allow an admin to join any course. ([@genevievehelsel](https://github.com/genevievehelsel) in [#164](https://github.com/illinois/queue/pull/164))
+* Updated API documentation. ([@genevievehelsel](https://github.com/genevievehelsel) in [#170](https://github.com/illinois/queue/pull/170))
+* Fix readme typo and prettierignore. ([@genevievehelsel](https://github.com/genevievehelsel) in [#159](https://github.com/illinois/queue/pull/159))
+* Sort courses in "Create a queue" panel. ([@ApoorvaDixit](https://github.com/ApoorvaDixit) in [#167](https://github.com/illinois/queue/pull/167))
+* Update README. ([@genevievehelsel](https://github.com/genevievehelsel) in [#171](https://github.com/illinois/queue/pull/171))
+* Replace `react-toggle` with native Bootstrap 4.2.1 components. ([@james9909](https://github.com/james9909) in [#176](https://github.com/illinois/queue/pull/176))
+
+## 22 October 2018
+
+* Log errors to `stdout` instead of `stderr`. ([@nwalters512](https://github.com/nwalters512) in [#152](https://github.com/illinois/queue/pull/152))
+* Add hack night advertisement banner. ([@genevievehelsel](https://github.com/genevievehelsel) in [#157](https://github.com/illinois/queue/pull/157))
+* Changed cancel question modal to contain clearer messages. ([@Xiangmingchen](https://github.com/Xiangmingchen) in [#141](https://github.com/illinois/queue/pull/141))
+* Remove slash from the index route. ([@nwalters512](https://github.com/nwalters512) in [#158](https://github.com/illinois/queue/pull/158))
 
 ## 11 October 2018
 
