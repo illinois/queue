@@ -3,9 +3,7 @@ const path = require('path')
 const Sequelize = require('sequelize')
 
 const env = process.env.NODE_ENV || 'development'
-const config = JSON.parse(
-  fs.readFileSync(path.join(__dirname, '..', 'config', 'config.json'), 'utf-8')
-)[env]
+const config = require('../config/config.js')[env]
 
 /**
  * Loads our models into the given Sequelize instance
