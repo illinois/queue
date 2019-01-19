@@ -23,12 +23,19 @@ class NewCourse extends React.Component {
 
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleCreateCourse = this.handleCreateCourse.bind(this)
+    this.handleKeyPress = this.handleKeyPress.bind(this)
   }
 
   handleInputChange(event) {
     this.setState({
       [event.target.name]: event.target.value,
     })
+  }
+
+  handleKeyPress(e) {
+    if (e.key === 'Enter') {
+      this.handleCreateCourse()
+    }
   }
 
   handleCreateCourse() {
@@ -67,6 +74,7 @@ class NewCourse extends React.Component {
               placeholder="Enter the course name (e.g. CS 225)"
               value={this.state.name}
               onChange={this.handleInputChange}
+              onKeyDown={this.handleKeyPress}
               valid={this.state.isFieldValid.name}
             />
             <FormFeedback>A name is required</FormFeedback>
@@ -83,6 +91,7 @@ class NewCourse extends React.Component {
               placeholder="Enter a course shortcode (e.g. cs225)"
               value={this.state.shortcode}
               onChange={this.handleInputChange}
+              onKeyDown={this.handleKeyPress}
               valid={this.state.isFieldValid.shortcode}
             />
             <FormFeedback>A shortcode is required!</FormFeedback>

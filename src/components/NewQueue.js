@@ -31,6 +31,13 @@ class NewQueue extends React.Component {
 
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleKeyPress = this.handleKeyPress.bind(this)
+  }
+
+  handleKeyPress(e) {
+    if (e.key === 'Enter') {
+      this.handleSubmit()
+    }
   }
 
   handleInputChange(event) {
@@ -137,6 +144,7 @@ class NewQueue extends React.Component {
               name="name"
               placeholder="Office Hours"
               onChange={this.handleInputChange}
+              onKeyDown={this.handleKeyPress}
               value={this.state.name}
               valid={isValid(this.state.fieldErrors.name)}
             />
@@ -171,6 +179,7 @@ class NewQueue extends React.Component {
               name="location"
               placeholder="Siebel 0222"
               onChange={this.handleInputChange}
+              onKeyDown={this.handleKeyPress}
               value={this.state.location}
               valid={isValid(this.state.fieldErrors.location)}
             />
