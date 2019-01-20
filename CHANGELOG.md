@@ -10,6 +10,7 @@ with the current date and the next changes should go under a **[Next]** header.
 
 * Alert last on duty staff of option to close queue when leaving. ([@AlpriElse](https://github.com/AlpriElse) in [#173](https://github.com/illinois/queue/pull/173))
 * Use enter key to submit new question, new course, or new queue. ([@rohinb2](https://github.com/rohinb2) in [#161](https://github.com/illinois/queue/pull/161))
+* Specify which queue is being deleted. ([@james9909](https://github.com/james9909) in [#179](https://github.com/illinois/queue/pull/179))
 
 ## 17 January 2019
 
