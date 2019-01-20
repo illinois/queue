@@ -148,6 +148,16 @@ class QueueCardList extends React.Component {
       <Fragment>
         {queues}
         <ConfirmDeleteQueueModal
+          queueName={
+            this.state.pendingDeleteQueue
+              ? this.props.queues[this.state.pendingDeleteQueue.queueId].name
+              : null
+          }
+          courseName={
+            this.state.pendingDeleteQueue
+              ? this.props.courses[this.state.pendingDeleteQueue.courseId].name
+              : null
+          }
           isOpen={this.state.showDeleteQueueModal}
           toggle={() => this.toggleDeleteModal()}
           confirm={() => this.confirmDeleteQueue()}
