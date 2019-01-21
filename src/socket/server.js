@@ -129,6 +129,7 @@ module.exports = newIo => {
 
   queueNamespace = io.of('/queue')
   queueNamespace.on('connection', socket => {
+    console.log(socket)
     socket.on('join', (msg, callback) => {
       if ('queueId' in msg) {
         const { queueId } = msg

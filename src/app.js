@@ -33,6 +33,15 @@ app.use(rewrite(`${baseUrl}/static/*`, '/static/$1'))
 // Prettify all json by default
 app.use(require('./middleware/prettyPrintJson'))
 
+// Authentication
+// All auth is handled by the /login route. In production, /login/shib is
+// a special Shib-protected route. When a user is directed to that page,
+// they'll need to sign in to Shib if they aren't already. Then, the request
+// will hit that page with their user information present in headers. We can
+// then establish our own session with them, which can persist beyond Shib's
+// authentication restrictions.
+app.use(`${baseUrl}/login/shib`, require('./auth/shibboleth'))
+
 // Shibboleth auth
 // In dev, we need all requests to flow through the authn middleware so that
 // we can properly handle a forceuser query param on a page load.

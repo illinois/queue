@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import {
   Navbar,
@@ -52,18 +52,20 @@ class Header extends React.Component {
         <Link route="index" passHref>
           <NavbarBrand>Queues@Illinois</NavbarBrand>
         </Link>
-        <NavbarToggler onClick={() => this.toggle()} />
         {user && (
-          <Collapse isOpen={this.state.isOpen} navbar>
-            <Nav navbar className="ml-auto">
-              <Link route="userSettings" passHref>
-                <NavLink className="navbar-text">
-                  <FontAwesomeIcon icon={faUser} className="mr-2" />
-                  {userName}
-                </NavLink>
-              </Link>
-            </Nav>
-          </Collapse>
+          <Fragment>
+            <NavbarToggler onClick={() => this.toggle()} />
+            <Collapse isOpen={this.state.isOpen} navbar>
+              <Nav navbar className="ml-auto">
+                <Link route="userSettings" passHref>
+                  <NavLink className="navbar-text">
+                    <FontAwesomeIcon icon={faUser} className="mr-2" />
+                    {userName}
+                  </NavLink>
+                </Link>
+              </Nav>
+            </Collapse>
+          </Fragment>
         )}
       </Navbar>
     )
