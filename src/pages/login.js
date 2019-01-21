@@ -11,19 +11,19 @@ const Login = (props) => {
         <Button className="btn-illinois" color={null} block>Log in with Illinois</Button>
       </div>
       <style jsx global>{`
-        body {
-          background-color: var(--dark)!important;
-        }
         .login-container {
           margin-top:
           width: 100%;
           margin-right: auto;
           margin-left: auto;
-          max-width: 576px;
+          max-width: 500px;
           padding: 2rem;
           background-color: white;
         }
         @media (min-width: 576px) {
+          body {
+            background-color: var(--dark)!important;
+          }
           .login-container {
             margin-top: 3rem;
             border-radius: 0.5rem;
