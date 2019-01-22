@@ -46,6 +46,7 @@ if (DEV) {
   app.use(`${baseUrl}/login/dev`, require('./auth/dev'))
 }
 app.use(`${baseUrl}/login/shib`, require('./auth/shibboleth'))
+app.use(`${baseUrl}/logout`, require('./auth/logout'))
 
 // Shibboleth auth
 // In dev, we need all requests to flow through the authn middleware so that

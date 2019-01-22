@@ -4,20 +4,27 @@ const { User } = require('../models')
 const safeAsync = require('../middleware/safeAsync')
 
 module.exports = safeAsync(async (req, res, next) => {
+  const jwtCookie = req.cookies.jwt
+  if (!jwtCookie) {
+    res.status(401).send()
+    return
+  }
+
+  let jwtData
   try {
-    const jwtCookie = req.cookies.jwt
-    const jwtData = jwt.verify(jwtCookie, 'mysecretkey')
-    const netid = jwtData.sub
-    const user = await User.find({ where: { netid } })
-    if (user === null) {
-      // This shouldn't ever happen, but if it does...
-      res.status(403).send()
-      return
-    }
-    res.locals.userAuthn = user
-    next()
+    jwtData = jwt.verify(jwtCookie, 'mysecretkey')
   } catch (e) {
     console.error(e)
-    res.status(403).send()
+    res.status(401).send()
   }
+
+  const netid = jwtData.sub
+  const user = await User.find({ where: { netid } })
+  if (user === null) {
+    // This shouldn't ever happen, but if it does...
+    res.status(401).send()
+    return
+  }
+  res.locals.userAuthn = user
+  next()
 })

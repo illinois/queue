@@ -24,7 +24,7 @@ export default function(AuthedComponent, permissions) {
     componentDidMount() {
       // Time to fetch our user!
       if (!this.props.user) {
-        this.props.fetchUser()
+        this.props.fetchUser().then(() => console.log('succ')).catch((err) => console.log(err))
       }
     }
 
