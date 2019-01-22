@@ -36,3 +36,15 @@ module.exports.addJwtCookie = (req, res, user) => {
     secure: req.secure,
   })
 }
+
+module.exports.getUserFromJwt = async (token) => {
+  try {
+    const jwtData = jwt.verify(token, 'mysecretkey')
+    const netid = jwtData.sub
+    const user = await User.find({ where: { netid } })
+    return user
+  } catch (e) {
+    console.error(e)
+    return null
+  }
+}

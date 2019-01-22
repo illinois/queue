@@ -1,6 +1,7 @@
 /* eslint global-require: "off", no-console: "off" */
 const app = require('express')()
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const rewrite = require('express-urlrewrite')
 
@@ -23,6 +24,7 @@ if (DEV || NOW) {
   )
 }
 
+app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
@@ -49,12 +51,15 @@ app.use(`${baseUrl}/login/shib`, require('./auth/shibboleth'))
 // In dev, we need all requests to flow through the authn middleware so that
 // we can properly handle a forceuser query param on a page load.
 // In production, we only need this for the API routes; everything else is just statics.
-if (DEV || NOW) {
-  app.use(baseUrl, require('./middleware/authnDev'))
-} else {
-  app.use(`${baseUrl}/api`, require('./middleware/authn'))
+if (false) {
+  if (DEV || NOW) {
+    app.use(baseUrl, require('./middleware/authnDev'))
+  } else {
+    app.use(`${baseUrl}/api`, require('./middleware/authn'))
+  }
+  app.use(`${baseUrl}/api`, require('./middleware/authz'))
 }
-app.use(`${baseUrl}/api`, require('./middleware/authz'))
+app.use(`${baseUrl}/api`, require('./middleware/authnJwt'))
 
 // API routes
 app.use(`${baseUrl}/api/users`, require('./api/users'))
