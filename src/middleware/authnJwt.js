@@ -14,7 +14,6 @@ module.exports = safeAsync(async (req, res, next) => {
   try {
     jwtData = jwt.verify(jwtCookie, 'mysecretkey')
   } catch (e) {
-    console.error(e)
     res.status(401).send()
   }
 

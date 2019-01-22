@@ -62,6 +62,11 @@ if (false) {
 app.use(`${baseUrl}/api`, require('./middleware/authnJwt'))
 app.use(`${baseUrl}/api`, require('./middleware/authz'))
 
+// This will selectively send redirects if the user needs to (re)authenticate
+// Useful mostly on initial page load - avoids having to detect that we
+// aren't authed on the client and redirect there.
+app.use(`${baseUrl}/`, require('./middleware/redirectIfNeedsAuthn'))
+
 // API routes
 app.use(`${baseUrl}/api/users`, require('./api/users'))
 app.use(`${baseUrl}/api/courses`, require('./api/courses'))
