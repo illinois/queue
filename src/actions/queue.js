@@ -2,7 +2,6 @@ import axios from './axios'
 import * as types from '../constants/ActionTypes'
 import { makeActionCreator } from './util'
 import { normalizeActiveStaff } from '../reducers/normalize'
-import { isUserCourseStaff } from '../selectors'
 
 /**
  * Loading all courses
@@ -86,27 +85,7 @@ export function fetchQueue(queueId) {
 
     return axios
       .get(`/api/queues/${queueId}`)
-      .then(res => {
-        console.log(isUserCourseStaff)
-        if (res.data.isConfidential && !isUserCourseStaff) {
-          const blankQuestion = {
-            askedBy: {
-              netid: ''
-            },
-            askedById: '',
-            comments: null,
-            location: '',
-            name: '',
-            topic: ''
-          }
-          res.data.questions.map(q => {
-            const replacement = Object.assign(q, blankQuestion);
-            return replacement;
-          })
-        }
-        console.log(res.data)
-        dispatch(fetchQueueSuccess(queueId, res.data))
-      })
+      .then(res => dispatch(fetchQueueSuccess(queueId, res.data)))
       .catch(err => {
         console.error(err)
         dispatch(fetchQueueFailure(queueId, err))

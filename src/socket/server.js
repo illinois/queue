@@ -38,9 +38,8 @@ const blankQuestion = {
 }
 const handleQuestionCreate = (id, queueId) => {
   Question.findOne({ where: { id } }).then(question => {
-    console.log(Queue.isConfidential);
     queueNamespace
-      .to(`queue-${queueId}`)
+      .to(`queue-${queueId}-staff`)
       .emit('question:create', { id, question })
   })
 }
@@ -48,13 +47,13 @@ const handleQuestionCreate = (id, queueId) => {
 const handleQuestionUpdate = (id, queueId) => {
   Question.findOne({ where: { id } }).then(question => {
     queueNamespace
-      .to(`queue-${queueId}`)
+      .to(`queue-${queueId}-staff`)
       .emit('question:update', { id, question })
   })
 }
 
 const handleQuestionDelete = (id, queueId) => {
-  queueNamespace.to(`queue-${queueId}`).emit('question:delete', { id })
+  queueNamespace.to(`queue-${queueId}-staff`).emit('question:delete', { id })
 }
 
 const handleQuestionEvent = (event, instance) => {
@@ -81,13 +80,13 @@ const handleActiveStaffCreate = id => {
     include: [User],
   }).then(activeStaff => {
     queueNamespace
-      .to(`queue-${activeStaff.queueId}`)
+      .to(`queue-${activeStaff.queueId}-staff`)
       .emit('activeStaff:create', { id, activeStaff })
   })
 }
 
 const handleActiveStaffDelete = (id, queueId) => {
-  queueNamespace.to(`queue-${queueId}`).emit('activeStaff:delete', { id })
+  queueNamespace.to(`queue-${queueId}-staff`).emit('activeStaff:delete', { id })
 }
 
 const handleActiveStaffEvent = (event, instance) => {
@@ -108,7 +107,7 @@ const handleActiveStaffEvent = (event, instance) => {
 
 const handleQueueUpdate = id => {
   Queue.findOne({ where: { id } }).then(queue => {
-    queueNamespace.to(`queue-${id}`).emit('queue:update', { id, queue })
+    queueNamespace.to(`queue-${id}-staff`).emit('queue:update', { id, queue })
   })
 }
 
@@ -124,7 +123,6 @@ const handleQueueEvent = (event, instance) => {
 
 const stream = sequelizeStream(sequelize)
 stream.on('data', data => {
-  console.log(data);
   const { event, instance } = data
   // Need to have isConfidential in  question?
   if (instance instanceof Question) {
@@ -145,7 +143,7 @@ module.exports = newIo => {
       if ('queueId' in msg) {
         // try looking at msg to see if tells us conf, other wise try with queue. might need to include conf in question model
         const { queueId } = msg
-        socket.join(`queue-${queueId}`)
+        socket.join(`queue-${queueId}-staff`)
         sendInitialState(queueId, callback)
       }
     })
