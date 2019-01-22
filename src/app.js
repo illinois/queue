@@ -57,9 +57,9 @@ if (false) {
   } else {
     app.use(`${baseUrl}/api`, require('./middleware/authn'))
   }
-  app.use(`${baseUrl}/api`, require('./middleware/authz'))
 }
 app.use(`${baseUrl}/api`, require('./middleware/authnJwt'))
+app.use(`${baseUrl}/api`, require('./middleware/authz'))
 
 // API routes
 app.use(`${baseUrl}/api/users`, require('./api/users'))
