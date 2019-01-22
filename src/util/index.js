@@ -5,6 +5,11 @@ module.exports.baseUrl =
   (typeof process !== 'undefined' && process.env.BASE_URL) ||
   ''
 
+module.exports.isDev =
+  (typeof window !== 'undefined' && window.IS_DEV) ||
+  (typeof process !== 'undefined' &&
+    ['production', 'staging'].indexOf(process.env.NODE_ENV) === -1)
+
 module.exports.withBaseUrl = url => `${module.exports.baseUrl}${url}`
 
 module.exports.mapObjectToArray = o => {

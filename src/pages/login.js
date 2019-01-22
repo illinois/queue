@@ -3,7 +3,7 @@ import React, { Fragment } from 'react'
 import { Button  } from 'reactstrap'
 
 import DevModeLogin from '../components/DevModeLogin'
-import { withBaseUrl } from '../util'
+import { withBaseUrl, isDev } from '../util'
 
 const Login = () => {
   return (
@@ -22,7 +22,7 @@ const Login = () => {
           Log in with Illinois
         </Button>
         <hr />
-        <DevModeLogin />
+        {isDev && <DevModeLogin />}
       </div>
       <style jsx global>{`
         .login-container {
