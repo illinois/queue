@@ -20,13 +20,10 @@ export function fetchCurrentUser() {
 
     return axios.get('/api/users/me').then(
       res => {
-        console.log('HERE')
-        console.log(res)
         return dispatch(fetchCurrentUserSuccess(res.data))
       },
       err => {
         console.error(err)
-        console.log('ERROR')
         dispatch(fetchCurrentUserFailure(err))
       }
     )
