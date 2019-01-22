@@ -21,7 +21,7 @@ const Login = () => {
         >
           Log in with Illinois
         </Button>
-        <hr />
+        {isDev && <hr />}
         {isDev && <DevModeLogin />}
       </div>
       <style jsx global>{`
