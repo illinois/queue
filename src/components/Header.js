@@ -1,3 +1,4 @@
+/* eslint-env browser */
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import {
@@ -7,6 +8,8 @@ import {
   Collapse,
   Nav,
   NavLink,
+  NavItem,
+  Button,
 } from 'reactstrap'
 import { connect } from 'react-redux'
 
@@ -14,12 +17,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
 
 import { Link } from '../routes'
+import { withBaseUrl } from '../util'
 
 const styles = {
   navbar: {
     zIndex: '10',
   },
 }
+
+const logoutRoute = withBaseUrl('/logout')
 
 class Header extends React.Component {
   constructor(props) {
@@ -41,6 +47,19 @@ class Header extends React.Component {
       const { name, netid } = user
       userName = name ? `${name} (${netid})` : `${netid}`
     }
+
+    // If there isn't a user in the store, that means the user is necessarily
+    // on the login page. If that's the case, disable the link to the homepage
+    // so they can't cycle repeatedly back and forth between that and the
+    // login page
+    const brandLink = user ? (
+      <Link route="index" passHref>
+        <NavbarBrand>Queues@Illinois</NavbarBrand>
+      </Link>
+    ) : (
+        <NavbarBrand tag="span">Queues@Illinois</NavbarBrand>
+    )
+
     return (
       <Navbar
         color="dark"
@@ -49,20 +68,27 @@ class Header extends React.Component {
         style={styles.navbar}
         expand="sm"
       >
-        <Link route="index" passHref>
-          <NavbarBrand>Queues@Illinois</NavbarBrand>
-        </Link>
+        {brandLink}
         {user && (
           <Fragment>
             <NavbarToggler onClick={() => this.toggle()} />
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav navbar className="ml-auto">
                 <Link route="userSettings" passHref>
-                  <NavLink className="navbar-text">
+                  <NavLink className="navbar-text mr-3">
                     <FontAwesomeIcon icon={faUser} className="mr-2" />
                     {userName}
                   </NavLink>
                 </Link>
+                <NavItem>
+                  <Button
+                    color="secondary"
+                    type="button"
+                    onClick={() => { window.location = logoutRoute}}
+                  >
+                    Logout
+                  </Button>
+                </NavItem>
               </Nav>
             </Collapse>
           </Fragment>
