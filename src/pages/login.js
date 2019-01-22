@@ -1,14 +1,28 @@
 import React, { Fragment } from 'react'
 
-import { Card, Button } from 'reactstrap'
+import { Button  } from 'reactstrap'
 
-const Login = (props) => {
+import DevModeLogin from '../components/DevModeLogin'
+import { withBaseUrl } from '../util'
+
+const Login = () => {
   return (
     <Fragment>
       <div className="login-container">
         <h1 className="text-center display-4">Log in</h1>
-        <p className="text-center text-secondary">Welcome back! Log in to access the Queue.</p>
-        <Button className="btn-illinois" color={null} block>Log in with Illinois</Button>
+        <p className="text-center text-secondary">
+          Welcome back! Log in to access the Queue.
+        </p>
+        <Button
+          className="btn-illinois"
+          color={null}
+          block
+          href={withBaseUrl('/login/shib')}
+        >
+          Log in with Illinois
+        </Button>
+        <hr />
+        <DevModeLogin />
       </div>
       <style jsx global>{`
         .login-container {

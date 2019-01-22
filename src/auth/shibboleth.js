@@ -1,23 +1,20 @@
-const { User } = require('../models')
+const { withBaseUrl } = require('../util')
+const { createOrUpdateUser, addJwtCookie  } = require('./util')
+const safeAsync = require('../middleware/safeAsync')
 
-module.exports = async (req, res, next) => {
-  // Get the user's NetID based on the "eppn" field
+module.exports = safeAsync(async (req, res) => {
+  // Get the user's NetID based on the "eppn" header
   const email = req.get('eppn') || ''
-  res.cookie('testing', 'thisissomecontent')
   if (email.indexOf('@') === -1) {
     res.status(400).send('No login information found')
     return
   }
   const [netid] = email.split('@')
-  const [user] = await User.findOrCreate({ where: { netid } })
 
-  const name = req.get('displayname')
-  if (name) {
-    user.universityName = name
-    await user.save()
-  }
+  const user = await createOrUpdateUser(req, netid)
+  addJwtCookie(req, res, user)
 
-
-  res.locals.userAuthn = user
-  next()
-}
+  // Finally, we'll redirect the user to the queue homepage. They'll now
+  // have the required token to make authenticated requests.
+  res.redirect(withBaseUrl('/'))
+})

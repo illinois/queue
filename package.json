@@ -38,6 +38,7 @@
     "http-status": "^1.2.0",
     "isomorphic-unfetch": "^2.1.0",
     "json-patch": "^0.7.0",
+    "jsonwebtoken": "^8.4.0",
     "moment": "^2.22.2",
     "mysql2": "^1.5.3",
     "next": "^7.0.0",

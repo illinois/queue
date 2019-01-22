@@ -40,6 +40,9 @@ app.use(require('./middleware/prettyPrintJson'))
 // will hit that page with their user information present in headers. We can
 // then establish our own session with them, which can persist beyond Shib's
 // authentication restrictions.
+if (DEV) {
+  app.use(`${baseUrl}/login/dev`, require('./auth/dev'))
+}
 app.use(`${baseUrl}/login/shib`, require('./auth/shibboleth'))
 
 // Shibboleth auth
