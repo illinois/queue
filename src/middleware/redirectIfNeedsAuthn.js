@@ -4,12 +4,14 @@ const { getUserFromJwt } = require('../auth/util')
 
 // We'll assume that if a route is not Next.js statics, general statics, or
 // an API, then it will require auth
+// Note that this middleware is mounted at `/BASE_URL`, so these paths are
+// relative to that
 const authnWhitelist = [
-  withBaseUrl('/_next'),
-  withBaseUrl('/static'),
-  withBaseUrl('/api'),
-  withBaseUrl('/login'),
-  withBaseUrl('/logout'),
+  '/_next',
+  '/static',
+  '/api',
+  '/login',
+  '/logout',
 ]
 
 const checkPathAgainstWhitelist = (path, whitelist) => {

@@ -44,7 +44,6 @@ module.exports.getUserFromJwt = async (token) => {
     const user = await User.find({ where: { netid } })
     return user
   } catch (e) {
-    console.error(e)
     return null
   }
 }
