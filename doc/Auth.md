@@ -11,4 +11,6 @@ authentication on every request, for a couple of reasons:
 
 To account for this, we only use Shibboleth initially to verify a user's
 identity. We then establish our own "session" for them using a JSON Web
-Token. When that token expires, we re-authenticate using Shibboleth.
+Token. When that token expires, we re-authenticate using Shibboleth. This
+also allows us to use other forms of authentication, such as OAuth. In
+all cases, we simply issue a JWT that identifies the user to us.
