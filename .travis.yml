@@ -5,9 +5,10 @@ node_js:
   - "9.5"
 before_install:
   - wget https://dev.mysql.com/get/mysql-apt-config_0.8.12-1_all.deb
+  - echo mysql-apt-config mysql-apt-config/select-server select mysql-8.0 | sudo debconf-set-selections
   - sudo dpkg -i mysql-apt-config_0.8.12-1_all.deb
   - sudo apt-get update
-  - sudo apt-get install mysql-server-8.0 mysql-utilities
+  - sudo apt-get install mysql-server mysql-utilities
   - sudo mysql_upgrade
   - sudo service mysql restart
   - mysql -e 'CREATE USER 'queue'@'localhost'; GRANT ALL PRIVILEGES ON *.* TO 'queue'@'localhost'; CREATE DATABASE queue; CREATE DATABASE queue_test;'
