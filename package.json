@@ -32,7 +32,6 @@
     "cookie-parser": "^1.4.3",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
-    "express-session": "^1.15.6",
     "express-urlrewrite": "^1.2.0",
     "express-validator": "^5.3.0",
     "hoist-non-react-statics": "^3.0.0-rc.1",

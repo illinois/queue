@@ -2,27 +2,9 @@
 const app = require('express')()
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
-const session = require('express-session')
 const rewrite = require('express-urlrewrite')
 
-const { baseUrl } = require('./util')
-
-const DEV = ['production', 'staging'].indexOf(process.env.NODE_ENV) === -1
-const NOW = process.env.NODE_ENV === 'now'
-
-// In production, all concepts of "sessions" will be handled by checking the
-// eppn header from Shib. In dev, to support multiple users for testing, we
-// use session middleware. For PR deploys to now, we won't have Shib in front
-// of us, so we'll also use our own sessions there.
-if (DEV || NOW) {
-  app.use(
-    session({
-      secret: 'this is not a secret',
-      resave: false,
-      saveUninitialized: true,
-    })
-  )
-}
+const { baseUrl, isDev } = require('./util')
 
 app.use(cookieParser())
 app.use(bodyParser.json())
@@ -42,7 +24,7 @@ app.use(require('./middleware/prettyPrintJson'))
 // will hit that page with their user information present in headers. We can
 // then establish our own session with them, which can persist beyond Shib's
 // authentication restrictions.
-if (DEV) {
+if (isDev) {
   app.use(`${baseUrl}/login/dev`, require('./auth/dev'))
 }
 app.use(`${baseUrl}/login/shib`, require('./auth/shibboleth'))
