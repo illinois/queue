@@ -48,17 +48,6 @@ if (DEV) {
 app.use(`${baseUrl}/login/shib`, require('./auth/shibboleth'))
 app.use(`${baseUrl}/logout`, require('./auth/logout'))
 
-// Shibboleth auth
-// In dev, we need all requests to flow through the authn middleware so that
-// we can properly handle a forceuser query param on a page load.
-// In production, we only need this for the API routes; everything else is just statics.
-if (false) {
-  if (DEV || NOW) {
-    app.use(baseUrl, require('./middleware/authnDev'))
-  } else {
-    app.use(`${baseUrl}/api`, require('./middleware/authn'))
-  }
-}
 app.use(`${baseUrl}/api`, require('./middleware/authnJwt'))
 app.use(`${baseUrl}/api`, require('./middleware/authz'))
 
