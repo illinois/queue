@@ -13,6 +13,11 @@ module.exports = safeAsync(async (req, res) => {
   } = req
 
   const user = await createOrUpdateUser(req, netid)
+  if (netid === 'dev' && !user.isAdmin) {
+    // This is a special user - let's make them an admin!
+    user.isAdmin = true
+    await user.save()
+  }
   addJwtCookie(req, res, user)
 
   res.status(200).send()

@@ -11,7 +11,7 @@ module.exports.isDev =
     ['production', 'staging'].indexOf(process.env.NODE_ENV) === -1)
 
 // Lets us identify if we're running under Zeit's Now
-// This is mostly useful for our GitHub deployments - we special-case some
+// This is mostly useful for our GitHub PR deployments - we special-case some
 // behavior there to work around things like the lack of Shib auth
 module.exports.isNow =
   (typeof window !== 'undefined' && window.IS_NOW) ||
