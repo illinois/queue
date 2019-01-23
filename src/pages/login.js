@@ -3,9 +3,10 @@ import React, { Fragment } from 'react'
 import { Button  } from 'reactstrap'
 
 import DevModeLogin from '../components/DevModeLogin'
-import { withBaseUrl, isDev } from '../util'
+import { withBaseUrl, isDev, isNow } from '../util'
 
 const Login = () => {
+  const showDevModeLogin = isDev || isNow
   return (
     <Fragment>
       <div className="login-container">
@@ -21,8 +22,12 @@ const Login = () => {
         >
           Log in with Illinois
         </Button>
-        {isDev && <hr />}
-        {isDev && <DevModeLogin />}
+        {showDevModeLogin && (
+          <Fragment>
+            <hr />
+            <DevModeLogin />
+          </Fragment>
+        )}
       </div>
       <style jsx global>{`
         .login-container {

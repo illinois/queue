@@ -4,7 +4,7 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const rewrite = require('express-urlrewrite')
 
-const { baseUrl, isDev } = require('./util')
+const { baseUrl, isDev, isNow } = require('./util')
 
 app.use(cookieParser())
 app.use(bodyParser.json())
@@ -24,7 +24,7 @@ app.use(require('./middleware/prettyPrintJson'))
 // will hit that page with their user information present in headers. We can
 // then establish our own session with them, which can persist beyond Shib's
 // authentication restrictions.
-if (isDev) {
+if (isDev || isNow) {
   app.use(`${baseUrl}/login/dev`, require('./auth/dev'))
 }
 app.use(`${baseUrl}/login/shib`, require('./auth/shibboleth'))
