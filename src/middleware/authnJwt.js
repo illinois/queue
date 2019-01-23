@@ -1,7 +1,5 @@
-const jwt = require('jsonwebtoken')
-
-const { User } = require('../models')
 const safeAsync = require('../middleware/safeAsync')
+const { getUserFromJwt } = require('../auth/util')
 
 module.exports = safeAsync(async (req, res, next) => {
   const jwtCookie = req.cookies.jwt
@@ -10,20 +8,13 @@ module.exports = safeAsync(async (req, res, next) => {
     return
   }
 
-  let jwtData
-  try {
-    jwtData = jwt.verify(jwtCookie, 'mysecretkey')
-  } catch (e) {
-    res.status(401).send()
-  }
-
-  const netid = jwtData.sub
-  const user = await User.find({ where: { netid } })
+  const user = await getUserFromJwt(jwtCookie)
   if (user === null) {
     // This shouldn't ever happen, but if it does...
     res.status(401).send()
     return
   }
+
   res.locals.userAuthn = user
   next()
 })

@@ -1,6 +1,12 @@
 const jwt = require('jsonwebtoken')
 
 const { User } = require('../models')
+const { isDev } = require('../util')
+
+if (!isDev && !process.env.JWT_SECRET) {
+  throw new Error('You must set the JWT_SECRET environment variable in production!')
+}
+const JWT_SECRET = process.env.JWT_SECRET || 'useastrongkeyinproduction!!!'
 
 /**
  * Create + update user in the DB
@@ -26,7 +32,7 @@ module.exports.addJwtCookie = (req, res, user) => {
   const tokenOptions = {
     expiresIn: '28 days',
   }
-  const token = jwt.sign(tokenData, 'mysecretkey', tokenOptions)
+  const token = jwt.sign(tokenData, JWT_SECRET, tokenOptions)
 
   res.cookie('jwt', token, {
     maxAge: 1000 * 60 * 60 * 24 * 28, // 28 days
@@ -39,7 +45,7 @@ module.exports.addJwtCookie = (req, res, user) => {
 
 module.exports.getUserFromJwt = async (token) => {
   try {
-    const jwtData = jwt.verify(token, 'mysecretkey')
+    const jwtData = jwt.verify(token, JWT_SECRET)
     const netid = jwtData.sub
     const user = await User.find({ where: { netid } })
     return user
