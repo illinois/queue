@@ -12,6 +12,7 @@ const authnWhitelist = [
   '/api',
   '/login',
   '/logout',
+  '/auth'
 ]
 
 const checkPathAgainstWhitelist = (path, whitelist) => {
