@@ -10,8 +10,6 @@ before_install:
   - sudo dpkg -i mysql-apt-config_0.8.12-1_all.deb
   - sudo apt-get update
   - sudo apt-get install mysql-utilities
-  # - sudo mysql_upgrade
-  # - sudo service mysql restart
   - mysql -e 'CREATE USER 'queue'@'localhost'; GRANT ALL PRIVILEGES ON *.* TO 'queue'@'localhost'; CREATE DATABASE queue; CREATE DATABASE queue_test;'
 script:
   - npm run build
