@@ -21,7 +21,8 @@ class DevModeLogin extends React.Component {
     })
   }
 
-  handleSubmit() {
+  handleSubmit(e) {
+    e.preventDefault()
     axios
       .post(
         '/login/dev',
