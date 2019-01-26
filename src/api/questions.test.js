@@ -18,9 +18,7 @@ describe('Questions API', () => {
     test('succeeds for student with well-formed request', async () => {
       const question = { name: 'a', location: 'b', topic: 'c' }
       const request = await requestAsUser(app, 'otherstudent')
-      const res = await request
-        .post('/api/queues/1/questions')
-        .send(question)
+      const res = await request.post('/api/queues/1/questions').send(question)
       expect(res.statusCode).toBe(201)
       expect(res.body.name).toBe('a')
       expect(res.body.location).toBe('b')
@@ -37,9 +35,7 @@ describe('Questions API', () => {
         netid: 'otherstudent',
       }
       const request = await requestAsUser(app, '225staff')
-      const res = await request
-        .post('/api/queues/1/questions')
-        .send(question)
+      const res = await request.post('/api/queues/1/questions').send(question)
       expect(res.statusCode).toBe(201)
       expect(res.body.name).toBe('a')
       expect(res.body.location).toBe('b')
@@ -56,9 +52,7 @@ describe('Questions API', () => {
         netid: 'otherstudent',
       }
       const request = await requestAsUser(app, 'admin')
-      const res = await request
-        .post('/api/queues/1/questions')
-        .send(question)
+      const res = await request.post('/api/queues/1/questions').send(question)
       expect(res.statusCode).toBe(201)
       expect(res.body.name).toBe('a')
       expect(res.body.location).toBe('b')
@@ -70,9 +64,7 @@ describe('Questions API', () => {
     test('fails for student with well-formed request but the queue is closed', async () => {
       const question = { name: 'a', location: 'b', topic: 'c' }
       const request = await requestAsUser(app, 'otherstudent')
-      const res = await request
-        .post('/api/queues/4/questions')
-        .send(question)
+      const res = await request.post('/api/queues/4/questions').send(question)
       expect(res.statusCode).toBe(422)
     })
 
@@ -84,18 +76,14 @@ describe('Questions API', () => {
         netid: 'otherstudent',
       }
       const request = await requestAsUser(app, 'student')
-      const res = await request
-        .post('/api/queues/1/questions')
-        .send(question)
+      const res = await request.post('/api/queues/1/questions').send(question)
       expect(res.statusCode).toBe(403)
     })
 
     test('removes location for fixed-location queue', async () => {
       const question = { name: 'a', location: 'testing', topic: 'c' }
       const request = await requestAsUser(app, 'student')
-      const res = await request
-        .post('/api/queues/3/questions')
-        .send(question)
+      const res = await request.post('/api/queues/3/questions').send(question)
       expect(res.statusCode).toBe(201)
       expect(res.body.location).toBe('')
     })
@@ -103,9 +91,7 @@ describe('Questions API', () => {
     test('succeeds if location is missing for fixed-location queue', async () => {
       const question = { name: 'a', location: '', topic: 'c' }
       const request = await requestAsUser(app, 'student')
-      const res = await request
-        .post('/api/queues/3/questions')
-        .send(question)
+      const res = await request.post('/api/queues/3/questions').send(question)
       expect(res.statusCode).toBe(201)
       expect(res.body.location).toBe('')
     })
@@ -174,9 +160,7 @@ describe('Questions API', () => {
     test('fails if user already has a question on the queue', async () => {
       const question = { name: 'a', location: 'b', topic: 'c' }
       const request = await requestAsUser(app, 'admin')
-      const res = await request
-        .post('/api/queues/1/questions')
-        .send(question)
+      const res = await request.post('/api/queues/1/questions').send(question)
       expect(res.statusCode).toBe(422)
     })
   })
@@ -232,9 +216,7 @@ describe('Questions API', () => {
 
     test('succeeds for non admin', async () => {
       const request = await requestAsUser(app, 'student')
-      const res = await request.get(
-        '/api/queues/1/questions/1'
-      )
+      const res = await request.get('/api/queues/1/questions/1')
       expect(res.statusCode).toBe(200)
       expect(res.body.name).toBe('Nathan')
       expect(res.body).toHaveProperty('askedBy')
@@ -303,9 +285,7 @@ describe('Questions API', () => {
   describe('POST /api/queues/:queueId/questions/:questionId/answering', () => {
     test('succeeds for admin', async () => {
       const request = await requestAsUser(app, 'admin')
-      const res = await request.post(
-        '/api/queues/1/questions/1/answering'
-      )
+      const res = await request.post('/api/queues/1/questions/1/answering')
       expect(res.statusCode).toBe(200)
       expect(res.body).toHaveProperty('askedBy')
       expect(res.body.askedBy.netid).toBe('admin')
@@ -314,9 +294,7 @@ describe('Questions API', () => {
 
     test('succeeds for course staff', async () => {
       const request = await requestAsUser(app, '225staff')
-      const res = await request.post(
-        '/api/queues/1/questions/1/answering'
-      )
+      const res = await request.post('/api/queues/1/questions/1/answering')
       expect(res.statusCode).toBe(200)
       expect(res.body).toHaveProperty('askedBy')
       expect(res.body.askedBy.netid).toBe('admin')
@@ -326,15 +304,11 @@ describe('Questions API', () => {
     test('succeeds if user is answering a question on another queue', async () => {
       // Mark question as being answered by admin
       const request = await requestAsUser(app, 'admin')
-      const res = await request.post(
-        '/api/queues/1/questions/1/answering'
-      )
+      const res = await request.post('/api/queues/1/questions/1/answering')
       expect(res.statusCode).toBe(200)
       // Attempt to answer as another user
       const request2 = await requestAsUser(app, 'admin')
-      const res2 = await request2.post(
-        '/api/queues/3/questions/3/answering'
-      )
+      const res2 = await request2.post('/api/queues/3/questions/3/answering')
       expect(res2.statusCode).toBe(200)
       const question = await Question.findById(3)
       expect(question.answeredById).toBe(2)
@@ -343,15 +317,11 @@ describe('Questions API', () => {
     test('fails if another user is already answering the question', async () => {
       // Mark question as being answered by admin
       const request = await requestAsUser(app, 'admin')
-      const res = await request.post(
-        '/api/queues/1/questions/1/answering'
-      )
+      const res = await request.post('/api/queues/1/questions/1/answering')
       expect(res.statusCode).toBe(200)
       // Attempt to answer as another user
       const request2 = await requestAsUser(app, '225staff')
-      const res2 = await request2.post(
-        '/api/queues/1/questions/1/answering'
-      )
+      const res2 = await request2.post('/api/queues/1/questions/1/answering')
       expect(res2.statusCode).toBe(403)
       const question = await Question.findById(1)
       expect(question.answeredById).toBe(2)
@@ -359,14 +329,10 @@ describe('Questions API', () => {
 
     test('fails if user is currently answering another question', async () => {
       const request = await requestAsUser(app, 'admin')
-      const res = await request.post(
-        '/api/queues/1/questions/1/answering'
-      )
+      const res = await request.post('/api/queues/1/questions/1/answering')
       expect(res.statusCode).toBe(200)
       const request2 = await requestAsUser(app, 'admin')
-      const res2 = await request2.post(
-        '/api/queues/1/questions/2/answering'
-      )
+      const res2 = await request2.post('/api/queues/1/questions/2/answering')
       expect(res2.statusCode).toBe(403)
       const question = await Question.findById(2)
       expect(question.beingAnswered).toBe(false)
@@ -374,9 +340,7 @@ describe('Questions API', () => {
 
     test('fails for student', async () => {
       const request = await requestAsUser(app, 'student')
-      const res = await request.post(
-        '/api/queues/1/questions/1/answering'
-      )
+      const res = await request.post('/api/queues/1/questions/1/answering')
       expect(res.statusCode).toBe(403)
     })
   })
@@ -384,9 +348,7 @@ describe('Questions API', () => {
   describe('DELETE /api/queues/:queueId/questions/:questionId/answering', () => {
     test('succeeds for admin', async () => {
       const request = await requestAsUser(app, 'admin')
-      const res = await request.delete(
-        '/api/queues/1/questions/1/answering'
-      )
+      const res = await request.delete('/api/queues/1/questions/1/answering')
       expect(res.statusCode).toBe(200)
       expect(res.body).toHaveProperty('askedBy')
       expect(res.body.askedBy.netid).toBe('admin')
@@ -395,9 +357,7 @@ describe('Questions API', () => {
 
     test('succeeds for course staff', async () => {
       const request = await requestAsUser(app, '225staff')
-      const res = await request.delete(
-        '/api/queues/1/questions/1/answering'
-      )
+      const res = await request.delete('/api/queues/1/questions/1/answering')
       expect(res.statusCode).toBe(200)
       expect(res.body).toHaveProperty('askedBy')
       expect(res.body.askedBy.netid).toBe('admin')
@@ -406,9 +366,7 @@ describe('Questions API', () => {
 
     test('fails for student', async () => {
       const request = await requestAsUser(app, 'student')
-      const res = await request.delete(
-        '/api/queues/1/questions/1/answering'
-      )
+      const res = await request.delete('/api/queues/1/questions/1/answering')
       expect(res.statusCode).toBe(403)
     })
   })
@@ -471,17 +429,13 @@ describe('Questions API', () => {
 
     test('fails for course staff of different course', async () => {
       const request = await requestAsUser(app, '241staff')
-      const res = await request.post(
-        '/api/queues/1/questions/1/answered'
-      )
+      const res = await request.post('/api/queues/1/questions/1/answered')
       expect(res.statusCode).toBe(403)
     })
 
     test('fails for student', async () => {
       const request = await requestAsUser(app, 'student')
-      const res = await request.post(
-        '/api/queues/1/questions/1/answered'
-      )
+      const res = await request.post('/api/queues/1/questions/1/answered')
       expect(res.statusCode).toBe(403)
     })
   })
@@ -489,33 +443,25 @@ describe('Questions API', () => {
   describe('DELETE /api/queues/:queueId/questions/:questionId', () => {
     test('succeeds for course staff', async () => {
       const request = await requestAsUser(app, '225staff')
-      const res = await request.delete(
-        '/api/queues/2/questions/2'
-      )
+      const res = await request.delete('/api/queues/2/questions/2')
       expect(res.statusCode).toBe(204)
     })
 
     test('succeeds for the student that asked the question', async () => {
       const request = await requestAsUser(app, 'student')
-      const res = await request.delete(
-        '/api/queues/2/questions/2'
-      )
+      const res = await request.delete('/api/queues/2/questions/2')
       expect(res.statusCode).toBe(204)
     })
 
     test('fails for course staff of different course', async () => {
       const request = await requestAsUser(app, '241staff')
-      const res = await request.delete(
-        '/api/queues/2/questions/2'
-      )
+      const res = await request.delete('/api/queues/2/questions/2')
       expect(res.statusCode).toBe(403)
     })
 
     test('fails for random student', async () => {
       const request = await requestAsUser(app, 'otherstudent')
-      const res = await request.delete(
-        '/api/queues/2/questions/2'
-      )
+      const res = await request.delete('/api/queues/2/questions/2')
       expect(res.statusCode).toBe(403)
     })
   })

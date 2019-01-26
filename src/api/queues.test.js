@@ -99,9 +99,7 @@ describe('Queues API', () => {
     test('succeeds for admin', async () => {
       const queue = { name: 'CS225 Queue 2', location: 'Where' }
       const request = await requestAsUser(app, 'admin')
-      const res = await request
-        .post('/api/courses/1/queues')
-        .send(queue)
+      const res = await request.post('/api/courses/1/queues').send(queue)
       expect(res.statusCode).toBe(201)
       expect(res.body.name).toBe('CS225 Queue 2')
       expect(res.body.location).toBe('Where')
@@ -111,9 +109,7 @@ describe('Queues API', () => {
     test('succeeds for course staff', async () => {
       const queue = { name: 'CS225 Queue 2', location: 'Where' }
       const request = await requestAsUser(app, '225staff')
-      const res = await request
-        .post('/api/courses/1/queues')
-        .send(queue)
+      const res = await request.post('/api/courses/1/queues').send(queue)
       expect(res.statusCode).toBe(201)
       expect(res.body.name).toBe('CS225 Queue 2')
       expect(res.body.location).toBe('Where')
@@ -123,27 +119,21 @@ describe('Queues API', () => {
     test('fails if name is missing', async () => {
       const queue = { location: 'Where' }
       const request = await requestAsUser(app, '225staff')
-      const res = await request
-        .post('/api/courses/1/queues')
-        .send(queue)
+      const res = await request.post('/api/courses/1/queues').send(queue)
       expect(res.statusCode).toBe(422)
     })
 
     test('fails if location is missing and queue is fixed-location', async () => {
       const queue = { name: 'CS225 Queue 2', fixedLocation: true }
       const request = await requestAsUser(app, '225staff')
-      const res = await request
-        .post('/api/courses/1/queues')
-        .send(queue)
+      const res = await request.post('/api/courses/1/queues').send(queue)
       expect(res.statusCode).toBe(422)
     })
 
     test('fails for student', async () => {
       const queue = { name: 'CS225 Queue 2', location: 'Where' }
       const request = await requestAsUser(app, 'student')
-      const res = await request
-        .post('/api/courses/1/queues')
-        .send(queue)
+      const res = await request.post('/api/courses/1/queues').send(queue)
       expect(res.statusCode).toBe(403)
       expect(res.body).toEqual({})
     })
@@ -151,9 +141,7 @@ describe('Queues API', () => {
     test('fails for course staff of different course', async () => {
       const queue = { name: 'CS225 Queue 2', location: 'Where' }
       const request = await requestAsUser(app, '241staff')
-      const res = await request
-        .post('/api/courses/1/queues')
-        .send(queue)
+      const res = await request.post('/api/courses/1/queues').send(queue)
       expect(res.statusCode).toBe(403)
       expect(res.body).toEqual({})
     })
@@ -175,9 +163,7 @@ describe('Queues API', () => {
       const request = await requestAsUser(app, '225staff')
       const res = await request.post('/api/queues/1/staff/2')
       expect(res.statusCode).toBe(202)
-      const res2 = await request.post(
-        '/api/queues/1/staff/2'
-      )
+      const res2 = await request.post('/api/queues/1/staff/2')
       expect(res2.statusCode).toBe(202)
       const request2 = await requestAsUser(app, 'admin')
       const res3 = await request2.get('/api/queues/1/staff')
@@ -188,9 +174,7 @@ describe('Queues API', () => {
 
     test('succeeds for admin to add admin', async () => {
       const request = await requestAsUser(app, 'admin')
-      const res = await request.post(
-        '/api/courses/1/queues/1/staff/1'
-      )
+      const res = await request.post('/api/courses/1/queues/1/staff/1')
       expect(res.statusCode).toBe(202)
       const res2 = await request.get('/api/queues/1/staff')
       expect(res2.statusCode).toBe(200)
@@ -200,9 +184,7 @@ describe('Queues API', () => {
 
     test('fails for student to add student', async () => {
       const request = await requestAsUser(app, 'student')
-      const res = await request.post(
-        '/api/courses/1/queues/1/staff/4'
-      )
+      const res = await request.post('/api/courses/1/queues/1/staff/4')
       expect(res.statusCode).toBe(403)
       expect(res.body).toEqual({})
       const request2 = await requestAsUser(app, 'admin')
@@ -213,9 +195,7 @@ describe('Queues API', () => {
 
     test('fails for student to add admin', async () => {
       const request = await requestAsUser(app, 'student')
-      const res = await request.post(
-        '/api/courses/1/queues/1/staff/1'
-      )
+      const res = await request.post('/api/courses/1/queues/1/staff/1')
       expect(res.statusCode).toBe(403)
       expect(res.body).toEqual({})
       const res2 = await request.get('/api/queues/1/staff')
@@ -225,9 +205,7 @@ describe('Queues API', () => {
 
     test('fails for course staff of different course', async () => {
       const request = await requestAsUser(app, '241staff')
-      const res = await request.post(
-        '/api/courses/1/queues/1/staff/3'
-      )
+      const res = await request.post('/api/courses/1/queues/1/staff/3')
       expect(res.statusCode).toBe(403)
       expect(res.body).toEqual({})
       const res2 = await request.get('/api/queues/1/staff')
@@ -240,9 +218,7 @@ describe('Queues API', () => {
     test('succeeds for course staff with well-formed request no location', async () => {
       const attributes = { name: 'CS 225 Queue 1 Alter', location: '' }
       const request = await requestAsUser(app, '225staff')
-      const res = await request
-        .patch('/api/queues/1')
-        .send(attributes)
+      const res = await request.patch('/api/queues/1').send(attributes)
       expect(res.statusCode).toBe(201)
       expect(res.body.name).toBe('CS 225 Queue 1 Alter')
       expect(res.body.id).toBe(1)
@@ -252,9 +228,7 @@ describe('Queues API', () => {
     test('succeeds for course staff with well-formed request with location', async () => {
       const attributes = { name: 'CS 225 Queue 1 Alter', location: 'Where' }
       const request = await requestAsUser(app, '225staff')
-      const res = await request
-        .patch('/api/queues/1')
-        .send(attributes)
+      const res = await request.patch('/api/queues/1').send(attributes)
       expect(res.statusCode).toBe(201)
       expect(res.body.name).toBe('CS 225 Queue 1 Alter')
       expect(res.body.id).toBe(1)
@@ -264,9 +238,7 @@ describe('Queues API', () => {
     test('succeeds for admin with well-formed request no location', async () => {
       const attributes = { name: 'CS 225 Queue 1 Alter', location: '' }
       const request = await requestAsUser(app, 'admin')
-      const res = await request
-        .patch('/api/queues/1')
-        .send(attributes)
+      const res = await request.patch('/api/queues/1').send(attributes)
       expect(res.statusCode).toBe(201)
       expect(res.body.name).toBe('CS 225 Queue 1 Alter')
       expect(res.body.id).toBe(1)
@@ -276,9 +248,7 @@ describe('Queues API', () => {
     test('succeeds for admin with well-formed request with location', async () => {
       const attributes = { name: 'CS 225 Queue 1 Alter', location: 'Where' }
       const request = await requestAsUser(app, 'admin')
-      const res = await request
-        .patch('/api/queues/1')
-        .send(attributes)
+      const res = await request.patch('/api/queues/1').send(attributes)
       expect(res.statusCode).toBe(201)
       expect(res.body.name).toBe('CS 225 Queue 1 Alter')
       expect(res.body.id).toBe(1)
@@ -288,45 +258,35 @@ describe('Queues API', () => {
     test('fails for course staff with ill-formed request no location', async () => {
       const attributes = { name: '', location: '' }
       const request = await requestAsUser(app, '225staff')
-      const res = await request
-        .patch('/api/queues/1')
-        .send(attributes)
+      const res = await request.patch('/api/queues/1').send(attributes)
       expect(res.statusCode).toBe(422)
     })
 
     test('fails for course staff with ill-formed request with location', async () => {
       const attributes = { name: '', location: 'Where' }
       const request = await requestAsUser(app, '225staff')
-      const res = await request
-        .patch('/api/queues/1')
-        .send(attributes)
+      const res = await request.patch('/api/queues/1').send(attributes)
       expect(res.statusCode).toBe(422)
     })
 
     test('fails for admin with ill-formed request no location', async () => {
       const attributes = { name: '', location: '' }
       const request = await requestAsUser(app, 'admin')
-      const res = await request
-        .patch('/api/queues/1')
-        .send(attributes)
+      const res = await request.patch('/api/queues/1').send(attributes)
       expect(res.statusCode).toBe(422)
     })
 
     test('fails for admin with ill-formed request with location', async () => {
       const attributes = { name: '', location: 'Where' }
       const request = await requestAsUser(app, 'admin')
-      const res = await request
-        .patch('/api/queues/1')
-        .send(attributes)
+      const res = await request.patch('/api/queues/1').send(attributes)
       expect(res.statusCode).toBe(422)
     })
 
     test('fails for student with well-formed request no location', async () => {
       const attributes = { name: 'CS 225 Queue 1 Alter', location: '' }
       const request = await requestAsUser(app, 'student')
-      const res = await request
-        .patch('/api/queues/1')
-        .send(attributes)
+      const res = await request.patch('/api/queues/1').send(attributes)
       expect(res.statusCode).toBe(403)
       expect(res.body).toEqual({})
     })
@@ -334,9 +294,7 @@ describe('Queues API', () => {
     test('fails for student with well-formed request with location', async () => {
       const attributes = { name: 'CS 225 Queue 1 Alter', location: 'Where' }
       const request = await requestAsUser(app, 'student')
-      const res = await request
-        .patch('/api/queues/1')
-        .send(attributes)
+      const res = await request.patch('/api/queues/1').send(attributes)
       expect(res.statusCode).toBe(403)
       expect(res.body).toEqual({})
     })
@@ -344,9 +302,7 @@ describe('Queues API', () => {
     test('fails for course staff of different course with well-formed request no location', async () => {
       const attributes = { name: 'CS 225 Queue 1 Alter', location: '' }
       const request = await requestAsUser(app, '241staff')
-      const res = await request
-        .patch('/api/queues/1')
-        .send(attributes)
+      const res = await request.patch('/api/queues/1').send(attributes)
       expect(res.statusCode).toBe(403)
       expect(res.body).toEqual({})
     })
@@ -354,9 +310,7 @@ describe('Queues API', () => {
     test('fails for course staff of different course with well-formed request with location', async () => {
       const attributes = { name: 'CS 225 Queue 1 Alter', location: 'Where' }
       const request = await requestAsUser(app, '241staff')
-      const res = await request
-        .patch('/api/queues/1')
-        .send(attributes)
+      const res = await request.patch('/api/queues/1').send(attributes)
       expect(res.statusCode).toBe(403)
       expect(res.body).toEqual({})
     })
@@ -364,27 +318,21 @@ describe('Queues API', () => {
     test('fails for course staff with request to fixed location queue but no location', async () => {
       const attributes = { name: 'CS225 Fixed Location Alter', location: '' }
       const request = await requestAsUser(app, '225staff')
-      const res = await request
-        .patch('/api/queues/3')
-        .send(attributes)
+      const res = await request.patch('/api/queues/3').send(attributes)
       expect(res.statusCode).toBe(422)
     })
 
     test('fails for admin with request to fixed location queue but no location', async () => {
       const attributes = { name: 'CS225 Fixed Location Alter', location: '' }
       const request = await requestAsUser(app, 'admin')
-      const res = await request
-        .patch('/api/queues/3')
-        .send(attributes)
+      const res = await request.patch('/api/queues/3').send(attributes)
       expect(res.statusCode).toBe(422)
     })
 
     test('succeeds for course staff to close queue', async () => {
       const attributes = { open: false }
       const request = await requestAsUser(app, '225staff')
-      const res = await request
-        .patch('/api/queues/1')
-        .send(attributes)
+      const res = await request.patch('/api/queues/1').send(attributes)
       expect(res.statusCode).toBe(201)
       expect(res.body.open).toBe(false)
     })
@@ -392,9 +340,7 @@ describe('Queues API', () => {
     test('succeeds for admin to close queue', async () => {
       const attributes = { open: false }
       const request = await requestAsUser(app, 'admin')
-      const res = await request
-        .patch('/api/queues/1')
-        .send(attributes)
+      const res = await request.patch('/api/queues/1').send(attributes)
       expect(res.statusCode).toBe(201)
       expect(res.body.open).toBe(false)
     })
@@ -402,9 +348,7 @@ describe('Queues API', () => {
     test('fails for non course staff to close queue', async () => {
       const attributes = { open: false }
       const request = await requestAsUser(app, 'student')
-      const res = await request
-        .patch('/api/queues/1')
-        .send(attributes)
+      const res = await request.patch('/api/queues/1').send(attributes)
       expect(res.statusCode).toBe(403)
       const res2 = await request.get('/api/queues/1')
       expect(res2.statusCode).toBe(200)
@@ -414,9 +358,7 @@ describe('Queues API', () => {
     test('fails for course staff to change queue status with non boolean (empty string)', async () => {
       const attributes = { open: '' }
       const request = await requestAsUser(app, '225staff')
-      const res = await request
-        .patch('/api/queues/1')
-        .send(attributes)
+      const res = await request.patch('/api/queues/1').send(attributes)
       expect(res.statusCode).toBe(422)
       const request2 = await requestAsUser(app, 'student')
       const res2 = await request2.get('/api/queues/1')
@@ -427,9 +369,7 @@ describe('Queues API', () => {
     test('fails for course staff to change queue status with non boolean (non-empty string)', async () => {
       const attributes = { open: 'hello' }
       const request = await requestAsUser(app, '225staff')
-      const res = await request
-        .patch('/api/queues/1')
-        .send(attributes)
+      const res = await request.patch('/api/queues/1').send(attributes)
       expect(res.statusCode).toBe(422)
       const request2 = await requestAsUser(app, 'student')
       const res2 = await request2.get('/api/queues/1')
@@ -440,9 +380,7 @@ describe('Queues API', () => {
     test('fails for course staff to change queue status with non boolean (integer)', async () => {
       const attributes = { open: 1234 }
       const request = await requestAsUser(app, '225staff')
-      const res = await request
-        .patch('/api/queues/1')
-        .send(attributes)
+      const res = await request.patch('/api/queues/1').send(attributes)
       expect(res.statusCode).toBe(422)
       const request2 = await requestAsUser(app, 'student')
       const res2 = await request2.get('/api/queues/1')
@@ -457,27 +395,21 @@ describe('Queues API', () => {
         location: 'Where',
       }
       const request = await requestAsUser(app, '225staff')
-      const res = await request
-        .patch('/api/queues/1')
-        .send(attributes)
+      const res = await request.patch('/api/queues/1').send(attributes)
       expect(res.statusCode).toBe(201)
       expect(res.body.open).toBe(false)
       expect(res.body.name).toBe('CS 225 Queue 1 Alter')
       expect(res.body.location).toBe('Where')
 
       const attributes2 = { open: null, name: null, location: null }
-      const res2 = await request
-        .patch('/api/queues/1')
-        .send(attributes2)
+      const res2 = await request.patch('/api/queues/1').send(attributes2)
       expect(res2.statusCode).toBe(201)
       expect(res2.body.open).toBe(false)
       expect(res2.body.name).toBe('CS 225 Queue 1 Alter')
       expect(res2.body.location).toBe('Where')
 
       const attributes3 = { open: null, name: null }
-      const res3 = await request
-        .patch('/api/queues/1')
-        .send(attributes3)
+      const res3 = await request.patch('/api/queues/1').send(attributes3)
       expect(res3.statusCode).toBe(201)
       expect(res3.body.open).toBe(false)
       expect(res3.body.name).toBe('CS 225 Queue 1 Alter')
@@ -540,9 +472,7 @@ describe('Queues API', () => {
       const request = await requestAsUser(app, '225staff')
       const res = await request.post('/api/queues/1/staff/3')
       expect(res.statusCode).toBe(202)
-      const res2 = await request.delete(
-        '/api/queues/1/staff/3'
-      )
+      const res2 = await request.delete('/api/queues/1/staff/3')
       expect(res2.statusCode).toBe(202)
       const request3 = await requestAsUser(app, 'admin')
       const res3 = await request3.get('/api/queues/1/staff')
@@ -555,9 +485,7 @@ describe('Queues API', () => {
       const res = await request.post('/api/queues/1/staff/3')
       expect(res.statusCode).toBe(202)
       const request2 = await requestAsUser(app, 'admin')
-      const res2 = await request2.delete(
-        '/api/queues/1/staff/3'
-      )
+      const res2 = await request2.delete('/api/queues/1/staff/3')
       expect(res2.statusCode).toBe(202)
       const res3 = await request2.get('/api/queues/1/staff')
       expect(res3.statusCode).toBe(200)
@@ -569,9 +497,7 @@ describe('Queues API', () => {
       const res = await request.post('/api/queues/1/staff/3')
       expect(res.statusCode).toBe(202)
       const request2 = await requestAsUser(app, '241staff')
-      const res2 = await request2.delete(
-        '/api/queues/1/staff/3'
-      )
+      const res2 = await request2.delete('/api/queues/1/staff/3')
       expect(res2.statusCode).toBe(403)
       expect(res2.body).toEqual({})
       const request3 = await requestAsUser(app, 'admin')
@@ -586,9 +512,7 @@ describe('Queues API', () => {
       const res = await request.post('/api/queues/1/staff/3')
       expect(res.statusCode).toBe(202)
       const request2 = await requestAsUser(app, 'student')
-      const res2 = await request2.delete(
-        '/api/queues/1/staff/3'
-      )
+      const res2 = await request2.delete('/api/queues/1/staff/3')
       expect(res2.statusCode).toBe(403)
       expect(res2.body).toEqual({})
       const request3 = await requestAsUser(app, 'admin')
