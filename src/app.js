@@ -30,14 +30,7 @@ if (isDev || isNow) {
 app.use(`${baseUrl}/login/shib`, require('./auth/shibboleth'))
 app.use(`${baseUrl}/logout`, require('./auth/logout'))
 
-// During testing, we'll use a special authentication handler that
-// checks for a `forceuser` query param and authenticates as that
-// user. DON'T LET THIS HAPPEN IN PRODUCTION.
-if (process.env.NODE_ENV === 'testtt') {
-  app.use(`${baseUrl}/api`, require('./middleware/authnForceUser'))
-} else {
-  app.use(`${baseUrl}/api`, require('./middleware/authnJwt'))
-}
+app.use(`${baseUrl}/api`, require('./middleware/authnJwt'))
 app.use(`${baseUrl}/api`, require('./middleware/authz'))
 
 // This will selectively send redirects if the user needs to (re)authenticate

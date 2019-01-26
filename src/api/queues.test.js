@@ -52,7 +52,7 @@ describe('Queues API', () => {
       const res2 = await request.post('/api/queues/2/questions').send(question)
       expect(res2.body.askedBy.netid).toBe('admin')
 
-      const res3 = await request.get('/api/queues/2?forceuser=admin')
+      const res3 = await request.get('/api/queues/2')
       expect(res3.body).toHaveProperty('questions')
       expect(res3.body.questions).toHaveLength(1)
       expect(res3.body.questions[0]).toHaveProperty('askedBy')
@@ -78,7 +78,7 @@ describe('Queues API', () => {
       const res2 = await request2.post('/api/queues/2/questions').send(question)
       expect(res2.body.askedBy.netid).toBe('admin')
 
-      const res3 = await request.get('/api/queues/2?forceuser=student')
+      const res3 = await request.get('/api/queues/2')
       expect(res3.body).toHaveProperty('questions')
       expect(res3.body.questions).toHaveLength(1)
       expect(res3.body.questions[0]).toHaveProperty('askedBy')
@@ -100,7 +100,7 @@ describe('Queues API', () => {
       const queue = { name: 'CS225 Queue 2', location: 'Where' }
       const request = await requestAsUser(app, 'admin')
       const res = await request
-        .post('/api/courses/1/queues?forceuser=admin')
+        .post('/api/courses/1/queues')
         .send(queue)
       expect(res.statusCode).toBe(201)
       expect(res.body.name).toBe('CS225 Queue 2')
@@ -112,7 +112,7 @@ describe('Queues API', () => {
       const queue = { name: 'CS225 Queue 2', location: 'Where' }
       const request = await requestAsUser(app, '225staff')
       const res = await request
-        .post('/api/courses/1/queues?forceuser=225staff')
+        .post('/api/courses/1/queues')
         .send(queue)
       expect(res.statusCode).toBe(201)
       expect(res.body.name).toBe('CS225 Queue 2')
@@ -124,7 +124,7 @@ describe('Queues API', () => {
       const queue = { location: 'Where' }
       const request = await requestAsUser(app, '225staff')
       const res = await request
-        .post('/api/courses/1/queues?forceuser=225staff')
+        .post('/api/courses/1/queues')
         .send(queue)
       expect(res.statusCode).toBe(422)
     })
@@ -133,7 +133,7 @@ describe('Queues API', () => {
       const queue = { name: 'CS225 Queue 2', fixedLocation: true }
       const request = await requestAsUser(app, '225staff')
       const res = await request
-        .post('/api/courses/1/queues?forceuser=225staff')
+        .post('/api/courses/1/queues')
         .send(queue)
       expect(res.statusCode).toBe(422)
     })
@@ -142,7 +142,7 @@ describe('Queues API', () => {
       const queue = { name: 'CS225 Queue 2', location: 'Where' }
       const request = await requestAsUser(app, 'student')
       const res = await request
-        .post('/api/courses/1/queues?forceuser=student')
+        .post('/api/courses/1/queues')
         .send(queue)
       expect(res.statusCode).toBe(403)
       expect(res.body).toEqual({})
@@ -152,7 +152,7 @@ describe('Queues API', () => {
       const queue = { name: 'CS225 Queue 2', location: 'Where' }
       const request = await requestAsUser(app, '241staff')
       const res = await request
-        .post('/api/courses/1/queues?forceuser=241staff')
+        .post('/api/courses/1/queues')
         .send(queue)
       expect(res.statusCode).toBe(403)
       expect(res.body).toEqual({})
@@ -162,7 +162,7 @@ describe('Queues API', () => {
   describe('POST /api/queues/1/staff/:userId', () => {
     test('succeeds for course staff to add self', async () => {
       const request = await requestAsUser(app, '225staff')
-      const res = await request.post('/api/queues/1/staff/2?forceuser=225staff')
+      const res = await request.post('/api/queues/1/staff/2')
       expect(res.statusCode).toBe(202)
       const request2 = await requestAsUser(app, 'admin')
       const res2 = await request2.get('/api/queues/1/staff')
@@ -173,10 +173,10 @@ describe('Queues API', () => {
 
     test('succeeds if user is already active course staff', async () => {
       const request = await requestAsUser(app, '225staff')
-      const res = await request.post('/api/queues/1/staff/2?forceuser=225staff')
+      const res = await request.post('/api/queues/1/staff/2')
       expect(res.statusCode).toBe(202)
       const res2 = await request.post(
-        '/api/queues/1/staff/2?forceuser=225staff'
+        '/api/queues/1/staff/2'
       )
       expect(res2.statusCode).toBe(202)
       const request2 = await requestAsUser(app, 'admin')
@@ -189,7 +189,7 @@ describe('Queues API', () => {
     test('succeeds for admin to add admin', async () => {
       const request = await requestAsUser(app, 'admin')
       const res = await request.post(
-        '/api/courses/1/queues/1/staff/1?forceuser=admin'
+        '/api/courses/1/queues/1/staff/1'
       )
       expect(res.statusCode).toBe(202)
       const res2 = await request.get('/api/queues/1/staff')
@@ -201,7 +201,7 @@ describe('Queues API', () => {
     test('fails for student to add student', async () => {
       const request = await requestAsUser(app, 'student')
       const res = await request.post(
-        '/api/courses/1/queues/1/staff/4?forceuser=student'
+        '/api/courses/1/queues/1/staff/4'
       )
       expect(res.statusCode).toBe(403)
       expect(res.body).toEqual({})
@@ -214,7 +214,7 @@ describe('Queues API', () => {
     test('fails for student to add admin', async () => {
       const request = await requestAsUser(app, 'student')
       const res = await request.post(
-        '/api/courses/1/queues/1/staff/1?forceuser=student'
+        '/api/courses/1/queues/1/staff/1'
       )
       expect(res.statusCode).toBe(403)
       expect(res.body).toEqual({})
@@ -226,7 +226,7 @@ describe('Queues API', () => {
     test('fails for course staff of different course', async () => {
       const request = await requestAsUser(app, '241staff')
       const res = await request.post(
-        '/api/courses/1/queues/1/staff/3?forceuser=241staff'
+        '/api/courses/1/queues/1/staff/3'
       )
       expect(res.statusCode).toBe(403)
       expect(res.body).toEqual({})
@@ -241,7 +241,7 @@ describe('Queues API', () => {
       const attributes = { name: 'CS 225 Queue 1 Alter', location: '' }
       const request = await requestAsUser(app, '225staff')
       const res = await request
-        .patch('/api/queues/1?forceuser=225staff')
+        .patch('/api/queues/1')
         .send(attributes)
       expect(res.statusCode).toBe(201)
       expect(res.body.name).toBe('CS 225 Queue 1 Alter')
@@ -253,7 +253,7 @@ describe('Queues API', () => {
       const attributes = { name: 'CS 225 Queue 1 Alter', location: 'Where' }
       const request = await requestAsUser(app, '225staff')
       const res = await request
-        .patch('/api/queues/1?forceuser=225staff')
+        .patch('/api/queues/1')
         .send(attributes)
       expect(res.statusCode).toBe(201)
       expect(res.body.name).toBe('CS 225 Queue 1 Alter')
@@ -265,7 +265,7 @@ describe('Queues API', () => {
       const attributes = { name: 'CS 225 Queue 1 Alter', location: '' }
       const request = await requestAsUser(app, 'admin')
       const res = await request
-        .patch('/api/queues/1?forceuser=admin')
+        .patch('/api/queues/1')
         .send(attributes)
       expect(res.statusCode).toBe(201)
       expect(res.body.name).toBe('CS 225 Queue 1 Alter')
@@ -277,7 +277,7 @@ describe('Queues API', () => {
       const attributes = { name: 'CS 225 Queue 1 Alter', location: 'Where' }
       const request = await requestAsUser(app, 'admin')
       const res = await request
-        .patch('/api/queues/1?forceuser=admin')
+        .patch('/api/queues/1')
         .send(attributes)
       expect(res.statusCode).toBe(201)
       expect(res.body.name).toBe('CS 225 Queue 1 Alter')
@@ -289,7 +289,7 @@ describe('Queues API', () => {
       const attributes = { name: '', location: '' }
       const request = await requestAsUser(app, '225staff')
       const res = await request
-        .patch('/api/queues/1?forceuser=225staff')
+        .patch('/api/queues/1')
         .send(attributes)
       expect(res.statusCode).toBe(422)
     })
@@ -298,7 +298,7 @@ describe('Queues API', () => {
       const attributes = { name: '', location: 'Where' }
       const request = await requestAsUser(app, '225staff')
       const res = await request
-        .patch('/api/queues/1?forceuser=225staff')
+        .patch('/api/queues/1')
         .send(attributes)
       expect(res.statusCode).toBe(422)
     })
@@ -307,7 +307,7 @@ describe('Queues API', () => {
       const attributes = { name: '', location: '' }
       const request = await requestAsUser(app, 'admin')
       const res = await request
-        .patch('/api/queues/1?forceuser=admin')
+        .patch('/api/queues/1')
         .send(attributes)
       expect(res.statusCode).toBe(422)
     })
@@ -316,7 +316,7 @@ describe('Queues API', () => {
       const attributes = { name: '', location: 'Where' }
       const request = await requestAsUser(app, 'admin')
       const res = await request
-        .patch('/api/queues/1?forceuser=admin')
+        .patch('/api/queues/1')
         .send(attributes)
       expect(res.statusCode).toBe(422)
     })
@@ -325,7 +325,7 @@ describe('Queues API', () => {
       const attributes = { name: 'CS 225 Queue 1 Alter', location: '' }
       const request = await requestAsUser(app, 'student')
       const res = await request
-        .patch('/api/queues/1?forceuser=student')
+        .patch('/api/queues/1')
         .send(attributes)
       expect(res.statusCode).toBe(403)
       expect(res.body).toEqual({})
@@ -335,7 +335,7 @@ describe('Queues API', () => {
       const attributes = { name: 'CS 225 Queue 1 Alter', location: 'Where' }
       const request = await requestAsUser(app, 'student')
       const res = await request
-        .patch('/api/queues/1?forceuser=student')
+        .patch('/api/queues/1')
         .send(attributes)
       expect(res.statusCode).toBe(403)
       expect(res.body).toEqual({})
@@ -345,7 +345,7 @@ describe('Queues API', () => {
       const attributes = { name: 'CS 225 Queue 1 Alter', location: '' }
       const request = await requestAsUser(app, '241staff')
       const res = await request
-        .patch('/api/queues/1?forceuser=241staff')
+        .patch('/api/queues/1')
         .send(attributes)
       expect(res.statusCode).toBe(403)
       expect(res.body).toEqual({})
@@ -355,7 +355,7 @@ describe('Queues API', () => {
       const attributes = { name: 'CS 225 Queue 1 Alter', location: 'Where' }
       const request = await requestAsUser(app, '241staff')
       const res = await request
-        .patch('/api/queues/1?forceuser=241staff')
+        .patch('/api/queues/1')
         .send(attributes)
       expect(res.statusCode).toBe(403)
       expect(res.body).toEqual({})
@@ -365,7 +365,7 @@ describe('Queues API', () => {
       const attributes = { name: 'CS225 Fixed Location Alter', location: '' }
       const request = await requestAsUser(app, '225staff')
       const res = await request
-        .patch('/api/queues/3?forceuser=225staff')
+        .patch('/api/queues/3')
         .send(attributes)
       expect(res.statusCode).toBe(422)
     })
@@ -374,7 +374,7 @@ describe('Queues API', () => {
       const attributes = { name: 'CS225 Fixed Location Alter', location: '' }
       const request = await requestAsUser(app, 'admin')
       const res = await request
-        .patch('/api/queues/3?forceuser=admin')
+        .patch('/api/queues/3')
         .send(attributes)
       expect(res.statusCode).toBe(422)
     })
@@ -383,7 +383,7 @@ describe('Queues API', () => {
       const attributes = { open: false }
       const request = await requestAsUser(app, '225staff')
       const res = await request
-        .patch('/api/queues/1?forceuser=225staff')
+        .patch('/api/queues/1')
         .send(attributes)
       expect(res.statusCode).toBe(201)
       expect(res.body.open).toBe(false)
@@ -393,7 +393,7 @@ describe('Queues API', () => {
       const attributes = { open: false }
       const request = await requestAsUser(app, 'admin')
       const res = await request
-        .patch('/api/queues/1?forceuser=admin')
+        .patch('/api/queues/1')
         .send(attributes)
       expect(res.statusCode).toBe(201)
       expect(res.body.open).toBe(false)
@@ -403,10 +403,10 @@ describe('Queues API', () => {
       const attributes = { open: false }
       const request = await requestAsUser(app, 'student')
       const res = await request
-        .patch('/api/queues/1?forceuser=student')
+        .patch('/api/queues/1')
         .send(attributes)
       expect(res.statusCode).toBe(403)
-      const res2 = await request.get('/api/queues/1?forceuser=student')
+      const res2 = await request.get('/api/queues/1')
       expect(res2.statusCode).toBe(200)
       expect(res2.body.open).toBe(true)
     })
@@ -415,11 +415,11 @@ describe('Queues API', () => {
       const attributes = { open: '' }
       const request = await requestAsUser(app, '225staff')
       const res = await request
-        .patch('/api/queues/1?forceuser=225staff')
+        .patch('/api/queues/1')
         .send(attributes)
       expect(res.statusCode).toBe(422)
       const request2 = await requestAsUser(app, 'student')
-      const res2 = await request2.get('/api/queues/1?forceuser=student')
+      const res2 = await request2.get('/api/queues/1')
       expect(res2.statusCode).toBe(200)
       expect(res2.body.open).toBe(true)
     })
@@ -428,11 +428,11 @@ describe('Queues API', () => {
       const attributes = { open: 'hello' }
       const request = await requestAsUser(app, '225staff')
       const res = await request
-        .patch('/api/queues/1?forceuser=225staff')
+        .patch('/api/queues/1')
         .send(attributes)
       expect(res.statusCode).toBe(422)
       const request2 = await requestAsUser(app, 'student')
-      const res2 = await request2.get('/api/queues/1?forceuser=student')
+      const res2 = await request2.get('/api/queues/1')
       expect(res2.statusCode).toBe(200)
       expect(res2.body.open).toBe(true)
     })
@@ -441,11 +441,11 @@ describe('Queues API', () => {
       const attributes = { open: 1234 }
       const request = await requestAsUser(app, '225staff')
       const res = await request
-        .patch('/api/queues/1?forceuser=225staff')
+        .patch('/api/queues/1')
         .send(attributes)
       expect(res.statusCode).toBe(422)
       const request2 = await requestAsUser(app, 'student')
-      const res2 = await request2.get('/api/queues/1?forceuser=student')
+      const res2 = await request2.get('/api/queues/1')
       expect(res2.statusCode).toBe(200)
       expect(res2.body.open).toBe(true)
     })
@@ -458,7 +458,7 @@ describe('Queues API', () => {
       }
       const request = await requestAsUser(app, '225staff')
       const res = await request
-        .patch('/api/queues/1?forceuser=225staff')
+        .patch('/api/queues/1')
         .send(attributes)
       expect(res.statusCode).toBe(201)
       expect(res.body.open).toBe(false)
@@ -467,7 +467,7 @@ describe('Queues API', () => {
 
       const attributes2 = { open: null, name: null, location: null }
       const res2 = await request
-        .patch('/api/queues/1?forceuser=225staff')
+        .patch('/api/queues/1')
         .send(attributes2)
       expect(res2.statusCode).toBe(201)
       expect(res2.body.open).toBe(false)
@@ -476,7 +476,7 @@ describe('Queues API', () => {
 
       const attributes3 = { open: null, name: null }
       const res3 = await request
-        .patch('/api/queues/1?forceuser=225staff')
+        .patch('/api/queues/1')
         .send(attributes3)
       expect(res3.statusCode).toBe(201)
       expect(res3.body.open).toBe(false)
@@ -488,7 +488,7 @@ describe('Queues API', () => {
   describe('DELETE /api/queues/1', () => {
     test('succeeds for course staff', async () => {
       const request = await requestAsUser(app, '225staff')
-      const res = await request.delete('/api/queues/1?forceuser=225staff')
+      const res = await request.delete('/api/queues/1')
       expect(res.statusCode).toBe(202)
       const request2 = await requestAsUser(app, 'admin')
       const res2 = await request2.get('/api/queues')
@@ -499,7 +499,7 @@ describe('Queues API', () => {
 
     test('succeeds for admin', async () => {
       const request = await requestAsUser(app, 'admin')
-      const res = await request.delete('/api/queues/1?forceuser=admin')
+      const res = await request.delete('/api/queues/1')
       expect(res.statusCode).toBe(202)
       const request2 = await requestAsUser(app, 'admin')
       const res2 = await request2.get('/api/queues')
@@ -510,7 +510,7 @@ describe('Queues API', () => {
 
     test('fails for course staff of different course', async () => {
       const request = await requestAsUser(app, '225staff')
-      const res = await request.delete('/api/queues/2?forceuser=225staff')
+      const res = await request.delete('/api/queues/2')
       expect(res.statusCode).toBe(403)
       expect(res.body).toEqual({})
       const request2 = await requestAsUser(app, 'admin')
@@ -523,7 +523,7 @@ describe('Queues API', () => {
 
     test('fails for student', async () => {
       const request = await requestAsUser(app, 'student')
-      const res = await request.delete('/api/queues/1?forceuser=student')
+      const res = await request.delete('/api/queues/1')
       expect(res.statusCode).toBe(403)
       expect(res.body).toEqual({})
       const request2 = await requestAsUser(app, 'admin')
@@ -538,10 +538,10 @@ describe('Queues API', () => {
   describe('DELETE /api/queues/:queueId/staff/:userId', () => {
     test('succeeds for course staff to delete self', async () => {
       const request = await requestAsUser(app, '225staff')
-      const res = await request.post('/api/queues/1/staff/3?forceuser=225staff')
+      const res = await request.post('/api/queues/1/staff/3')
       expect(res.statusCode).toBe(202)
       const res2 = await request.delete(
-        '/api/queues/1/staff/3?forceuser=225staff'
+        '/api/queues/1/staff/3'
       )
       expect(res2.statusCode).toBe(202)
       const request3 = await requestAsUser(app, 'admin')
@@ -552,11 +552,11 @@ describe('Queues API', () => {
 
     test('succeeds for admin to delete staff', async () => {
       const request = await requestAsUser(app, '225staff')
-      const res = await request.post('/api/queues/1/staff/3?forceuser=225staff')
+      const res = await request.post('/api/queues/1/staff/3')
       expect(res.statusCode).toBe(202)
       const request2 = await requestAsUser(app, 'admin')
       const res2 = await request2.delete(
-        '/api/queues/1/staff/3?forceuser=admin'
+        '/api/queues/1/staff/3'
       )
       expect(res2.statusCode).toBe(202)
       const res3 = await request2.get('/api/queues/1/staff')
@@ -566,11 +566,11 @@ describe('Queues API', () => {
 
     test('fails for course staff of different course to delete staff', async () => {
       const request = await requestAsUser(app, '225staff')
-      const res = await request.post('/api/queues/1/staff/3?forceuser=225staff')
+      const res = await request.post('/api/queues/1/staff/3')
       expect(res.statusCode).toBe(202)
       const request2 = await requestAsUser(app, '241staff')
       const res2 = await request2.delete(
-        '/api/queues/1/staff/3?forceuser=241staff'
+        '/api/queues/1/staff/3'
       )
       expect(res2.statusCode).toBe(403)
       expect(res2.body).toEqual({})
@@ -583,11 +583,11 @@ describe('Queues API', () => {
 
     test('fails for student to delete staff', async () => {
       const request = await requestAsUser(app, '225staff')
-      const res = await request.post('/api/queues/1/staff/3?forceuser=225staff')
+      const res = await request.post('/api/queues/1/staff/3')
       expect(res.statusCode).toBe(202)
       const request2 = await requestAsUser(app, 'student')
       const res2 = await request2.delete(
-        '/api/queues/1/staff/3?forceuser=student'
+        '/api/queues/1/staff/3'
       )
       expect(res2.statusCode).toBe(403)
       expect(res2.body).toEqual({})
@@ -602,7 +602,7 @@ describe('Queues API', () => {
   describe('DELETE /api/queues/1', () => {
     test('succeeds for course staff', async () => {
       const request = await requestAsUser(app, '225staff')
-      const res = await request.delete('/api/queues/1?forceuser=225staff')
+      const res = await request.delete('/api/queues/1')
       expect(res.statusCode).toBe(202)
       const request2 = await requestAsUser(app, 'admin')
       const res2 = await request2.get('/api/queues')
@@ -612,7 +612,7 @@ describe('Queues API', () => {
 
     test('succeeds for admin', async () => {
       const request = await requestAsUser(app, 'admin')
-      const res = await request.delete('/api/queues/1?forceuser=admin')
+      const res = await request.delete('/api/queues/1')
       expect(res.statusCode).toBe(202)
       const res2 = await request.get('/api/queues')
       expect(res2.statusCode).toBe(200)
@@ -621,7 +621,7 @@ describe('Queues API', () => {
 
     test('fails for course staff of different course', async () => {
       const request = await requestAsUser(app, '241staff')
-      const res = await request.delete('/api/queues/1?forceuser=241staff')
+      const res = await request.delete('/api/queues/1')
       expect(res.statusCode).toBe(403)
       expect(res.body).toEqual({})
       const request2 = await requestAsUser(app, 'admin')
@@ -632,7 +632,7 @@ describe('Queues API', () => {
 
     test('fails for student', async () => {
       const request = await requestAsUser(app, 'student')
-      const res = await request.delete('/api/queues/1?forceuser=student')
+      const res = await request.delete('/api/queues/1')
       expect(res.statusCode).toBe(403)
       expect(res.body).toEqual({})
       const request2 = await requestAsUser(app, 'admin')
