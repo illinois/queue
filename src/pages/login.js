@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 
-import { Button  } from 'reactstrap'
+import { Button } from 'reactstrap'
 
 import DevModeLogin from '../components/DevModeLogin'
 import { withBaseUrl, isDev, isNow } from '../util'

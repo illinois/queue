@@ -1,5 +1,5 @@
 const sequelizeStream = require('sequelize-stream')
-const cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser')
 
 const { sequelize, Question, User, ActiveStaff, Queue } = require('../models')
 const { getUserFromJwt } = require('../auth/util')
@@ -133,7 +133,6 @@ stream.on('data', data => {
     handleQueueEvent(event, instance)
   }
 })
-
 
 module.exports = newIo => {
   io = newIo

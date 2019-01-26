@@ -22,11 +22,17 @@ class DevModeLogin extends React.Component {
   }
 
   handleSubmit() {
-    axios.post('/login/dev', {
-      netid: this.state.netid,
-    }, {
-      withCredentials: true,
-    }).then(() => Router.pushRoute('index'))
+    axios
+      .post(
+        '/login/dev',
+        {
+          netid: this.state.netid,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .then(() => Router.pushRoute('index'))
   }
 
   render() {
@@ -38,10 +44,19 @@ class DevModeLogin extends React.Component {
         </p>
         <Form onSubmit={this.handleSubmit}>
           <InputGroup>
-            <Input placeholder="username" value={this.state.netid} onChange={this.handleNetidChange} />
+            <Input
+              placeholder="username"
+              value={this.state.netid}
+              onChange={this.handleNetidChange}
+            />
             <InputGroupAddon addonType="append">@illinois.edu</InputGroupAddon>
           </InputGroup>
-          <Button block type="button" className="mt-3" onClick={this.handleSubmit}>
+          <Button
+            block
+            type="button"
+            className="mt-3"
+            onClick={this.handleSubmit}
+          >
             Dev log in
           </Button>
         </Form>
@@ -49,6 +64,5 @@ class DevModeLogin extends React.Component {
     )
   }
 }
-
 
 export default DevModeLogin

@@ -12,15 +12,15 @@ const authnWhitelist = [
   '/api',
   '/login',
   '/logout',
-  '/auth'
+  '/auth',
 ]
 
 const checkPathAgainstWhitelist = (path, whitelist) => {
-  return whitelist.some((base) => path.indexOf(base) === 0)
+  return whitelist.some(base => path.indexOf(base) === 0)
 }
 
 module.exports = safeAsync(async (req, res, next) => {
-  const { path } = req;
+  const { path } = req
   if (checkPathAgainstWhitelist(path, authnWhitelist)) {
     // This path hit the whitelist; we're good
     next()

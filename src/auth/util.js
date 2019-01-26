@@ -4,7 +4,9 @@ const { User } = require('../models')
 const { isDev } = require('../util')
 
 if (!isDev && !process.env.JWT_SECRET) {
-  throw new Error('You must set the JWT_SECRET environment variable in production!')
+  throw new Error(
+    'You must set the JWT_SECRET environment variable in production!'
+  )
 }
 const JWT_SECRET = process.env.JWT_SECRET || 'useastrongkeyinproduction!!!'
 
@@ -43,7 +45,7 @@ module.exports.addJwtCookie = (req, res, user) => {
   })
 }
 
-module.exports.getUserFromJwt = async (token) => {
+module.exports.getUserFromJwt = async token => {
   try {
     const jwtData = jwt.verify(token, JWT_SECRET)
     const netid = jwtData.sub

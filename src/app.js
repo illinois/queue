@@ -33,7 +33,7 @@ app.use(`${baseUrl}/logout`, require('./auth/logout'))
 // During testing, we'll use a special authentication handler that
 // checks for a `forceuser` query param and authenticates as that
 // user. DON'T LET THIS HAPPEN IN PRODUCTION.
-if (process.env.NODE_ENV === 'test') {
+if (process.env.NODE_ENV === 'testtt') {
   app.use(`${baseUrl}/api`, require('./middleware/authnForceUser'))
 } else {
   app.use(`${baseUrl}/api`, require('./middleware/authnJwt'))

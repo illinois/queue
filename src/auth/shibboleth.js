@@ -1,5 +1,5 @@
 const { withBaseUrl } = require('../util')
-const { createOrUpdateUser, addJwtCookie  } = require('./util')
+const { createOrUpdateUser, addJwtCookie } = require('./util')
 const safeAsync = require('../middleware/safeAsync')
 
 module.exports = safeAsync(async (req, res) => {

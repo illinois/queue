@@ -65,6 +65,7 @@
     "socket.io": "^2.1.1",
     "socket.io-client": "^2.1.1",
     "styled-jsx": "^2.2.7",
+    "supertest-session": "^3.3.0",
     "umzug": "^2.1.0",
     "validator": "^10.4.0",
     "winston": "^3.0.0"

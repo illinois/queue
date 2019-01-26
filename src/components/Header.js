@@ -57,7 +57,7 @@ class Header extends React.Component {
         <NavbarBrand>Queues@Illinois</NavbarBrand>
       </Link>
     ) : (
-        <NavbarBrand tag="span">Queues@Illinois</NavbarBrand>
+      <NavbarBrand tag="span">Queues@Illinois</NavbarBrand>
     )
 
     return (
@@ -84,7 +84,9 @@ class Header extends React.Component {
                   <Button
                     color="secondary"
                     type="button"
-                    onClick={() => { window.location = logoutRoute}}
+                    onClick={() => {
+                      window.location = logoutRoute
+                    }}
                   >
                     Logout
                   </Button>
