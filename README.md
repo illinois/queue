@@ -36,20 +36,6 @@ If you wish to report a bug, feature request, etc., please open a new issue (fir
   - Access the queue from a browser at `localhost:3000`
   - You can run it on a different port by setting the `PORT` environment variable
 
-### Multiple users in dev mode
-
-In production, all auth is done by Shibboleth, and we just read out of the `eppn` header
-to get a student's identity. In dev mode, we still want to be able to test with multiple
-users (for instance, to assert that user roles work correctly, or to ensue that syncing
-between multiple clients works correctly). To achieve that, we use `express-session` to
-track users across page reloads. By default, you will assume the role of `dev`, an admin
-user. To force a different user, you can append `?forceuser=NETID` to any URL (this creates
-a user NETID if needed). All future requests from that browser will be associated with that
-user, and you can add it to course staff, etc. like a normal user.
-
-To test with multiple users at the same time, you can open up multiple browsers, or use
-multiple incognito windows.
-
 ### Production config
 
 Several configuration options are exposed via environment variables:
@@ -62,3 +48,4 @@ Several configuration options are exposed via environment variables:
   reverse-proxied behind Apache. For instance, if the queue is served from
   `/my/path/`, then you should run with `BASE_URL=/my/path` (note the lack of
   trailing slash), and a request for queue 1 should be received as `/my/path/queue/1`.
+- `JWT_SECRET`: a secret key used to sign JSON Web Tokens for our users.

@@ -1,7 +1,8 @@
 /* eslint-env jest */
-const request = require('supertest')
+// const request = require('supertest')
 const app = require('../app')
 const testutil = require('../../test/util')
+const { requestAsUser } = require('../../test/util')
 
 beforeAll(async () => {
   await testutil.setupTestDb()
@@ -15,7 +16,8 @@ afterAll(async () => {
 describe('Users API', () => {
   describe('GET /api/users/me', () => {
     test('returns correct user for admin', async () => {
-      const res = await request(app).get('/api/users/me?forceuser=admin')
+      const request = await requestAsUser(app, 'admin')
+      const res = await request.get('/api/users/me')
       expect(res.statusCode).toBe(200)
       expect(res.body.id).toBe(2)
       expect(res.body.netid).toBe('admin')
@@ -24,7 +26,8 @@ describe('Users API', () => {
     })
 
     test('returns correct user for 225staff user', async () => {
-      const res = await request(app).get('/api/users/me?forceuser=225staff')
+      const request = await requestAsUser(app, '225staff')
+      const res = await request.get('/api/users/me')
       expect(res.statusCode).toBe(200)
       expect(res.body.id).toBe(3)
       expect(res.body.netid).toBe('225staff')
@@ -37,37 +40,43 @@ describe('Users API', () => {
 
   describe('GET /api/users', () => {
     test('returns all users for admin', async () => {
-      const res = await request(app).get('/api/users?forceuser=admin')
+      const request = await requestAsUser(app, 'admin')
+      const res = await request.get('/api/users')
       expect(res.statusCode).toBe(200)
       expect(res.body).toHaveLength(6)
     })
 
     test('returns 403 for 225staff', async () => {
-      const res = await request(app).get('/api/users?forceuser=225staff')
+      const request = await requestAsUser(app, '225staff')
+      const res = await request.get('/api/users')
       expect(res.statusCode).toBe(403)
     })
 
     test('returns 403 for student', async () => {
-      const res = await request(app).get('/api/users?forceuser=student')
+      const request = await requestAsUser(app, 'student')
+      const res = await request.get('/api/users')
       expect(res.statusCode).toBe(403)
     })
   })
 
   describe('GET /api/users/:userId', () => {
     test('succeeds for admin', async () => {
-      const res = await request(app).get('/api/users/5?forceuser=admin')
+      const request = await requestAsUser(app, 'admin')
+      const res = await request.get('/api/users/5')
       expect(res.statusCode).toBe(200)
       expect(res.body.id).toBe(5)
       expect(res.body.netid).toBe('student')
     })
 
     test('fails for 225staff', async () => {
-      const res = await request(app).get('/api/users/4?forceuser=225staff')
+      const request = await requestAsUser(app, '225staff')
+      const res = await request.get('/api/users/4')
       expect(res.statusCode).toBe(403)
     })
 
     test('fails for student', async () => {
-      const res = await request(app).get('/api/users/4?forceuser=student')
+      const request = await requestAsUser(app, 'student')
+      const res = await request.get('/api/users/4')
       expect(res.statusCode).toBe(403)
     })
   })

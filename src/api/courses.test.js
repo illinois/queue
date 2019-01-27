@@ -1,7 +1,8 @@
 /* eslint-env jest */
-const request = require('supertest')
+// const request = require('supertest')
 const app = require('../app')
 const testutil = require('../../test/util')
+const { requestAsUser } = require('../../test/util')
 const { User } = require('../models')
 
 beforeEach(async () => {
@@ -12,7 +13,8 @@ afterEach(() => testutil.destroyTestDb())
 
 describe('Courses API', () => {
   test('GET /api/courses', async () => {
-    const res = await request(app).get('/api/courses')
+    const request = await requestAsUser(app, 'admin')
+    const res = await request.get('/api/courses')
     expect(res.statusCode).toBe(200)
     expect(res.body).toHaveLength(2)
     expect(res.body[0].name).toBe('CS225')
@@ -21,7 +23,8 @@ describe('Courses API', () => {
 
   describe('GET /api/courses/:courseId', () => {
     test('succeeds for admin', async () => {
-      const res = await request(app).get('/api/courses/2')
+      const request = await requestAsUser(app, 'admin')
+      const res = await request.get('/api/courses/2')
       expect(res.statusCode).toBe(200)
       expect(res.body.id).toBe(2)
       expect(res.body.name).toBe('CS241')
@@ -36,7 +39,8 @@ describe('Courses API', () => {
     })
 
     test('succeeds for course staff', async () => {
-      const res = await request(app).get('/api/courses/2?forceuser=241staff')
+      const request = await requestAsUser(app, '241staff')
+      const res = await request.get('/api/courses/2')
       expect(res.statusCode).toBe(200)
       expect(res.body.id).toBe(2)
       expect(res.body.name).toBe('CS241')
@@ -51,7 +55,8 @@ describe('Courses API', () => {
     })
 
     test('excludes staff list for student', async () => {
-      const res = await request(app).get('/api/courses/2?forceuser=student')
+      const request = await requestAsUser(app, 'student')
+      const res = await request.get('/api/courses/2')
       expect(res.statusCode).toBe(200)
       expect(res.body.id).toBe(2)
       expect(res.body.name).toBe('CS241')
@@ -66,9 +71,8 @@ describe('Courses API', () => {
   describe('POST /api/courses', () => {
     test('succeeds for admin', async () => {
       const course = { name: 'CS423', shortcode: 'cs423' }
-      const res = await request(app)
-        .post('/api/courses?forceuser=admin')
-        .send(course)
+      const request = await requestAsUser(app, 'admin')
+      const res = await request.post('/api/courses').send(course)
       expect(res.statusCode).toBe(201)
       expect(res.body.id).toBe(3)
       expect(res.body.name).toBe('CS423')
@@ -76,23 +80,20 @@ describe('Courses API', () => {
     })
     test('fails for missing name', async () => {
       const course = { shortcode: 'cs423' }
-      const res = await request(app)
-        .post('/api/courses?forceuser=admin')
-        .send(course)
+      const request = await requestAsUser(app, 'admin')
+      const res = await request.post('/api/courses').send(course)
       expect(res.statusCode).toBe(422)
     })
     test('fails for missing shortcode', async () => {
       const course = { name: 'CS423' }
-      const res = await request(app)
-        .post('/api/courses?forceuser=admin')
-        .send(course)
+      const request = await requestAsUser(app, 'admin')
+      const res = await request.post('/api/courses').send(course)
       expect(res.statusCode).toBe(422)
     })
     test('fails for non-admin', async () => {
       const course = { name: 'CS423' }
-      const res = await request(app)
-        .post('/api/courses?forceuser=student')
-        .send(course)
+      const request = await requestAsUser(app, 'student')
+      const res = await request.post('/api/courses').send(course)
       expect(res.statusCode).toBe(403)
     })
   })
@@ -100,51 +101,45 @@ describe('Courses API', () => {
   describe('POST /api/course/:courseId/staff', async () => {
     test('succeeds for admin', async () => {
       const newUser = { netid: 'newnetid' }
-      const res = await request(app)
-        .post('/api/courses/1/staff')
-        .send(newUser)
+      const request = await requestAsUser(app, 'admin')
+      const res = await request.post('/api/courses/1/staff').send(newUser)
       expect(res.statusCode).toBe(201)
       expect(res.body.netid).toBe('newnetid')
     })
 
     test('succeeds for course staff', async () => {
       const newUser = { netid: 'newnetid' }
-      const res = await request(app)
-        .post('/api/courses/1/staff?forceuser=225staff')
-        .send(newUser)
+      const request = await requestAsUser(app, '225staff')
+      const res = await request.post('/api/courses/1/staff').send(newUser)
       expect(res.statusCode).toBe(201)
       expect(res.body.netid).toBe('newnetid')
     })
 
     test('fails if netid is missing', async () => {
       const newUser = {}
-      const res = await request(app)
-        .post('/api/courses/1/staff')
-        .send(newUser)
+      const request = await requestAsUser(app, 'admin')
+      const res = await request.post('/api/courses/1/staff').send(newUser)
       expect(res.statusCode).toBe(422)
     })
 
     test('fails for course staff of different course', async () => {
       const newUser = { netid: 'newnetid' }
-      const res = await request(app)
-        .post('/api/courses/1/staff?forceuser=241staff')
-        .send(newUser)
+      const request = await requestAsUser(app, '241staff')
+      const res = await request.post('/api/courses/1/staff').send(newUser)
       expect(res.statusCode).toBe(403)
     })
 
     test('fails for student', async () => {
       const newUser = { netid: 'newnetid' }
-      const res = await request(app)
-        .post('/api/courses/1/staff?forceuser=student')
-        .send(newUser)
+      const request = await requestAsUser(app, 'student')
+      const res = await request.post('/api/courses/1/staff').send(newUser)
       expect(res.statusCode).toBe(403)
     })
 
     test('trims "@illinois.edu" from netids', async () => {
       const newUser = { netid: 'newnetid@illinois.edu' }
-      const res = await request(app)
-        .post('/api/courses/1/staff')
-        .send(newUser)
+      const request = await requestAsUser(app, 'admin')
+      const res = await request.post('/api/courses/1/staff').send(newUser)
       expect(res.statusCode).toBe(201)
       const user = await User.findOne({ where: { netid: 'newnetid' } })
       expect(user).not.toBe(null)
@@ -153,9 +148,8 @@ describe('Courses API', () => {
 
     test('trims whitespace from netid', async () => {
       const newUser = { netid: '  waf     ' }
-      const res = await request(app)
-        .post('/api/courses/1/staff')
-        .send(newUser)
+      const request = await requestAsUser(app, 'admin')
+      const res = await request.post('/api/courses/1/staff').send(newUser)
       expect(res.statusCode).toBe(201)
       expect(res.body.netid).toBe('waf')
       const user = await User.findOne({ where: { netid: 'waf' } })
@@ -166,11 +160,10 @@ describe('Courses API', () => {
 
   describe('DELETE /api/courses/:courseId/staff/:userId', () => {
     test('succeeds for admin', async () => {
-      const res = await request(app).delete(
-        '/api/courses/1/staff/3?forceuser=admin'
-      )
+      const request = await requestAsUser(app, 'admin')
+      const res = await request.delete('/api/courses/1/staff/3')
       expect(res.statusCode).toBe(202)
-      const res2 = await request(app).get('/api/courses/1')
+      const res2 = await request.get('/api/courses/1')
       expect(res2.statusCode).toBe(200)
       expect(res2.body.id).toBe(1)
       expect(res2.body.name).toBe('CS225')
@@ -179,11 +172,11 @@ describe('Courses API', () => {
       expect(res2.body.staff).toHaveLength(0)
     })
     test('succeeds for course staff', async () => {
-      const res = await request(app).delete(
-        '/api/courses/1/staff/3?forceuser=225staff'
-      )
+      const request = await requestAsUser(app, '225staff')
+      const res = await request.delete('/api/courses/1/staff/3')
       expect(res.statusCode).toBe(202)
-      const res2 = await request(app).get('/api/courses/1')
+      const request2 = await requestAsUser(app, 'admin')
+      const res2 = await request2.get('/api/courses/1')
       expect(res2.statusCode).toBe(200)
       expect(res2.body.id).toBe(1)
       expect(res2.body.name).toBe('CS225')
@@ -192,11 +185,11 @@ describe('Courses API', () => {
       expect(res2.body.staff).toHaveLength(0)
     })
     test('fails for student', async () => {
-      const res = await request(app).delete(
-        '/api/courses/1/staff/3?forceuser=student'
-      )
+      const request = await requestAsUser(app, 'student')
+      const res = await request.delete('/api/courses/1/staff/3')
       expect(res.statusCode).toBe(403)
-      const res2 = await request(app).get('/api/courses/1')
+      const request2 = await requestAsUser(app, 'admin')
+      const res2 = await request2.get('/api/courses/1')
       expect(res2.statusCode).toBe(200)
       expect(res2.body.id).toBe(1)
       expect(res2.body.name).toBe('CS225')
@@ -207,11 +200,11 @@ describe('Courses API', () => {
       expect(res2.body.staff[0].id).toBe(3)
     })
     test('fails for course staff of different course', async () => {
-      const res = await request(app).delete(
-        '/api/courses/1/staff/3?forceuser=241staff'
-      )
+      const request = await requestAsUser(app, '241staff')
+      const res = await request.delete('/api/courses/1/staff/3')
       expect(res.statusCode).toBe(403)
-      const res2 = await request(app).get('/api/courses/1')
+      const request2 = await requestAsUser(app, 'admin')
+      const res2 = await request2.get('/api/courses/1')
       expect(res2.statusCode).toBe(200)
       expect(res2.body.id).toBe(1)
       expect(res2.body.name).toBe('CS225')

@@ -4,7 +4,7 @@ import Document, { Head, Main, NextScript } from 'next/document'
 import flush from 'styled-jsx/server'
 import { dom } from '@fortawesome/fontawesome-svg-core'
 
-import { baseUrl } from '../util'
+import { baseUrl, isDev, isNow } from '../util'
 
 export default class MyDocument extends Document {
   static getInitialProps({ renderPage }) {
@@ -23,7 +23,7 @@ export default class MyDocument extends Document {
     // If we're deployed to anywhere other than the server root, we'll have to
     // store our root path that here so that the client can access it.
     const script = {
-      __html: `window.BASE_URL = '${baseUrl}';`,
+      __html: `window.BASE_URL = '${baseUrl}'; window.IS_DEV = ${isDev}; window.IS_NOW = ${isNow};`,
     }
     const faviconPath = `${baseUrl}/static/favicon.ico`
     const manifestPath = `${baseUrl}/static/manifest.json`
@@ -49,7 +49,7 @@ export default class MyDocument extends Document {
           <title>Queues@Illinois</title>
           <style>{dom.css()}</style>
           <link rel="icon" href={faviconPath} type="image/png" />
-          {baseUrl && <script dangerouslySetInnerHTML={script} />}
+          <script dangerouslySetInnerHTML={script} />
         </Head>
         <body className="custom_class">
           {this.props.customValue}

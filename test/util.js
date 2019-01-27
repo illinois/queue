@@ -1,3 +1,4 @@
+const session = require('supertest-session')
 const models = require('../src/models')
 
 module.exports.setupTestDb = async () => {
@@ -80,4 +81,10 @@ module.exports.populateTestDb = async () => {
 
   await module.exports.createTestQueues()
   await module.exports.createTestQuestions()
+}
+
+module.exports.requestAsUser = async (app, user) => {
+  const testSession = session(app)
+  await testSession.post('/login/dev').send({ netid: user })
+  return testSession
 }
