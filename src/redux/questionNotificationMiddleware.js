@@ -78,29 +78,34 @@ export default store => next => action => {
   } else if (action.type === UPDATE_QUESTION.SUCCESS) {
     const { question } = action
     const { activeStaff } = state.activeStaff
-    // If question is marked as being answered and it is the student who ask this question
+    if (isOnDutyStaff(activeStaff, user)) {
+      // Close question creation notification
+      closeNotification(question.queueId, question.id)
+    }
+
     const markedBeingAnswered =
       !state.questions.questions[question.id].beingAnswered &&
       question.beingAnswered
-    if (isOnDutyStaff(activeStaff, user)) {
-      closeNotification(question.queueId, question.id)
-    } else if (markedBeingAnswered && user.id === question.askedById) {
+    if (user.id === question.askedById) {
       const { id, queueId } = question
-      const name = question.answeredBy.name || question.answeredBy.netid
-      const title = `${name} is answering your question`
 
-      const options = {
-        icon: `${baseUrl}/static/notif_icon.png`,
-        tag: `queue-${queueId}/question-${id}`,
+      // If question is marked as being answered and it is the user who asked this question
+      if (markedBeingAnswered) {
+        const name = question.answeredBy.name || question.answeredBy.netid
+        const title = `${name} is answering your question`
+
+        const options = {
+          icon: `${baseUrl}/static/notif_icon.png`,
+          tag: `queue-${queueId}/question-${id}`,
+        }
+        sendNotificationIfEnabled(title, options, queueId, id)
+      } else {
+        closeNotification(queueId, id)
       }
-      sendNotificationIfEnabled(title, options, queueId, id)
     }
   } else if (action.type === DELETE_QUESTION.SUCCESS) {
-    const { activeStaff } = state.activeStaff
     const { questionId, queueId } = action
-    if (isOnDutyStaff(activeStaff, user)) {
-      closeNotification(queueId, questionId)
-    }
+    closeNotification(queueId, questionId)
   }
   return next(action)
 }
