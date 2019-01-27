@@ -7,10 +7,10 @@ with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
 * Fix regression where course names in `QueueCard`s would not be bold. ([@james9909](https://github.com/james9909) in [#178](https://github.com/illinois/queue/pull/178))
-
 * Alert last on duty staff of option to close queue when leaving. ([@AlpriElse](https://github.com/AlpriElse) in [#173](https://github.com/illinois/queue/pull/173))
 * Use enter key to submit new question, new course, or new queue. ([@rohinb2](https://github.com/rohinb2) in [#161](https://github.com/illinois/queue/pull/161))
 * Specify which queue is being deleted. ([@james9909](https://github.com/james9909) in [#179](https://github.com/illinois/queue/pull/179))
+* Switch to maintaining our own user sessions outside of Shibboleth. ([@nwalters512](https://github.com/nwalters512) in [#182](https://github.com/illinois/queue/pull/182))
 
 ## 17 January 2019
 

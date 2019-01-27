@@ -11,6 +11,7 @@ if (baseUrl === '') {
   routes.add('index', withBaseUrl(''))
 }
 routes
+  .add('login', withBaseUrl('/login'))
   .add('queue', withBaseUrl('/queue/:id'))
   .add('createCourse', withBaseUrl('/course/create'))
   .add('course', withBaseUrl('/course/:id'))
