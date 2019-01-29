@@ -28,7 +28,7 @@ const fields = [
   },
 ]
 
-const isValid = error => (error === undefined ? undefined : error === '')
+const isValid = error => error === undefined || error === ''
 
 class QuestionEdit extends React.Component {
   constructor(props) {
@@ -125,7 +125,7 @@ class QuestionEdit extends React.Component {
                   id="topic"
                   value={this.state.topic}
                   onChange={this.handleInputChange}
-                  valid={isValid(this.state.isFieldValid.topic)}
+                  invalid={!isValid(this.state.isFieldValid.topic)}
                 />
                 <FormFeedback>{this.state.isFieldValid.topic}</FormFeedback>
               </Col>
@@ -142,7 +142,7 @@ class QuestionEdit extends React.Component {
                   disabled={this.props.queue.fixedLocation}
                   value={queueLocation}
                   onChange={this.handleInputChange}
-                  valid={isValid(this.state.isFieldValid.location)}
+                  invalid={!isValid(this.state.isFieldValid.location)}
                 />
                 <FormFeedback>{this.state.isFieldValid.location}</FormFeedback>
                 {fixedLocation && (
