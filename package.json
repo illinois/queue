@@ -55,6 +55,7 @@
     "react-markdown": "^4.0.2",
     "react-moment": "^0.7.9",
     "react-redux": "^5.0.7",
+    "react-toastify": "^4.5.2",
     "react-transition-group": "^2.4.0",
     "reactstrap": "^7.1.0",
     "redux": "^4.0.0",

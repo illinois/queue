@@ -1,4 +1,5 @@
 import axiosBase from 'axios'
+import { toast } from 'react-toastify'
 
 import { baseUrl } from '../util'
 import { Router } from '../routes'
@@ -11,8 +12,16 @@ const axios = axiosBase.create({ baseURL: baseUrl })
 // them using a page. A possible improvement would be to gracefully prompt
 // them to renew their session, but this will be ok for now.
 axios.interceptors.response.use(null, err => {
-  if (err.response.status === 401) {
-    Router.replaceRoute('login')
+  if (err.response) {
+    // Status code outside of 2xx
+    if (err.response.status === 401) {
+      Router.replaceRoute('login')
+    } else {
+      toast.error(err.response.data)
+    }
+  } else {
+    // Something happened while setting up the request
+    toast.error(err.message)
   }
   return Promise.reject(err)
 })

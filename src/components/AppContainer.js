@@ -1,6 +1,9 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { PageTransition } from 'next-page-transitions'
+import { ToastContainer, Flip } from 'react-toastify'
+
+import 'react-toastify/dist/ReactToastify.min.css'
 
 import Header from './Header'
 import Footer from './Footer'
@@ -11,6 +14,7 @@ const TIMEOUT = 200
 const AppContainer = props => {
   return (
     <Fragment>
+      <ToastContainer transition={Flip} hideProgressBar autoClose={3000} />
       <Header />
       <PageTransition
         timeout={TIMEOUT}
