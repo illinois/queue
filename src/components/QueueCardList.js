@@ -114,7 +114,7 @@ class QueueCardList extends React.Component {
       }
 
       const handleQueueKeyPress = (e, id) => {
-        if (e.key == 'Enter' || e.key == ' ') {
+        if (e.key === 'Enter' || e.key === ' ') {
           handleQueueClick(id)
         }
       }
