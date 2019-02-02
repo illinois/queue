@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Alert, Button, FormText, Input } from 'reactstrap'
+import { Alert, Button, ButtonGroup, FormText, Input, Collapse } from 'reactstrap'
 import ReactMarkdown from 'react-markdown'
 
 class QueueMessage extends React.Component {
@@ -11,11 +11,13 @@ class QueueMessage extends React.Component {
     this.state = {
       editing: false,
       editedMessage: null,
+      preview: true,
     }
 
     this.onMessageChanged = this.onMessageChanged.bind(this)
     this.onStartEdit = this.onStartEdit.bind(this)
     this.onFinishEdit = this.onFinishEdit.bind(this)
+    this.onPreview = this.onPreview.bind(this)
   }
 
   onMessageChanged(e) {
@@ -38,6 +40,10 @@ class QueueMessage extends React.Component {
     this.props.updateQueue(this.props.queueId, attributes).then(() => {
       this.setState({ editing: false })
     })
+  }
+
+  onPreview() {
+    this.setState(prevState => ({ preview: !prevState.preview }))
   }
 
   render() {
@@ -65,12 +71,20 @@ class QueueMessage extends React.Component {
           <FormText color="muted">
             You can use Markdown to format this message.
           </FormText>
+          <Collapse isOpen={this.state.preview}>
+            <ReactMarkdown source={editedMessage} />
+          </Collapse>
         </>
       )
       button = (
-        <Button color="primary" onClick={this.onFinishEdit}>
-          Save
-        </Button>
+        <ButtonGroup>
+          <Button color="primary" onClick={this.onFinishEdit}>
+            Save
+          </Button>
+          <Button color="light" onClick={this.onPreview}>
+            {this.state.preview ? 'Hide' : 'Show'}
+          </Button>
+        </ButtonGroup>
       )
     } else {
       content = <ReactMarkdown source={message} />
