@@ -17,11 +17,17 @@ class QueueMessageEnabledToggle extends React.Component {
 
   render() {
     return (
-      <div className="mb-3 d-flex">
-        <span className="mr-auto">Show staff message</span>
+      <div className="mb-3 d-flex align-items-center">
+        <div className="d-flex flex-column mr-auto">
+          <span>Show staff message</span>
+          <span className="small text-muted">
+            This affects anyone using this queue
+          </span>
+        </div>
         <CustomInput
           id="messageEnabled"
           type="switch"
+          className="ml-3"
           onChange={this.handleCheckChanged}
           checked={this.props.queue.messageEnabled}
         />
