@@ -8,7 +8,7 @@ with the current date and the next changes should go under a **[Next]** header.
 ## [Next]
 
 * Allow user to select queues by tabbing through the main page. ([@shwavedefapp](https://github.com/shwavedefapp) in [#192](https://github.com/illinois/queue/pull/192))
-* Markdown previews can be toggled while editing a queue message. ([@shwavedefapp](https://github.com/shwavedefapp) in [#193](https://github.com/illinois/queue/pull/193))
+* Markdown previews available while creating a queue message. ([@shwavedefapp](https://github.com/shwavedefapp) in [#193](https://github.com/illinois/queue/pull/193))
 
 ## 26 January 2019
 

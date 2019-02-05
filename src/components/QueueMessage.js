@@ -1,7 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import classnames from 'classnames'
 
-import { Alert, Button, ButtonGroup, FormText, Input, Collapse } from 'reactstrap'
+import {
+  Alert,
+  Button,
+  FormText,
+  Input,
+  Nav,
+  NavItem,
+  NavLink,
+  TabContent,
+  TabPane,
+} from 'reactstrap'
 import ReactMarkdown from 'react-markdown'
 
 class QueueMessage extends React.Component {
@@ -11,13 +22,13 @@ class QueueMessage extends React.Component {
     this.state = {
       editing: false,
       editedMessage: null,
-      preview: true,
+      activeTab: '1',
     }
 
     this.onMessageChanged = this.onMessageChanged.bind(this)
     this.onStartEdit = this.onStartEdit.bind(this)
     this.onFinishEdit = this.onFinishEdit.bind(this)
-    this.onPreview = this.onPreview.bind(this)
+    this.onChangeTab = this.onChangeTab.bind(this)
   }
 
   onMessageChanged(e) {
@@ -42,8 +53,10 @@ class QueueMessage extends React.Component {
     })
   }
 
-  onPreview() {
-    this.setState(prevState => ({ preview: !prevState.preview }))
+  onChangeTab(tab) {
+    if (this.state.activeTab !== tab) {
+      this.setState({ activeTab: tab })
+    }
   }
 
   render() {
@@ -61,30 +74,51 @@ class QueueMessage extends React.Component {
     if (editing) {
       content = (
         <>
-          <Input
-            type="textarea"
-            name="text"
-            rows="6"
-            value={editedMessage}
-            onChange={this.onMessageChanged}
-          />
-          <FormText color="muted">
-            You can use Markdown to format this message.
-          </FormText>
-          <Collapse isOpen={this.state.preview}>
-            <ReactMarkdown source={editedMessage} />
-          </Collapse>
+          <Nav tabs>
+            <NavItem>
+              <NavLink
+                className={classnames({ active: this.state.activeTab === '1' })}
+                onClick={() => {
+                  this.onChangeTab('1')
+                }}
+              >
+                Edit
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                className={classnames({ active: this.state.activeTab === '2' })}
+                onClick={() => {
+                  this.onChangeTab('2')
+                }}
+              >
+                Preview
+              </NavLink>
+            </NavItem>
+          </Nav>
+          <TabContent activeTab={this.state.activeTab}>
+            <TabPane tabId="1">
+              <Input
+                type="textarea"
+                name="text"
+                rows="6"
+                value={editedMessage}
+                onChange={this.onMessageChanged}
+              />
+              <FormText color="muted">
+                You can use Markdown to format this message.
+              </FormText>
+            </TabPane>
+            <TabPane tabId="2">
+              <ReactMarkdown source={editedMessage} />
+            </TabPane>
+          </TabContent>
         </>
       )
       button = (
-        <ButtonGroup>
-          <Button color="primary" onClick={this.onFinishEdit}>
-            Save
-          </Button>
-          <Button color="light" onClick={this.onPreview}>
-            {this.state.preview ? 'Hide' : 'Show'}
-          </Button>
-        </ButtonGroup>
+        <Button color="primary" onClick={this.onFinishEdit}>
+          Save
+        </Button>
       )
     } else {
       content = <ReactMarkdown source={message} />
