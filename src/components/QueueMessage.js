@@ -5,6 +5,9 @@ import classnames from 'classnames'
 import {
   Alert,
   Button,
+  Card,
+  CardHeader,
+  CardBody,
   FormText,
   Input,
   Nav,
@@ -73,47 +76,55 @@ class QueueMessage extends React.Component {
     let button
     if (editing) {
       content = (
-        <>
-          <Nav tabs>
-            <NavItem>
-              <NavLink
-                className={classnames({ active: this.state.activeTab === '1' })}
-                onClick={() => {
-                  this.onChangeTab('1')
-                }}
-              >
-                Edit
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink
-                className={classnames({ active: this.state.activeTab === '2' })}
-                onClick={() => {
-                  this.onChangeTab('2')
-                }}
-              >
-                Preview
-              </NavLink>
-            </NavItem>
-          </Nav>
-          <TabContent activeTab={this.state.activeTab}>
-            <TabPane tabId="1">
-              <Input
-                type="textarea"
-                name="text"
-                rows="6"
-                value={editedMessage}
-                onChange={this.onMessageChanged}
-              />
-              <FormText color="muted">
-                You can use Markdown to format this message.
-              </FormText>
-            </TabPane>
-            <TabPane tabId="2">
-              <ReactMarkdown source={editedMessage} />
-            </TabPane>
-          </TabContent>
-        </>
+        <Card>
+          <CardHeader>
+            <Nav card tabs>
+              <NavItem>
+                <NavLink
+                  className={classnames({
+                    active: this.state.activeTab === '1',
+                  })}
+                  onClick={() => {
+                    this.onChangeTab('1')
+                  }}
+                >
+                  Edit
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink
+                  className={classnames({
+                    active: this.state.activeTab === '2',
+                  })}
+                  onClick={() => {
+                    this.onChangeTab('2')
+                  }}
+                >
+                  Preview
+                </NavLink>
+              </NavItem>
+            </Nav>
+          </CardHeader>
+          <CardBody className="p-0">
+            <TabContent activeTab={this.state.activeTab}>
+              <TabPane className="m-2" tabId="1">
+                <Input
+                  type="textarea"
+                  name="text"
+                  rows="6"
+                  value={editedMessage}
+                  onChange={this.onMessageChanged}
+                />
+                <FormText color="muted">
+                  You can use Markdown to format this message.
+                </FormText>
+              </TabPane>
+              <TabPane className="m-3" tabId="2">
+                <ReactMarkdown source={editedMessage} />
+              </TabPane>
+            </TabContent>
+          </CardBody>
+        </Card>
       )
       button = (
         <Button color="primary" onClick={this.onFinishEdit}>
