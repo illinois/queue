@@ -9,6 +9,7 @@ with the current date and the next changes should go under a **[Next]** header.
 
 * Allow user to select queues by tabbing through the main page. ([@shwavedefapp](https://github.com/shwavedefapp) in [#192](https://github.com/illinois/queue/pull/192))
 * Make improvements to staff message experience. ([@nwalters512](https://github.com/nwalters512) in [#194](https://github.com/illinois/queue/pull/194))
+* Add user-facing error messages. ([@james9909](https://github.com/james9909) in [#195](https://github.com/illinois/queue/pull/195))
 
 ## 26 January 2019
 
