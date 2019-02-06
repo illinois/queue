@@ -72,6 +72,13 @@ class QueueMessage extends React.Component {
       return null
     }
 
+    const handleTabKeyPress = (e, tab) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.stopPropagation()
+        this.onChangeTab(tab)
+      }
+    }
+
     let content
     let button
     if (editing) {
@@ -84,9 +91,9 @@ class QueueMessage extends React.Component {
                   className={classnames({
                     active: this.state.activeTab === '1',
                   })}
-                  onClick={() => {
-                    this.onChangeTab('1')
-                  }}
+                  onClick={() => this.onChangeTab('1')}
+                  tabIndex="0"
+                  onKeyPress={e => handleTabKeyPress(e, '1')}
                 >
                   Edit
                 </NavLink>
@@ -96,9 +103,9 @@ class QueueMessage extends React.Component {
                   className={classnames({
                     active: this.state.activeTab === '2',
                   })}
-                  onClick={() => {
-                    this.onChangeTab('2')
-                  }}
+                  onClick={() => this.onChangeTab('2')}
+                  tabIndex="0"
+                  onKeyPress={e => handleTabKeyPress(e, '2')}
                 >
                   Preview
                 </NavLink>
