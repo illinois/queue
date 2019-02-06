@@ -141,7 +141,7 @@ class QueueMessage extends React.Component {
     }
 
     return (
-      <Alert color="primary">
+      <Alert color="primary" fade={false}>
         <h6 className="alert-heading">A message from the queue staff</h6>
         {content}
         {isUserCourseStaff && <div className="mt-3">{button}</div>}
