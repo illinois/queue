@@ -15,6 +15,7 @@ class QueueMessage extends React.Component {
 
     this.onMessageChanged = this.onMessageChanged.bind(this)
     this.onStartEdit = this.onStartEdit.bind(this)
+    this.onCancelEdit = this.onCancelEdit.bind(this)
     this.onFinishEdit = this.onFinishEdit.bind(this)
   }
 
@@ -28,6 +29,12 @@ class QueueMessage extends React.Component {
     this.setState({
       editing: true,
       editedMessage: this.props.message,
+    })
+  }
+
+  onCancelEdit() {
+    this.setState({
+      editing: false,
     })
   }
 
@@ -68,9 +75,14 @@ class QueueMessage extends React.Component {
         </>
       )
       button = (
-        <Button color="primary" onClick={this.onFinishEdit}>
-          Save
-        </Button>
+        <>
+          <Button color="primary" onClick={this.onFinishEdit}>
+            Save
+          </Button>
+          <Button color="danger" className="ml-1" onClick={this.onCancelEdit}>
+            Cancel
+          </Button>
+        </>
       )
     } else {
       content = <ReactMarkdown source={message} />
