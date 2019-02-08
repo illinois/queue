@@ -17,7 +17,7 @@ import {
   TabPane,
 } from 'reactstrap'
 import ReactMarkdown from 'react-markdown'
-import ParrotText from './ParrotText';
+import ParrotText from './ParrotText'
 
 class QueueMessage extends React.Component {
   constructor(props) {
@@ -108,7 +108,7 @@ class QueueMessage extends React.Component {
 
     // We use a custom renderer for text so that we can support parrots!
     const renderers = {
-      text: (props) => (<ParrotText text={props.children} />),
+      text: props => <ParrotText text={props.children} />,
     }
 
     let content
