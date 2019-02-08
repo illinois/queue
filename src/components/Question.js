@@ -146,7 +146,7 @@ class Question extends React.Component {
                 <span title="NetID" className="text-muted">
                   {' '}
                   ({askedBy.netid})
-            </span>
+                </span>
               )}
             </strong>
             <div className="text-muted">

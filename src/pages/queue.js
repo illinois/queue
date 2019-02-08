@@ -1,7 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Container, Row, Col, Card, CardBody, Collapse, UncontrolledTooltip } from 'reactstrap'
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  CardBody,
+  Collapse,
+  UncontrolledTooltip,
+} from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMapMarker, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
@@ -18,8 +26,8 @@ import ShowForCourseStaff from '../components/ShowForCourseStaff'
 import QuestionNotificationsToggle from '../components/QuestionNotificationsToggle'
 import QueueStatusToggleContainer from '../containers/QueueStatusToggleContainer'
 import QueueMessageEnabledToggleContainer from '../containers/QueueMessageEnabledToggleContainer'
-import { isUserCourseStaffForQueue } from '../selectors';
-import ConfidentialQueuePanelContainer from '../containers/ConfidentialQueuePanelContainer';
+import { isUserCourseStaffForQueue } from '../selectors'
+import ConfidentialQueuePanelContainer from '../containers/ConfidentialQueuePanelContainer'
 
 class Queue extends React.Component {
   static getInitialProps({ isServer, store, query }) {
@@ -116,9 +124,10 @@ class Queue extends React.Component {
                 </CardBody>
               </Card>
             )}
-            {this.props.queue.isConfidential && !this.props.isUserCourseStaff && (
-              <ConfidentialQueuePanelContainer queueId={this.props.queueId} />
-            )}
+            {this.props.queue.isConfidential &&
+              !this.props.isUserCourseStaff && (
+                <ConfidentialQueuePanelContainer queueId={this.props.queueId} />
+              )}
             <QuestionListContainer queueId={this.props.queueId} />
           </Col>
         </Row>

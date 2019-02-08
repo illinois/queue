@@ -10,6 +10,7 @@ import {
   Label,
   Input,
   Button,
+  Toggle,
 } from 'reactstrap'
 import { connect } from 'react-redux'
 
@@ -83,7 +84,7 @@ class NewQueue extends React.Component {
       name: this.state.name,
       location: this.state.location,
       fixedLocation: this.state.fixedLocation,
-      isConfidential: this.state.isConfidential
+      isConfidential: this.state.isConfidential,
     }
 
     let courseId
@@ -182,8 +183,8 @@ class NewQueue extends React.Component {
               onChange={this.handleInputChange}
             />
             <FormText color="muted">
-              If a queue is marked as confidential, students won&apos;t be able to
-              see other student names and topics.
+              If a queue is marked as confidential, students won&apos;t be able
+              to see other student names and topics.
             </FormText>
           </Col>
         </FormGroup>

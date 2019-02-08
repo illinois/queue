@@ -3,6 +3,7 @@ module.exports = {
     return queryInterface.addColumn('queues', 'isConfidential', {
       type: Sequelize.BOOLEAN,
       defaultValue: false,
+      after: 'messageEnabled',
     })
   },
 
