@@ -256,7 +256,7 @@ router.patch(
     } else {
       res
         .status(403)
-        .send('You do not have authorization to update this question')
+        .send("You don't have authorization to update this question")
     }
   })
 )
