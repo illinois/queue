@@ -9,7 +9,8 @@ with the current date and the next changes should go under a **[Next]** header.
 
 * Allow user to select queues by tabbing through the main page. ([@shwavedefapp](https://github.com/shwavedefapp) in [#192](https://github.com/illinois/queue/pull/192))
 * Make improvements to staff message experience. ([@nwalters512](https://github.com/nwalters512) in [#194](https://github.com/illinois/queue/pull/194))
-* Staff can cancel when editing the queue message. ([@shwavedefapp](https://github.com/shwavedefapp) in [#197](https://github.com/illinois/queue/pull/197))
+* Add markdown previews to the queue message editor. ([@shwavedefapp](https://github.com/shwavedefapp) in [#193](https://github.com/illinois/queue/pull/193))
+* Add ability to cancel editing of the queue message. ([@shwavedefapp](https://github.com/shwavedefapp) in [#197](https://github.com/illinois/queue/pull/197))
 
 ## 26 January 2019
 
