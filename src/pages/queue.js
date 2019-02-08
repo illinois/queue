@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Container, Row, Col, Card, CardBody, UncontrolledTooltip } from 'reactstrap'
+import { Container, Row, Col, Card, CardBody, Collapse, UncontrolledTooltip } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMapMarker, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
@@ -103,9 +103,9 @@ class Queue extends React.Component {
             <StaffSidebar queueId={this.props.queueId} />
           </Col>
           <Col xs={{ size: 12 }} md={{ size: 8 }} lg={{ size: 9 }}>
-            {this.props.queue.messageEnabled && (
+            <Collapse isOpen={this.props.queue.messageEnabled}>
               <QueueMessageContainer queueId={this.props.queueId} />
-            )}
+            </Collapse>
             {this.props.queue.open && (
               <QuestionPanelContainer queueId={this.props.queueId} />
             )}

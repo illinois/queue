@@ -113,6 +113,12 @@ class QueueCardList extends React.Component {
         Router.pushRoute('queue', { id })
       }
 
+      const handleQueueKeyPress = (e, id) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleQueueClick(id)
+        }
+      }
+
       this.props.queueIds.sort(this.queueSorter.bind(this))
 
       queues = this.props.queueIds.map(queueId => {
@@ -127,6 +133,8 @@ class QueueCardList extends React.Component {
               onClick={() => handleQueueClick(queue.id)}
               onDelete={() => this.deleteQueue(queue.courseId, queue.id)}
               onUpdate={() => this.editQueue(queue.id)}
+              onKeyPress={e => handleQueueKeyPress(e, queue.id)}
+              tabIndex="0"
             />
           </CardCol>
         )
@@ -148,6 +156,16 @@ class QueueCardList extends React.Component {
       <Fragment>
         {queues}
         <ConfirmDeleteQueueModal
+          queueName={
+            this.state.pendingDeleteQueue
+              ? this.props.queues[this.state.pendingDeleteQueue.queueId].name
+              : null
+          }
+          courseName={
+            this.state.pendingDeleteQueue
+              ? this.props.courses[this.state.pendingDeleteQueue.courseId].name
+              : null
+          }
           isOpen={this.state.showDeleteQueueModal}
           toggle={() => this.toggleDeleteModal()}
           confirm={() => this.confirmDeleteQueue()}

@@ -1,5 +1,8 @@
 const sequelizeStream = require('sequelize-stream')
+const cookieParser = require('cookie-parser')
+
 const { sequelize, Question, User, ActiveStaff, Queue } = require('../models')
+const { getUserFromJwt } = require('../auth/util')
 
 let io = null
 let queueNamespace = null
@@ -121,6 +124,13 @@ const handleQueueEvent = (event, instance) => {
   }
 }
 
+const parseSocketCookies = () => {
+  const parser = cookieParser()
+  return (socket, next) => {
+    parser(socket.request, null, next)
+  }
+}
+
 const stream = sequelizeStream(sequelize)
 stream.on('data', data => {
   const { event, instance } = data
@@ -136,6 +146,16 @@ stream.on('data', data => {
 
 module.exports = newIo => {
   io = newIo
+
+  io.use(parseSocketCookies())
+  // After this middleware, you can access the current user as
+  // `socket.request.user`
+  io.use(async (socket, next) => {
+    const user = await getUserFromJwt(socket.request.cookies.jwt)
+    // eslint-disable-next-line no-param-reassign
+    socket.request.user = user
+    next()
+  })
 
   queueNamespace = io.of('/queue')
   queueNamespace.on('connection', socket => {

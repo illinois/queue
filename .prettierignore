@@ -1,6 +1,7 @@
 /coverage/
 /node_modules/
-/.next/
+/src/.next/
 package.json
 package-lock.json
 CHANGELOG.md
+README.md

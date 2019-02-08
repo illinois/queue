@@ -37,6 +37,10 @@ const QueueCard = ({
     onUpdate()
   }
 
+  const preventKeyBubbleUp = e => {
+    e.stopPropagation()
+  }
+
   const title = courseName || queueName
   const showQueueNameInBody = !!courseName
 
@@ -60,7 +64,13 @@ const QueueCard = ({
           </span>
           <div>
             <ShowForCourseStaff courseId={queue.courseId}>
-              <Button color="danger" size="sm" outline onClick={handleDelete}>
+              <Button
+                color="danger"
+                size="sm"
+                outline
+                onClick={handleDelete}
+                onKeyPress={preventKeyBubbleUp}
+              >
                 Delete
               </Button>
             </ShowForCourseStaff>
@@ -71,6 +81,7 @@ const QueueCard = ({
                 className="mr-0 ml-1"
                 outline
                 onClick={handleUpdate}
+                onKeyPress={preventKeyBubbleUp}
               >
                 Edit
               </Button>
