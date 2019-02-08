@@ -20,7 +20,7 @@ const ParrotText = ({ text }) => {
         src={parrots[c]}
         alt={c}
         key={`${c}_${i + 1}`}
-        style={{ height: '1rem', marginTop: '-0.2rem' }}
+        style={{ height: '1em', marginTop: '-0.2em' }}
       />
     )
   })
