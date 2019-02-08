@@ -24,7 +24,7 @@ class QueueMessage extends React.Component {
 
     this.state = {
       editing: false,
-      editedMessage: null,
+      editedMessage: '',
       activeTab: '1',
     }
 
@@ -32,6 +32,19 @@ class QueueMessage extends React.Component {
     this.onStartEdit = this.onStartEdit.bind(this)
     this.onFinishEdit = this.onFinishEdit.bind(this)
     this.onChangeTab = this.onChangeTab.bind(this)
+
+    this.inputRef = React.createRef()
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    // If we we just started editing or we switched to the editor tab from
+    // another tab, focus the editor input
+    const { editing, activeTab } = this.state
+    const startedEditing = !prevState.editing && editing
+    const switchedToEditor = prevState.activeTab !== '1' && activeTab === '1'
+    if ((startedEditing || switchedToEditor) && this.inputRef.current) {
+      this.inputRef.current.focus()
+    }
   }
 
   onMessageChanged(e) {
@@ -43,7 +56,7 @@ class QueueMessage extends React.Component {
   onStartEdit() {
     this.setState({
       editing: true,
-      editedMessage: this.props.message,
+      editedMessage: this.props.message || '',
     })
   }
 
@@ -99,8 +112,9 @@ class QueueMessage extends React.Component {
                     active: this.state.activeTab === '1',
                   })}
                   onClick={e => handleTabClick(e, '1')}
-                  tabIndex="0"
                   onKeyPress={e => handleTabKeyPress(e, '1')}
+                  role="tab"
+                  aria-selected={this.state.activeTab === '1'}
                 >
                   Edit
                 </NavLink>
@@ -112,8 +126,9 @@ class QueueMessage extends React.Component {
                     active: this.state.activeTab === '2',
                   })}
                   onClick={e => handleTabClick(e, '2')}
-                  tabIndex="0"
                   onKeyPress={e => handleTabKeyPress(e, '2')}
+                  role="tab"
+                  aria-selected={this.state.activeTab === '2'}
                 >
                   Preview
                 </NavLink>
@@ -129,6 +144,7 @@ class QueueMessage extends React.Component {
                   rows="6"
                   value={editedMessage}
                   onChange={this.onMessageChanged}
+                  innerRef={this.inputRef}
                 />
                 <FormText color="muted">
                   You can use Markdown to format this message.
@@ -169,10 +185,14 @@ class QueueMessage extends React.Component {
   }
 }
 
+QueueMessage.defaultProps = {
+  message: '',
+}
+
 QueueMessage.propTypes = {
   queueId: PropTypes.number.isRequired,
   isUserCourseStaff: PropTypes.bool.isRequired,
-  message: PropTypes.string.isRequired,
+  message: PropTypes.string,
   updateQueue: PropTypes.func.isRequired,
 }
 
