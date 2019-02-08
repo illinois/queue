@@ -17,6 +17,7 @@ import {
   TabPane,
 } from 'reactstrap'
 import ReactMarkdown from 'react-markdown'
+import ParrotText from './ParrotText';
 
 class QueueMessage extends React.Component {
   constructor(props) {
@@ -105,6 +106,11 @@ class QueueMessage extends React.Component {
       }
     }
 
+    // We use a custom renderer for text so that we can support parrots!
+    const renderers = {
+      text: (props) => (<ParrotText text={props.children} />),
+    }
+
     let content
     let button
     if (editing) {
@@ -162,6 +168,7 @@ class QueueMessage extends React.Component {
                   source={
                     editedMessage === '' ? 'Nothing to preview' : editedMessage
                   }
+                  renderers={renderers}
                 />
               </TabPane>
             </TabContent>
@@ -179,7 +186,7 @@ class QueueMessage extends React.Component {
         </>
       )
     } else {
-      content = <ReactMarkdown source={message} />
+      content = <ReactMarkdown source={message} renderers={renderers} />
       button = (
         <Button color="primary" onClick={this.onStartEdit}>
           Edit
