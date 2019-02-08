@@ -14,7 +14,6 @@ class Question extends React.Component {
       name,
       location,
       topic,
-      isConfidential,
       beingAnswered,
       enqueueTime,
       answeredBy,
@@ -101,36 +100,6 @@ class Question extends React.Component {
       )
     }
 
-    let studentName
-    let studentTopic
-    let studentLocation
-    if (!isConfidential || isUserCourseStaff || didUserAskQuestion) {
-      studentName = (
-        <strong className="d-block">
-          <span title="Name">{name}</span>
-          {isUserCourseStaff && (
-            <span title="NetID" className="text-muted">
-              {' '}
-              ({askedBy.netid})
-            </span>
-          )}
-        </strong>
-      )
-      studentTopic = <ParrotText text={topic} />
-      studentLocation = (
-        <span>
-          <span title="Location">{location}</span>
-          <span className="mr-2 ml-2">&bull;</span>
-        </span>
-      )
-    } else if (isConfidential) {
-      studentName = (
-        <strong className="d-block">
-          <span title="Name">Anonymous</span>
-        </strong>
-      )
-    }
-
     const isBeingAnswered = !!answeredBy
     const answeringName =
       (answeredBy && (answeredBy.name || answeredBy.netid)) || undefined
@@ -171,16 +140,31 @@ class Question extends React.Component {
             {isBeingAnswered && (
               <Badge color="success">Being answered by {answeringName}</Badge>
             )}
-            {studentName}
+            <strong className="d-block">
+              <span title="Name">{name}</span>
+              {isUserCourseStaff && (
+                <span title="NetID" className="text-muted">
+                  {' '}
+                  ({askedBy.netid})
+            </span>
+              )}
+            </strong>
             <div className="text-muted">
               <span className="text-muted" style={{ fontSize: '0.9rem' }}>
-                {!!location && <Fragment>{studentLocation}</Fragment>}
+                {!!location && (
+                  <Fragment>
+                    <span title="Location">{location}</span>
+                    <span className="mr-2 ml-2">&bull;</span>
+                  </Fragment>
+                )}
                 <span title={moment(enqueueTime).calendar()}>
                   <Moment fromNow>{enqueueTime}</Moment>
                 </span>
               </span>
             </div>
-            <div title="Topic">{studentTopic}</div>
+            <div title="Topic">
+              <ParrotText text={topic} />
+            </div>
           </div>
           <div className="ml-auto pt-3 pt-sm-0">{buttonCluster}</div>
         </ListGroupItem>
@@ -198,7 +182,6 @@ Question.propTypes = {
   name: PropTypes.string.isRequired,
   location: PropTypes.string.isRequired,
   topic: PropTypes.string.isRequired,
-  isConfidential: PropTypes.bool.isRequired,
   beingAnswered: PropTypes.bool.isRequired,
   enqueueTime: PropTypes.string.isRequired,
   answeredBy: PropTypes.shape({

@@ -156,30 +156,41 @@ class QuestionList extends React.Component {
     let questions
     if (this.props.queue && this.props.queue.questions) {
       if (this.props.queue.questions.length > 0) {
-        questions = this.props.queue.questions.map(questionId => {
-          const question = this.props.questions[questionId]
-          return (
-            <Question
-              key={questionId}
-              isConfidential={this.props.queue.isConfidential}
-              isUserCourseStaff={this.props.isUserCourseStaff}
-              isUserActiveStaffForQueue={this.props.isUserActiveStaffForQueue}
-              isUserAnsweringQuestion={
-                this.props.userId === question.answeredById
-              }
-              isUserAnsweringOtherQuestion={
-                this.props.isUserAnsweringQuestionForQueue
-              }
-              didUserAskQuestion={this.props.userId === question.askedById}
-              deleteQuestion={() => this.deleteQuestion(questionId)}
-              cancelQuestion={() => this.cancelQuestion(questionId)}
-              startQuestion={() => this.startQuestion(questionId)}
-              finishedAnswering={() => this.handleFinishedAnswering(questionId)}
-              editQuestion={() => this.handleEditQuestion(questionId)}
-              {...question}
-            />
-          )
-        })
+          questions = this.props.queue.questions.map(questionId => {
+            const question = this.props.questions[questionId]
+            if (
+              !this.props.queue.isConfidential ||
+              (this.props.queue.isConfidential &&
+                (this.props.userId === question.askedById || this.props.isUserCourseStaff))
+            ) {
+              return (
+                <Question
+                  key={questionId}
+                  isConfidential={this.props.queue.isConfidential}
+                  isUserCourseStaff={this.props.isUserCourseStaff}
+                  isUserActiveStaffForQueue={
+                    this.props.isUserActiveStaffForQueue
+                  }
+                  isUserAnsweringQuestion={
+                    this.props.userId === question.answeredById
+                  }
+                  isUserAnsweringOtherQuestion={
+                    this.props.isUserAnsweringQuestionForQueue
+                  }
+                  didUserAskQuestion={this.props.userId === question.askedById}
+                  deleteQuestion={() => this.deleteQuestion(questionId)}
+                  cancelQuestion={() => this.cancelQuestion(questionId)}
+                  startQuestion={() => this.startQuestion(questionId)}
+                  finishedAnswering={() =>
+                    this.handleFinishedAnswering(questionId)
+                  }
+                  editQuestion={() => this.handleEditQuestion(questionId)}
+                  {...question}
+                />
+              )
+            }
+            return null;
+          })
       } else {
         questions = (
           <div>

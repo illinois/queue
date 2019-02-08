@@ -18,6 +18,8 @@ import ShowForCourseStaff from '../components/ShowForCourseStaff'
 import QuestionNotificationsToggle from '../components/QuestionNotificationsToggle'
 import QueueStatusToggleContainer from '../containers/QueueStatusToggleContainer'
 import QueueMessageEnabledToggleContainer from '../containers/QueueMessageEnabledToggleContainer'
+import { isUserCourseStaffForQueue } from '../selectors';
+import ConfidentialQueuePanelContainer from '../containers/ConfidentialQueuePanelContainer';
 
 class Queue extends React.Component {
   static getInitialProps({ isServer, store, query }) {
@@ -114,6 +116,9 @@ class Queue extends React.Component {
                 </CardBody>
               </Card>
             )}
+            {this.props.queue.isConfidential && !this.props.isUserCourseStaff && (
+              <ConfidentialQueuePanelContainer queueId={this.props.queueId} />
+            )}
             <QuestionListContainer queueId={this.props.queueId} />
           </Col>
         </Row>
@@ -128,6 +133,7 @@ Queue.propTypes = {
   fetchQueue: PropTypes.func.isRequired,
   queueId: PropTypes.number.isRequired,
   dispatch: PropTypes.func.isRequired,
+  isUserCourseStaff: PropTypes.bool.isRequired,
   queue: PropTypes.shape({
     id: PropTypes.number,
     name: PropTypes.string,
@@ -150,6 +156,7 @@ const mapStateToProps = (state, ownProps) => ({
   isFetching: state.queues.isFetching,
   hasQueue: !!state.queues.queues[ownProps.queueId],
   queue: state.queues.queues[ownProps.queueId],
+  isUserCourseStaff: isUserCourseStaffForQueue(state, ownProps),
 })
 
 const mapDispatchToProps = dispatch => ({
