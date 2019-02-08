@@ -72,6 +72,12 @@ class QueueMessage extends React.Component {
       return null
     }
 
+    const handleTabClick = (e, tab) => {
+      e.stopPropagation()
+      e.preventDefault()
+      this.onChangeTab(tab)
+    }
+
     const handleTabKeyPress = (e, tab) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.stopPropagation()
@@ -88,10 +94,11 @@ class QueueMessage extends React.Component {
             <Nav card tabs>
               <NavItem>
                 <NavLink
+                  href="#"
                   className={classnames({
                     active: this.state.activeTab === '1',
                   })}
-                  onClick={() => this.onChangeTab('1')}
+                  onClick={e => handleTabClick(e, '1')}
                   tabIndex="0"
                   onKeyPress={e => handleTabKeyPress(e, '1')}
                 >
@@ -100,10 +107,11 @@ class QueueMessage extends React.Component {
               </NavItem>
               <NavItem>
                 <NavLink
+                  href="#"
                   className={classnames({
                     active: this.state.activeTab === '2',
                   })}
-                  onClick={() => this.onChangeTab('2')}
+                  onClick={e => handleTabClick(e, '2')}
                   tabIndex="0"
                   onKeyPress={e => handleTabKeyPress(e, '2')}
                 >
@@ -127,7 +135,11 @@ class QueueMessage extends React.Component {
                 </FormText>
               </TabPane>
               <TabPane className="m-3" tabId="2">
-                <ReactMarkdown source={editedMessage} />
+                <ReactMarkdown
+                  source={
+                    editedMessage === '' ? 'Nothing to preview' : editedMessage
+                  }
+                />
               </TabPane>
             </TabContent>
           </CardBody>
