@@ -39,7 +39,7 @@
     "isomorphic-unfetch": "^2.1.0",
     "json-patch": "^0.7.0",
     "jsonwebtoken": "^8.4.0",
-    "moment": "^2.22.2",
+    "moment": "^2.24.0",
     "mysql2": "^1.6.5",
     "next": "^7.0.0",
     "next-page-transitions": "^1.0.0-alpha.6",
