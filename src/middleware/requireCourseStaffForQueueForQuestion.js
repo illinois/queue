@@ -10,7 +10,7 @@ module.exports = async (req, res, next) => {
       return
     }
 
-    const question = await Question.findById(questionId)
+    const question = await Question.findByPk(questionId)
     if (!question) {
       res.status(404).send()
       return

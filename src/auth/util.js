@@ -49,7 +49,7 @@ module.exports.getUserFromJwt = async token => {
   try {
     const jwtData = jwt.verify(token, JWT_SECRET)
     const netid = jwtData.sub
-    const user = await User.find({ where: { netid } })
+    const user = await User.findOne({ where: { netid } })
     return user
   } catch (e) {
     return null
