@@ -7,6 +7,8 @@ with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
 
+* Update all dependencies. ([@nwalters512](https://github.com/nwalters512) in [#206](https://github.com/illinois/queue/pull/206))
+
 ## 8 February 2019
 
 * Allow user to select queues by tabbing through the main page. ([@shwavedefapp](https://github.com/shwavedefapp) in [#192](https://github.com/illinois/queue/pull/192))
