@@ -71,9 +71,8 @@
     "winston": "^3.0.0"
   },
   "devDependencies": {
-    "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^8.2.6",
-    "babel-jest": "^23.4.0",
+    "babel-jest": "^24.1.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "cpx": "^1.5.0",
@@ -86,18 +85,20 @@
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.10.0",
     "husky": "^0.15.0-rc.13",
-    "jest": "^23.4.1",
-    "jest-enzyme": "^6.0.2",
+    "jest": "^24.1.0",
+    "jest-enzyme": "^7.0.1",
     "nodemon": "^1.18.3",
     "prettier": "1.13.7",
     "pretty-quick": "^1.6.0",
     "react-test-renderer": "^16.4.1",
     "rimraf": "^2.6.2",
     "sqlite3": "^4.0.2",
-    "supertest": "^3.1.0"
+    "supertest": "^3.4.2"
   },
   "jest": {
-    "setupTestFrameworkScriptFile": "./test/setup.js",
+    "setupFilesAfterEnv": [
+      "./test/setup.js"
+    ],
     "testRegex": "src/.*test.js",
     "collectCoverage": true
   },
