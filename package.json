@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node src/server.js",
     "dev-watch": "nodemon src/server.js",
-    "build": "rimraf build && cpx \"src\\**\\*\" build && next build build",
+    "build": "rimraf build && cpx \"src\\**\\*\" build && next build ./build",
     "start": "NODE_ENV=production node build/server.js",
     "now-start": "NODE_ENV=now node build/server.js",
     "test": "NODE_ENV=test jest",
