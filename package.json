@@ -67,7 +67,7 @@
     "styled-jsx": "^3.1.0",
     "supertest-session": "^3.3.0",
     "umzug": "^2.2.0",
-    "validator": "^10.4.0",
+    "validator": "^10.11.0",
     "winston": "^3.0.0"
   },
   "devDependencies": {
