@@ -24,7 +24,7 @@
     "@fortawesome/free-brands-svg-icons": "^5.2.0",
     "@fortawesome/free-solid-svg-icons": "^5.2.0",
     "@fortawesome/react-fontawesome": "0.1.0-11",
-    "@zeit/next-css": "^1.0.0",
+    "@zeit/next-css": "^1.0.1",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "classnames": "^2.2.6",
