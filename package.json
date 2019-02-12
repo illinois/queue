@@ -43,7 +43,7 @@
     "mysql2": "^1.6.5",
     "next": "^8.0.0",
     "next-page-transitions": "^1.0.0-alpha.6",
-    "next-redux-wrapper": "^2.0.0",
+    "next-redux-wrapper": "^3.0.0-alpha.1",
     "next-routes": "^1.4.2",
     "normalizr": "^3.3.0",
     "pg": "^7.8.0",
