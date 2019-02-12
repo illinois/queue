@@ -30,7 +30,7 @@
     "classnames": "^2.2.6",
     "co": "^4.6.0",
     "cookie-parser": "^1.4.3",
-    "dotenv": "^6.0.0",
+    "dotenv": "^6.2.0",
     "express": "^4.16.3",
     "express-urlrewrite": "^1.2.0",
     "express-validator": "^5.3.0",
