@@ -35,10 +35,8 @@ class DevModeLogin extends React.Component {
           withCredentials: true,
         }
       )
-      .then(res => {
-        if (res.data.redirect) {
-          window.location = res.data.redirect
-        }
+      .then(() => {
+        window.location = this.props.redirect
       })
   }
 
@@ -73,11 +71,7 @@ class DevModeLogin extends React.Component {
 }
 
 DevModeLogin.propTypes = {
-  redirect: PropTypes.string,
-}
-
-DevModeLogin.defaultProps = {
-  redirect: null,
+  redirect: PropTypes.string.isRequired,
 }
 
 export default DevModeLogin

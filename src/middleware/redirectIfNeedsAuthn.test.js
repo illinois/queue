@@ -39,6 +39,13 @@ describe('redirectIfNeedsAuthn middleware', () => {
     expect(res.redirect).not.toBeCalled()
   })
 
+  test("doesn't add an explicit redirect for the index route", async () => {
+    const { req, res, next } = makeArgs('/')
+    await redirectIfNeedsAuthn(req, res, next)
+    expect(next).not.toBeCalled()
+    expect(res.redirect).toBeCalledWith('/login')
+  })
+
   test('adds redirect query parameter for unauthenticated users', async () => {
     const { req, res, next } = makeArgs('/queue/1')
     await redirectIfNeedsAuthn(req, res, next)

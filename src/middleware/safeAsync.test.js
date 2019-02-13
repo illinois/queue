@@ -2,7 +2,7 @@
 const safeAsync = require('./safeAsync')
 
 describe('safeAsync wrapper', () => {
-  test('returns a function that is waitable', async () => {
+  test('returns a Promise', async () => {
     let c1 = false
     let c2 = false
     await safeAsync(async () => {
@@ -10,7 +10,7 @@ describe('safeAsync wrapper', () => {
         setTimeout(() => {
           c2 = true
           resolve()
-        }, 1000)
+        }, 100)
       )
     })()
     c1 = true

@@ -6,31 +6,40 @@ import { Button } from 'reactstrap'
 import DevModeLogin from '../components/DevModeLogin'
 import { withBaseUrl, isDev, isNow } from '../util'
 
-const Login = ({ router }) => {
-  const showDevModeLogin = isDev || isNow
-  const { redirect } = router.query
-  let shibUrl = withBaseUrl('login/shib')
-  if (redirect) {
-    shibUrl += `?redirect=${redirect}`
+class Login extends React.Component {
+  static async getInitialProps({ req }) {
+    if (req) {
+      return {
+        redirect: req.query.redirect,
+      }
+    }
+    return {}
   }
-  return (
-    <Fragment>
-      <div className="login-container">
-        <h1 className="text-center display-4">Log in</h1>
-        <p className="text-center text-secondary">
-          Welcome back! Log in to access the Queue.
-        </p>
-        <Button className="btn-illinois" color={null} block href={shibUrl}>
-          Log in with Illinois
-        </Button>
-        {showDevModeLogin && (
-          <Fragment>
-            <hr />
-            <DevModeLogin redirect={redirect} />
-          </Fragment>
-        )}
-      </div>
-      <style jsx global>{`
+
+  render() {
+    const showDevModeLogin = isDev || isNow
+    let shibUrl = withBaseUrl('login/shib')
+    if (this.props.redirect !== withBaseUrl('/')) {
+      shibUrl += `?redirect=${this.props.redirect}`
+    }
+    return (
+      <Fragment>
+        <div className="login-container">
+          <h1 className="text-center display-4">Log in</h1>
+          <p className="text-center text-secondary">
+            Welcome back! Log in to access the Queue.
+          </p>
+          <Button className="btn-illinois" color={null} block href={shibUrl}>
+            Log in with Illinois
+          </Button>
+          {showDevModeLogin && (
+            <Fragment>
+              <hr />
+              <DevModeLogin redirect={this.props.redirect} />
+            </Fragment>
+          )}
+        </div>
+        <style jsx global>{`
         .login-container {
           margin-top:
           width: 100%;
@@ -69,16 +78,17 @@ const Login = ({ router }) => {
           border-color: #B93B1F;
         }
       `}</style>
-    </Fragment>
-  )
+      </Fragment>
+    )
+  }
 }
 
 Login.propTypes = {
-  router: PropTypes.shape({
-    query: PropTypes.shape({
-      redirect: PropTypes.string,
-    }),
-  }).isRequired,
+  redirect: PropTypes.string,
+}
+
+Login.defaultProps = {
+  redirect: withBaseUrl('/'),
 }
 
 export default Login
