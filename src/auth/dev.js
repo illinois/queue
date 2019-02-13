@@ -20,5 +20,5 @@ module.exports = safeAsync(async (req, res) => {
   }
   addJwtCookie(req, res, user)
 
-  res.send(200)
+  res.status(200).send()
 })
