@@ -18,7 +18,7 @@ class Login extends React.Component {
 
   render() {
     const showDevModeLogin = isDev || isNow
-    let shibUrl = withBaseUrl('login/shib')
+    let shibUrl = withBaseUrl('/login/shib')
     if (this.props.redirect !== withBaseUrl('/')) {
       shibUrl += `?redirect=${this.props.redirect}`
     }
