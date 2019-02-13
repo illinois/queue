@@ -1,5 +1,5 @@
 const { withBaseUrl } = require('../util')
-const { createOrUpdateUser, addJwtCookie } = require('./util')
+const { createOrUpdateUser, addJwtCookie, isSafeUrl } = require('./util')
 const safeAsync = require('../middleware/safeAsync')
 
 module.exports = safeAsync(async (req, res) => {
@@ -14,7 +14,14 @@ module.exports = safeAsync(async (req, res) => {
   const user = await createOrUpdateUser(req, netid)
   addJwtCookie(req, res, user)
 
+  const { redirect } = req.query
+  // Sanity check the redirect url
   // Finally, we'll redirect the user to either their original url or the queue homepage.
+  // The redirect should already be prefixed by `BASE_URL`
   // They'll now have the required token to make authenticated requests.
-  res.redirect(req.query.redirect || withBaseUrl('/'))
+  if (redirect && isSafeUrl(req, redirect)) {
+    res.redirect(redirect)
+  } else {
+    res.redirect(withBaseUrl('/'))
+  }
 })

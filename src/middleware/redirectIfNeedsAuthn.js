@@ -33,8 +33,10 @@ module.exports = safeAsync(async (req, res, next) => {
   const user = await getUserFromJwt(jwtCookie)
   if (user === null) {
     let url = withBaseUrl('/login')
-    if (path !== withBaseUrl('/')) {
-      url += `?redirect=${path}`
+    // `path` isn't prefixed by BASE_URL
+    if (path !== '' && path !== '/') {
+      const fullPath = withBaseUrl(path)
+      url += `?redirect=${fullPath}`
     }
     res.redirect(url)
   } else {

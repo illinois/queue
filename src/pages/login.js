@@ -19,8 +19,9 @@ class Login extends React.Component {
   render() {
     const showDevModeLogin = isDev || isNow
     let shibUrl = withBaseUrl('/login/shib')
-    if (this.props.redirect !== withBaseUrl('/')) {
-      shibUrl += `?redirect=${this.props.redirect}`
+    const { redirect } = this.props
+    if (redirect !== withBaseUrl('') && redirect !== withBaseUrl('/')) {
+      shibUrl += `?redirect=${redirect}`
     }
     return (
       <Fragment>
@@ -35,7 +36,7 @@ class Login extends React.Component {
           {showDevModeLogin && (
             <Fragment>
               <hr />
-              <DevModeLogin redirect={this.props.redirect} />
+              <DevModeLogin redirect={redirect} />
             </Fragment>
           )}
         </div>
