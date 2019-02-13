@@ -1,12 +1,18 @@
 import React, { Fragment } from 'react'
+import PropTypes from 'prop-types'
 
 import { Button } from 'reactstrap'
 
 import DevModeLogin from '../components/DevModeLogin'
 import { withBaseUrl, isDev, isNow } from '../util'
 
-const Login = () => {
+const Login = ({ router }) => {
   const showDevModeLogin = isDev || isNow
+  const { redirect } = router.query
+  let shibUrl = withBaseUrl('login/shib')
+  if (redirect) {
+    shibUrl += `?redirect=${redirect}`
+  }
   return (
     <Fragment>
       <div className="login-container">
@@ -14,18 +20,13 @@ const Login = () => {
         <p className="text-center text-secondary">
           Welcome back! Log in to access the Queue.
         </p>
-        <Button
-          className="btn-illinois"
-          color={null}
-          block
-          href={withBaseUrl('/login/shib')}
-        >
+        <Button className="btn-illinois" color={null} block href={shibUrl}>
           Log in with Illinois
         </Button>
         {showDevModeLogin && (
           <Fragment>
             <hr />
-            <DevModeLogin />
+            <DevModeLogin redirect={redirect} />
           </Fragment>
         )}
       </div>
@@ -70,6 +71,14 @@ const Login = () => {
       `}</style>
     </Fragment>
   )
+}
+
+Login.propTypes = {
+  router: PropTypes.shape({
+    query: PropTypes.shape({
+      redirect: PropTypes.string,
+    }),
+  }).isRequired,
 }
 
 export default Login

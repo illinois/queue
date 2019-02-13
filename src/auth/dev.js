@@ -1,3 +1,4 @@
+const { withBaseUrl } = require('../util')
 const { createOrUpdateUser, addJwtCookie } = require('./util')
 const safeAsync = require('../middleware/safeAsync')
 
@@ -9,7 +10,7 @@ const safeAsync = require('../middleware/safeAsync')
  */
 module.exports = safeAsync(async (req, res) => {
   const {
-    body: { netid },
+    body: { netid, redirect },
   } = req
 
   const user = await createOrUpdateUser(req, netid)
@@ -20,5 +21,7 @@ module.exports = safeAsync(async (req, res) => {
   }
   addJwtCookie(req, res, user)
 
-  res.status(200).send()
+  res.json({
+    redirect: redirect || withBaseUrl('/'),
+  })
 })

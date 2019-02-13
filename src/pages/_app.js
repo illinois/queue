@@ -24,7 +24,7 @@ class MyApp extends React.Component {
     return (
       <Provider store={store}>
         <AppContainer>
-          <Component {...pageProps} key={router.route} />
+          <Component {...pageProps} router={router} key={router.route} />
         </AppContainer>
       </Provider>
     )

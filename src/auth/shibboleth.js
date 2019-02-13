@@ -14,7 +14,7 @@ module.exports = safeAsync(async (req, res) => {
   const user = await createOrUpdateUser(req, netid)
   addJwtCookie(req, res, user)
 
-  // Finally, we'll redirect the user to the queue homepage. They'll now
-  // have the required token to make authenticated requests.
-  res.redirect(withBaseUrl('/'))
+  // Finally, we'll redirect the user to either their original url or the queue homepage.
+  // They'll now have the required token to make authenticated requests.
+  res.redirect(req.query.redirect || withBaseUrl('/'))
 })
