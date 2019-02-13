@@ -29,7 +29,6 @@ class DevModeLogin extends React.Component {
         '/login/dev',
         {
           netid: this.state.netid,
-          redirect: this.props.redirect,
         },
         {
           withCredentials: true,
