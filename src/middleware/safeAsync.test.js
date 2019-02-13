@@ -3,15 +3,17 @@ const safeAsync = require('./safeAsync')
 
 describe('safeAsync wrapper', () => {
   test('returns a function that is waitable', async () => {
-    let done = false
+    let c1 = false
+    let c2 = false
     await safeAsync(async () => {
-      return new Promise(resolve =>
+      await new Promise(resolve =>
         setTimeout(() => {
-          done = true
+          c2 = true
           resolve()
         }, 1000)
       )
     })()
-    expect(done).toBeTruthy()
+    c1 = true
+    expect(c1 && c2).toBeTruthy()
   })
 })
