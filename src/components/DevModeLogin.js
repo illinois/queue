@@ -1,8 +1,9 @@
+/* eslint-env browser */
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Form, InputGroup, InputGroupAddon, Input, Button } from 'reactstrap'
 
 import axios from '../actions/axios'
-import { Router } from '../routes'
 
 class DevModeLogin extends React.Component {
   constructor(props) {
@@ -33,7 +34,9 @@ class DevModeLogin extends React.Component {
           withCredentials: true,
         }
       )
-      .then(() => Router.pushRoute('index'))
+      .then(() => {
+        window.location = this.props.redirect
+      })
   }
 
   render() {
@@ -64,6 +67,10 @@ class DevModeLogin extends React.Component {
       </div>
     )
   }
+}
+
+DevModeLogin.propTypes = {
+  redirect: PropTypes.string.isRequired,
 }
 
 export default DevModeLogin
