@@ -155,7 +155,7 @@ router.post(
     }
 
     // Verify that this user isn't currently answering another question
-    const otherQuestions = await Question.find({
+    const otherQuestions = await Question.findOne({
       where: {
         answeredById: res.locals.userAuthn.id,
         dequeueTime: null,

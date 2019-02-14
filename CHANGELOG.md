@@ -7,9 +7,17 @@ with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
 
+* Update all dependencies. ([@nwalters512](https://github.com/nwalters512) in [#206](https://github.com/illinois/queue/pull/206))
+* Implement landing url redirects. ([@james9909](https://github.com/james9909) in [#208](https://github.com/illinois/queue/pull/208))
+* Add user-facing error messages. ([@james9909](https://github.com/james9909) in [#195](https://github.com/illinois/queue/pull/195))
+
+## 8 February 2019
+
 * Allow user to select queues by tabbing through the main page. ([@shwavedefapp](https://github.com/shwavedefapp) in [#192](https://github.com/illinois/queue/pull/192))
 * Make improvements to staff message experience. ([@nwalters512](https://github.com/nwalters512) in [#194](https://github.com/illinois/queue/pull/194))
-* Add user-facing error messages. ([@james9909](https://github.com/james9909) in [#195](https://github.com/illinois/queue/pull/195))
+* Add markdown previews to the queue message editor. ([@shwavedefapp](https://github.com/shwavedefapp) in [#193](https://github.com/illinois/queue/pull/193))
+* Add ability to cancel editing of the queue message. ([@shwavedefapp](https://github.com/shwavedefapp) in [#197](https://github.com/illinois/queue/pull/197))
+* Add parrot support to queue messages. ([@nwalters512](https://github.com/nwalters512) in [#201](https://github.com/illinois/queue/pull/201))
 
 ## 26 January 2019
 
