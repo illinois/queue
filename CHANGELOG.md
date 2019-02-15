@@ -8,6 +8,7 @@ with the current date and the next changes should go under a **[Next]** header.
 ## [Next]
 
 * Update all dependencies. ([@nwalters512](https://github.com/nwalters512) in [#206](https://github.com/illinois/queue/pull/206))
+* Implement landing url redirects. ([@james9909](https://github.com/james9909) in [#208](https://github.com/illinois/queue/pull/208))
 * Add ability to collapse the queue message. ([@nwalters512](https://github.com/nwalters512) in [#212](https://github.com/illinois/queue/pull/212))
 
 ## 8 February 2019
