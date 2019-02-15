@@ -17,8 +17,7 @@ import {
   TabContent,
   TabPane,
 } from 'reactstrap'
-import ReactMarkdown from 'react-markdown'
-import ParrotText from './ParrotText'
+import ParrotMarkdown from './ParrotMarkdown'
 
 const QueueMessage = props => {
   const [editing, setEditing] = useState(false)
@@ -71,11 +70,6 @@ const QueueMessage = props => {
     })
   }
 
-  // We use a custom renderer for text so that we can support parrots!
-  const renderers = {
-    text: element => <ParrotText text={element.children} />,
-  }
-
   let content
   let button
   if (editing) {
@@ -121,7 +115,7 @@ const QueueMessage = props => {
                 name="text"
                 rows="6"
                 value={editedMessage.value}
-                onChange={editedMessage.onChanged}
+                onChange={editedMessage.onChange}
                 innerRef={inputRef}
               />
               <FormText color="muted">
@@ -129,9 +123,8 @@ const QueueMessage = props => {
               </FormText>
             </TabPane>
             <TabPane className="m-3" tabId="2">
-              <ReactMarkdown
+              <ParrotMarkdown
                 source={editedMessage.value || 'Nothing to preview'}
-                renderers={renderers}
               />
             </TabPane>
           </TabContent>
@@ -153,7 +146,7 @@ const QueueMessage = props => {
       </>
     )
   } else {
-    content = <ReactMarkdown source={message} renderers={renderers} />
+    content = <ParrotMarkdown source={message} />
     button = (
       <Button color="primary" onClick={startEditing}>
         Edit
