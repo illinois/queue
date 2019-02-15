@@ -6,15 +6,15 @@ const useLocalStorage = (key, initialValue) => {
     window.localStorage.setItem(key, JSON.stringify(initialValue))
   }
   const localStorageValue = JSON.parse(window.localStorage.getItem(key))
-  const [localState, updateLocalState] = useState(localStorageValue)
+  const [state, updateState] = useState(localStorageValue)
   const localStorageChanged = e => {
     if (e.key === key) {
-      updateLocalState(JSON.parse(e.newValue))
+      updateState(JSON.parse(e.newValue))
     }
   }
-  const setLocalState = value => {
+  const setState = value => {
     window.localStorage.setItem(key, JSON.stringify(value))
-    updateLocalState(value)
+    updateState(value)
   }
   useEffect(() => {
     window.addEventListener('storage', localStorageChanged)
@@ -22,7 +22,7 @@ const useLocalStorage = (key, initialValue) => {
       window.removeEventListener('storage', localStorageChanged)
     }
   })
-  return [localState, setLocalState]
+  return [state, setState]
 }
 
 export default useLocalStorage
