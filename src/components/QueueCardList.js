@@ -152,18 +152,20 @@ class QueueCardList extends React.Component {
       )
     }
 
+    const { pendingDeleteQueue } = this.state
     return (
       <Fragment>
         {queues}
         <ConfirmDeleteQueueModal
           queueName={
-            this.state.pendingDeleteQueue
-              ? this.props.queues[this.state.pendingDeleteQueue.queueId].name
+            pendingDeleteQueue && this.props.queues[pendingDeleteQueue.queueId]
+              ? this.props.queues[pendingDeleteQueue.queueId].name
               : null
           }
           courseName={
-            this.state.pendingDeleteQueue
-              ? this.props.courses[this.state.pendingDeleteQueue.courseId].name
+            pendingDeleteQueue &&
+            this.props.courses[pendingDeleteQueue.courseId]
+              ? this.props.courses[pendingDeleteQueue.courseId].name
               : null
           }
           isOpen={this.state.showDeleteQueueModal}
