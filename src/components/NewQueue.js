@@ -15,7 +15,7 @@ import { connect } from 'react-redux'
 
 import { mapObjectToArray } from '../util'
 
-const isValid = error => (error === undefined ? undefined : error === '')
+const isValid = error => error === undefined || error === ''
 
 class NewQueue extends React.Component {
   constructor(props) {
@@ -123,7 +123,7 @@ class NewQueue extends React.Component {
                 id="course"
                 onChange={this.handleInputChange}
                 value={this.state.course}
-                valid={isValid(this.state.fieldErrors.course)}
+                invalid={!isValid(this.state.fieldErrors.course)}
               >
                 <option value="none" disabled>
                   Select a course
@@ -146,7 +146,7 @@ class NewQueue extends React.Component {
               onChange={this.handleInputChange}
               onKeyDown={this.handleKeyPress}
               value={this.state.name}
-              valid={isValid(this.state.fieldErrors.name)}
+              invalid={!isValid(this.state.fieldErrors.name)}
             />
             <FormFeedback>{this.state.fieldErrors.name}</FormFeedback>
           </Col>
@@ -181,7 +181,7 @@ class NewQueue extends React.Component {
               onChange={this.handleInputChange}
               onKeyDown={this.handleKeyPress}
               value={this.state.location}
-              valid={isValid(this.state.fieldErrors.location)}
+              invalid={!isValid(this.state.fieldErrors.location)}
             />
             {this.state.fixedLocation ? (
               <FormText color="muted">
