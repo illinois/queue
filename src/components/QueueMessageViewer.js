@@ -6,8 +6,24 @@ import classNames from 'classnames'
 import { Card, CardHeader, CardBody, Collapse } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faEdit } from '@fortawesome/free-solid-svg-icons'
+import css from 'styled-jsx/css'
 
 import ParrotMarkdown from './ParrotMarkdown'
+
+const { className, styles } = css.resolve`
+  .bg-primary-light {
+    color: #004085;
+    background-color: #cce5ff;
+  }
+
+  .bg-primary-light .card-header {
+    background-color: #acd5ff;
+  }
+
+  .card-body > :global(*:last-child) {
+    margin-bottom: 0;
+  }
+`
 
 const QueueMessageViewer = props => {
   const expanded = useBoolean(true)
@@ -19,6 +35,7 @@ const QueueMessageViewer = props => {
   })
 
   const headerClassNames = classNames({
+    [className]: true,
     'd-flex align-items-center': true,
     'new-question-header-clickable': collapsible,
   })
@@ -28,8 +45,15 @@ const QueueMessageViewer = props => {
     onEdit()
   }
 
+  const onEditKeyPress = e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.stopPropagation()
+      onEdit()
+    }
+  }
+
   return (
-    <Card color="primary" className="text-white">
+    <Card className={`${className} bg-primary-light`}>
       <CardHeader onClick={expanded.toggle} className={headerClassNames}>
         <span>Queue staff message</span>
         <div className="ml-auto">
@@ -37,6 +61,10 @@ const QueueMessageViewer = props => {
             <FontAwesomeIcon
               icon={faEdit}
               onClick={onEditClick}
+              onKeyPress={onEditKeyPress}
+              tabIndex="0"
+              aria-hidden={false}
+              aria-label="Edit message"
               className="mr-3"
             />
           )}
@@ -49,10 +77,11 @@ const QueueMessageViewer = props => {
         </div>
       </CardHeader>
       <Collapse isOpen={expanded.value}>
-        <CardBody>
+        <CardBody className={className}>
           <ParrotMarkdown source={message} />
         </CardBody>
       </Collapse>
+      {styles}
     </Card>
   )
 }
