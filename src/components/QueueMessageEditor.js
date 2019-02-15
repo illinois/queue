@@ -22,6 +22,13 @@ const QueueMessageEditor = props => {
   const messageInputRef = useRef(null)
   const [activeTab, setActiveTab] = useState('1')
   useEffect(() => {
+    if (messageInputRef.current) {
+      messageInputRef.current.focus()
+      messageInputRef.current.setSelectionRange(0, 0)
+      messageInputRef.current.scrollTo(0, 0)
+    }
+  }, [])
+  useEffect(() => {
     if (activeTab === '1' && messageInputRef.current) {
       messageInputRef.current.focus()
     }
