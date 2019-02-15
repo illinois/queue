@@ -21,7 +21,7 @@ const useLocalStorage = (key, initialValue) => {
     return () => {
       window.removeEventListener('storage', localStorageChanged)
     }
-  }, [])
+  })
   return [localState, setLocalState]
 }
 
