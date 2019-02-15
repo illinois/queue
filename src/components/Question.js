@@ -66,17 +66,16 @@ class Question extends React.Component {
     } else {
       buttonCluster = (
         <Fragment>
-          {isUserActiveStaffForQueue &&
-            !isUserAnsweringOtherQuestion && (
-              <Button
-                color="primary"
-                outline
-                className="mr-2"
-                onClick={() => this.props.startQuestion()}
-              >
-                Start Answering!
-              </Button>
-            )}
+          {isUserActiveStaffForQueue && !isUserAnsweringOtherQuestion && (
+            <Button
+              color="primary"
+              outline
+              className="mr-2"
+              onClick={() => this.props.startQuestion()}
+            >
+              Start Answering!
+            </Button>
+          )}
           {didUserAskQuestion && (
             <Button
               color="primary"
