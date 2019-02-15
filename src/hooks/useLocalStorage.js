@@ -19,7 +19,7 @@ const useLocalStorage = (key, initialValue) => {
   useEffect(() => {
     window.addEventListener('storage', localStorageChanged)
     return () => {
-      window.removeEventListener('storage', localStorage)
+      window.removeEventListener('storage', localStorageChanged)
     }
   }, [])
   return [localState, setLocalState]
