@@ -85,6 +85,7 @@ class Header extends React.Component {
                     color="secondary"
                     type="button"
                     onClick={() => {
+                      window.localStorage.setItem('logout', Date.now())
                       window.location = logoutRoute
                     }}
                   >
