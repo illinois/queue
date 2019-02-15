@@ -36,6 +36,7 @@ const QueueMessage = props => {
   } else {
     content = (
       <QueueMessageViewer
+        queueId={props.queueId}
         message={message}
         editable={isUserCourseStaff}
         collapsible={isUserCourseStaff}

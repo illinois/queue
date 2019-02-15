@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useBoolean } from 'react-hanger'
 import classNames from 'classnames'
 
 import { Card, CardHeader, CardBody, Collapse } from 'reactstrap'
@@ -8,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faEdit } from '@fortawesome/free-solid-svg-icons'
 import css from 'styled-jsx/css'
 
+import useLocalStorage from '../hooks/useLocalStorage'
 import ParrotMarkdown from './ParrotMarkdown'
 
 const { className, styles } = css.resolve`
@@ -38,13 +38,14 @@ const { className, styles } = css.resolve`
 `
 
 const QueueMessageViewer = props => {
-  const expanded = useBoolean(true)
+  const localStorageKey = `queue-message-${props.queueId}`
+  const [expanded, setExpanded] = useLocalStorage(localStorageKey, true)
   const { collapsible, editable, message, onEdit } = props
 
   const chevronClassNames = classNames({
     [className]: true,
     'queue-message-expand': true,
-    open: expanded.value,
+    open: collapsible && expanded,
   })
 
   const headerClassNames = classNames({
@@ -65,9 +66,15 @@ const QueueMessageViewer = props => {
     }
   }
 
+  const onClickHeader = () => {
+    if (collapsible) {
+      setExpanded(!expanded)
+    }
+  }
+
   return (
     <Card className={`${className} bg-primary-light`}>
-      <CardHeader onClick={expanded.toggle} className={headerClassNames}>
+      <CardHeader onClick={onClickHeader} className={headerClassNames}>
         <strong>Queue staff message</strong>
         <div className="ml-auto">
           {editable && (
@@ -89,7 +96,7 @@ const QueueMessageViewer = props => {
           )}
         </div>
       </CardHeader>
-      <Collapse isOpen={expanded.value}>
+      <Collapse isOpen={collapsible && expanded}>
         <CardBody className={className}>
           <ParrotMarkdown source={message} />
         </CardBody>
@@ -100,6 +107,7 @@ const QueueMessageViewer = props => {
 }
 
 QueueMessageViewer.propTypes = {
+  queueId: PropTypes.number.isRequired,
   message: PropTypes.string.isRequired,
   collapsible: PropTypes.bool.isRequired,
   editable: PropTypes.bool.isRequired,
