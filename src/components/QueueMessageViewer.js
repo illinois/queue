@@ -23,6 +23,18 @@ const { className, styles } = css.resolve`
   .card-body > :global(*:last-child) {
     margin-bottom: 0;
   }
+
+  .queue-message-expand {
+    transition: all 400ms;
+  }
+
+  .queue-message-expand.open {
+    transform: rotateX(180deg);
+  }
+
+  .queue-message-header-clickable {
+    cursor: pointer;
+  }
 `
 
 const QueueMessageViewer = props => {
@@ -30,14 +42,15 @@ const QueueMessageViewer = props => {
   const { collapsible, editable, message, onEdit } = props
 
   const chevronClassNames = classNames({
-    'new-question-expand': true,
+    [className]: true,
+    'queue-message-expand': true,
     open: expanded.value,
   })
 
   const headerClassNames = classNames({
     [className]: true,
     'd-flex align-items-center': true,
-    'new-question-header-clickable': collapsible,
+    'queue-message-header-clickable': collapsible,
   })
 
   const onEditClick = e => {
@@ -55,7 +68,7 @@ const QueueMessageViewer = props => {
   return (
     <Card className={`${className} bg-primary-light`}>
       <CardHeader onClick={expanded.toggle} className={headerClassNames}>
-        <span>Queue staff message</span>
+        <strong>Queue staff message</strong>
         <div className="ml-auto">
           {editable && (
             <FontAwesomeIcon
