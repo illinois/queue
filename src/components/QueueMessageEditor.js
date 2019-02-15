@@ -12,7 +12,6 @@ import {
   TabContent,
   TabPane,
   Input,
-  FormText,
   Button,
 } from 'reactstrap'
 
@@ -81,14 +80,11 @@ const QueueMessageEditor = props => {
             <Input
               type="textarea"
               name="text"
-              rows="6"
+              rows="8"
               value={messageInput.value}
               onChange={messageInput.onChange}
               innerRef={messageInputRef}
             />
-            <FormText color="muted">
-              You can use Markdown to format this message.
-            </FormText>
           </TabPane>
           <TabPane className="m-3" tabId="2">
             <ParrotMarkdown
@@ -96,19 +92,23 @@ const QueueMessageEditor = props => {
             />
           </TabPane>
         </TabContent>
-        <Button
-          color="primary"
-          onClick={() => props.onSave(messageInput.value)}
-        >
-          Save
-        </Button>
-        <Button
-          color="danger"
-          className="ml-1"
-          onClick={() => props.onCancel()}
-        >
-          Cancel
-        </Button>
+        <div className="d-flex flex-column flex-sm-row align-items-sm-center mt-2">
+          <span className="text-secondary small">
+            You can use markdown to format this message.
+          </span>
+          <div className="ml-auto mt-2 mt-sm-0">
+            <Button color="danger" onClick={() => props.onCancel()}>
+              Cancel
+            </Button>
+            <Button
+              color="primary"
+              className="ml-1"
+              onClick={() => props.onSave(messageInput.value)}
+            >
+              Save
+            </Button>
+          </div>
+        </div>
       </CardBody>
     </Card>
   )
