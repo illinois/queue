@@ -6,8 +6,8 @@ import { Card, CardHeader, CardBody, Collapse } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown, faEdit } from '@fortawesome/free-solid-svg-icons'
 import css from 'styled-jsx/css'
+import useLocalStorage from '@illinois/react-use-local-storage'
 
-import useLocalStorage from '../hooks/useLocalStorage'
 import ParrotMarkdown from './ParrotMarkdown'
 
 const { className, styles } = css.resolve`
