@@ -203,6 +203,67 @@ export function deleteQuestion(queueId, questionId) {
 }
 
 /**
+ * Delete all Questions
+ */
+const deleteAllQuestionsRequest = makeActionCreator(
+  types.DELETE_ALL_QUESTIONS.REQUEST,
+  'queueId',
+  'attributes'
+)
+
+export const deleteAllQuestionsSuccess = makeActionCreator(
+  types.DELETE_ALL_QUESTIONS.SUCCESS,
+  'queueId'
+)
+
+const deleteAllQuestionsFailure = makeActionCreator(
+  types.DELETE_ALL_QUESTIONS.FAILURE,
+  'queueId'
+)
+
+export function deleteAllQuestions(queueId, attributes) {
+  return dispatch => {
+    dispatch(deleteAllQuestionsRequest(queueId, attributes))
+
+    var questionList
+    axios
+      .get(`/api/queues/${queueId}/questions`)
+      .then(res => {
+        questionList = res.data
+        var i
+        for (i = questionList['length'] - 1; i >= 0; i--) {
+          var questionId = questionList[i]['id']
+          axios.delete(`/api/questions/${questionId}`).then(
+            () => dispatch(deleteQuestionSuccess(queueId, questionId)),
+            err => {
+              console.error(err)
+              dispatch(deleteQuestionFailure(queueId, questionId))
+              dispatch(deleteAllQuestionsFailure(queueId))
+            }
+          )
+        }
+      })
+      .catch(err => {
+        console.error(err)
+        dispatch(requestQuestionsFailure(queueId))
+        dispatch(deleteAllQuestionsFailure(queueId))
+      })
+
+    axios
+      .patch(`/api/queues/${queueId}`, attributes)
+      .then
+      // res => dispatch(updateQueueSuccess(queueId, res.data)),
+      // err => {
+      //   console.error(err)
+      //   dispatch(updateQueueFailure(queueId))
+      // }
+      ()
+
+    dispatch(deleteAllQuestionsSuccess(queueId))
+  }
+}
+
+/**
  * Update all questions for a queue
  */
 export const replaceQuestions = makeActionCreator(

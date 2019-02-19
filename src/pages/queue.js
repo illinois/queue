@@ -17,6 +17,7 @@ import QueueMessageContainer from '../containers/QueueMessageContainer'
 import ShowForCourseStaff from '../components/ShowForCourseStaff'
 import QuestionNotificationsToggle from '../components/QuestionNotificationsToggle'
 import QueueStatusToggleContainer from '../containers/QueueStatusToggleContainer'
+import DeleteAllQuestionsToggleContainer from '../containers/DeleteAllQuestionsToggleContainer'
 import QueueMessageEnabledToggleContainer from '../containers/QueueMessageEnabledToggleContainer'
 
 class Queue extends React.Component {
@@ -80,6 +81,7 @@ class Queue extends React.Component {
             <QuestionNotificationsToggle />
             <ShowForCourseStaff queueId={this.props.queueId}>
               <QueueStatusToggleContainer queue={this.props.queue} />
+              <DeleteAllQuestionsToggleContainer queue={this.props.queue} />
               <QueueMessageEnabledToggleContainer queue={this.props.queue} />
             </ShowForCourseStaff>
             <StaffSidebar queueId={this.props.queueId} />
@@ -118,6 +120,7 @@ Queue.propTypes = {
     location: PropTypes.string,
     courseId: PropTypes.number,
     open: PropTypes.bool,
+    deleteall: PropTypes.bool,
     message: PropTypes.string,
     messageEnabled: PropTypes.bool,
   }),
