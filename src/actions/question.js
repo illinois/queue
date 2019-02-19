@@ -249,15 +249,7 @@ export function deleteAllQuestions(queueId, attributes) {
         dispatch(deleteAllQuestionsFailure(queueId))
       })
 
-    axios
-      .patch(`/api/queues/${queueId}`, attributes)
-      .then
-      // res => dispatch(updateQueueSuccess(queueId, res.data)),
-      // err => {
-      //   console.error(err)
-      //   dispatch(updateQueueFailure(queueId))
-      // }
-      ()
+    axios.patch(`/api/queues/${queueId}`, attributes).then()
 
     dispatch(deleteAllQuestionsSuccess(queueId))
   }

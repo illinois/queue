@@ -12,10 +12,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
       },
-      deleteall: {
-        tupe: DataTypes.BOOLEAN,
-        defaultValue: false,
-      },
       message: DataTypes.TEXT,
       messageEnabled: {
         type: DataTypes.BOOLEAN,

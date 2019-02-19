@@ -121,9 +121,6 @@ router.patch(
     check('open')
       .optional({ nullable: true })
       .isBoolean(),
-    check('deleteall')
-      .optional({ nullable: true })
-      .isLength({ min: 1 }),
     check('message').optional({ nullable: true }),
     check('messageEnabled')
       .optional({ nullable: true })
