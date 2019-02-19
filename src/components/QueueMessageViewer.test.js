@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import React from 'react'
 import { shallow } from 'enzyme'
-import { Collapse, CardHeader } from 'reactstrap'
+import { Collapse } from 'reactstrap'
 import QueueMessageViewer from './QueueMessageViewer'
 
 const makeProps = (props = {}) => {
