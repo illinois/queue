@@ -7,6 +7,8 @@ with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
 
+## 19 February 2019
+
 * Fix queue message not being visible to students. ([@nwalters512](https://github.com/nwalters512) in [#214](https://github.com/illinois/queue/pull/214))
 
 ## 18 February 2019
