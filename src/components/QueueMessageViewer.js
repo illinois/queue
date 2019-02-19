@@ -72,6 +72,8 @@ const QueueMessageViewer = props => {
     }
   }
 
+  const messageVisible = !collapsible || expanded
+
   return (
     <Card className={`${className} bg-primary-light`}>
       <CardHeader onClick={onClickHeader} className={headerClassNames}>
@@ -96,7 +98,7 @@ const QueueMessageViewer = props => {
           )}
         </div>
       </CardHeader>
-      <Collapse isOpen={collapsible && expanded}>
+      <Collapse isOpen={messageVisible}>
         <CardBody className={className}>
           <ParrotMarkdown source={message} />
         </CardBody>
