@@ -1,100 +1,61 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-import { Alert, Button, FormText, Input } from 'reactstrap'
-import ReactMarkdown from 'react-markdown'
+import QueueMessageEditor from './QueueMessageEditor'
+import QueueMessageViewer from './QueueMessageViewer'
 
-class QueueMessage extends React.Component {
-  constructor(props) {
-    super(props)
+const QueueMessage = props => {
+  const [editing, setEditing] = useState(false)
+  const { message, isUserCourseStaff } = props
 
-    this.state = {
-      editing: false,
-      editedMessage: null,
-    }
-
-    this.onMessageChanged = this.onMessageChanged.bind(this)
-    this.onStartEdit = this.onStartEdit.bind(this)
-    this.onFinishEdit = this.onFinishEdit.bind(this)
+  // If the user is not on course staff and the message is null or empty,
+  // don't render the panel to them.
+  if (!isUserCourseStaff && !message) {
+    return null
   }
 
-  onMessageChanged(e) {
-    this.setState({
-      editedMessage: e.target.value,
-    })
-  }
+  let content
 
-  onStartEdit() {
-    this.setState({
-      editing: true,
-      editedMessage: this.props.message,
-    })
-  }
-
-  onFinishEdit() {
-    const attributes = {
-      message: this.state.editedMessage,
-    }
-    this.props.updateQueue(this.props.queueId, attributes).then(() => {
-      this.setState({ editing: false })
-    })
-  }
-
-  render() {
-    const { message, isUserCourseStaff } = this.props
-    const { editing, editedMessage } = this.state
-
-    // If the user is not on course staff and the message is null or empty,
-    // don't render the panel to them.
-    if (!isUserCourseStaff && !message) {
-      return null
+  if (editing) {
+    const handleSave = savedMessage => {
+      const attributes = {
+        message: savedMessage,
+      }
+      props.updateQueue(props.queueId, attributes).then(() => {
+        setEditing(false)
+      })
     }
 
-    let content
-    let button
-    if (editing) {
-      content = (
-        <>
-          <Input
-            type="textarea"
-            name="text"
-            rows="6"
-            value={editedMessage}
-            onChange={this.onMessageChanged}
-          />
-          <FormText color="muted">
-            You can use Markdown to format this message.
-          </FormText>
-        </>
-      )
-      button = (
-        <Button color="primary" onClick={this.onFinishEdit}>
-          Save
-        </Button>
-      )
-    } else {
-      content = <ReactMarkdown source={message} />
-      button = (
-        <Button color="primary" onClick={this.onStartEdit}>
-          Edit
-        </Button>
-      )
-    }
-
-    return (
-      <Alert color="primary" fade={false}>
-        <h6 className="alert-heading">A message from the queue staff</h6>
-        {content}
-        {isUserCourseStaff && <div className="mt-3">{button}</div>}
-      </Alert>
+    content = (
+      <QueueMessageEditor
+        message={message}
+        onSave={handleSave}
+        onCancel={() => setEditing(false)}
+      />
+    )
+  } else {
+    content = (
+      <QueueMessageViewer
+        queueId={props.queueId}
+        message={message}
+        editable={isUserCourseStaff}
+        collapsible={isUserCourseStaff}
+        onEdit={() => setEditing(true)}
+      />
     )
   }
+
+  return <div className="mb-3">{content}</div>
+}
+
+QueueMessage.defaultProps = {
+  message: '',
 }
 
 QueueMessage.propTypes = {
   queueId: PropTypes.number.isRequired,
   isUserCourseStaff: PropTypes.bool.isRequired,
-  message: PropTypes.string.isRequired,
+  message: PropTypes.string,
   updateQueue: PropTypes.func.isRequired,
 }
 
