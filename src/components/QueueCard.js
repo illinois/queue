@@ -22,7 +22,7 @@ const QueueCard = ({
 
   const questionCountText = `${questionCount} Question${
     questionCount !== 1 ? 's' : ''
-  }`
+    }`
   const locationText = location || 'No location specified'
 
   const handleDelete = e => {
