@@ -132,7 +132,7 @@ router.patch(
   safeAsync(async (req, res, _next) => {
     const { queue } = res.locals
     const data = matchedData(req)
-
+    
     await queue.update({
       name: data.name !== null ? data.name : undefined,
       location: data.location !== null ? data.location : undefined,
@@ -140,7 +140,6 @@ router.patch(
       message: data.message !== null ? data.message : undefined,
       messageEnabled:
         data.messageEnabled !== null ? data.messageEnabled : undefined,
-      isConfidential: req.body.isConfidential === true,
     })
 
     const updatedQueue = await Queue.scope('questionCount').findOne({

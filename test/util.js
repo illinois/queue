@@ -40,6 +40,14 @@ module.exports.createTestQueues = async () => {
       location: 'Everywhere',
       courseId: 1,
     },
+    {
+      name: 'CS225 Confidential Queue',
+      fixedLocation: false,
+      location: 'Everywhere',
+      isConfidential: true,
+      messageEnabled: true,
+      courseId: 1,
+    }
   ])
 }
 
