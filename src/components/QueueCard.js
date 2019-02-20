@@ -22,7 +22,7 @@ const QueueCard = ({
 
   const questionCountText = `${questionCount} Question${
     questionCount !== 1 ? 's' : ''
-    }`
+  }`
   const locationText = location || 'No location specified'
 
   const handleDelete = e => {
@@ -52,14 +52,9 @@ const QueueCard = ({
       <CardBody>
         <CardTitle className="d-flex flex-wrap align-items-center">
           <span className="h5 mb-2 mr-auto pr-3">
-            {isConfidential &&
-              !showQueueNameInBody && (
-                <FontAwesomeIcon
-                  icon={faEyeSlash}
-                  fixedWidth
-                  className="mr-2"
-                />
-              )}
+            {isConfidential && !showQueueNameInBody && (
+              <FontAwesomeIcon icon={faEyeSlash} fixedWidth className="mr-2" />
+            )}
             {title}
           </span>
           <div>
