@@ -69,7 +69,7 @@ router.post(
     })
 
     Queue.scope('questionCount')
-      .findById(queue.id)
+      .findByPk(queue.id)
       .then(newQueue => res.status(201).json(newQueue))
       .catch(next)
   })
@@ -208,7 +208,7 @@ router.delete(
   safeAsync(async (req, res, _next) => {
     const { id: userId } = res.locals.user
     const { id: queueId } = res.locals.queue
-    const staff = await ActiveStaff.find({
+    const staff = await ActiveStaff.findOne({
       where: {
         userId,
         queueId,

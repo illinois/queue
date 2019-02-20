@@ -1,6 +1,7 @@
 module.exports = {
   parser: 'babel-eslint',
   extends: ['airbnb', 'prettier', 'prettier/react'],
+  plugins: ['react-hooks'],
   rules: {
     'no-unused-vars': [
       'error',
@@ -20,5 +21,6 @@ module.exports = {
         aspects: ['noHref', 'invalidHref', 'preferButton'],
       },
     ],
+    'react-hooks/rules-of-hooks': 'error',
   },
 }

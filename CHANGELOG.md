@@ -7,10 +7,24 @@ with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
 
+## 19 February 2019
+
+* Fix queue message not being visible to students. ([@nwalters512](https://github.com/nwalters512) in [#214](https://github.com/illinois/queue/pull/214))
+
+## 18 February 2019
+
+* Update all dependencies. ([@nwalters512](https://github.com/nwalters512) in [#206](https://github.com/illinois/queue/pull/206))
+* Implement landing url redirects. ([@james9909](https://github.com/james9909) in [#208](https://github.com/illinois/queue/pull/208))
+* Fix page crash after deleting a queue. ([@james9909](https://github.com/james9909) in [#209](https://github.com/illinois/queue/pull/209))
+* Add ability to collapse the queue message. ([@nwalters512](https://github.com/nwalters512) in [#212](https://github.com/illinois/queue/pull/212))
+
+## 8 February 2019
+
 * Allow user to select queues by tabbing through the main page. ([@shwavedefapp](https://github.com/shwavedefapp) in [#192](https://github.com/illinois/queue/pull/192))
 * Make improvements to staff message experience. ([@nwalters512](https://github.com/nwalters512) in [#194](https://github.com/illinois/queue/pull/194))
 * Add markdown previews to the queue message editor. ([@shwavedefapp](https://github.com/shwavedefapp) in [#193](https://github.com/illinois/queue/pull/193))
 * Add ability to cancel editing of the queue message. ([@shwavedefapp](https://github.com/shwavedefapp) in [#197](https://github.com/illinois/queue/pull/197))
+* Add parrot support to queue messages. ([@nwalters512](https://github.com/nwalters512) in [#201](https://github.com/illinois/queue/pull/201))
 
 ## 26 January 2019
 

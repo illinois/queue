@@ -310,7 +310,7 @@ describe('Questions API', () => {
       const request2 = await requestAsUser(app, 'admin')
       const res2 = await request2.post('/api/queues/3/questions/3/answering')
       expect(res2.statusCode).toBe(200)
-      const question = await Question.findById(3)
+      const question = await Question.findByPk(3)
       expect(question.answeredById).toBe(2)
     })
 
@@ -323,7 +323,7 @@ describe('Questions API', () => {
       const request2 = await requestAsUser(app, '225staff')
       const res2 = await request2.post('/api/queues/1/questions/1/answering')
       expect(res2.statusCode).toBe(403)
-      const question = await Question.findById(1)
+      const question = await Question.findByPk(1)
       expect(question.answeredById).toBe(2)
     })
 
@@ -334,7 +334,7 @@ describe('Questions API', () => {
       const request2 = await requestAsUser(app, 'admin')
       const res2 = await request2.post('/api/queues/1/questions/2/answering')
       expect(res2.statusCode).toBe(403)
-      const question = await Question.findById(2)
+      const question = await Question.findByPk(2)
       expect(question.beingAnswered).toBe(false)
     })
 
