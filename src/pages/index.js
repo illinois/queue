@@ -17,7 +17,6 @@ import {
   deleteQueue,
   updateQueue,
 } from '../actions/queue'
-import { deleteAllQuestions } from '../actions/question'
 import { mapObjectToArray } from '../util'
 
 import PageWithUser from '../components/PageWithUser'
@@ -267,8 +266,6 @@ const mapDispatchToProps = dispatch => ({
   updateQueue: (queueId, attributes) =>
     dispatch(updateQueue(queueId, attributes)),
   deleteQueue: (courseId, queueId) => dispatch(deleteQueue(courseId, queueId)),
-  deleteAllQuestions: (queueId, attributes) =>
-    dispatch(deleteAllQuestions(queueId, attributes)),
 })
 
 export default connect(

@@ -81,7 +81,9 @@ class Queue extends React.Component {
             <QuestionNotificationsToggle />
             <ShowForCourseStaff queueId={this.props.queueId}>
               <QueueStatusToggleContainer queue={this.props.queue} />
-              <DeleteAllQuestionsToggleContainer queue={this.props.queue} />
+              {!this.props.queue.open && (
+                <DeleteAllQuestionsToggleContainer queue={this.props.queue} />
+              )}
               <QueueMessageEnabledToggleContainer queue={this.props.queue} />
             </ShowForCourseStaff>
             <StaffSidebar queueId={this.props.queueId} />
@@ -120,7 +122,6 @@ Queue.propTypes = {
     location: PropTypes.string,
     courseId: PropTypes.number,
     open: PropTypes.bool,
-    deleteall: PropTypes.bool,
     message: PropTypes.string,
     messageEnabled: PropTypes.bool,
   }),

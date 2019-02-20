@@ -1,43 +1,57 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+/* eslint-env browser */
+import React, { Fragment } from 'react'
 import { Button } from 'reactstrap'
 
+import ConfirmDeleteAllQuestionsModal from './ConfirmDeleteAllQuestionsModal'
+import QuestionNotificationsToggleExplanationModal from './QuestionNotificationsToggleExplanationModal'
+
 class DeleteAllQuestionsToggle extends React.Component {
-  toggleDeleteAllQuestions() {
-    const attributes = {
-      open: !this.props.queue.open,
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      showDeleteAllModal: false,
     }
-    this.props.deleteAllQuestions(this.props.queue.id)
+  }
+
+  deleteAllQuestions() {
+    this.setState({})
+  }
+
+  confirmDeleteAllQuestionsModal() {
+    const { queue } = this.props
+    this.props.deleteAllQuestions(queue.id)
+    this.toggleDeleteAllQuestionsModal()
+  }
+
+  toggleDeleteAllQuestionsModal() {
+    this.setState(prevState => ({
+      showDeleteAllModal: !prevState.showDeleteAllModal,
+    }))
   }
 
   render() {
-    const text = this.props.queue.open ? 'Delete All Questions' : 'All Deleted!'
-    const color = this.props.queue.open ? 'danger' : 'success'
-
+    const text = 'Delete All Questions'
+    const color = 'danger'
     return (
-      <Button
-        color={color}
-        block
-        className="mb-3 d-flex flex-row justify-content-center align-items-center"
-        style={{ whiteSpace: 'normal' }}
-        onClick={() => this.toggleDeleteAllQuestions()}
-      >
-        <span>{text}</span>
-      </Button>
+      <Fragment>
+        <Button
+          color={color}
+          block
+          className="mb-3 d-flex flex-row justify-content-center align-items-center"
+          style={{ whiteSpace: 'normal' }}
+          onClick={() => this.toggleDeleteAllQuestionsModal()}
+        >
+          <span>{text}</span>
+        </Button>
+        <ConfirmDeleteAllQuestionsModal
+          isOpen={this.state.showDeleteAllModal}
+          toggle={() => this.toggleDeleteAllQuestionsModal()}
+          confirm={() => this.confirmDeleteAllQuestionsModal()}
+        />
+      </Fragment>
     )
   }
-}
-
-DeleteAllQuestionsToggle.defaultProps = {
-  queue: null,
-}
-
-DeleteAllQuestionsToggle.propTypes = {
-  queue: PropTypes.shape({
-    id: PropTypes.number,
-    open: PropTypes.bool,
-  }),
-  deleteAllQuestions: PropTypes.func.isRequired,
 }
 
 export default DeleteAllQuestionsToggle

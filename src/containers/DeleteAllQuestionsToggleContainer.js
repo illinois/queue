@@ -4,8 +4,7 @@ import { deleteAllQuestions } from '../actions/question'
 import DeleteAllQuestionsToggle from '../components/DeleteAllQuestionsToggle'
 
 const mapDispatchToProps = dispatch => ({
-  deleteAllQuestions: (queueId, attributes) =>
-    dispatch(deleteAllQuestions(queueId, attributes)),
+  deleteAllQuestions: queueId => dispatch(deleteAllQuestions(queueId)),
 })
 
 export default connect(

@@ -207,8 +207,7 @@ export function deleteQuestion(queueId, questionId) {
  */
 const deleteAllQuestionsRequest = makeActionCreator(
   types.DELETE_ALL_QUESTIONS.REQUEST,
-  'queueId',
-  'attributes'
+  'queueId'
 )
 
 export const deleteAllQuestionsSuccess = makeActionCreator(
@@ -221,9 +220,9 @@ const deleteAllQuestionsFailure = makeActionCreator(
   'queueId'
 )
 
-export function deleteAllQuestions(queueId, attributes) {
+export function deleteAllQuestions(queueId) {
   return dispatch => {
-    dispatch(deleteAllQuestionsRequest(queueId, attributes))
+    dispatch(deleteAllQuestionsRequest(queueId))
 
     var questionList
     axios
@@ -248,8 +247,6 @@ export function deleteAllQuestions(queueId, attributes) {
         dispatch(requestQuestionsFailure(queueId))
         dispatch(deleteAllQuestionsFailure(queueId))
       })
-
-    axios.patch(`/api/queues/${queueId}`, attributes).then()
 
     dispatch(deleteAllQuestionsSuccess(queueId))
   }
