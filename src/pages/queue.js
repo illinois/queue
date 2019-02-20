@@ -26,7 +26,7 @@ import ShowForCourseStaff from '../components/ShowForCourseStaff'
 import QuestionNotificationsToggle from '../components/QuestionNotificationsToggle'
 import QueueStatusToggleContainer from '../containers/QueueStatusToggleContainer'
 import QueueMessageEnabledToggleContainer from '../containers/QueueMessageEnabledToggleContainer'
-import { isUserCourseStaffForQueue } from '../selectors'
+import { isUserCourseStaff, isUserAdmin } from '../selectors'
 import ConfidentialQueuePanelContainer from '../containers/ConfidentialQueuePanelContainer'
 
 class Queue extends React.Component {
@@ -73,6 +73,9 @@ class Queue extends React.Component {
       return <Error statusCode={404} />
     }
     const locationText = this.props.queue.location || 'No location specified'
+    const confidentialMessage = this.props.isUserCourseStaff
+      ? 'Students'
+      : 'You'
     return (
       <Container fluid>
         <h3>
@@ -85,8 +88,8 @@ class Queue extends React.Component {
                 id="confidentialIcon"
               />
               <UncontrolledTooltip placement="bottom" target="confidentialIcon">
-                This is a confidential queue! Students won&apos;t be able to see
-                other student names and topics.
+                This is a confidential queue! {confidentialMessage} won&apos;t
+                be able to see questions from other students.
               </UncontrolledTooltip>
             </span>
           )}
@@ -125,7 +128,8 @@ class Queue extends React.Component {
               </Card>
             )}
             {this.props.queue.isConfidential &&
-              !this.props.isUserCourseStaff && (
+              !this.props.isUserCourseStaff &&
+              !this.props.isUserAdmin && (
                 <ConfidentialQueuePanelContainer queueId={this.props.queueId} />
               )}
             <QuestionListContainer queueId={this.props.queueId} />
@@ -143,6 +147,7 @@ Queue.propTypes = {
   queueId: PropTypes.number.isRequired,
   dispatch: PropTypes.func.isRequired,
   isUserCourseStaff: PropTypes.bool.isRequired,
+  isUserAdmin: PropTypes.bool.isRequired,
   queue: PropTypes.shape({
     id: PropTypes.number,
     name: PropTypes.string,
@@ -165,7 +170,8 @@ const mapStateToProps = (state, ownProps) => ({
   isFetching: state.queues.isFetching,
   hasQueue: !!state.queues.queues[ownProps.queueId],
   queue: state.queues.queues[ownProps.queueId],
-  isUserCourseStaff: isUserCourseStaffForQueue(state, ownProps),
+  isUserCourseStaff: isUserCourseStaff(state, ownProps),
+  isUserAdmin: isUserAdmin(state, ownProps),
 })
 
 const mapDispatchToProps = dispatch => ({
