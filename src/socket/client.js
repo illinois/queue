@@ -3,7 +3,6 @@ import {
   replaceQuestions,
   createQuestionSuccess,
   updateQuestionSuccess,
-  deleteAllQuestionsSuccess,
   deleteQuestionSuccess,
 } from '../actions/question'
 import {
@@ -31,10 +30,6 @@ const handleQuestionUpdate = (dispatch, question) => {
 
 const handleQuestionDelete = (dispatch, queueId, questionId) => {
   dispatch(deleteQuestionSuccess(queueId, questionId))
-}
-
-const handleDeleteAllQuestions = (dispatch, queueId, queue) => {
-  dispatch(deleteAllQuestionsSuccess(queueId, queue))
 }
 
 const handleActiveStaffCreate = (dispatch, queueId, data) => {

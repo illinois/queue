@@ -125,9 +125,6 @@ router.patch(
     check('messageEnabled')
       .optional({ nullable: true })
       .isBoolean(),
-    check('deleteall')
-      .optional({ nullable: true })
-      .isBoolean(),
     validateLocation,
     failIfErrors,
   ],

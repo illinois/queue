@@ -224,14 +224,13 @@ export function deleteAllQuestions(queueId) {
   return dispatch => {
     dispatch(deleteAllQuestionsRequest(queueId))
 
-    var questionList
     axios
       .get(`/api/queues/${queueId}/questions`)
       .then(res => {
-        questionList = res.data
+        var questionList = res.data
         var i
-        for (i = questionList['length'] - 1; i >= 0; i--) {
-          var questionId = questionList[i]['id']
+        for (i = questionList.length - 1; i >= 0; i--) {
+          var questionId = questionList[i].id
           axios.delete(`/api/questions/${questionId}`).then(
             () => dispatch(deleteQuestionSuccess(queueId, questionId)),
             err => {

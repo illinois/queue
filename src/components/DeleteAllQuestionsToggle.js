@@ -3,7 +3,6 @@ import React, { Fragment } from 'react'
 import { Button } from 'reactstrap'
 
 import ConfirmDeleteAllQuestionsModal from './ConfirmDeleteAllQuestionsModal'
-import QuestionNotificationsToggleExplanationModal from './QuestionNotificationsToggleExplanationModal'
 
 class DeleteAllQuestionsToggle extends React.Component {
   constructor(props) {
