@@ -51,7 +51,7 @@ const QueueCard = ({
     >
       <CardBody>
         <CardTitle className="d-flex flex-wrap align-items-center">
-          <span className="mb-2 mr-auto pr-3">
+          <span className="h5 mb-2 mr-auto pr-3">
             {isConfidential &&
               !showQueueNameInBody && (
                 <FontAwesomeIcon

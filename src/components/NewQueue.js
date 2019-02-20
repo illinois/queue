@@ -10,7 +10,6 @@ import {
   Label,
   Input,
   Button,
-  Toggle,
 } from 'reactstrap'
 import { connect } from 'react-redux'
 
@@ -177,7 +176,9 @@ class NewQueue extends React.Component {
             Confidential Queue
           </Label>
           <Col sm={9}>
-            <Toggle
+            <CustomInput
+              id="isConfidential"
+              type="switch"
               name="isConfidential"
               defaultChecked={false}
               onChange={this.handleInputChange}
