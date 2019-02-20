@@ -153,30 +153,27 @@ class QuestionList extends React.Component {
   }
 
   render() {
+    const { queue, userId } = this.props
     let questions
-    if (this.props.queue && this.props.queue.questions) {
-      if (this.props.queue.questions.length > 0) {
-        questions = this.props.queue.questions.map(questionId => {
+    if (queue && queue.questions) {
+      if (queue.questions.length > 0) {
+        questions = queue.questions.map(questionId => {
           const question = this.props.questions[questionId]
           if (
-            !this.props.queue.isConfidential ||
-            (this.props.queue.isConfidential &&
-              (this.props.userId === question.askedById ||
-                this.props.isUserCourseStaff))
+            !queue.isConfidential ||
+            (userId === question.askedById || this.props.isUserCourseStaff)
           ) {
             return (
               <Question
                 key={questionId}
-                isConfidential={this.props.queue.isConfidential}
+                isConfidential={queue.isConfidential}
                 isUserCourseStaff={this.props.isUserCourseStaff}
                 isUserActiveStaffForQueue={this.props.isUserActiveStaffForQueue}
-                isUserAnsweringQuestion={
-                  this.props.userId === question.answeredById
-                }
+                isUserAnsweringQuestion={userId === question.answeredById}
                 isUserAnsweringOtherQuestion={
                   this.props.isUserAnsweringQuestionForQueue
                 }
-                didUserAskQuestion={this.props.userId === question.askedById}
+                didUserAskQuestion={userId === question.askedById}
                 deleteQuestion={() => this.deleteQuestion(questionId)}
                 cancelQuestion={() => this.cancelQuestion(questionId)}
                 startQuestion={() => this.startQuestion(questionId)}
@@ -248,7 +245,7 @@ class QuestionList extends React.Component {
         />
         <QuestionEdit
           question={this.props.questions[this.state.attributeId]}
-          queue={this.props.queue}
+          queue={queue}
           isOpen={this.state.showQuestionEditModal}
           onSubmitQuestionEdit={attributes =>
             this.handleSubmitQuestionEdit(attributes)

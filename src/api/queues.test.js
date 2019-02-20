@@ -97,7 +97,11 @@ describe('Queues API', () => {
 
   describe('POST /api/queues', () => {
     test('succeeds for admin', async () => {
-      const queue = { name: 'CS225 Queue 2', location: 'Where', isConfidential: false }
+      const queue = {
+        name: 'CS225 Queue 2',
+        location: 'Where',
+        isConfidential: false,
+      }
       const request = await requestAsUser(app, 'admin')
       const res = await request.post('/api/courses/1/queues').send(queue)
       expect(res.statusCode).toBe(201)
@@ -108,7 +112,11 @@ describe('Queues API', () => {
     })
 
     test('succeeds for course staff', async () => {
-      const queue = { name: 'CS225 Queue 2', location: 'Where', isConfidential: false }
+      const queue = {
+        name: 'CS225 Queue 2',
+        location: 'Where',
+        isConfidential: false,
+      }
       const request = await requestAsUser(app, '225staff')
       const res = await request.post('/api/courses/1/queues').send(queue)
       expect(res.statusCode).toBe(201)
@@ -119,7 +127,11 @@ describe('Queues API', () => {
     })
 
     test('succeeds for confidential queue', async () => {
-      const queue = { name: 'CS225 Confidential Queue', location: 'Where', isConfidential: true }
+      const queue = {
+        name: 'CS225 Confidential Queue',
+        location: 'Where',
+        isConfidential: true,
+      }
       const request = await requestAsUser(app, '225staff')
       const res = await request.post('/api/courses/1/queues').send(queue)
       expect(res.statusCode).toBe(201)
@@ -137,14 +149,22 @@ describe('Queues API', () => {
     })
 
     test('fails if location is missing and queue is fixed-location', async () => {
-      const queue = { name: 'CS225 Queue 2', fixedLocation: true, isConfidential: false }
+      const queue = {
+        name: 'CS225 Queue 2',
+        fixedLocation: true,
+        isConfidential: false,
+      }
       const request = await requestAsUser(app, '225staff')
       const res = await request.post('/api/courses/1/queues').send(queue)
       expect(res.statusCode).toBe(422)
     })
 
     test('fails for student', async () => {
-      const queue = { name: 'CS225 Queue 2', location: 'Where', isConfidential: false }
+      const queue = {
+        name: 'CS225 Queue 2',
+        location: 'Where',
+        isConfidential: false,
+      }
       const request = await requestAsUser(app, 'student')
       const res = await request.post('/api/courses/1/queues').send(queue)
       expect(res.statusCode).toBe(403)
@@ -152,7 +172,11 @@ describe('Queues API', () => {
     })
 
     test('fails for course staff of different course', async () => {
-      const queue = { name: 'CS225 Queue 2', location: 'Where', isConfidential: false }
+      const queue = {
+        name: 'CS225 Queue 2',
+        location: 'Where',
+        isConfidential: false,
+      }
       const request = await requestAsUser(app, '241staff')
       const res = await request.post('/api/courses/1/queues').send(queue)
       expect(res.statusCode).toBe(403)

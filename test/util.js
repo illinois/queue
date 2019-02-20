@@ -47,7 +47,7 @@ module.exports.createTestQueues = async () => {
       isConfidential: true,
       messageEnabled: true,
       courseId: 1,
-    }
+    },
   ])
 }
 
