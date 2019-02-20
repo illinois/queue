@@ -161,7 +161,9 @@ class QuestionList extends React.Component {
           const question = this.props.questions[questionId]
           if (
             !queue.isConfidential ||
-            (userId === question.askedById || this.props.isUserCourseStaff)
+            (userId === question.askedById ||
+              this.props.isUserCourseStaff ||
+              this.props.isUserAdmin)
           ) {
             return (
               <Question
@@ -274,6 +276,7 @@ QuestionList.propTypes = {
   isUserCourseStaff: PropTypes.bool.isRequired,
   isUserActiveStaffForQueue: PropTypes.bool.isRequired,
   isUserAnsweringQuestionForQueue: PropTypes.bool.isRequired,
+  isUserAdmin: PropTypes.bool.isRequired,
   deleteQuestion: PropTypes.func.isRequired,
   updateQuestionBeingAnswered: PropTypes.func.isRequired,
   finishAnsweringQuestion: PropTypes.func.isRequired,
