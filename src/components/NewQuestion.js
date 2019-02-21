@@ -155,7 +155,7 @@ export default class NewQuestion extends React.Component {
             className={headerClassNames}
             onClick={() => this.onCardHeaderClick()}
           >
-            <span>New question</span>
+            <strong>New question</strong>
             {isUserCourseStaff && (
               <FontAwesomeIcon
                 icon={faChevronDown}
