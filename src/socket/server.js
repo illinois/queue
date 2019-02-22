@@ -29,16 +29,7 @@ const sendInitialState = (queueId, callback) => {
     callback({ questions, activeStaff })
   })
 }
-// const blankQuestion = {
-//   askedBy: {
-//     netid: ''
-//   },
-//   askedById: '',
-//   comments: null,
-//   location: '',
-//   name: '',
-//   topic: ''
-// }
+
 const handleQuestionCreate = (id, queueId) => {
   Question.findOne({ where: { id } }).then(question => {
     queueNamespace

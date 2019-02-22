@@ -73,9 +73,10 @@ class Queue extends React.Component {
       return <Error statusCode={404} />
     }
     const locationText = this.props.queue.location || 'No location specified'
-    const confidentialMessage = this.props.isUserCourseStaff
-      ? 'Students'
-      : 'You'
+    const confidentialMessage =
+      this.props.isUserCourseStaff || this.props.isUserAdmin
+        ? 'Students'
+        : 'You'
     return (
       <Container fluid>
         <h3>
