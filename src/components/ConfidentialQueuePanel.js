@@ -6,49 +6,47 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 /* eslint-disable react/prefer-stateless-function */
-class ConfidentialQueuePanel extends React.Component {
-  render() {
-    let questionId
-    let position = 0
-    if (this.props.queue && this.props.queue.questions) {
-      this.props.queue.questions.forEach(qId => {
-        const question = this.props.questions[qId]
-        if (this.props.userId === question.askedById) {
-          questionId = qId
-        } else {
-          position += 1
-        }
-      })
-
-      const numQuestions = this.props.queue.questions.length
-      if (numQuestions === 0) {
-        return null
+const ConfidentialQueuePanel = props => {
+  let questionId
+  let position = 0
+  if (props.queue && props.queue.questions) {
+    props.queue.questions.forEach(qId => {
+      const question = props.questions[qId]
+      if (props.userId === question.askedById) {
+        questionId = qId
+      } else {
+        position += 1
       }
-      const cardTotalQuestionsMessage =
-        numQuestions === 1
-          ? 'There is 1 person on the queue'
-          : `There are ${numQuestions} people on the queue`
-      const singularOrPluralPerson = position === 1 ? 'person' : 'people'
-      const cardMessage = questionId
-        ? `${cardTotalQuestionsMessage} with ${position} ${singularOrPluralPerson} in front of you.`
-        : `${cardTotalQuestionsMessage}.`
+    })
 
-      return (
-        <div>
-          <ListGroupItem className="text-center text-muted pt-4 pb-4 mb-3">
-            {cardMessage}
-          </ListGroupItem>
-        </div>
-      )
+    const numQuestions = props.queue.questions.length
+    if (numQuestions === 0) {
+      return null
     }
+    const cardTotalQuestionsMessage =
+      numQuestions === 1
+        ? 'There is 1 person on the queue'
+        : `There are ${numQuestions} people on the queue`
+    const singularOrPluralPerson = position === 1 ? 'person' : 'people'
+    const cardMessage = questionId
+      ? `${cardTotalQuestionsMessage} with ${position} ${singularOrPluralPerson} in front of you.`
+      : `${cardTotalQuestionsMessage}.`
+
     return (
       <div>
-        <ListGroupItem className="text-center pt-4 pb-4">
-          <FontAwesomeIcon icon={faSpinner} pulse />
+        <ListGroupItem className="text-center text-muted pt-4 pb-4 mb-3">
+          {cardMessage}
         </ListGroupItem>
       </div>
     )
   }
+  return (
+    <div>
+      <ListGroupItem className="text-center pt-4 pb-4">
+        <FontAwesomeIcon icon={faSpinner} pulse />
+      </ListGroupItem>
+    </div>
+  )
 }
 
 ConfidentialQueuePanel.propTypes = {
