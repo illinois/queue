@@ -25,7 +25,7 @@ const fields = [
   },
 ]
 
-const isValid = error => error === undefined || error === ''
+const isInvalid = error => error !== undefined && error !== ''
 
 class QueueEdit extends React.Component {
   constructor(props) {
@@ -121,7 +121,7 @@ class QueueEdit extends React.Component {
                   id="name"
                   value={this.state.name}
                   onChange={this.handleInputChange}
-                  invalid={!isValid(this.state.isFieldValid.name)}
+                  invalid={isInvalid(this.state.isFieldValid.name)}
                 />
                 <FormFeedback>{this.state.isFieldValid.name}</FormFeedback>
               </Col>
@@ -137,7 +137,7 @@ class QueueEdit extends React.Component {
                   id="location"
                   value={this.state.location}
                   onChange={this.handleInputChange}
-                  invalid={!isValid(this.state.isFieldValid.location)}
+                  invalid={isInvalid(this.state.isFieldValid.location)}
                 />
                 <FormFeedback>{this.state.isFieldValid.location}</FormFeedback>
               </Col>

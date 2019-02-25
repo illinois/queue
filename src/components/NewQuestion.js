@@ -35,7 +35,7 @@ const fields = [
   },
 ]
 
-const isValid = error => error === undefined || error === ''
+const isInvalid = error => error !== undefined && error !== ''
 
 export default class NewQuestion extends React.Component {
   constructor(props) {
@@ -199,7 +199,7 @@ export default class NewQuestion extends React.Component {
                       value={this.state.name}
                       onChange={this.handleInputChange}
                       onKeyDown={this.handleKeyPress}
-                      invalid={!isValid(this.state.fieldErrors.name)}
+                      invalid={isInvalid(this.state.fieldErrors.name)}
                     />
                     <FormFeedback>{this.state.fieldErrors.name}</FormFeedback>
                     <FormText color="muted">Using a nickname is fine!</FormText>
@@ -217,7 +217,7 @@ export default class NewQuestion extends React.Component {
                       value={this.state.topic}
                       onChange={this.handleInputChange}
                       onKeyDown={this.handleKeyPress}
-                      invalid={!isValid(this.state.fieldErrors.topic)}
+                      invalid={isInvalid(this.state.fieldErrors.topic)}
                     />
                     <FormFeedback>{this.state.fieldErrors.topic}</FormFeedback>
                   </Col>
@@ -235,7 +235,7 @@ export default class NewQuestion extends React.Component {
                       disabled={fixedLocation}
                       onChange={this.handleInputChange}
                       onKeyDown={this.handleKeyPress}
-                      invalid={!isValid(this.state.fieldErrors.location)}
+                      invalid={isInvalid(this.state.fieldErrors.location)}
                     />
                     <FormFeedback>
                       {this.state.fieldErrors.location}
