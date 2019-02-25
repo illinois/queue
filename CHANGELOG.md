@@ -6,6 +6,7 @@ When a new version is deployed, the changes since the last deploy should be labe
 with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
+* Add user-facing error messages. ([@james9909](https://github.com/james9909) in [#195](https://github.com/illinois/queue/pull/195))
 
 ## 19 February 2019
 
@@ -17,7 +18,6 @@ with the current date and the next changes should go under a **[Next]** header.
 * Implement landing url redirects. ([@james9909](https://github.com/james9909) in [#208](https://github.com/illinois/queue/pull/208))
 * Fix page crash after deleting a queue. ([@james9909](https://github.com/james9909) in [#209](https://github.com/illinois/queue/pull/209))
 * Add ability to collapse the queue message. ([@nwalters512](https://github.com/nwalters512) in [#212](https://github.com/illinois/queue/pull/212))
-* Add user-facing error messages. ([@james9909](https://github.com/james9909) in [#195](https://github.com/illinois/queue/pull/195))
 
 ## 8 February 2019
 
