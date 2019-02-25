@@ -11,27 +11,12 @@ import { Router } from '../routes'
 // We add this during SSR in _document.js
 config.autoAddCss = false
 
-const syncLogout = e => {
-  if (e.key === 'logout') {
-    Router.push('/login')
-  }
-}
-
 class MyApp extends React.Component {
   static async getInitialProps({ Component, ctx }) {
     const pageProps = Component.getInitialProps
       ? await Component.getInitialProps(ctx)
       : {}
     return { pageProps }
-  }
-
-  componentDidMount() {
-    window.addEventListener('storage', syncLogout)
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('storage', syncLogout)
-    window.localStorage.removeItem('logout')
   }
 
   render() {
