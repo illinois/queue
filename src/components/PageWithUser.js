@@ -118,7 +118,6 @@ export default function(AuthedComponent, permissions) {
 
   const mapDispatchToProps = dispatch => ({
     fetchUser: () => dispatch(fetchCurrentUser()),
-    clearUser: () => dispatch(),
   })
 
   hoistStatics(PageWithUser, AuthedComponent)
