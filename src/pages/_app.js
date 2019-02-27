@@ -6,7 +6,6 @@ import { config } from '@fortawesome/fontawesome-svg-core'
 
 import makeStore from '../redux/makeStore'
 import AppContainer from '../components/AppContainer'
-import { Router } from '../routes'
 
 // We add this during SSR in _document.js
 config.autoAddCss = false
