@@ -7,6 +7,7 @@ with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
 * Add user-facing error messages. ([@james9909](https://github.com/james9909) in [#195](https://github.com/illinois/queue/pull/195))
+* Sync logouts between tabs ([@james9909](https://github.com/james9909) in [#215](https://github.com/illinois/queue/pull/215))
 
 ## 19 February 2019
 
