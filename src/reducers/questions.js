@@ -60,8 +60,6 @@ const questions = (state = defaultState, action) => {
       }
     }
     case DELETE_ALL_QUESTIONS.SUCCESS: {
-      // const { questionId } = action
-      // const newQuestions = []
       return {
         ...state,
         questions: [],

@@ -136,6 +136,32 @@ router.get(
   }
 )
 
+// Delete all questions for a particular queue
+router.delete(
+  '/',
+  [requireQueue, failIfErrors],
+  safeAsync(async (req, res, _next) => {
+    const { id: queueId } = res.locals.queue
+    const questions = await Question.findAll({
+      where: {
+        queueId,
+        dequeueTime: null,
+      },
+      order: [['id', 'ASC']],
+    })
+
+    await Promise.all(
+      questions.map(async question => {
+        await question.update({
+          dequeueTime: new Date(),
+        })
+      })
+    )
+
+    res.status(204).send()
+  })
+)
+
 // Mark a question as being answered
 router.post(
   '/:questionId/answering',

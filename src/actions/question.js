@@ -224,30 +224,13 @@ export function deleteAllQuestions(queueId) {
   return dispatch => {
     dispatch(deleteAllQuestionsRequest(queueId))
 
-    axios
-      .get(`/api/queues/${queueId}/questions`)
-      .then(res => {
-        var questionList = res.data
-        var i
-        for (i = questionList.length - 1; i >= 0; i--) {
-          var questionId = questionList[i].id
-          axios.delete(`/api/questions/${questionId}`).then(
-            () => dispatch(deleteQuestionSuccess(queueId, questionId)),
-            err => {
-              console.error(err)
-              dispatch(deleteQuestionFailure(queueId, questionId))
-              dispatch(deleteAllQuestionsFailure(queueId))
-            }
-          )
-        }
-      })
-      .catch(err => {
+    return axios.delete(`/api/queues/${queueId}/questions`).then(
+      () => dispatch(deleteAllQuestionsSuccess(queueId)),
+      err => {
         console.error(err)
-        dispatch(requestQuestionsFailure(queueId))
         dispatch(deleteAllQuestionsFailure(queueId))
-      })
-
-    dispatch(deleteAllQuestionsSuccess(queueId))
+      }
+    )
   }
 }
 

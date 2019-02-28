@@ -31,7 +31,6 @@ export const FINISH_ANSWERING_QUESTION = makeActionStrings(
 )
 export const DELETE_QUESTION = makeActionStrings('DELETE_QUESTION')
 
-// Delete All Questions
 export const DELETE_ALL_QUESTIONS = makeActionStrings('DELETE_ALL_QUESTIONS')
 
 export const FETCH_CURRENT_USER = makeActionStrings('FETCH_CURRENT_USER')
