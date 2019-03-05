@@ -10,6 +10,7 @@ import {
   isUserCourseStaffForQueue,
   isUserActiveStaffForQueue,
   isUserAnsweringQuestionForQueue,
+  isUserAdmin,
 } from '../selectors'
 
 import QuestionList from '../components/QuestionList'
@@ -23,6 +24,7 @@ const mapStateToProps = (state, props) => ({
     state,
     props
   ),
+  isUserAdmin: isUserAdmin(state, props),
   userId: state.user.user.id,
 })
 

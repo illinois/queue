@@ -63,6 +63,7 @@ router.post(
       name: data.name,
       location: data.location,
       fixedLocation: data.fixedLocation === true,
+      isConfidential: req.body.isConfidential === true,
       courseId,
       createdByUserId: res.locals.userAuthn.id,
     })

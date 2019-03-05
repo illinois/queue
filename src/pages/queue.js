@@ -1,9 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Container, Row, Col, Card, CardBody, Collapse } from 'reactstrap'
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  CardBody,
+  Collapse,
+  UncontrolledTooltip,
+} from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMapMarker } from '@fortawesome/free-solid-svg-icons'
+import { faMapMarker, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
 import { fetchQueue, fetchQueueRequest } from '../actions/queue'
 import { connectToQueue, disconnectFromQueue } from '../socket/client'
@@ -18,6 +26,8 @@ import ShowForCourseStaff from '../components/ShowForCourseStaff'
 import QuestionNotificationsToggle from '../components/QuestionNotificationsToggle'
 import QueueStatusToggleContainer from '../containers/QueueStatusToggleContainer'
 import QueueMessageEnabledToggleContainer from '../containers/QueueMessageEnabledToggleContainer'
+import { isUserCourseStaff, isUserAdmin } from '../selectors'
+import ConfidentialQueuePanelContainer from '../containers/ConfidentialQueuePanelContainer'
 
 class Queue extends React.Component {
   static getInitialProps({ isServer, store, query }) {
@@ -63,9 +73,29 @@ class Queue extends React.Component {
       return <Error statusCode={404} />
     }
     const locationText = this.props.queue.location || 'No location specified'
+    const confidentialMessage =
+      this.props.isUserCourseStaff || this.props.isUserAdmin
+        ? 'Students'
+        : 'You'
     return (
       <Container fluid>
-        <h3>{this.props.queue.name}</h3>
+        <h3>
+          {this.props.queue.isConfidential && (
+            <span>
+              <FontAwesomeIcon
+                icon={faEyeSlash}
+                fixedWidth
+                className="mr-2"
+                id="confidentialIcon"
+              />
+              <UncontrolledTooltip placement="bottom" target="confidentialIcon">
+                This is a confidential queue! {confidentialMessage} won&apos;t
+                be able to see questions from other students.
+              </UncontrolledTooltip>
+            </span>
+          )}
+          {this.props.queue.name}
+        </h3>
         <h5 className="mb-3 text-muted">
           <FontAwesomeIcon icon={faMapMarker} fixedWidth className="mr-2" />
           {locationText}
@@ -98,6 +128,11 @@ class Queue extends React.Component {
                 </CardBody>
               </Card>
             )}
+            {this.props.queue.isConfidential &&
+              !this.props.isUserCourseStaff &&
+              !this.props.isUserAdmin && (
+                <ConfidentialQueuePanelContainer queueId={this.props.queueId} />
+              )}
             <QuestionListContainer queueId={this.props.queueId} />
           </Col>
         </Row>
@@ -112,10 +147,13 @@ Queue.propTypes = {
   fetchQueue: PropTypes.func.isRequired,
   queueId: PropTypes.number.isRequired,
   dispatch: PropTypes.func.isRequired,
+  isUserCourseStaff: PropTypes.bool.isRequired,
+  isUserAdmin: PropTypes.bool.isRequired,
   queue: PropTypes.shape({
     id: PropTypes.number,
     name: PropTypes.string,
     location: PropTypes.string,
+    isConfidential: PropTypes.bool,
     courseId: PropTypes.number,
     open: PropTypes.bool,
     message: PropTypes.string,
@@ -133,6 +171,8 @@ const mapStateToProps = (state, ownProps) => ({
   isFetching: state.queues.isFetching,
   hasQueue: !!state.queues.queues[ownProps.queueId],
   queue: state.queues.queues[ownProps.queueId],
+  isUserCourseStaff: isUserCourseStaff(state, ownProps),
+  isUserAdmin: isUserAdmin(state, ownProps),
 })
 
 const mapDispatchToProps = dispatch => ({
