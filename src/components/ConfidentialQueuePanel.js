@@ -5,7 +5,6 @@ import { ListGroupItem } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
-/* eslint-disable react/prefer-stateless-function */
 const ConfidentialQueuePanel = props => {
   const questionId = props.getUserActiveQuestionIdForQueue
   let position = -1
