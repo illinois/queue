@@ -132,8 +132,10 @@ router.get(
       question.get({ plain: true })
     )
     if (isConfidential) {
-      if (!canUserSeeQuestionDetailsForConfidentialQueue(res, courseId)) {
-        questions = filterConfidentialQueueQuestionsForUser(res, questions)
+      const { userAuthz } = res.locals
+      if (!canUserSeeQuestionDetailsForConfidentialQueue(userAuthz, courseId)) {
+        const { id: userId } = res.locals.userAuthn
+        questions = filterConfidentialQueueQuestionsForUser(userId, questions)
       }
     }
 
@@ -146,9 +148,10 @@ router.get(
   [requireQuestion, requireQueueForQuestion, failIfErrors],
   (req, res, _next) => {
     const { courseId, isConfidential } = res.locals.queue
-    const { id: userId } = res.locals.userAuthn
     if (isConfidential) {
-      if (!canUserSeeQuestionDetailsForConfidentialQueue(res, courseId)) {
+      const { id: userId } = res.locals.userAuthn
+      const { userAuthz } = res.locals
+      if (!canUserSeeQuestionDetailsForConfidentialQueue(userAuthz, courseId)) {
         if (res.locals.question.askedById !== userId) {
           res.status(403).send('You are not authorized to access that question')
           return

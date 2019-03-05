@@ -2,12 +2,21 @@ const sequelizeStream = require('sequelize-stream')
 const cookieParser = require('cookie-parser')
 
 const { sequelize, Question, User, ActiveStaff, Queue } = require('../models')
-const { getUserFromJwt } = require('../auth/util')
+const { getUserFromJwt, getAuthzForUser } = require('../auth/util')
+const {
+  canUserSeeQuestionDetailsForConfidentialQueue,
+  filterConfidentialQueueQuestionsForUser,
+} = require('../api/util')
 
 let io = null
 let queueNamespace = null
 
-const sendInitialState = (queueId, callback) => {
+const sendInitialState = (
+  queueId,
+  userId,
+  sendCompleteQuestionData,
+  callback
+) => {
   const questionPromise = Question.findAll({
     where: {
       queueId,
@@ -25,29 +34,32 @@ const sendInitialState = (queueId, callback) => {
   })
 
   Promise.all([questionPromise, activeStaffPromise]).then(results => {
-    const [questions, activeStaff] = results
+    const [questionsResult, activeStaff] = results
+    let questions = questionsResult.map(q => q.get({ plain: true }))
+    if (!sendCompleteQuestionData) {
+      questions = filterConfidentialQueueQuestionsForUser(userId, questions)
+    }
+
     callback({ questions, activeStaff })
   })
 }
 
-const handleQuestionCreate = (id, queueId) => {
-  Question.findOne({ where: { id } }).then(question => {
-    queueNamespace
-      .to(`queue-${queueId}-staff`)
-      .emit('question:create', { id, question })
-  })
+const handleQuestionCreate = async (id, queueId) => {
+  const question = await Question.findOne({ where: { id } })
+  queueNamespace.to(`queue-${queueId}`).emit('question:create', { question })
+  queueNamespace
+    .to(`queue-${queueId}-public`)
+    .emit('question:create', { question: { id } })
 }
 
-const handleQuestionUpdate = (id, queueId) => {
-  Question.findOne({ where: { id } }).then(question => {
-    queueNamespace
-      .to(`queue-${queueId}-staff`)
-      .emit('question:update', { id, question })
-  })
+const handleQuestionUpdate = async (id, queueId) => {
+  const question = Question.findOne({ where: { id } })
+  queueNamespace.to(`queue-${queueId}`).emit('question:update', { question })
 }
 
 const handleQuestionDelete = (id, queueId) => {
-  queueNamespace.to(`queue-${queueId}-staff`).emit('question:delete', { id })
+  queueNamespace.to(`queue-${queueId}`).emit('question:delete', { id })
+  queueNamespace.to(`queue-${queueId}-public`).emit('question:delete', { id })
 }
 
 const handleQuestionEvent = (event, instance) => {
@@ -150,12 +162,33 @@ module.exports = newIo => {
 
   queueNamespace = io.of('/queue')
   queueNamespace.on('connection', socket => {
-    socket.on('join', (msg, callback) => {
+    socket.on('join', async (msg, callback) => {
       if ('queueId' in msg) {
-        // try looking at msg to see if tells us conf, other wise try with queue. might need to include conf in question model
         const { queueId } = msg
-        socket.join(`queue-${queueId}-staff`)
-        sendInitialState(queueId, callback)
+        const queuePromise = Queue.findOne({
+          where: {
+            id: queueId,
+          },
+        })
+        const userAuthzPromise = getAuthzForUser(socket.request.user)
+        const [queue, userAuthz] = await Promise.all([
+          queuePromise,
+          userAuthzPromise,
+        ])
+        const { courseId, isConfidential } = queue
+        const canSeeQuestionDetails = canUserSeeQuestionDetailsForConfidentialQueue(
+          userAuthz,
+          courseId
+        )
+        let sendCompleteQuestionData = true
+        if (isConfidential && !canSeeQuestionDetails) {
+          socket.join(`queue-${queueId}-public`)
+          sendCompleteQuestionData = false
+        } else {
+          socket.join(`queue-${queueId}`)
+        }
+        const { id: userId } = socket.request.user
+        sendInitialState(queueId, userId, sendCompleteQuestionData, callback)
       }
     })
   })

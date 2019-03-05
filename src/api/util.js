@@ -58,8 +58,8 @@ const requireModelForModel = (
   }
 }
 
-const canUserSeeQuestionDetailsForConfidentialQueue = (res, courseId) => {
-  const { isAdmin, staffedCourseIds } = res.locals.userAuthz
+const canUserSeeQuestionDetailsForConfidentialQueue = (userAuthz, courseId) => {
+  const { isAdmin, staffedCourseIds } = userAuthz
   const staffsQueue = staffedCourseIds.findIndex(id => id === courseId) !== -1
   return isAdmin || staffsQueue
 }
@@ -71,8 +71,7 @@ const canUserSeeQuestionDetailsForConfidentialQueue = (res, courseId) => {
  * @param {Response} res The response containing user info on res.locals
  * @param {Questions[]} questions The list of questions to remove sensitive info from
  */
-const filterConfidentialQueueQuestionsForUser = (res, questions) => {
-  const { id: userId } = res.locals.userAuthn
+const filterConfidentialQueueQuestionsForUser = (userId, questions) => {
   return questions.map(question => {
     if (question.askedById === userId) {
       return question

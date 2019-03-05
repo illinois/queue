@@ -128,54 +128,44 @@ describe('Testing Utils', () => {
 
   describe('canUserSeeQuestionDetailsForConfidentialQueue', () => {
     test('returns true for an admin', () => {
-      const res = {
-        locals: {
-          userAuthz: {
-            isAdmin: true,
-            staffedCourseIds: [],
-          },
-        },
+      const userAuthz = {
+        isAdmin: true,
+        staffedCourseIds: [],
       }
-      const value = util.canUserSeeQuestionDetailsForConfidentialQueue(res, 123)
+      const value = util.canUserSeeQuestionDetailsForConfidentialQueue(
+        userAuthz,
+        123
+      )
       expect(value).toBeTruthy()
     })
 
     test('returns true for course staff', () => {
-      const res = {
-        locals: {
-          userAuthz: {
-            isAdmin: false,
-            staffedCourseIds: [123],
-          },
-        },
+      const userAuthz = {
+        isAdmin: false,
+        staffedCourseIds: [123],
       }
-      const value = util.canUserSeeQuestionDetailsForConfidentialQueue(res, 123)
+      const value = util.canUserSeeQuestionDetailsForConfidentialQueue(
+        userAuthz,
+        123
+      )
       expect(value).toBeTruthy()
     })
 
     test('returns false for non-admin, non-course staff', () => {
-      const res = {
-        locals: {
-          userAuthz: {
-            isAdmin: false,
-            staffedCourseIds: [],
-          },
-        },
+      const userAuthz = {
+        isAdmin: false,
+        staffedCourseIds: [],
       }
-      const value = util.canUserSeeQuestionDetailsForConfidentialQueue(res, 123)
+      const value = util.canUserSeeQuestionDetailsForConfidentialQueue(
+        userAuthz,
+        123
+      )
       expect(value).toBeFalsy()
     })
   })
 
   describe('filterConfidentialQueueQuestionsForUser', () => {
     test('removes question info from other users', () => {
-      const res = {
-        locals: {
-          userAuthn: {
-            id: 123,
-          },
-        },
-      }
       const questions = [
         {
           id: 10,
@@ -194,7 +184,7 @@ describe('Testing Utils', () => {
         },
       ]
       const result = util.filterConfidentialQueueQuestionsForUser(
-        res,
+        123,
         questions
       )
       expect(result).toHaveLength(3)

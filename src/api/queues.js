@@ -115,9 +115,16 @@ router.get(
     // If this is a confidential queue, don't send any actual question data
     // back to the client, besides IDs
     if (queue.isConfidential) {
-      if (!canUserSeeQuestionDetailsForConfidentialQueue(res, queue.courseId)) {
+      const { userAuthz } = res.locals
+      if (
+        !canUserSeeQuestionDetailsForConfidentialQueue(
+          userAuthz,
+          queue.courseId
+        )
+      ) {
+        const { id: userId } = res.locals.userAuthn
         const filtered = filterConfidentialQueueQuestionsForUser(
-          res,
+          userId,
           queue.questions
         )
         queue.questions = filtered
