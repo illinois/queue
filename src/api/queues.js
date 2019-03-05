@@ -81,7 +81,7 @@ router.get(
   [requireQueue, failIfErrors],
   safeAsync(async (req, res, _next) => {
     const { id: queueId } = res.locals.queue
-    const queue = await Queue.findOne({
+    const queueResults = await Queue.findOne({
       where: {
         id: queueId,
       },
@@ -105,6 +105,27 @@ router.get(
       ],
       order: [[Question, 'id', 'ASC']],
     })
+
+    // Convert to plain object that we can manipulate/filter/etc. before
+    // sending back to the client
+    const queue = queueResults.get({ plain: true })
+
+    // If this is a confidential queue, don't send any actual question data
+    // back to the client, besides IDs
+    if (queue.isConfidential) {
+      const { id: userId } = res.locals.userAuthn
+      const { isAdmin, staffedCourseIds } = res.locals.userAuthz
+      const staffsQueue =
+        staffedCourseIds.findIndex(id => id === queue.courseId) !== -1
+      if (!isAdmin && !staffsQueue) {
+        queue.questions = queue.questions.map(question => {
+          if (question.askedById === userId) {
+            return question
+          }
+          return { id: question.id }
+        })
+      }
+    }
 
     res.json(queue)
   })

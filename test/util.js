@@ -74,6 +74,20 @@ module.exports.createTestQuestions = async () => {
       topic: 'Sauce',
       askedById: 2,
     },
+    {
+      queueId: 5,
+      name: 'Student',
+      location: '',
+      topic: 'Secret',
+      askedById: 5,
+    },
+    {
+      queueId: 5,
+      name: 'Other Student',
+      location: '',
+      topic: 'Secret',
+      askedById: 6,
+    },
   ])
 }
 
