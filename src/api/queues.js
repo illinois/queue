@@ -13,6 +13,8 @@ const {
   requireQueue,
   requireUser,
   failIfErrors,
+  canUserSeeQuestionDetailsForConfidentialQueue,
+  filterConfidentialQueueQuestionsForUser,
 } = require('./util')
 
 const requireCourseStaffForQueue = require('../middleware/requireCourseStaffForQueue')
@@ -113,17 +115,12 @@ router.get(
     // If this is a confidential queue, don't send any actual question data
     // back to the client, besides IDs
     if (queue.isConfidential) {
-      const { id: userId } = res.locals.userAuthn
-      const { isAdmin, staffedCourseIds } = res.locals.userAuthz
-      const staffsQueue =
-        staffedCourseIds.findIndex(id => id === queue.courseId) !== -1
-      if (!isAdmin && !staffsQueue) {
-        queue.questions = queue.questions.map(question => {
-          if (question.askedById === userId) {
-            return question
-          }
-          return { id: question.id }
-        })
+      if (!canUserSeeQuestionDetailsForConfidentialQueue(res, queue.courseId)) {
+        const filtered = filterConfidentialQueueQuestionsForUser(
+          res,
+          queue.questions
+        )
+        queue.questions = filtered
       }
     }
 

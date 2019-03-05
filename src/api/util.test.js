@@ -125,4 +125,82 @@ describe('Testing Utils', () => {
       expect(send).toBeCalled()
     })
   })
+
+  describe('canUserSeeQuestionDetailsForConfidentialQueue', () => {
+    test('returns true for an admin', () => {
+      const res = {
+        locals: {
+          userAuthz: {
+            isAdmin: true,
+            staffedCourseIds: [],
+          },
+        },
+      }
+      const value = util.canUserSeeQuestionDetailsForConfidentialQueue(res, 123)
+      expect(value).toBeTruthy()
+    })
+
+    test('returns true for course staff', () => {
+      const res = {
+        locals: {
+          userAuthz: {
+            isAdmin: false,
+            staffedCourseIds: [123],
+          },
+        },
+      }
+      const value = util.canUserSeeQuestionDetailsForConfidentialQueue(res, 123)
+      expect(value).toBeTruthy()
+    })
+
+    test('returns false for non-admin, non-course staff', () => {
+      const res = {
+        locals: {
+          userAuthz: {
+            isAdmin: false,
+            staffedCourseIds: [],
+          },
+        },
+      }
+      const value = util.canUserSeeQuestionDetailsForConfidentialQueue(res, 123)
+      expect(value).toBeFalsy()
+    })
+  })
+
+  describe('filterConfidentialQueueQuestionsForUser', () => {
+    test('removes question info from other users', () => {
+      const res = {
+        locals: {
+          userAuthn: {
+            id: 123,
+          },
+        },
+      }
+      const questions = [
+        {
+          id: 10,
+          askedById: 321,
+          name: 'Secret',
+        },
+        {
+          id: 11,
+          askedById: 123,
+          name: 'Not a Secret',
+        },
+        {
+          id: 12,
+          askedById: 456,
+          name: 'Also a Secret',
+        },
+      ]
+      const result = util.filterConfidentialQueueQuestionsForUser(
+        res,
+        questions
+      )
+      expect(result).toHaveLength(3)
+      expect(result[0]).toEqual({ id: 10 })
+      expect(result[1]).toEqual(questions[1])
+      expect(result[2]).toEqual({ id: 12 })
+    })
+  })
 })

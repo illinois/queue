@@ -12,6 +12,8 @@ const {
   requireQueueForQuestion,
   requireQuestion,
   failIfErrors,
+  canUserSeeQuestionDetailsForConfidentialQueue,
+  filterConfidentialQueueQuestionsForUser,
 } = require('./util')
 const requireCourseStaffForQueueForQuestion = require('../middleware/requireCourseStaffForQueueForQuestion')
 const safeAsync = require('../middleware/safeAsync')
@@ -116,22 +118,43 @@ router.get(
   '/',
   [requireQueue, failIfErrors],
   safeAsync(async (req, res, _next) => {
-    const { id: queueId } = res.locals.queue
-    const questions = await Question.findAll({
+    const { id: queueId, courseId, isConfidential } = res.locals.queue
+    const questionsResult = await Question.findAll({
       where: {
         queueId,
         dequeueTime: null,
       },
       order: [['id', 'ASC']],
     })
+
+    // Convert questions to array of plain objects that we can filter and manipulate
+    let questions = questionsResult.map(question =>
+      question.get({ plain: true })
+    )
+    if (isConfidential) {
+      if (!canUserSeeQuestionDetailsForConfidentialQueue(res, courseId)) {
+        questions = filterConfidentialQueueQuestionsForUser(res, questions)
+      }
+    }
+
     res.send(questions)
   })
 )
 
 router.get(
   '/:questionId',
-  [requireQuestion, failIfErrors],
+  [requireQuestion, requireQueueForQuestion, failIfErrors],
   (req, res, _next) => {
+    const { courseId, isConfidential } = res.locals.queue
+    const { id: userId } = res.locals.userAuthn
+    if (isConfidential) {
+      if (!canUserSeeQuestionDetailsForConfidentialQueue(res, courseId)) {
+        if (res.locals.question.askedById !== userId) {
+          res.status(403).send('You are not authorized to access that question')
+          return
+        }
+      }
+    }
     res.send(res.locals.question)
   }
 )

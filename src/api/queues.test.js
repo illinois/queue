@@ -86,7 +86,7 @@ describe('Queues API', () => {
     })
   })
 
-  describe('GET /api/queues/5', () => {
+  describe('GET /api/queues/5 (confidential queue)', () => {
     test('includes all question data for admins', async () => {
       const request = await requestAsUser(app, 'admin')
       const res = await request.get('/api/queues/5')
