@@ -7,16 +7,12 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 /* eslint-disable react/prefer-stateless-function */
 const ConfidentialQueuePanel = props => {
-  let questionId
-  let position = 0
+  const questionId = props.getUserActiveQuestionIdForQueue
+  let position = -1
   if (props.queue && props.queue.questions) {
-    props.queue.questions.forEach(qId => {
-      const question = props.questions[qId]
-      if (props.userId === question.askedById) {
-        questionId = qId
-      } else {
-        position += 1
-      }
+    props.queue.questions.some(qId => {
+      position += 1
+      return qId === questionId
     })
 
     const numQuestions = props.queue.questions.length
@@ -28,9 +24,10 @@ const ConfidentialQueuePanel = props => {
         ? 'There is 1 person on the queue'
         : `There are ${numQuestions} people on the queue`
     const singularOrPluralPerson = position === 1 ? 'person' : 'people'
-    const cardMessage = questionId
-      ? `${cardTotalQuestionsMessage} with ${position} ${singularOrPluralPerson} in front of you.`
-      : `${cardTotalQuestionsMessage}.`
+    const cardMessage =
+      questionId === -1
+        ? `${cardTotalQuestionsMessage}.`
+        : `${cardTotalQuestionsMessage} with ${position} ${singularOrPluralPerson} in front of you.`
 
     return (
       <div>
@@ -62,12 +59,13 @@ ConfidentialQueuePanel.propTypes = {
       topic: PropTypes.string,
     })
   ),
-  userId: PropTypes.number.isRequired,
+  getUserActiveQuestionIdForQueue: PropTypes.number,
 }
 
 ConfidentialQueuePanel.defaultProps = {
   queue: null,
   questions: null,
+  getUserActiveQuestionIdForQueue: -1,
 }
 
 export default ConfidentialQueuePanel
