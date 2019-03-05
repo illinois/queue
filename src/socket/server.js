@@ -47,6 +47,7 @@ const sendInitialState = (
 const handleQuestionCreate = async (id, queueId) => {
   const question = await Question.findOne({ where: { id } })
   queueNamespace.to(`queue-${queueId}`).emit('question:create', { question })
+  // Public confidential queues only need to learn that a question was added
   queueNamespace
     .to(`queue-${queueId}-public`)
     .emit('question:create', { question: { id } })
@@ -54,6 +55,7 @@ const handleQuestionCreate = async (id, queueId) => {
 
 const handleQuestionUpdate = async (id, queueId) => {
   const question = Question.findOne({ where: { id } })
+  // Public confidential queues don't need to know about question updates
   queueNamespace.to(`queue-${queueId}`).emit('question:update', { question })
 }
 
@@ -182,9 +184,15 @@ module.exports = newIo => {
         )
         let sendCompleteQuestionData = true
         if (isConfidential && !canSeeQuestionDetails) {
+          // All users that shouldn't see confidential information are added
+          // to a "public" version of the room that receives the minimum
+          // possible set of information
           socket.join(`queue-${queueId}-public`)
           sendCompleteQuestionData = false
         } else {
+          // For non-confidential queues, this room will consider receiving all
+          // updates for all users. For confidential queues, only admins and
+          // course staff will be subscribed to this room
           socket.join(`queue-${queueId}`)
         }
         const { id: userId } = socket.request.user
