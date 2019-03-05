@@ -12,6 +12,7 @@ import ConfirmLeaveQueueModal from './ConfirmLeaveQueueModal'
 import ConfirmDeleteQuestionModal from './ConfirmDeleteQuestionModal'
 import ConfirmCancelQuestionModal from './ConfirmCancelQuestionModal'
 import ConfirmStopAnsweringQuestionModal from './ConfirmStopAnsweringQuestionModal'
+import PostponeQuestionModal from './PostponeQuestionModal'
 import QuestionEdit from './QuestionEdit'
 
 class QuestionList extends React.Component {
@@ -25,6 +26,7 @@ class QuestionList extends React.Component {
       showCancelModal: false,
       showStopAnswerModal: false,
       showQuestionEditModal: false,
+      showPostponeModal: false,
       attributeId: null,
       feedbackId: null,
       deleteId: null,
@@ -152,6 +154,26 @@ class QuestionList extends React.Component {
     })
   }
 
+  postponeQuestion(questionId) {
+    this.setState({
+      showPostponeModal: true,
+      postponeId: questionId,
+    })
+  }
+
+  togglePostponeModal() {
+    this.setState(prevState => ({
+      showPostponeModal: !prevState.showPostponeModal,
+    }))
+  }
+
+  handlePostpone(reason) {
+    console.log('postpone handled:', reason)
+    this.setState({
+      showPostponeModal: false,
+    })
+  }
+
   render() {
     let questions
     if (this.props.queue && this.props.queue.questions) {
@@ -175,6 +197,7 @@ class QuestionList extends React.Component {
               startQuestion={() => this.startQuestion(questionId)}
               finishedAnswering={() => this.handleFinishedAnswering(questionId)}
               editQuestion={() => this.handleEditQuestion(questionId)}
+              postponeQuestion={() => this.postponeQuestion(questionId)}
               {...question}
             />
           )
@@ -234,6 +257,11 @@ class QuestionList extends React.Component {
           isOpen={this.state.showStopAnswerModal}
           toggle={() => this.toggleStopAnswerModal()}
           confirm={() => this.handleConfirmedCancellation()}
+        />
+        <PostponeQuestionModal
+          isOpen={this.state.showPostponeModal}
+          toggle={() => this.togglePostponeModal()}
+          onPostpone={reason => this.handlePostpone(reason)}
         />
         <QuestionEdit
           question={this.props.questions[this.state.attributeId]}

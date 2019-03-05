@@ -25,7 +25,8 @@ class Question extends React.Component {
       didUserAskQuestion,
     } = this.props
 
-    const userCanDelete = didUserAskQuestion || isUserCourseStaff
+    const userCanDelete =
+      didUserAskQuestion || isUserCourseStaff || isUserActiveStaffForQueue
 
     let buttonCluster
     if (beingAnswered) {
@@ -84,6 +85,16 @@ class Question extends React.Component {
               onClick={() => this.props.editQuestion(id)}
             >
               Edit
+            </Button>
+          )}
+          {(isUserActiveStaffForQueue || didUserAskQuestion) && (
+            <Button
+              color="secondary"
+              outline
+              className="mr-2"
+              onClick={() => this.props.postponeQuestion()}
+            >
+              Postpone
             </Button>
           )}
           {userCanDelete && (
@@ -198,6 +209,7 @@ Question.propTypes = {
   cancelQuestion: PropTypes.func.isRequired,
   startQuestion: PropTypes.func.isRequired,
   editQuestion: PropTypes.func.isRequired,
+  postponeQuestion: PropTypes.func.isRequired,
   finishedAnswering: PropTypes.func.isRequired,
   deleteQuestion: PropTypes.func.isRequired,
 }
