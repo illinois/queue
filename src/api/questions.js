@@ -142,20 +142,16 @@ router.delete(
   [requireQueue, failIfErrors],
   safeAsync(async (req, res, _next) => {
     const { id: queueId } = res.locals.queue
-    const questions = await Question.findAll({
-      where: {
-        queueId,
-        dequeueTime: null,
+    Question.update(
+      {
+        dequeueTime: new Date(),
       },
-      order: [['id', 'ASC']],
-    })
-
-    await Promise.all(
-      questions.map(async question => {
-        await question.update({
-          dequeueTime: new Date(),
-        })
-      })
+      {
+        where: {
+          queueId,
+          dequeueTime: null,
+        },
+      }
     )
 
     res.status(204).send()
