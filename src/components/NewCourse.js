@@ -11,6 +11,8 @@ import {
   Button,
 } from 'reactstrap'
 
+const isInvalid = error => error !== undefined && error !== ''
+
 class NewCourse extends React.Component {
   constructor(props) {
     super(props)
@@ -75,7 +77,7 @@ class NewCourse extends React.Component {
               value={this.state.name}
               onChange={this.handleInputChange}
               onKeyDown={this.handleKeyPress}
-              valid={this.state.isFieldValid.name}
+              invalid={isInvalid(this.state.isFieldValid.name)}
             />
             <FormFeedback>A name is required</FormFeedback>
           </Col>
@@ -92,7 +94,7 @@ class NewCourse extends React.Component {
               value={this.state.shortcode}
               onChange={this.handleInputChange}
               onKeyDown={this.handleKeyPress}
-              valid={this.state.isFieldValid.shortcode}
+              invalid={isInvalid(this.state.isFieldValid.shortcode)}
             />
             <FormFeedback>A shortcode is required!</FormFeedback>
             <FormText>

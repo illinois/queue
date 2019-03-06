@@ -40,9 +40,11 @@ function closeNotification(queueId, questionId) {
   delete notifications[queueId][questionId]
 }
 
-function isOnDutyStaff(activeStaff, user) {
+function isOnDutyStaff(activeStaff, user, queueId) {
   return Object.keys(activeStaff).some(
-    key => activeStaff[key].userId === user.id
+    key =>
+      activeStaff[key].userId === user.id &&
+      activeStaff[key].queueId === queueId
   )
 }
 
@@ -54,10 +56,10 @@ export default store => next => action => {
   if (action.type === CREATE_QUESTION.SUCCESS) {
     const { activeStaff } = state.activeStaff
     // On duty staff cannot ask questions, so no need to filter by askedById
-    if (isOnDutyStaff(activeStaff, user)) {
+    const { id, name, location, queueId } = action.question
+    const queue = state.queues.queues[queueId]
+    if (isOnDutyStaff(activeStaff, user, queueId)) {
       const title = 'New question'
-      const { id, name, location, queueId } = action.question
-      const queue = state.queues.queues[queueId]
       let body = ''
 
       if (queue.fixedLocation) {
@@ -78,7 +80,7 @@ export default store => next => action => {
   } else if (action.type === UPDATE_QUESTION.SUCCESS) {
     const { question } = action
     const { activeStaff } = state.activeStaff
-    if (isOnDutyStaff(activeStaff, user)) {
+    if (isOnDutyStaff(activeStaff, user, question.queueId)) {
       // Close question creation notification
       closeNotification(question.queueId, question.id)
     }

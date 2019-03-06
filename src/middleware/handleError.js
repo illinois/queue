@@ -6,5 +6,5 @@ module.exports = (err, req, res, _next) => {
     req.socket.destroy()
     return
   }
-  res.status(500).send()
+  res.status(500).send('Something went wrong')
 }

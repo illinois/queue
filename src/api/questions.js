@@ -277,7 +277,9 @@ router.patch(
       })
       res.status(201).send(question)
     } else {
-      res.status(403).send()
+      res
+        .status(403)
+        .send("You don't have authorization to update this question")
     }
   })
 )
@@ -313,7 +315,9 @@ router.delete(
       })
       res.status(204).send()
     } else {
-      res.status(403).send()
+      res
+        .status(403)
+        .send("You don't have authorization to delete this question")
     }
   })
 )
