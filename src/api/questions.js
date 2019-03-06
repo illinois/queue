@@ -13,6 +13,7 @@ const {
   requireQuestion,
   failIfErrors,
 } = require('./util')
+const requireCourseStaffForQueue = require('../middleware/requireCourseStaffForQueue')
 const requireCourseStaffForQueueForQuestion = require('../middleware/requireCourseStaffForQueueForQuestion')
 const safeAsync = require('../middleware/safeAsync')
 
@@ -139,7 +140,7 @@ router.get(
 // Delete all questions for a particular queue
 router.delete(
   '/',
-  [requireQueue, failIfErrors],
+  [requireQueue, requireCourseStaffForQueue, failIfErrors],
   safeAsync(async (req, res, _next) => {
     const { id: queueId } = res.locals.queue
     Question.update(
