@@ -54,9 +54,13 @@ const handleQuestionCreate = async (id, queueId) => {
 }
 
 const handleQuestionUpdate = async (id, queueId) => {
-  const question = Question.findOne({ where: { id } })
+  const question = await Question.findOne({ where: { id } })
   // Public confidential queues don't need to know about question updates
   queueNamespace.to(`queue-${queueId}`).emit('question:update', { question })
+  // However, the user that *asked* the question should in fact get this update
+  queueNamespace
+    .to(`queue-${queueId}-user-${question.askedById}`)
+    .emit('question:update', { question })
 }
 
 const handleQuestionDelete = (id, queueId) => {
@@ -188,6 +192,9 @@ module.exports = newIo => {
           // to a "public" version of the room that receives the minimum
           // possible set of information
           socket.join(`queue-${queueId}-public`)
+          // Users will also join a specific room for themselves so that they
+          // receive updates about questions being answered, etc.
+          socket.join(`queue-${queueId}-user-${socket.request.user.id}`)
           sendCompleteQuestionData = false
         } else {
           // For non-confidential queues, this room will consider receiving all
