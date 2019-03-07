@@ -1,7 +1,9 @@
+/* eslint-env browser */
+
 import axiosBase from 'axios'
 import { toast } from 'react-toastify'
 
-import { baseUrl } from '../util'
+import { baseUrl, getApiUrl } from '../util'
 import { Router } from '../routes'
 
 const axios = axiosBase.create({ baseURL: baseUrl })
@@ -15,7 +17,9 @@ axios.interceptors.response.use(null, err => {
   if (err.response) {
     // Status code outside of 2xx
     if (err.response.status === 401) {
-      Router.replaceRoute('login')
+      if (process.browser) {
+        Router.replaceRoute('login')
+      }
     } else {
       toast.error(err.response.data || 'Something went wrong')
     }
@@ -25,5 +29,18 @@ axios.interceptors.response.use(null, err => {
   }
   return Promise.reject(err)
 })
+
+// Create an axios request that includes authorization cookies from
+// a Request object
+axios.withRequest = (method, url, req) =>
+  axios({
+    method,
+    url: getApiUrl(url, req),
+    headers: req
+      ? {
+          cookie: `jwt=${req.cookies.jwt}`,
+        }
+      : {},
+  })
 
 export default axios

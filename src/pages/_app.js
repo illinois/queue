@@ -7,6 +7,8 @@ import { config } from '@fortawesome/fontawesome-svg-core'
 import makeStore from '../redux/makeStore'
 import AppContainer from '../components/AppContainer'
 
+import { fetchCurrentUser } from '../actions/user'
+
 // We add this during SSR in _document.js
 config.autoAddCss = false
 
@@ -15,6 +17,15 @@ class MyApp extends React.Component {
     const pageProps = Component.getInitialProps
       ? await Component.getInitialProps(ctx)
       : {}
+    if (ctx.isServer) {
+      // Fetch the current user so we can render PageWithUsers
+      // Must fetch user here since getInitialProps is only called
+      // server-side in pages
+      await ctx.store.dispatch(fetchCurrentUser(ctx.req))
+    }
+
+    // Pass `isServer` down to all child components
+    pageProps.isServer = ctx.isServer
     return { pageProps }
   }
 

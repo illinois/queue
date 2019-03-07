@@ -13,11 +13,11 @@ const fetchQueuesSuccess = makeActionCreator(
 )
 const fetchQueuesFailure = makeActionCreator(types.FETCH_QUEUES.FAILURE, 'data')
 
-export function fetchQueues() {
+export function fetchQueues(req) {
   return dispatch => {
     dispatch(fetchQueuesRequest())
 
-    return axios.get('/api/queues').then(
+    return axios.withRequest('GET', '/api/queues', req).then(
       res => dispatch(fetchQueuesSuccess(res.data)),
       err => {
         console.error(err)

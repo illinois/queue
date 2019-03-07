@@ -47,11 +47,11 @@ const fetchCoursesFailure = makeActionCreator(
   'data'
 )
 
-export function fetchCourses() {
+export function fetchCourses(req) {
   return dispatch => {
     dispatch(fetchCoursesRequest())
 
-    return axios.get('/api/courses').then(
+    return axios.withRequest('GET', '/api/courses', req).then(
       res => dispatch(fetchCoursesSuccess(res.data)),
       err => {
         console.error(err)

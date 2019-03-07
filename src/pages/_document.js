@@ -7,7 +7,7 @@ import { dom } from '@fortawesome/fontawesome-svg-core'
 import { baseUrl, isDev, isNow } from '../util'
 
 export default class MyDocument extends Document {
-  static getInitialProps({ renderPage }) {
+  static async getInitialProps({ renderPage }) {
     const { html, head, errorHtml, chunks } = renderPage()
     const styles = flush()
     return {

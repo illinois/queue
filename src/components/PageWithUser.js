@@ -14,9 +14,9 @@ export default function(AuthedComponent, permissions) {
 
     constructor(props) {
       super(props)
-      const { user } = props
+      const { isServer, user } = props
       this.state = {
-        isLoading: !user,
+        isLoading: !isServer,
         isAuthed: this.checkAuthz(user),
       }
     }
@@ -94,6 +94,7 @@ export default function(AuthedComponent, permissions) {
       isAdmin: PropTypes.bool.isRequired,
     }),
     courseId: PropTypes.number,
+    isServer: PropTypes.bool.isRequired,
   }
 
   const mapStateToProps = state => ({

@@ -24,3 +24,11 @@ module.exports.mapObjectToArray = o => {
   const sortKeys = keys.sort((a, b) => (a < b ? -1 : 1))
   return sortKeys.map(id => o[id])
 }
+
+// Make a raw url SSR friendly
+module.exports.getApiUrl = (route, req) => {
+  const protocol = module.exports.isDev ? 'http' : 'https'
+  return process.browser
+    ? `${protocol}://${window.location.host}${route}`
+    : `${protocol}://${req.headers.host}${route}`
+}

@@ -27,10 +27,34 @@ import QueueCardListContainer from '../containers/QueueCardListContainer'
 import DevWorkshopAd from '../components/DevWorkshopAd'
 
 class Index extends React.Component {
-  static async getInitialProps({ store, isServer }) {
+  static async getInitialProps({ store, isServer, req }) {
     if (isServer) {
-      // We're going to start loading as soon as we're on the client
+      // Fetch all information for SSR
+      await Promise.all([
+        store.dispatch(fetchCourses(req)),
+        store.dispatch(fetchQueues(req)),
+      ])
+    } else {
+      // Only asynchronously fetch when navigating on the client side
       store.dispatch(fetchCoursesRequest())
+    }
+    return {}
+  }
+
+  componentDidMount() {
+    if (this.state.isFetching) {
+      Promise.all([this.props.fetchCourses(), this.props.fetchQueues()]).then(
+        () => {
+          this.setState({
+            isFetching: false,
+          })
+          if (this.props.pageTransitionReadyToEnter) {
+            this.props.pageTransitionReadyToEnter()
+          }
+        }
+      )
+    } else if (this.props.pageTransitionReadyToEnter) {
+      this.props.pageTransitionReadyToEnter()
     }
   }
 
@@ -40,25 +64,10 @@ class Index extends React.Component {
     super(props)
 
     this.state = {
-      finishedLoading: false,
+      isFetching: !this.props.isServer,
       showCreateCoursePanel: false,
       showCreateQueuePanel: false,
     }
-  }
-
-  componentDidMount() {
-    // We need to wait for multiple network requests to complete, so we can't
-    // use the usual isFetching property from the state blob
-    Promise.all([this.props.fetchCourses(), this.props.fetchQueues()]).then(
-      () => {
-        this.setState({
-          finishedLoading: true,
-        })
-        if (this.props.pageTransitionReadyToEnter) {
-          this.props.pageTransitionReadyToEnter()
-        }
-      }
-    )
   }
 
   showCreateCoursePanel(state) {
@@ -86,7 +95,7 @@ class Index extends React.Component {
   }
 
   render() {
-    if (!this.state.finishedLoading) {
+    if (this.state.isFetching) {
       return null
     }
 
@@ -227,6 +236,7 @@ Index.propTypes = {
       name: PropTypes.string,
     })
   ),
+  isServer: PropTypes.bool.isRequired,
   fetchCourses: PropTypes.func.isRequired,
   fetchQueues: PropTypes.func.isRequired,
   createCourse: PropTypes.func.isRequired,

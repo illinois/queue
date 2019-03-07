@@ -14,11 +14,11 @@ const fetchCurrentUserFailure = makeActionCreator(
   'data'
 )
 
-export function fetchCurrentUser() {
+export function fetchCurrentUser(req) {
   return dispatch => {
     dispatch(fetchCurrentUserRequest())
 
-    return axios.get('/api/users/me').then(
+    return axios.withRequest('GET', '/api/users/me', req).then(
       res => dispatch(fetchCurrentUserSuccess(res.data)),
       err => {
         console.error(err)
