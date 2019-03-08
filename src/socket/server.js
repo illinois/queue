@@ -56,16 +56,18 @@ const handleQuestionCreate = async (id, queueId) => {
 const handleQuestionUpdate = async (id, queueId) => {
   const question = await Question.findOne({ where: { id } })
   // Public confidential queues don't need to know about question updates
-  queueNamespace.to(`queue-${queueId}`).emit('question:update', { question })
   // However, the user that *asked* the question should in fact get this update
   queueNamespace
+    .to(`queue-${queueId}`)
     .to(`queue-${queueId}-user-${question.askedById}`)
     .emit('question:update', { question })
 }
 
 const handleQuestionDelete = (id, queueId) => {
-  queueNamespace.to(`queue-${queueId}`).emit('question:delete', { id })
-  queueNamespace.to(`queue-${queueId}-public`).emit('question:delete', { id })
+  queueNamespace
+    .to(`queue-${queueId}`)
+    .to(`queue-${queueId}-public`)
+    .emit('question:delete', { id })
 }
 
 const handleQuestionEvent = (event, instance) => {
@@ -92,13 +94,17 @@ const handleActiveStaffCreate = id => {
     include: [User],
   }).then(activeStaff => {
     queueNamespace
-      .to(`queue-${activeStaff.queueId}-staff`)
+      .to(`queue-${activeStaff.queueId}`)
+      .to(`queue-${activeStaff.queueId}-public`)
       .emit('activeStaff:create', { id, activeStaff })
   })
 }
 
 const handleActiveStaffDelete = (id, queueId) => {
-  queueNamespace.to(`queue-${queueId}-staff`).emit('activeStaff:delete', { id })
+  queueNamespace
+    .to(`queue-${queueId}`)
+    .to(`queue-${queueId}-public`)
+    .emit('activeStaff:delete', { id })
 }
 
 const handleActiveStaffEvent = (event, instance) => {
@@ -119,7 +125,10 @@ const handleActiveStaffEvent = (event, instance) => {
 
 const handleQueueUpdate = id => {
   Queue.findOne({ where: { id } }).then(queue => {
-    queueNamespace.to(`queue-${id}-staff`).emit('queue:update', { id, queue })
+    queueNamespace
+      .to(`queue-${id}`)
+      .to(`queue-${id}-public`)
+      .emit('queue:update', { id, queue })
   })
 }
 
