@@ -19,6 +19,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       startTime: DataTypes.DATE,
       endTime: DataTypes.DATE,
+      admissionControlEnabled: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      admissionControlUrl: DataTypes.TEXT,
     },
     {
       paranoid: true, // Don't actually delete

@@ -100,25 +100,30 @@ router.post(
 
     // If this queue has an admission control policy, let's query it to see
     // if this question will be allowed
-    let questionAllowed = true
-    let questionAllowedReason = null
-    try {
-      const allowedResponse = await axios.post('http://localhost:4005/', {
-        topic: data.topic,
-      })
-      questionAllowed = allowedResponse.data.allowed
-      questionAllowedReason =
-        allowedResponse.data.reason ||
-        'No reason was given by the course admission control policy'
-    } catch (e) {
-      // TODO log or something?
-      questionAllowed = false
-      questionAllowedReason = 'Error querying admission control API'
-    }
+    if (res.locals.queue.admissionControlEnabled) {
+      let questionAllowed = true
+      let questionAllowedReason = null
+      try {
+        const allowedResponse = await axios.post(
+          res.locals.queue.admissionControlUrl,
+          {
+            topic: data.topic,
+          }
+        )
+        questionAllowed = allowedResponse.data.allowed
+        questionAllowedReason =
+          allowedResponse.data.reason ||
+          'No reason was given by the course admission control policy'
+      } catch (e) {
+        // TODO log or something?
+        questionAllowed = false
+        questionAllowedReason = 'Error querying admission control API'
+      }
 
-    if (!questionAllowed) {
-      next(new ApiError(422, questionAllowedReason))
-      return
+      if (!questionAllowed) {
+        next(new ApiError(422, questionAllowedReason))
+        return
+      }
     }
 
     const question = Question.build({

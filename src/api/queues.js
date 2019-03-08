@@ -125,6 +125,10 @@ router.patch(
     check('messageEnabled')
       .optional({ nullable: true })
       .isBoolean(),
+    check('admissionControlEnabled')
+      .optional({ nullable: true })
+      .isBoolean(),
+    check('admissionControlUrl').optional({ nullable: true }),
     validateLocation,
     failIfErrors,
   ],
@@ -139,6 +143,14 @@ router.patch(
       message: data.message !== null ? data.message : undefined,
       messageEnabled:
         data.messageEnabled !== null ? data.messageEnabled : undefined,
+      admissionControlEnabled:
+        data.admissionControlEnabled !== null
+          ? data.admissionControlEnabled
+          : undefined,
+      admissionControlUrl:
+        data.admissionControlUrl !== null
+          ? data.admissionControlUrl
+          : undefined,
     })
 
     const updatedQueue = await Queue.scope('questionCount').findOne({
