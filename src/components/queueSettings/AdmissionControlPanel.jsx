@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   Card,
   CardHeader,
@@ -7,6 +7,10 @@ import {
   CustomInput,
   Button,
   Input,
+  Form,
+  FormGroup,
+  Label,
+  Col,
 } from 'reactstrap'
 import { useBoolean, useInput } from 'react-hanger'
 
@@ -30,21 +34,33 @@ const AdmissionControlPanel = props => {
           For more information, check out the{' '}
           <a href="https://queue.illinois.edu">admission control docs.</a>
         </p>
-        <div>
-          <CustomInput
-            id="messageEnabled"
-            type="switch"
-            className="mr-3 d-inline-block"
-            onChange={enabledToggle.toggle}
-            checked={enabledToggle.value}
-          />
-          Custom admission control policy is{' '}
-          {enabledToggle.value ? 'enabled' : 'disabled'}
-        </div>
-        <Input
-          {...admissionControlUrl.bindToInput}
-          disabled={!enabledToggle.value}
-        />
+        <Form autoComplete="off">
+          <FormGroup row>
+            <Label for="enable" sm={3}>
+              Enable custom policy
+            </Label>
+            <Col sm={9} className="d-flex align-items-center">
+              <CustomInput
+                id="messageEnabled"
+                type="switch"
+                className="mr-3 d-inline-block"
+                onChange={enabledToggle.toggle}
+                checked={enabledToggle.value}
+              />
+            </Col>
+          </FormGroup>
+          <FormGroup row>
+            <Label for="url" sm={3}>
+              Policy API URL
+            </Label>
+            <Col sm={9}>
+              <Input
+                {...admissionControlUrl.bindToInput}
+                disabled={!enabledToggle.value}
+              />
+            </Col>
+          </FormGroup>
+        </Form>
         <Button disabled={!changed} color="primary">
           Update
         </Button>
