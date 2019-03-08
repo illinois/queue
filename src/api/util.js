@@ -2,6 +2,13 @@ const { validationResult } = require('express-validator/check')
 
 const { Course, Queue, Question, User } = require('../models')
 
+class ApiError extends Error {
+  constructor(httpStatusCode, message) {
+    super(message)
+    this.httpStatusCode = httpStatusCode
+  }
+}
+
 const findPropertyInRequest = (req, property) => {
   const locations = ['params', 'body']
   const location = locations.find(loc => req[loc][property] !== undefined)
@@ -83,4 +90,6 @@ module.exports = {
   // These have to be exported for testing
   findPropertyInRequest,
   requireModel,
+
+  ApiError,
 }

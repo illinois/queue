@@ -4,6 +4,7 @@ const router = require('express').Router({
 
 const { check } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
+const axios = require('axios')
 
 const constants = require('../constants')
 const { Course, Queue, Question, User } = require('../models/')
@@ -12,6 +13,7 @@ const {
   requireQueueForQuestion,
   requireQuestion,
   failIfErrors,
+  ApiError,
 } = require('./util')
 const requireCourseStaffForQueue = require('../middleware/requireCourseStaffForQueue')
 const requireCourseStaffForQueueForQuestion = require('../middleware/requireCourseStaffForQueueForQuestion')
@@ -56,7 +58,7 @@ router.post(
     checkLocation,
     failIfErrors,
   ],
-  safeAsync(async (req, res, _next) => {
+  safeAsync(async (req, res, next) => {
     const data = matchedData(req)
     const {
       userAuthz,
@@ -64,7 +66,7 @@ router.post(
     } = res.locals
     // make sure queue is open
     if (!res.locals.queue.open) {
-      res.status(422).send('This queue is closed')
+      next(new ApiError(422, 'This queue is closed'))
       return
     }
 
@@ -78,7 +80,7 @@ router.post(
         const [user] = await User.findOrCreate({ where: { netid } })
         askerId = user.id
       } else {
-        res.status(403).send("You don't have authorization to set a netid")
+        next(new ApiError(403, "You don't have authoriation to set a netid"))
         return
       }
     }
@@ -93,6 +95,29 @@ router.post(
     })
     if (existingQuestion) {
       res.status(422).send('You already have a question on this queue')
+      return
+    }
+
+    // If this queue has an admission control policy, let's query it to see
+    // if this question will be allowed
+    let questionAllowed = true
+    let questionAllowedReason = null
+    try {
+      const allowedResponse = await axios.post('http://localhost:4005/', {
+        topic: data.topic,
+      })
+      questionAllowed = allowedResponse.data.allowed
+      questionAllowedReason =
+        allowedResponse.data.reason ||
+        'No reason was given by the course admission control policy'
+    } catch (e) {
+      // TODO log or something?
+      questionAllowed = false
+      questionAllowedReason = 'Error querying admission control API'
+    }
+
+    if (!questionAllowed) {
+      next(new ApiError(422, questionAllowedReason))
       return
     }
 

@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import {
+  Alert,
   Collapse,
   Card,
   CardBody,
@@ -19,6 +20,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
 import constants from '../constants'
+import { CREATE_QUESTION } from '../constants/ActionTypes'
 
 const fields = [
   {
@@ -107,14 +109,16 @@ export default class NewQuestion extends React.Component {
       location: this.state.location,
       topic: this.state.topic,
     }
-    this.props.createQuestion(this.props.queueId, question).then(() => {
-      // Clear out all fields so user can add a new question
-      this.setState({
-        netid: '',
-        name: this.props.isUserCourseStaff ? '' : this.props.user.name || '',
-        location: '',
-        topic: '',
-      })
+    this.props.createQuestion(this.props.queueId, question).then(action => {
+      if (action.type === CREATE_QUESTION.SUCCESS) {
+        // Clear out all fields so user can add a new question
+        this.setState({
+          netid: '',
+          name: this.props.isUserCourseStaff ? '' : this.props.user.name || '',
+          location: '',
+          topic: '',
+        })
+      }
     })
   }
 
@@ -245,6 +249,9 @@ export default class NewQuestion extends React.Component {
                     )}
                   </Col>
                 </FormGroup>
+                {this.props.questionError && (
+                  <Alert color="danger">{this.props.questionError}</Alert>
+                )}
                 <Button
                   block
                   color="primary"
@@ -278,6 +285,7 @@ NewQuestion.defaultProps = {
     location: '',
     fixedLocation: false,
   },
+  questionError: null,
 }
 
 NewQuestion.propTypes = {
@@ -290,5 +298,6 @@ NewQuestion.propTypes = {
     name: PropTypes.string,
   }).isRequired,
   createQuestion: PropTypes.func.isRequired,
+  questionError: PropTypes.string,
   isUserCourseStaff: PropTypes.bool.isRequired,
 }
