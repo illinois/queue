@@ -12,7 +12,7 @@ import {
 } from 'reactstrap'
 import { connect } from 'react-redux'
 
-import { fetchQueue, fetchQueueRequest } from '../actions/queue'
+import { fetchQueue, fetchQueueRequest, updateQueue } from '../actions/queue'
 import AdmissionControlPanel from '../components/queueSettings/AdmissionControlPanel'
 import PageWithUser from '../components/PageWithUser'
 
@@ -37,11 +37,19 @@ class QueueSettings extends React.Component {
     })
   }
 
+  updateQueue(attributes) {
+    this.props.updateQueue(this.props.queueId, attributes)
+  }
+
   render() {
+    if (!this.props.queue) return null
     return (
       <Container>
         <h1 className="display-4 mb-4">Queue Settings</h1>
-        <AdmissionControlPanel />
+        <AdmissionControlPanel
+          queue={this.props.queue}
+          updateAdmissionControl={attributes => this.updateQueue(attributes)}
+        />
         <Card className="border border-danger">
           <CardHeader className="bg-danger text-white">
             <CardTitle tag="h5" className="mb-0">
@@ -71,7 +79,12 @@ class QueueSettings extends React.Component {
 
 QueueSettings.propTypes = {
   fetchQueue: PropTypes.func.isRequired,
+  updateQueue: PropTypes.func.isRequired,
   queueId: PropTypes.number.isRequired,
+  queue: PropTypes.shape({
+    admissionControlEnabled: PropTypes.bool,
+    admissionControlUrl: PropTypes.string,
+  }).isRequired,
   pageTransitionReadyToEnter: PropTypes.func,
 }
 
@@ -87,6 +100,8 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchQueue: queueId => dispatch(fetchQueue(queueId)),
+  updateQueue: (queueId, attributes) =>
+    dispatch(updateQueue(queueId, attributes)),
   dispatch,
 })
 

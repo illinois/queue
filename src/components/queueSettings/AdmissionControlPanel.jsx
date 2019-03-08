@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {
   Card,
   CardHeader,
@@ -14,11 +15,20 @@ import {
 } from 'reactstrap'
 import { useBoolean, useInput } from 'react-hanger'
 
-const AdmissionControlPanel = props => {
-  const initialEnabled = false
-  const enabledToggle = useBoolean(initialEnabled)
-  const admissionControlUrl = useInput('wig')
-  const changed = enabledToggle.value !== initialEnabled
+const AdmissionControlPanel = ({ queue, updateAdmissionControl }) => {
+  const enabledToggle = useBoolean(queue.admissionControlEnabled)
+  const admissionControlUrl = useInput(queue.admissionControlUrl)
+  const changed =
+    enabledToggle.value !== queue.admissionControlEnabled ||
+    admissionControlUrl.value !== queue.admissionControlUrl
+
+  const update = () => {
+    updateAdmissionControl({
+      admissionControlEnabled: enabledToggle.value,
+      admissionControlUrl: admissionControlUrl.value,
+    })
+  }
+
   return (
     <Card className="mb-3">
       <CardHeader>
@@ -61,12 +71,24 @@ const AdmissionControlPanel = props => {
             </Col>
           </FormGroup>
         </Form>
-        <Button disabled={!changed} color="primary">
+        <Button disabled={!changed} color="primary" onClick={update}>
           Update
         </Button>
       </CardBody>
     </Card>
   )
+}
+
+AdmissionControlPanel.propTypes = {
+  queue: PropTypes.shape({
+    admissionControlUrl: PropTypes.string,
+    admissionControlEnabled: PropTypes.bool,
+  }),
+  updateAdmissionControl: PropTypes.func.isRequired,
+}
+
+AdmissionControlPanel.defaultProps = {
+  queue: null,
 }
 
 export default AdmissionControlPanel
