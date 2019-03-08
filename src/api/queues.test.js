@@ -87,8 +87,8 @@ describe('Queues API', () => {
   })
 
   describe('GET /api/queues/5 (confidential queue)', () => {
-    test('includes all question data for admins', async () => {
-      const request = await requestAsUser(app, 'admin')
+    const includesDataForUser = async user => {
+      const request = await requestAsUser(app, user)
       const res = await request.get('/api/queues/5')
 
       expect(Array.isArray(res.body.questions)).toBeTruthy()
@@ -98,10 +98,18 @@ describe('Queues API', () => {
       expect(question1).toHaveProperty('askedBy.netid', 'student')
       expect(question2).toHaveProperty('askedById', 6)
       expect(question2).toHaveProperty('askedBy.netid', 'otherstudent')
+    }
+
+    test('includes all question data for admin', async () => {
+      await includesDataForUser('admin')
     })
 
-    test('excludes question data for students on confidential queue', async () => {
-      const request = await requestAsUser(app, 'student')
+    test('includes all question data for course staff', async () => {
+      await includesDataForUser('225staff')
+    })
+
+    const excludesDataForUser = async user => {
+      const request = await requestAsUser(app, user)
       const res = await request.get('/api/queues/5')
 
       // We expect all questions not asked by 'student' (user 5) to have no
@@ -115,6 +123,14 @@ describe('Queues API', () => {
           expect(Object.keys(question)).toEqual(['id'])
         }
       })
+    }
+
+    test('excludes question data for other course staff on confidential queue', async () => {
+      await excludesDataForUser('241staff')
+    })
+
+    test('excludes question data for students on confidential queue', async () => {
+      await excludesDataForUser('student')
     })
   })
 
