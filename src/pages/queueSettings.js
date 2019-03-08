@@ -5,6 +5,7 @@ import {
   Card,
   CardHeader,
   CardTitle,
+  CardBody,
   ListGroup,
   ListGroupItem,
   Button,
@@ -12,6 +13,7 @@ import {
 import { connect } from 'react-redux'
 
 import { fetchQueue, fetchQueueRequest } from '../actions/queue'
+import AdmissionControlPanel from '../components/queueSettings/AdmissionControlPanel'
 import PageWithUser from '../components/PageWithUser'
 
 class QueueSettings extends React.Component {
@@ -38,7 +40,8 @@ class QueueSettings extends React.Component {
   render() {
     return (
       <Container>
-        <h1 className="display-4">Queue Settings</h1>
+        <h1 className="display-4 mb-4">Queue Settings</h1>
+        <AdmissionControlPanel />
         <Card className="border border-danger">
           <CardHeader className="bg-danger text-white">
             <CardTitle tag="h5" className="mb-0">
@@ -52,7 +55,7 @@ class QueueSettings extends React.Component {
                 <strong>Delete this queue</strong>
                 <p className="mb-0">
                   Deleting a queue is permanent; please be sure you want to do
-                  this. Let&apos;s make this longer to see what happens.
+                  this.
                 </p>
               </div>
               <Button outline color="danger" className="mt-3 mt-sm-0">
