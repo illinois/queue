@@ -2,6 +2,7 @@ import {
   CREATE_QUESTION,
   FETCH_QUEUE,
   DELETE_QUESTION,
+  DELETE_ALL_QUESTIONS,
   UPDATE_QUESTION,
   REPLACE_QUESTIONS,
   UPDATE_QUESTION_ANSWERING,
@@ -56,6 +57,12 @@ const questions = (state = defaultState, action) => {
       return {
         ...state,
         questions: newQuestions,
+      }
+    }
+    case DELETE_ALL_QUESTIONS.SUCCESS: {
+      return {
+        ...state,
+        questions: [],
       }
     }
     case REPLACE_QUESTIONS: {
