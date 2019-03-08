@@ -1,3 +1,4 @@
+/* eslint-env browser */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
@@ -5,6 +6,14 @@ import hoistStatics from 'hoist-non-react-statics'
 
 import Error from './Error'
 import { fetchCurrentUser } from '../actions/user'
+
+import { withBaseUrl } from '../util'
+
+const syncLogout = e => {
+  if (e.key === 'logout') {
+    window.location = withBaseUrl('/logout')
+  }
+}
 
 export default function(AuthedComponent, permissions) {
   class PageWithUser extends React.Component {
@@ -24,7 +33,9 @@ export default function(AuthedComponent, permissions) {
     componentDidMount() {
       // Time to fetch our user!
       if (!this.props.user) {
-        this.props.fetchUser()
+        this.props.fetchUser().then(() => {
+          window.addEventListener('storage', syncLogout)
+        })
       }
     }
 
@@ -36,6 +47,11 @@ export default function(AuthedComponent, permissions) {
           isAuthed: this.checkAuthz(user),
         })
       }
+    }
+
+    componentWillUnmount() {
+      window.removeEventListener('storage', syncLogout)
+      window.localStorage.removeItem('logout')
     }
 
     checkAuthz(user) {
