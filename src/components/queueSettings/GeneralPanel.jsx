@@ -17,7 +17,7 @@ import { useInput } from 'react-hanger'
 const GeneralPanel = ({ queue, updateQueue }) => {
   const name = useInput(queue.name)
   const location = useInput(queue.location)
-  const changed = name.value !== queue.name || location.value != queue.location
+  const changed = name.value !== queue.name || location.value !== queue.location
 
   const update = () => {
     updateQueue({
