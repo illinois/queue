@@ -7,6 +7,7 @@ module.exports = {
         {
           type: Sequelize.BOOLEAN,
           default: false,
+          after: 'messageEnabled',
         },
         { transaction }
       )
@@ -15,13 +16,21 @@ module.exports = {
         'admissionControlUrl',
         {
           type: Sequelize.TEXT,
+          after: 'admissionControlEnabled',
         },
         { transaction }
       )
     })
   },
 
-  down: (queryInterface, _Sequelize) => {
-    return queryInterface.dropTable('queueConfigs')
+  down: async (queryInterface, _Sequelize) => {
+    await queryInterface.sequelize.transaction(async transaction => {
+      await queryInterface.removeColumn('queues', 'admissionControlEnabled', {
+        transaction,
+      })
+      await queryInterface.removeColumn('queues', 'admissionControlUrl', {
+        transaction,
+      })
+    })
   },
 }
