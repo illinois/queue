@@ -6,7 +6,7 @@ module.exports = {
         'admissionControlEnabled',
         {
           type: Sequelize.BOOLEAN,
-          default: false,
+          defaultValue: false,
           after: 'messageEnabled',
         },
         { transaction }
