@@ -72,12 +72,14 @@ router.post(
 
     // First, let's check if the request is coming from course staff and
     // includes a specific netid
+    let askerUser = res.locals.userAuthn
     let askerId = res.locals.userAuthn.id
     if (data.netid) {
       if (userAuthz.isAdmin || userAuthz.staffedCourseIds.includes(courseId)) {
         // The user is allowed to do this!
         const [netid] = data.netid.split('@')
         const [user] = await User.findOrCreate({ where: { netid } })
+        askerUser = user
         askerId = user.id
       } else {
         next(new ApiError(403, "You don't have authoriation to set a netid"))
@@ -107,7 +109,10 @@ router.post(
         const allowedResponse = await axios.post(
           res.locals.queue.admissionControlUrl,
           {
+            name: data.name,
+            location: data.location,
             topic: data.topic,
+            askedBy: askerUser,
           }
         )
         questionAllowed = allowedResponse.data.allowed
