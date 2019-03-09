@@ -7,7 +7,7 @@ const port = process.env.PORT || 4005
 app.use(bodyParser.json())
 
 app.post('/', (req, res) => {
-  if (req.body.topic && req.body.topic.length > 10) {
+  if (req.body.topic && req.body.topic.length >= 10) {
     res.status(200).json({ allowed: true })
   } else {
     res
