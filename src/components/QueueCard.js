@@ -7,6 +7,7 @@ import {
   faQuestionCircle,
 } from '@fortawesome/free-solid-svg-icons'
 
+import { Router } from '../routes'
 import ShowForCourseStaff from './ShowForCourseStaff'
 
 const QueueCard = ({
@@ -36,6 +37,12 @@ const QueueCard = ({
     onUpdate()
   }
 
+  const handleSettings = e => {
+    e.stopPropagation()
+    e.preventDefault()
+    Router.pushRoute('queueSettings', { id: queue.id })
+  }
+
   const preventKeyBubbleUp = e => {
     e.stopPropagation()
   }
@@ -54,25 +61,13 @@ const QueueCard = ({
           <div>
             <ShowForCourseStaff courseId={queue.courseId}>
               <Button
-                color="danger"
+                color="secondary"
                 size="sm"
                 outline
-                onClick={handleDelete}
-                onKeyPress={preventKeyBubbleUp}
+                onClick={handleSettings}
+                onKeyPress={handleSettings}
               >
-                Delete
-              </Button>
-            </ShowForCourseStaff>
-            <ShowForCourseStaff courseId={queue.courseId}>
-              <Button
-                color="primary"
-                size="sm"
-                className="mr-0 ml-1"
-                outline
-                onClick={handleUpdate}
-                onKeyPress={preventKeyBubbleUp}
-              >
-                Edit
+                Settings
               </Button>
             </ShowForCourseStaff>
           </div>

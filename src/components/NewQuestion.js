@@ -172,10 +172,10 @@ export default class NewQuestion extends React.Component {
               <Form onSubmit={this.handleSubmit} autoComplete="off">
                 {isUserCourseStaff && (
                   <FormGroup row>
-                    <Label for="netid" sm={2}>
+                    <Label for="netid" sm={2} md={3}>
                       Net ID
                     </Label>
-                    <Col sm={10}>
+                    <Col sm={10} md={9}>
                       <Input
                         name="netid"
                         id="netid"
@@ -192,10 +192,10 @@ export default class NewQuestion extends React.Component {
                   </FormGroup>
                 )}
                 <FormGroup row>
-                  <Label for="name" sm={2}>
+                  <Label for="name" sm={2} md={3}>
                     Name
                   </Label>
-                  <Col sm={10}>
+                  <Col sm={10} md={9}>
                     <Input
                       name="name"
                       id="name"
@@ -210,10 +210,10 @@ export default class NewQuestion extends React.Component {
                   </Col>
                 </FormGroup>
                 <FormGroup row>
-                  <Label for="topic" sm={2}>
+                  <Label for="topic" sm={2} md={3}>
                     Topic
                   </Label>
-                  <Col sm={10}>
+                  <Col sm={10} md={9}>
                     <Input
                       name="topic"
                       id="topic"
@@ -227,10 +227,10 @@ export default class NewQuestion extends React.Component {
                   </Col>
                 </FormGroup>
                 <FormGroup row>
-                  <Label for="location" sm={2}>
+                  <Label for="location" sm={2} md={3}>
                     Location
                   </Label>
-                  <Col sm={10}>
+                  <Col sm={10} md={9}>
                     <Input
                       name="location"
                       id="location"
@@ -249,9 +249,13 @@ export default class NewQuestion extends React.Component {
                     )}
                   </Col>
                 </FormGroup>
-                {this.props.questionError && (
-                  <Alert color="danger">{this.props.questionError}</Alert>
-                )}
+                <Alert
+                  color="danger"
+                  fade={false}
+                  isOpen={this.props.questionError}
+                >
+                  {this.props.questionError}
+                </Alert>
                 <Button
                   block
                   color="primary"
