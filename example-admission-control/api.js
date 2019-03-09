@@ -16,7 +16,7 @@ app.post('/', (req, res) => {
   }
 })
 
-// eslint-disable-next-line no-console
-app.listen(port, () =>
+app.listen(port, () => {
+  // eslint-disable-next-line no-console
   console.log(`Example admission control API listening on port ${port}`)
-)
+})
