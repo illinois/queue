@@ -10,14 +10,7 @@ import {
 import { Router } from '../routes'
 import ShowForCourseStaff from './ShowForCourseStaff'
 
-const QueueCard = ({
-  queue,
-  courseName,
-  open,
-  onDelete,
-  onUpdate,
-  ...rest
-}) => {
+const QueueCard = ({ queue, courseName, open, ...rest }) => {
   const { name: queueName, location, questionCount } = queue
 
   const questionCountText = `${questionCount} Question${
@@ -25,26 +18,10 @@ const QueueCard = ({
   }`
   const locationText = location || 'No location specified'
 
-  const handleDelete = e => {
-    e.stopPropagation()
-    e.preventDefault()
-    onDelete()
-  }
-
-  const handleUpdate = e => {
-    e.stopPropagation()
-    e.preventDefault()
-    onUpdate()
-  }
-
   const handleSettings = e => {
     e.stopPropagation()
     e.preventDefault()
     Router.pushRoute('queueSettings', { id: queue.id })
-  }
-
-  const preventKeyBubbleUp = e => {
-    e.stopPropagation()
   }
 
   const title = courseName || queueName

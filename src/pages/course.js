@@ -9,14 +9,13 @@ import { faPlus, faUsers } from '@fortawesome/free-solid-svg-icons'
 
 import { Link } from '../routes'
 import { fetchCourseRequest, fetchCourse } from '../actions/course'
-import { createQueue, deleteQueue, updateQueue } from '../actions/queue'
+import { createQueue } from '../actions/queue'
 import { mapObjectToArray } from '../util'
 
 import PageWithUser from '../components/PageWithUser'
 import NewQueue from '../components/NewQueue'
 import QueueCardListContainer from '../containers/QueueCardListContainer'
 import ShowForCourseStaff from '../components/ShowForCourseStaff'
-import ConfirmDeleteQueueModal from '../components/ConfirmDeleteQueueModal'
 import CourseShortCodeInfo from '../components/CourseShortCodeInfo'
 
 class Course extends React.Component {
@@ -143,13 +142,6 @@ class Course extends React.Component {
           </Row>
           <CourseShortCodeInfo course={this.props.course} />
         </Container>
-        {this.state.showDeleteQueueModal && (
-          <ConfirmDeleteQueueModal
-            isOpen={this.state.showDeleteQueueModal}
-            toggle={() => this.toggleDeleteModal()}
-            confirm={() => this.confirmDeleteQueue()}
-          />
-        )}
         <style jsx>{`
           :global(.courses-card) {
             width: 100%;
@@ -201,9 +193,6 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => ({
   fetchCourse: courseId => dispatch(fetchCourse(courseId)),
   createQueue: (courseId, queue) => dispatch(createQueue(courseId, queue)),
-  updateQueue: (queueId, attributes) =>
-    dispatch(updateQueue(queueId, attributes)),
-  deleteQueue: (courseId, queueId) => dispatch(deleteQueue(courseId, queueId)),
   dispatch,
 })
 
