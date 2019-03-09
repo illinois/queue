@@ -178,7 +178,7 @@ router.delete(
   [requireQueue, requireCourseStaffForQueue, failIfErrors],
   safeAsync(async (req, res, _next) => {
     const { id: queueId } = res.locals.queue
-    Question.update(
+    await Question.update(
       {
         dequeueTime: new Date(),
       },

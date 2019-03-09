@@ -51,15 +51,15 @@ app.use(
 app.use(`${baseUrl}/api/queues/:queueId/questions`, require('./api/questions'))
 
 // Use special not-found/error middleware for the API
-app.use(`${baseUrl}/api`, (req, res, next) => {
-  const error = new Error('Not Found')
-  error.httpStatusCode = 404
-  next(error)
-})
 app.use(`${baseUrl}/api`, (err, _req, res, _next) => {
   const statusCode = err.httpStatusCode || 500
   const message = err.message || 'Something went wrong'
   res.status(statusCode).json({ message })
+})
+app.use(`${baseUrl}/api`, (_req, res, _next) => {
+  res.status(404).json({
+    message: 'Not Found',
+  })
 })
 
 // Support for course shortcodes

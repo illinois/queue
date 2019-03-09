@@ -23,6 +23,17 @@ const handler = routes.getRequestHandler(nextApp)
 
 /* eslint-disable func-names */
 co(function*() {
+  // Do this first to catch any problems during startup
+  process.on('unhandledRejection', (err, promise) => {
+    console.error(
+      'Unhandled rejection (promise: ',
+      promise,
+      ', reason: ',
+      err,
+      ').'
+    )
+  })
+
   // Initialize the Next.js app
   yield nextApp.prepare()
 
