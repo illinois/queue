@@ -15,7 +15,7 @@ import {
 } from 'reactstrap'
 import { useBoolean, useInput } from 'react-hanger'
 
-const AdmissionControlPanel = ({ queue, updateAdmissionControl }) => {
+const AdmissionControlPanel = ({ queue, updateQueue }) => {
   const enabledToggle = useBoolean(queue.admissionControlEnabled)
   const admissionControlUrl = useInput(queue.admissionControlUrl)
   const changed =
@@ -23,10 +23,14 @@ const AdmissionControlPanel = ({ queue, updateAdmissionControl }) => {
     admissionControlUrl.value !== queue.admissionControlUrl
 
   const update = () => {
-    updateAdmissionControl({
+    updateQueue({
       admissionControlEnabled: enabledToggle.value,
       admissionControlUrl: admissionControlUrl.value,
     })
+  }
+
+  const onSubmit = e => {
+    e.preventDefault()
   }
 
   return (
@@ -44,14 +48,14 @@ const AdmissionControlPanel = ({ queue, updateAdmissionControl }) => {
           For more information, check out the{' '}
           <a href="https://queue.illinois.edu">admission control docs.</a>
         </p>
-        <Form autoComplete="off">
+        <Form autoComplete="off" onSubmit={onSubmit}>
           <FormGroup row>
             <Label for="enable" sm={3}>
               Enable custom policy
             </Label>
             <Col sm={9} className="d-flex align-items-center">
               <CustomInput
-                id="messageEnabled"
+                id="enable"
                 type="switch"
                 className="mr-3 d-inline-block"
                 onChange={enabledToggle.toggle}
@@ -65,6 +69,7 @@ const AdmissionControlPanel = ({ queue, updateAdmissionControl }) => {
             </Label>
             <Col sm={9}>
               <Input
+                id="url"
                 {...admissionControlUrl.bindToInput}
                 disabled={!enabledToggle.value}
               />
@@ -84,7 +89,7 @@ AdmissionControlPanel.propTypes = {
     admissionControlUrl: PropTypes.string,
     admissionControlEnabled: PropTypes.bool,
   }),
-  updateAdmissionControl: PropTypes.func.isRequired,
+  updateQueue: PropTypes.func.isRequired,
 }
 
 AdmissionControlPanel.defaultProps = {

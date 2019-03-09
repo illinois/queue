@@ -5,7 +5,6 @@ import {
   Card,
   CardHeader,
   CardTitle,
-  CardBody,
   ListGroup,
   ListGroupItem,
   Button,
@@ -13,6 +12,7 @@ import {
 import { connect } from 'react-redux'
 
 import { fetchQueue, fetchQueueRequest, updateQueue } from '../actions/queue'
+import GeneralPanel from '../components/queueSettings/GeneralPanel'
 import AdmissionControlPanel from '../components/queueSettings/AdmissionControlPanel'
 import PageWithUser from '../components/PageWithUser'
 
@@ -46,9 +46,13 @@ class QueueSettings extends React.Component {
     return (
       <Container>
         <h1 className="display-4 mb-4">Queue Settings</h1>
+        <GeneralPanel
+          queue={this.props.queue}
+          updateQueue={attributes => this.updateQueue(attributes)}
+        />
         <AdmissionControlPanel
           queue={this.props.queue}
-          updateAdmissionControl={attributes => this.updateQueue(attributes)}
+          updateQueue={attributes => this.updateQueue(attributes)}
         />
         <Card className="border border-danger">
           <CardHeader className="bg-danger text-white">
