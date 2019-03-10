@@ -96,7 +96,7 @@ router.post(
       },
     })
     if (existingQuestion) {
-      res.status(422).send('You already have a question on this queue')
+      next(new ApiError(422, 'You already have a question on this queue'))
       return
     }
 
@@ -203,12 +203,12 @@ router.post(
     requireQueueForQuestion,
     failIfErrors,
   ],
-  safeAsync(async (req, res, _next) => {
+  safeAsync(async (req, res, next) => {
     const { queue, question } = res.locals
 
     if (question.beingAnswered) {
       // Forbid someone else from taking over this question
-      res.status(403).send('Another user is already answering this question')
+      next(new ApiError(403, 'Another user is already answering this question'))
       return
     }
 
@@ -222,9 +222,12 @@ router.post(
     })
 
     if (otherQuestions !== null) {
-      res
-        .status(403)
-        .send('You are already answering another question on this queue')
+      next(
+        new ApiError(
+          403,
+          'You are already answering another question on this queue'
+        )
+      )
       return
     }
 
@@ -301,7 +304,7 @@ router.patch(
     checkLocation,
     failIfErrors,
   ],
-  safeAsync(async (req, res, _next) => {
+  safeAsync(async (req, res, next) => {
     const { userAuthn, question, queue } = res.locals
     const data = matchedData(req)
 
@@ -312,9 +315,12 @@ router.patch(
       })
       res.status(201).send(question)
     } else {
-      res
-        .status(403)
-        .send("You don't have authorization to update this question")
+      next(
+        new ApiError(
+          403,
+          "You don't have authorization to update this question"
+        )
+      )
     }
   })
 )
@@ -325,7 +331,7 @@ router.patch(
 router.delete(
   '/:questionId',
   [requireQuestion, failIfErrors],
-  safeAsync(async (req, res, _next) => {
+  safeAsync(async (req, res, next) => {
     const { userAuthn, userAuthz, question } = res.locals
     const { queueId } = question
 
@@ -350,9 +356,12 @@ router.delete(
       })
       res.status(204).send()
     } else {
-      res
-        .status(403)
-        .send("You don't have authorization to delete this question")
+      next(
+        new ApiError(
+          403,
+          "You don't have authorization to delete this question"
+        )
+      )
     }
   })
 )

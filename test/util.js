@@ -1,5 +1,7 @@
+/* eslint-env jest */
 const session = require('supertest-session')
 const models = require('../src/models')
+const { ApiError } = require('../src/api/util')
 
 module.exports.setupTestDb = async () => {
   await models.sequelize.sync()
@@ -87,4 +89,11 @@ module.exports.requestAsUser = async (app, user) => {
   const testSession = session(app)
   await testSession.post('/login/dev').send({ netid: user })
   return testSession
+}
+
+module.exports.expectNextCalledWithApiError = (next, statusCode) => {
+  expect(next).toHaveBeenCalledTimes(1)
+  const arg = next.mock.calls[0][0]
+  expect(arg).toBeInstanceOf(ApiError)
+  expect(arg.httpStatusCode).toEqual(statusCode)
 }

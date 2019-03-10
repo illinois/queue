@@ -21,24 +21,24 @@ const requireModel = (model, modelName, propertyName) => async (
   next
 ) => {
   const rawModelId = findPropertyInRequest(req, propertyName)
-  if (rawModelId) {
-    const parsedModelId = Number.parseInt(rawModelId, 10)
-    if (!Number.isNaN(parsedModelId)) {
-      const entity = await model.findOne({ where: { id: parsedModelId } })
-      if (entity === null) {
-        res
-          .status(404)
-          .send(`${modelName} with ID ${parsedModelId} does not exist`)
-      } else {
-        res.locals[modelName] = entity
-        next()
-      }
-    } else {
-      res.status(400).send(`${rawModelId} could not be parsed as an id`)
-    }
-  } else {
-    res.status(422).send(`${propertyName} was not present in the request`)
+  if (!rawModelId) {
+    next(new ApiError(422, `${propertyName} was not present in the request`))
+    return
   }
+  const parsedModelId = Number.parseInt(rawModelId, 10)
+  if (Number.isNaN(parsedModelId)) {
+    next(new ApiError(400, `${rawModelId} could not be parsed as an id`))
+    return
+  }
+  const entity = await model.findOne({ where: { id: parsedModelId } })
+  if (entity === null) {
+    next(
+      new ApiError(404, `${modelName} with ID ${parsedModelId} does not exist`)
+    )
+    return
+  }
+  res.locals[modelName] = entity
+  next()
 }
 
 const requireModelForModel = (
@@ -47,22 +47,22 @@ const requireModelForModel = (
   forModelName,
   forPropertyName
 ) => async (req, res, next) => {
-  if (forModelName in res.locals) {
-    if (forPropertyName in res.locals[forModelName]) {
-      const id = res.locals[forModelName][forPropertyName]
-      const entity = await model.findOne({ where: { id } })
-      if (entity === null) {
-        res.status(404).send(`${modelName} with ID ${id} does not exist`)
-      } else {
-        res.locals[modelName] = entity
-        next()
-      }
-    } else {
-      res.status(500).send(`${forPropertyName} was not in ${forModelName}`)
-    }
-  } else {
+  if (!(forModelName in res.locals)) {
     res.status(500).send(`${forModelName} was not in locals`)
+    return
   }
+  if (!(forPropertyName in res.locals[forModelName])) {
+    res.status(500).send(`${forPropertyName} was not in ${forModelName}`)
+    return
+  }
+  const id = res.locals[forModelName][forPropertyName]
+  const entity = await model.findOne({ where: { id } })
+  if (entity === null) {
+    next(new ApiError(404, `${modelName} with ID ${id} does not exist`))
+    return
+  }
+  res.locals[modelName] = entity
+  next()
 }
 
 module.exports = {
