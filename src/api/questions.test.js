@@ -166,8 +166,8 @@ describe('Questions API', () => {
   })
 
   describe('GET /api/queues/:queueId/questions', () => {
-    test('succeeds with valid response', async () => {
-      const request = await requestAsUser(app, 'admin')
+    const checkValidResponseForUser = async user => {
+      const request = await requestAsUser(app, user)
       const res = await request.get('/api/queues/1/questions')
       expect(res.statusCode).toBe(200)
       expect(res.body).toHaveLength(2)
@@ -178,6 +178,35 @@ describe('Questions API', () => {
       expect(res.body[1]).toHaveProperty('askedBy')
       expect(res.body[1].id).toBe(2)
       expect(res.body[1].askedBy.netid).toBe('student')
+    }
+
+    test('succeeds with valid response for admin', async () => {
+      await checkValidResponseForUser('admin')
+    })
+
+    test('succeeds with valid response for student', async () => {
+      await checkValidResponseForUser('student')
+    })
+
+    const checkValidResponseForUserOnConfidentialQueue = async user => {
+      const request = await requestAsUser(app, user)
+      const res = await request.get('/api/queues/5/questions')
+      expect(res.statusCode).toBe(200)
+      expect(Array.isArray(res.body)).toBeTruthy()
+      expect(res.body).toHaveLength(2)
+      const [question1, question2] = res.body
+      expect(question1).toHaveProperty('askedById', 5)
+      expect(question1).toHaveProperty('askedBy.netid', 'student')
+      expect(question2).toHaveProperty('askedById', 6)
+      expect(question2).toHaveProperty('askedBy.netid', 'otherstudent')
+    }
+
+    test('includes data for admin on confidential queue', async () => {
+      await checkValidResponseForUserOnConfidentialQueue('admin')
+    })
+
+    test('includes data for course staff on confidential queue', async () => {
+      await checkValidResponseForUserOnConfidentialQueue('225staff')
     })
 
     test('fails if queue does not exist', async () => {
@@ -186,18 +215,29 @@ describe('Questions API', () => {
       expect(res.statusCode).toBe(404)
     })
 
-    test('succeeds with valid response for non admin', async () => {
-      const request = await requestAsUser(app, 'student')
-      const res = await request.get('/api/queues/1/questions')
+    const excludesDataForUser = async user => {
+      const request = await requestAsUser(app, user)
+      const res = await request.get('/api/queues/5/questions')
       expect(res.statusCode).toBe(200)
+      expect(Array.isArray(res.body)).toBeTruthy()
       expect(res.body).toHaveLength(2)
-      // Ensure the questions are ordered correctly
-      expect(res.body[0].id).toBe(1)
-      expect(res.body[0]).toHaveProperty('askedBy')
-      expect(res.body[0].askedBy.netid).toBe('admin')
-      expect(res.body[1].id).toBe(2)
-      expect(res.body[1]).toHaveProperty('askedBy')
-      expect(res.body[1].askedBy.netid).toBe('student')
+      // We expect all questions not asked by 'student' (user 5) to have no
+      // information besides question ID
+      res.body.forEach(question => {
+        if (Object.keys(question).length > 1) {
+          expect(question.askedById).toEqual(5)
+        } else {
+          expect(Object.keys(question)).toEqual(['id'])
+        }
+      })
+    }
+
+    test('excludes question information for other staff on a confidential queue', async () => {
+      await excludesDataForUser('241staff')
+    })
+
+    test('excludes question information for students on a confidential queue', async () => {
+      await excludesDataForUser('student')
     })
   })
 
@@ -224,6 +264,38 @@ describe('Questions API', () => {
       expect(res.body.location).toBe('Siebel')
       expect(res.body.topic).toBe('Queue')
       expect(res.body.id).toBe(1)
+    })
+
+    test('succeeds for course staff of confidential queue', async () => {
+      const request = await requestAsUser(app, '225staff')
+      const res = await request.get('/api/queues/5/questions/4')
+      expect(res.statusCode).toBe(200)
+      expect(res.body.id).toBe(4)
+      expect(res.body.name).toBe('Student')
+      expect(res.body).toHaveProperty('askedBy.netid', 'student')
+    })
+
+    test('succeeds for student who asked question on confidential queue', async () => {
+      const request = await requestAsUser(app, 'student')
+      const res = await request.get('/api/queues/5/questions/4')
+      expect(res.statusCode).toBe(200)
+      expect(res.body.id).toBe(4)
+      expect(res.body.name).toBe('Student')
+      expect(res.body).toHaveProperty('askedBy.netid', 'student')
+    })
+
+    test('fails for other course staff on confidential queue', async () => {
+      const request = await requestAsUser(app, '241staff')
+      const res = await request.get('/api/queues/5/questions/4')
+      expect(res.statusCode).toBe(403)
+      expect(res.body).toEqual({})
+    })
+
+    test('fails for student on confidential queue', async () => {
+      const request = await requestAsUser(app, 'otherstudent')
+      const res = await request.get('/api/queues/5/questions/4')
+      expect(res.statusCode).toBe(403)
+      expect(res.body).toEqual({})
     })
   })
 

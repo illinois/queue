@@ -58,6 +58,28 @@ const requireModelForModel = (
   }
 }
 
+const canUserSeeQuestionDetailsForConfidentialQueue = (userAuthz, courseId) => {
+  const { isAdmin, staffedCourseIds } = userAuthz
+  const staffsQueue = staffedCourseIds.findIndex(id => id === courseId) !== -1
+  return isAdmin || staffsQueue
+}
+
+/**
+ * Removes any sensitive user information from all questions not asked by the
+ * user making this request.
+ *
+ * @param {Response} res The response containing user info on res.locals
+ * @param {Questions[]} questions The list of questions to remove sensitive info from
+ */
+const filterConfidentialQueueQuestionsForUser = (userId, questions) => {
+  return questions.map(question => {
+    if (question.askedById === userId) {
+      return question
+    }
+    return { id: question.id }
+  })
+}
+
 module.exports = {
   failIfErrors(req, res, next) {
     const errors = validationResult(req)
@@ -83,4 +105,8 @@ module.exports = {
   // These have to be exported for testing
   findPropertyInRequest,
   requireModel,
+
+  // Stuff for confidential queues
+  canUserSeeQuestionDetailsForConfidentialQueue,
+  filterConfidentialQueueQuestionsForUser,
 }
