@@ -203,6 +203,38 @@ export function deleteQuestion(queueId, questionId) {
 }
 
 /**
+ * Delete all Questions
+ */
+const deleteAllQuestionsRequest = makeActionCreator(
+  types.DELETE_ALL_QUESTIONS.REQUEST,
+  'queueId'
+)
+
+export const deleteAllQuestionsSuccess = makeActionCreator(
+  types.DELETE_ALL_QUESTIONS.SUCCESS,
+  'queueId'
+)
+
+const deleteAllQuestionsFailure = makeActionCreator(
+  types.DELETE_ALL_QUESTIONS.FAILURE,
+  'queueId'
+)
+
+export function deleteAllQuestions(queueId) {
+  return dispatch => {
+    dispatch(deleteAllQuestionsRequest(queueId))
+
+    return axios.delete(`/api/queues/${queueId}/questions`).then(
+      () => dispatch(deleteAllQuestionsSuccess(queueId)),
+      err => {
+        console.error(err)
+        dispatch(deleteAllQuestionsFailure(queueId))
+      }
+    )
+  }
+}
+
+/**
  * Update all questions for a queue
  */
 export const replaceQuestions = makeActionCreator(

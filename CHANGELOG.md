@@ -8,6 +8,9 @@ with the current date and the next changes should go under a **[Next]** header.
 ## [Next]
 * Add user-facing error messages. ([@james9909](https://github.com/james9909) in [#195](https://github.com/illinois/queue/pull/195))
 * Validate queue when sending notifications to course staff. ([@james9909](https://github.com/james9909) in [#222](https://github.com/illinois/queue/pull/222))
+* Add a button to delete all questions when the queue is closed. ([@rittikaadhikari](https://github.com/rittikaadhikari) in [#216](https://github.com/illinois/queue/pull/216)
+* Sync logouts between tabs. ([@james9909](https://github.com/james9909) in [#215](https://github.com/illinois/queue/pull/215))
+* Fix promise not being awaited in bulk question deletion endpoint. ([@nwalters512](https://github.com/nwalters512) in [#229](https://github.com/illinois/queue/pull/229)
 
 ## 19 February 2019
 

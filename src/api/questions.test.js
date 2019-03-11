@@ -537,4 +537,24 @@ describe('Questions API', () => {
       expect(res.statusCode).toBe(403)
     })
   })
+
+  describe('DELETE /api/queues/:queueId/questions', () => {
+    test('succeeds for course staff', async () => {
+      const request = await requestAsUser(app, '225staff')
+      const res = await request.delete('/api/queues/1/questions')
+      expect(res.statusCode).toBe(204)
+    })
+
+    test('fails for course staff of different course', async () => {
+      const request = await requestAsUser(app, '241staff')
+      const res = await request.delete('/api/queues/1/questions')
+      expect(res.statusCode).toBe(403)
+    })
+
+    test('fails for random student', async () => {
+      const request = await requestAsUser(app, 'otherstudent')
+      const res = await request.delete('/api/queues/1/questions')
+      expect(res.statusCode).toBe(403)
+    })
+  })
 })

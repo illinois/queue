@@ -25,6 +25,7 @@ import QueueMessageContainer from '../containers/QueueMessageContainer'
 import ShowForCourseStaff from '../components/ShowForCourseStaff'
 import QuestionNotificationsToggle from '../components/QuestionNotificationsToggle'
 import QueueStatusToggleContainer from '../containers/QueueStatusToggleContainer'
+import DeleteAllQuestionsButtonContainer from '../containers/DeleteAllQuestionsButtonContainer'
 import QueueMessageEnabledToggleContainer from '../containers/QueueMessageEnabledToggleContainer'
 import { isUserCourseStaff, isUserAdmin } from '../selectors'
 import ConfidentialQueuePanelContainer from '../containers/ConfidentialQueuePanelContainer'
@@ -110,6 +111,9 @@ class Queue extends React.Component {
             <QuestionNotificationsToggle />
             <ShowForCourseStaff queueId={this.props.queueId}>
               <QueueStatusToggleContainer queue={this.props.queue} />
+              {!this.props.queue.open && (
+                <DeleteAllQuestionsButtonContainer queue={this.props.queue} />
+              )}
               <QueueMessageEnabledToggleContainer queue={this.props.queue} />
             </ShowForCourseStaff>
             <StaffSidebar queueId={this.props.queueId} />

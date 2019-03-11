@@ -5,6 +5,7 @@ import {
   CREATE_QUEUE,
   CREATE_QUESTION,
   DELETE_QUESTION,
+  DELETE_ALL_QUESTIONS,
   UPDATE_QUEUE,
   DELETE_QUEUE,
   REPLACE_QUESTIONS,
@@ -66,6 +67,21 @@ function removeQuestionFromQueue(state, queueId, questionId) {
       [queueId]: {
         ...queue,
         questions: queue.questions.filter(id => id !== questionId),
+      },
+    },
+  }
+}
+
+function removeAllQuestionsFromQueue(state, queueId) {
+  const queue = state.queues[queueId]
+
+  return {
+    ...state,
+    queues: {
+      ...state.queues,
+      [queueId]: {
+        ...queue,
+        questions: [],
       },
     },
   }
@@ -172,6 +188,9 @@ const queues = (state = defaultState, action) => {
     }
     case DELETE_QUESTION.SUCCESS: {
       return removeQuestionFromQueue(state, action.queueId, action.questionId)
+    }
+    case DELETE_ALL_QUESTIONS.SUCCESS: {
+      return removeAllQuestionsFromQueue(state, action.queueId)
     }
     case UPDATE_QUEUE.SUCCESS: {
       const { queue } = action

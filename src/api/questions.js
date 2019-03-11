@@ -15,6 +15,7 @@ const {
   canUserSeeQuestionDetailsForConfidentialQueue,
   filterConfidentialQueueQuestionsForUser,
 } = require('./util')
+const requireCourseStaffForQueue = require('../middleware/requireCourseStaffForQueue')
 const requireCourseStaffForQueueForQuestion = require('../middleware/requireCourseStaffForQueueForQuestion')
 const safeAsync = require('../middleware/safeAsync')
 
@@ -160,6 +161,28 @@ router.get(
     }
     res.send(res.locals.question)
   }
+)
+
+// Delete all questions for a particular queue
+router.delete(
+  '/',
+  [requireQueue, requireCourseStaffForQueue, failIfErrors],
+  safeAsync(async (req, res, _next) => {
+    const { id: queueId } = res.locals.queue
+    await Question.update(
+      {
+        dequeueTime: new Date(),
+      },
+      {
+        where: {
+          queueId,
+          dequeueTime: null,
+        },
+      }
+    )
+
+    res.status(204).send()
+  })
 )
 
 // Mark a question as being answered
