@@ -1,14 +1,8 @@
 {
-  "developmenttt": {
+  "development": {
     "dialect": "sqlite",
     "storage": "./dev.sqlite",
     "logging": false
-  },
-  "development": {
-    "dialect": "mysql",
-    "host": "127.0.0.1",
-    "username": "root",
-    "database": "queue"
   },
   "test": {
     "dialect": "sqlite",
