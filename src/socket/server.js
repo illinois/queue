@@ -75,6 +75,7 @@ const handleActiveStaffCreate = instance => {
     where: { id },
     include: [User],
   }).then(activeStaff => {
+    // TODO remove once we can fix https://github.com/illinois/queue/issues/92
     if (activeStaff === null) {
       logger.error(
         `ActiveStaff query for id ${id} returned null; original instance:`
