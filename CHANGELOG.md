@@ -11,6 +11,7 @@ with the current date and the next changes should go under a **[Next]** header.
 * Add a button to delete all questions when the queue is closed. ([@rittikaadhikari](https://github.com/rittikaadhikari) in [#216](https://github.com/illinois/queue/pull/216)
 * Sync logouts between tabs. ([@james9909](https://github.com/james9909) in [#215](https://github.com/illinois/queue/pull/215))
 * Fix promise not being awaited in bulk question deletion endpoint. ([@nwalters512](https://github.com/nwalters512) in [#229](https://github.com/illinois/queue/pull/229)
+* Add debugging prints to help identify cause of ActiveStaff query error. ([@nwalters512](https://github.com/nwalters512) in [#231](https://github.com/illinois/queue/pull/231)
 
 ## 19 February 2019
 
