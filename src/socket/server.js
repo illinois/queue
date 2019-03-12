@@ -1,6 +1,7 @@
 const sequelizeStream = require('sequelize-stream')
 const cookieParser = require('cookie-parser')
 
+const logger = require('../util/logger')
 const { sequelize, Question, User, ActiveStaff, Queue } = require('../models')
 const { getUserFromJwt, getAuthzForUser } = require('../auth/util')
 const {
@@ -88,15 +89,24 @@ const handleQuestionEvent = (event, instance) => {
   }
 }
 
-const handleActiveStaffCreate = id => {
+const handleActiveStaffCreate = instance => {
+  const { id } = instance
   ActiveStaff.findOne({
     where: { id },
     include: [User],
   }).then(activeStaff => {
+    // TODO remove once we can fix https://github.com/illinois/queue/issues/92
+    if (activeStaff === null) {
+      logger.error(
+        `ActiveStaff query for id ${id} returned null; original instance:`
+      )
+      logger.error(JSON.stringify(instance))
+    } else {
     queueNamespace
       .to(`queue-${activeStaff.queueId}`)
       .to(`queue-${activeStaff.queueId}-public`)
       .emit('activeStaff:create', { id, activeStaff })
+    }
   })
 }
 
@@ -113,7 +123,7 @@ const handleActiveStaffEvent = (event, instance) => {
 
   switch (event) {
     case 'create':
-      handleActiveStaffCreate(instance.id)
+      handleActiveStaffCreate(instance)
       break
     case 'update':
       handleActiveStaffDelete(instance.id, instance.queueId)
