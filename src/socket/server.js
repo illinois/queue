@@ -102,10 +102,10 @@ const handleActiveStaffCreate = instance => {
       )
       logger.error(JSON.stringify(instance))
     } else {
-    queueNamespace
-      .to(`queue-${activeStaff.queueId}`)
-      .to(`queue-${activeStaff.queueId}-public`)
-      .emit('activeStaff:create', { id, activeStaff })
+      queueNamespace
+        .to(`queue-${activeStaff.queueId}`)
+        .to(`queue-${activeStaff.queueId}-public`)
+        .emit('activeStaff:create', { id, activeStaff })
     }
   })
 }
