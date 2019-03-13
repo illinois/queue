@@ -50,17 +50,11 @@ export default class NewQuestion extends React.Component {
       location: '',
       fieldErrors: {},
       isOpen: !this.props.isUserCourseStaff,
+      submitInProgress: false,
     }
 
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.handleKeyPress = this.handleKeyPress.bind(this)
-  }
-
-  handleKeyPress(e) {
-    if (e.key === 'Enter') {
-      this.handleSubmit()
-    }
   }
 
   onCardHeaderClick() {
@@ -77,7 +71,8 @@ export default class NewQuestion extends React.Component {
     })
   }
 
-  handleSubmit() {
+  handleSubmit(e) {
+    e.preventDefault()
     const fieldErrors = {}
     let valid = true
 
@@ -109,7 +104,14 @@ export default class NewQuestion extends React.Component {
       location: this.state.location,
       topic: this.state.topic,
     }
+    // Disable the button while the request is in flight
+    this.setState({
+      submitInProgress: true,
+    })
     this.props.createQuestion(this.props.queueId, question).then(action => {
+      this.setState({
+        submitInProgress: false,
+      })
       if (action.type === CREATE_QUESTION.SUCCESS) {
         // Clear out all fields so user can add a new question
         this.setState({
@@ -182,7 +184,6 @@ export default class NewQuestion extends React.Component {
                         placeholder="Enter a Net ID (optional)"
                         value={this.state.netid}
                         onChange={this.handleInputChange}
-                        onKeyDown={this.handleKeyPress}
                       />
                       <FormText color="muted">
                         This allows you to add a question on behalf of a
@@ -202,7 +203,6 @@ export default class NewQuestion extends React.Component {
                       placeholder={namePlaceholder}
                       value={this.state.name}
                       onChange={this.handleInputChange}
-                      onKeyDown={this.handleKeyPress}
                       invalid={isInvalid(this.state.fieldErrors.name)}
                     />
                     <FormFeedback>{this.state.fieldErrors.name}</FormFeedback>
@@ -220,7 +220,6 @@ export default class NewQuestion extends React.Component {
                       placeholder={topicPlaceholder}
                       value={this.state.topic}
                       onChange={this.handleInputChange}
-                      onKeyDown={this.handleKeyPress}
                       invalid={isInvalid(this.state.fieldErrors.topic)}
                     />
                     <FormFeedback>{this.state.fieldErrors.topic}</FormFeedback>
@@ -238,7 +237,6 @@ export default class NewQuestion extends React.Component {
                       value={queueLocation}
                       disabled={fixedLocation}
                       onChange={this.handleInputChange}
-                      onKeyDown={this.handleKeyPress}
                       invalid={isInvalid(this.state.fieldErrors.location)}
                     />
                     <FormFeedback>
@@ -259,8 +257,8 @@ export default class NewQuestion extends React.Component {
                 <Button
                   block
                   color="primary"
-                  type="button"
-                  onClick={this.handleSubmit}
+                  type="submit"
+                  disabled={this.state.submitInProgress}
                 >
                   Add to queue
                 </Button>

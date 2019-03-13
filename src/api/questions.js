@@ -115,6 +115,10 @@ router.post(
             location: data.location,
             topic: data.topic,
             askedBy: askerUser,
+          },
+          {
+            // Don't allow receivers to keep requests open indefinitely
+            timeout: 10000,
           }
         )
         questionAllowed = allowedResponse.data.allowed
