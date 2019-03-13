@@ -13,6 +13,8 @@ const {
   requireQueue,
   requireUser,
   failIfErrors,
+  canUserSeeQuestionDetailsForConfidentialQueue,
+  filterConfidentialQueueQuestionsForUser,
 } = require('./util')
 
 const requireCourseStaffForQueue = require('../middleware/requireCourseStaffForQueue')
@@ -63,6 +65,7 @@ router.post(
       name: data.name,
       location: data.location,
       fixedLocation: data.fixedLocation === true,
+      isConfidential: req.body.isConfidential === true,
       courseId,
       createdByUserId: res.locals.userAuthn.id,
     })
@@ -80,7 +83,7 @@ router.get(
   [requireQueue, failIfErrors],
   safeAsync(async (req, res, _next) => {
     const { id: queueId } = res.locals.queue
-    const queue = await Queue.findOne({
+    const queueResults = await Queue.findOne({
       where: {
         id: queueId,
       },
@@ -104,6 +107,29 @@ router.get(
       ],
       order: [[Question, 'id', 'ASC']],
     })
+
+    // Convert to plain object that we can manipulate/filter/etc. before
+    // sending back to the client
+    const queue = queueResults.get({ plain: true })
+
+    // If this is a confidential queue, don't send any actual question data
+    // back to the client, besides IDs
+    if (queue.isConfidential) {
+      const { userAuthz } = res.locals
+      if (
+        !canUserSeeQuestionDetailsForConfidentialQueue(
+          userAuthz,
+          queue.courseId
+        )
+      ) {
+        const { id: userId } = res.locals.userAuthn
+        const filtered = filterConfidentialQueueQuestionsForUser(
+          userId,
+          queue.questions
+        )
+        queue.questions = filtered
+      }
+    }
 
     res.json(queue)
   })
