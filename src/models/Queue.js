@@ -26,11 +26,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       paranoid: true, // Don't actually delete
-      defaultScope: {
-        attributes: {
-          include: ['courseId', 'createdByUserId'],
-        },
-      },
     }
   )
 
@@ -39,6 +34,25 @@ module.exports = (sequelize, DataTypes) => {
     models.Queue.hasMany(models.ActiveStaff)
     models.Queue.hasMany(models.Question)
     models.Queue.belongsTo(models.User, { as: 'createdByUser' })
+
+    models.Queue.addScope(
+      'defaultScope',
+      {
+        attributes: {
+          include: ['courseId', 'createdByUserId'],
+        },
+        include: [
+          {
+            model: models.Course,
+            as: 'course',
+            required: true,
+          },
+        ],
+      },
+      {
+        override: true,
+      }
+    )
 
     models.Queue.addScope('questionCount', {
       attributes: {

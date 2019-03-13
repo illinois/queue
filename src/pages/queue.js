@@ -78,6 +78,13 @@ class Queue extends React.Component {
       this.props.isUserCourseStaff || this.props.isUserAdmin
         ? 'Students'
         : 'You'
+
+    let queueName = ''
+    const { name, courseName } = this.props.queue
+    if (courseName) {
+      queueName += `${courseName} — `
+    }
+    queueName += name
     return (
       <Container fluid>
         <h3>
@@ -95,7 +102,7 @@ class Queue extends React.Component {
               </UncontrolledTooltip>
             </span>
           )}
-          {this.props.queue.name}
+          {queueName}
         </h3>
         <h5 className="mb-3 text-muted">
           <FontAwesomeIcon icon={faMapMarker} fixedWidth className="mr-2" />
@@ -156,6 +163,7 @@ Queue.propTypes = {
   queue: PropTypes.shape({
     id: PropTypes.number,
     name: PropTypes.string,
+    courseName: PropTypes.string,
     location: PropTypes.string,
     isConfidential: PropTypes.bool,
     courseId: PropTypes.number,

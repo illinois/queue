@@ -26,9 +26,15 @@ const defaultState = {
   queues: {},
 }
 
-function normalizeQueue(queue) {
-  const normalized = normalizeQueueHelper(queue)
-  return normalized.entities.queues[normalized.result]
+function normalizeQueue(originalQueue) {
+  const normalized = normalizeQueueHelper(originalQueue)
+  const queue = normalized.entities.queues[normalized.result]
+  // Flatten course into just its name
+  if (queue.course) {
+    queue.courseName = queue.course.name
+    delete queue.course
+  }
+  return queue
 }
 
 const reduceQueues = queues =>
