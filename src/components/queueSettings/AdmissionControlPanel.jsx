@@ -90,12 +90,8 @@ AdmissionControlPanel.propTypes = {
   queue: PropTypes.shape({
     admissionControlUrl: PropTypes.string,
     admissionControlEnabled: PropTypes.bool,
-  }),
+  }).isRequired,
   updateQueue: PropTypes.func.isRequired,
-}
-
-AdmissionControlPanel.defaultProps = {
-  queue: null,
 }
 
 export default AdmissionControlPanel
