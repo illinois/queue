@@ -16,21 +16,19 @@ import {
 import { useBoolean, useInput } from 'react-hanger'
 
 const AdmissionControlPanel = ({ queue, updateQueue }) => {
+  const admissionControlUrl = queue.admissionControlUrl || ''
   const enabledToggle = useBoolean(queue.admissionControlEnabled)
-  const admissionControlUrl = useInput(queue.admissionControlUrl || '')
+  const admissionControlUrlInput = useInput(admissionControlUrl)
   const changed =
     enabledToggle.value !== queue.admissionControlEnabled ||
-    admissionControlUrl.value !== queue.admissionControlUrl
-
-  const update = () => {
-    updateQueue({
-      admissionControlEnabled: enabledToggle.value,
-      admissionControlUrl: admissionControlUrl.value,
-    })
-  }
+    admissionControlUrlInput.value !== admissionControlUrl
 
   const onSubmit = e => {
     e.preventDefault()
+    updateQueue({
+      admissionControlEnabled: enabledToggle.value,
+      admissionControlUrl: admissionControlUrlInput.value,
+    })
   }
 
   return (
@@ -73,15 +71,15 @@ const AdmissionControlPanel = ({ queue, updateQueue }) => {
               <Input
                 id="url"
                 type="url"
-                {...admissionControlUrl.bindToInput}
+                {...admissionControlUrlInput.bindToInput}
                 disabled={!enabledToggle.value}
               />
             </Col>
           </FormGroup>
+          <Button disabled={!changed} color="primary" type="submit">
+            Update
+          </Button>
         </Form>
-        <Button disabled={!changed} color="primary" onClick={update}>
-          Update
-        </Button>
       </CardBody>
     </Card>
   )

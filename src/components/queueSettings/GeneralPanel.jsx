@@ -19,15 +19,12 @@ const GeneralPanel = ({ queue, updateQueue }) => {
   const location = useInput(queue.location)
   const changed = name.value !== queue.name || location.value !== queue.location
 
-  const update = () => {
+  const onSubmit = e => {
+    e.preventDefault()
     updateQueue({
       name: name.value,
       location: location.value,
     })
-  }
-
-  const onSubmit = e => {
-    e.preventDefault()
   }
 
   return (
@@ -55,10 +52,10 @@ const GeneralPanel = ({ queue, updateQueue }) => {
               <Input id="location" {...location.bindToInput} />
             </Col>
           </FormGroup>
+          <Button disabled={!changed} color="primary" type="submit">
+            Update
+          </Button>
         </Form>
-        <Button disabled={!changed} color="primary" onClick={update}>
-          Update
-        </Button>
       </CardBody>
     </Card>
   )
