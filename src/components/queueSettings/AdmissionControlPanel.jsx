@@ -72,6 +72,7 @@ const AdmissionControlPanel = ({ queue, updateQueue }) => {
             <Col sm={9}>
               <Input
                 id="url"
+                type="url"
                 {...admissionControlUrl.bindToInput}
                 disabled={!enabledToggle.value}
               />
