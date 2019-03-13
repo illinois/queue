@@ -51,7 +51,8 @@ class QueueSettings extends React.Component {
     if (!this.props.queue) return null
     return (
       <Container>
-        <h1 className="display-4 mb-4">Queue Settings</h1>
+        <h1 className="display-4">Queue Settings</h1>
+        <h2 className="mb-5">{this.props.queue.name}</h2>
         <GeneralPanel
           queue={this.props.queue}
           updateQueue={attributes => this.updateQueue(attributes)}
@@ -60,10 +61,7 @@ class QueueSettings extends React.Component {
           queue={this.props.queue}
           updateQueue={attributes => this.updateQueue(attributes)}
         />
-        <DangerPanel
-          queue={this.props.queue}
-          deleteQueue={() => this.deleteQueue()}
-        />
+        <DangerPanel deleteQueue={() => this.deleteQueue()} />
       </Container>
     )
   }
@@ -76,6 +74,7 @@ QueueSettings.propTypes = {
   queueId: PropTypes.number.isRequired,
   queue: PropTypes.shape({
     id: PropTypes.number,
+    name: PropTypes.string,
     courseId: PropTypes.number,
     admissionControlEnabled: PropTypes.bool,
     admissionControlUrl: PropTypes.string,
