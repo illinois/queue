@@ -153,31 +153,41 @@ class QuestionList extends React.Component {
   }
 
   render() {
+    const { queue, userId } = this.props
     let questions
-    if (this.props.queue && this.props.queue.questions) {
-      if (this.props.queue.questions.length > 0) {
-        questions = this.props.queue.questions.map(questionId => {
+    if (queue && queue.questions) {
+      if (queue.questions.length > 0) {
+        questions = queue.questions.map(questionId => {
           const question = this.props.questions[questionId]
-          return (
-            <Question
-              key={questionId}
-              isUserCourseStaff={this.props.isUserCourseStaff}
-              isUserActiveStaffForQueue={this.props.isUserActiveStaffForQueue}
-              isUserAnsweringQuestion={
-                this.props.userId === question.answeredById
-              }
-              isUserAnsweringOtherQuestion={
-                this.props.isUserAnsweringQuestionForQueue
-              }
-              didUserAskQuestion={this.props.userId === question.askedById}
-              deleteQuestion={() => this.deleteQuestion(questionId)}
-              cancelQuestion={() => this.cancelQuestion(questionId)}
-              startQuestion={() => this.startQuestion(questionId)}
-              finishedAnswering={() => this.handleFinishedAnswering(questionId)}
-              editQuestion={() => this.handleEditQuestion(questionId)}
-              {...question}
-            />
-          )
+          if (
+            !queue.isConfidential ||
+            (userId === question.askedById ||
+              this.props.isUserCourseStaff ||
+              this.props.isUserAdmin)
+          ) {
+            return (
+              <Question
+                key={questionId}
+                isConfidential={queue.isConfidential}
+                isUserCourseStaff={this.props.isUserCourseStaff}
+                isUserActiveStaffForQueue={this.props.isUserActiveStaffForQueue}
+                isUserAnsweringQuestion={userId === question.answeredById}
+                isUserAnsweringOtherQuestion={
+                  this.props.isUserAnsweringQuestionForQueue
+                }
+                didUserAskQuestion={userId === question.askedById}
+                deleteQuestion={() => this.deleteQuestion(questionId)}
+                cancelQuestion={() => this.cancelQuestion(questionId)}
+                startQuestion={() => this.startQuestion(questionId)}
+                finishedAnswering={() =>
+                  this.handleFinishedAnswering(questionId)
+                }
+                editQuestion={() => this.handleEditQuestion(questionId)}
+                {...question}
+              />
+            )
+          }
+          return null
         })
       } else {
         questions = (
@@ -237,7 +247,7 @@ class QuestionList extends React.Component {
         />
         <QuestionEdit
           question={this.props.questions[this.state.attributeId]}
-          queue={this.props.queue}
+          queue={queue}
           isOpen={this.state.showQuestionEditModal}
           onSubmitQuestionEdit={attributes =>
             this.handleSubmitQuestionEdit(attributes)
@@ -253,6 +263,7 @@ QuestionList.propTypes = {
   queue: PropTypes.shape({
     questions: PropTypes.arrayOf(PropTypes.number),
     fixedLocation: PropTypes.bool,
+    isConfidential: PropTypes.bool,
   }),
   questions: PropTypes.objectOf(
     PropTypes.shape({
@@ -265,6 +276,7 @@ QuestionList.propTypes = {
   isUserCourseStaff: PropTypes.bool.isRequired,
   isUserActiveStaffForQueue: PropTypes.bool.isRequired,
   isUserAnsweringQuestionForQueue: PropTypes.bool.isRequired,
+  isUserAdmin: PropTypes.bool.isRequired,
   deleteQuestion: PropTypes.func.isRequired,
   updateQuestionBeingAnswered: PropTypes.func.isRequired,
   finishAnsweringQuestion: PropTypes.func.isRequired,

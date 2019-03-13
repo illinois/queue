@@ -7,7 +7,7 @@ module.exports = {
         {
           type: Sequelize.BOOLEAN,
           defaultValue: false,
-          after: 'messageEnabled',
+          after: 'isConfidential',
         },
         { transaction }
       )

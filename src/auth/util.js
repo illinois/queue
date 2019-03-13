@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const url = require('url')
 
+const { Course } = require('../models')
 const { User } = require('../models')
 const { isDev } = require('../util')
 
@@ -61,4 +62,27 @@ module.exports.isSafeUrl = (req, redirect) => {
   const originUrl = new url.URL(`${req.protocol}://${req.get('host')}`)
   const redirectUrl = new url.URL(redirect, originUrl)
   return redirectUrl.host === originUrl.host
+}
+
+module.exports.getAuthzForUser = async user => {
+  const staffedCourses = await Course.findAll({
+    where: {
+      '$staff.id$': user.id,
+    },
+    attributes: ['id'],
+    include: [
+      {
+        model: User,
+        as: 'staff',
+        attributes: [],
+      },
+    ],
+    raw: true,
+  })
+  const staffedCourseIds = staffedCourses.map(row => row.id)
+
+  return {
+    isAdmin: user.isAdmin,
+    staffedCourseIds,
+  }
 }

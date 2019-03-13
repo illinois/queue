@@ -5,13 +5,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faMapMarker,
   faQuestionCircle,
+  faEyeSlash,
 } from '@fortawesome/free-solid-svg-icons'
 
 import { Router } from '../routes'
 import ShowForCourseStaff from './ShowForCourseStaff'
 
 const QueueCard = ({ queue, courseName, open, ...rest }) => {
-  const { name: queueName, location, questionCount } = queue
+  const { name: queueName, location, questionCount, isConfidential } = queue
 
   const questionCountText = `${questionCount} Question${
     questionCount !== 1 ? 's' : ''
@@ -34,7 +35,12 @@ const QueueCard = ({ queue, courseName, open, ...rest }) => {
     >
       <CardBody>
         <CardTitle className="d-flex flex-wrap align-items-center">
-          <span className="h5 mb-2 mr-auto pr-3">{title}</span>
+          <span className="h5 mb-2 mr-auto pr-3">
+            {isConfidential && !showQueueNameInBody && (
+              <FontAwesomeIcon icon={faEyeSlash} fixedWidth className="mr-2" />
+            )}
+            {title}
+          </span>
           <div>
             <ShowForCourseStaff courseId={queue.courseId}>
               <Button
@@ -50,7 +56,12 @@ const QueueCard = ({ queue, courseName, open, ...rest }) => {
           </div>
         </CardTitle>
         {showQueueNameInBody && (
-          <CardSubtitle className="mb-2">{queueName}</CardSubtitle>
+          <CardSubtitle className="mb-2">
+            {isConfidential && (
+              <FontAwesomeIcon icon={faEyeSlash} fixedWidth className="mr-2" />
+            )}
+            {queueName}
+          </CardSubtitle>
         )}
         <div className="text-muted">
           <FontAwesomeIcon icon={faMapMarker} fixedWidth className="mr-2" />

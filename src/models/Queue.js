@@ -17,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+      isConfidential: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
       admissionControlEnabled: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,

@@ -105,4 +105,72 @@ describe('Testing Utils', () => {
       testutil.expectNextCalledWithApiError(next, 404)
     })
   })
+
+  describe('canUserSeeQuestionDetailsForConfidentialQueue', () => {
+    test('returns true for an admin', () => {
+      const userAuthz = {
+        isAdmin: true,
+        staffedCourseIds: [],
+      }
+      const value = util.canUserSeeQuestionDetailsForConfidentialQueue(
+        userAuthz,
+        123
+      )
+      expect(value).toBeTruthy()
+    })
+
+    test('returns true for course staff', () => {
+      const userAuthz = {
+        isAdmin: false,
+        staffedCourseIds: [123],
+      }
+      const value = util.canUserSeeQuestionDetailsForConfidentialQueue(
+        userAuthz,
+        123
+      )
+      expect(value).toBeTruthy()
+    })
+
+    test('returns false for non-admin, non-course staff', () => {
+      const userAuthz = {
+        isAdmin: false,
+        staffedCourseIds: [],
+      }
+      const value = util.canUserSeeQuestionDetailsForConfidentialQueue(
+        userAuthz,
+        123
+      )
+      expect(value).toBeFalsy()
+    })
+  })
+
+  describe('filterConfidentialQueueQuestionsForUser', () => {
+    test('removes question info from other users', () => {
+      const questions = [
+        {
+          id: 10,
+          askedById: 321,
+          name: 'Secret',
+        },
+        {
+          id: 11,
+          askedById: 123,
+          name: 'Not a Secret',
+        },
+        {
+          id: 12,
+          askedById: 456,
+          name: 'Also a Secret',
+        },
+      ]
+      const result = util.filterConfidentialQueueQuestionsForUser(
+        123,
+        questions
+      )
+      expect(result).toHaveLength(3)
+      expect(result[0]).toEqual({ id: 10 })
+      expect(result[1]).toEqual(questions[1])
+      expect(result[2]).toEqual({ id: 12 })
+    })
+  })
 })

@@ -52,7 +52,7 @@ describe('redirectNoQueue middleware', () => {
     await Queue.destroy({ where: { id: 2 } })
     const { req, res, next } = makeArgs(2)
     await redirectNoQueue(req, res, next)
-    expect(res.redirect).toBeCalledWith('/queue/5')
+    expect(res.redirect).toBeCalledWith('/queue/6')
     expect(next).not.toBeCalled()
   })
 
