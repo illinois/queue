@@ -17,7 +17,7 @@ import { useBoolean, useInput } from 'react-hanger'
 
 const AdmissionControlPanel = ({ queue, updateQueue }) => {
   const enabledToggle = useBoolean(queue.admissionControlEnabled)
-  const admissionControlUrl = useInput(queue.admissionControlUrl)
+  const admissionControlUrl = useInput(queue.admissionControlUrl || '')
   const changed =
     enabledToggle.value !== queue.admissionControlEnabled ||
     admissionControlUrl.value !== queue.admissionControlUrl

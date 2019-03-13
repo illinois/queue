@@ -79,6 +79,7 @@ function addQueueToCourse(state, courseId, queue) {
 
 function removeQueueFromCourse(state, courseId, queueId) {
   if (
+    !state.courses[courseId] ||
     !state.courses[courseId].queues ||
     !(courseId in state.courses) ||
     state.courses[courseId].queues.indexOf(queueId) === -1

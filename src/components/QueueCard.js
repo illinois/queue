@@ -92,8 +92,6 @@ QueueCard.propTypes = {
   }).isRequired,
   courseName: PropTypes.string,
   open: PropTypes.bool,
-  onUpdate: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
 }
 
 export default QueueCard

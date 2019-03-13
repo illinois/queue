@@ -1,20 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-  Container,
-  Card,
-  CardHeader,
-  CardTitle,
-  ListGroup,
-  ListGroupItem,
-  Button,
-} from 'reactstrap'
+import { Container } from 'reactstrap'
 import { connect } from 'react-redux'
 
-import { fetchQueue, fetchQueueRequest, updateQueue } from '../actions/queue'
+import { Router } from '../routes'
+import {
+  fetchQueue,
+  fetchQueueRequest,
+  updateQueue,
+  deleteQueue,
+} from '../actions/queue'
 import GeneralPanel from '../components/queueSettings/GeneralPanel'
 import AdmissionControlPanel from '../components/queueSettings/AdmissionControlPanel'
 import PageWithUser from '../components/PageWithUser'
+import DangerPanel from '../components/queueSettings/DangerPanel'
 
 class QueueSettings extends React.Component {
   static async getInitialProps({ isServer, store, query }) {
@@ -41,6 +40,13 @@ class QueueSettings extends React.Component {
     this.props.updateQueue(this.props.queueId, attributes)
   }
 
+  deleteQueue() {
+    const { id: queueId, courseId } = this.props.queue
+    this.props.deleteQueue(courseId, queueId).then(() => {
+      Router.replaceRoute('index')
+    })
+  }
+
   render() {
     if (!this.props.queue) return null
     return (
@@ -54,28 +60,10 @@ class QueueSettings extends React.Component {
           queue={this.props.queue}
           updateQueue={attributes => this.updateQueue(attributes)}
         />
-        <Card className="border border-danger">
-          <CardHeader className="bg-danger text-white">
-            <CardTitle tag="h5" className="mb-0">
-              Danger zone
-            </CardTitle>
-            <small>Here be dragons</small>
-          </CardHeader>
-          <ListGroup>
-            <ListGroupItem className="d-flex align-items-sm-center flex-column flex-sm-row">
-              <div className="mr-auto pr-3">
-                <strong>Delete this queue</strong>
-                <p className="mb-0">
-                  Deleting a queue is permanent; please be sure you want to do
-                  this.
-                </p>
-              </div>
-              <Button outline color="danger" className="mt-3 mt-sm-0">
-                Delete&nbsp;queue
-              </Button>
-            </ListGroupItem>
-          </ListGroup>
-        </Card>
+        <DangerPanel
+          queue={this.props.queue}
+          deleteQueue={() => this.deleteQueue()}
+        />
       </Container>
     )
   }
@@ -84,15 +72,19 @@ class QueueSettings extends React.Component {
 QueueSettings.propTypes = {
   fetchQueue: PropTypes.func.isRequired,
   updateQueue: PropTypes.func.isRequired,
+  deleteQueue: PropTypes.func.isRequired,
   queueId: PropTypes.number.isRequired,
   queue: PropTypes.shape({
+    id: PropTypes.number,
+    courseId: PropTypes.number,
     admissionControlEnabled: PropTypes.bool,
     admissionControlUrl: PropTypes.string,
-  }).isRequired,
+  }),
   pageTransitionReadyToEnter: PropTypes.func,
 }
 
 QueueSettings.defaultProps = {
+  queue: null,
   pageTransitionReadyToEnter: null,
 }
 
@@ -106,6 +98,7 @@ const mapDispatchToProps = dispatch => ({
   fetchQueue: queueId => dispatch(fetchQueue(queueId)),
   updateQueue: (queueId, attributes) =>
     dispatch(updateQueue(queueId, attributes)),
+  deleteQueue: (courseId, queueId) => dispatch(deleteQueue(courseId, queueId)),
   dispatch,
 })
 

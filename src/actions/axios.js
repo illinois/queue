@@ -17,7 +17,7 @@ axios.interceptors.response.use(null, err => {
     if (err.response.status === 401) {
       Router.replaceRoute('login')
     } else {
-      toast.error(err.response.data || 'Something went wrong')
+      toast.error(err.response.data.message || 'Something went wrong')
     }
   } else {
     // Something happened while setting up the request
