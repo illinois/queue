@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import React from 'react'
 import { shallow } from 'enzyme'
-import { Input, Button, Form } from 'reactstrap'
+import { Input, Form } from 'reactstrap'
 import NewQuestion from './NewQuestion'
 
 const makeProps = (queueId, userName = null) => ({
