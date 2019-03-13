@@ -14,7 +14,8 @@
     "lint": "eslint --ext js ./src",
     "fix-lint": "npm run lint -- --fix",
     "prettier": "prettier --write \"src/**/*.js\"",
-    "prettier-diff": "prettier --list-different \"src/**/*.js\""
+    "prettier-diff": "prettier --list-different \"src/**/*.js\"",
+    "start:admissioncontrol": "node example-admission-control/api.js"
   },
   "keywords": [],
   "author": "",
@@ -104,7 +105,8 @@
       "./test/setup.js"
     ],
     "testRegex": "src/.*test.js",
-    "collectCoverage": true
+    "collectCoverage": true,
+    "testEnvironment": "node"
   },
   "husky": {
     "hooks": {

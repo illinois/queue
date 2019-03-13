@@ -1,6 +1,8 @@
+const { ApiError } = require('../api/util')
+
 module.exports = (req, res, next) => {
   if (!res.locals.userAuthz.isAdmin) {
-    res.status(403).send("You don't have authorization to do this")
+    next(new ApiError(403, "You don't have authorization to do that"))
     return
   }
   next()

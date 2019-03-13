@@ -10,7 +10,7 @@ import {
 
 const defaultState = {
   isFetching: false,
-  error: false,
+  error: null,
   questions: {},
 }
 
@@ -27,10 +27,17 @@ const questions = (state = defaultState, action) => {
       const { question } = action
       return {
         ...state,
+        error: null,
         questions: {
           ...state.questions,
           [question.id]: question,
         },
+      }
+    }
+    case CREATE_QUESTION.FAILURE: {
+      return {
+        ...state,
+        error: action.message,
       }
     }
     case FETCH_QUEUE.REQUEST: {

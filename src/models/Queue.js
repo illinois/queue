@@ -21,6 +21,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+      admissionControlEnabled: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      admissionControlUrl: DataTypes.TEXT,
       startTime: DataTypes.DATE,
       endTime: DataTypes.DATE,
     },

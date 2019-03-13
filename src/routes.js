@@ -13,6 +13,7 @@ if (baseUrl === '') {
 routes
   .add('login', withBaseUrl('/login'))
   .add('queue', withBaseUrl('/queue/:id'))
+  .add('queueSettings', withBaseUrl('/queue/:id/settings'))
   .add('createCourse', withBaseUrl('/course/create'))
   .add('course', withBaseUrl('/course/:id'))
   .add('courseStaff', withBaseUrl('/course/:id/staff'))

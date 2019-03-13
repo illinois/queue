@@ -11,6 +11,10 @@ beforeEach(async () => {
 
 afterEach(() => testutil.destroyTestDb())
 
+const expectErrorMessage = res => {
+  expect(Object.keys(res.body)).toEqual(['message'])
+}
+
 describe('Queues API', () => {
   describe('GET /api/queues', () => {
     const doGetTest = async user => {
@@ -216,7 +220,7 @@ describe('Queues API', () => {
       const request = await requestAsUser(app, 'student')
       const res = await request.post('/api/courses/1/queues').send(queue)
       expect(res.statusCode).toBe(403)
-      expect(res.body).toEqual({})
+      expectErrorMessage(res)
     })
 
     test('fails for course staff of different course', async () => {
@@ -228,7 +232,7 @@ describe('Queues API', () => {
       const request = await requestAsUser(app, '241staff')
       const res = await request.post('/api/courses/1/queues').send(queue)
       expect(res.statusCode).toBe(403)
-      expect(res.body).toEqual({})
+      expectErrorMessage(res)
     })
   })
 
@@ -271,7 +275,7 @@ describe('Queues API', () => {
       const request = await requestAsUser(app, 'student')
       const res = await request.post('/api/courses/1/queues/1/staff/4')
       expect(res.statusCode).toBe(403)
-      expect(res.body).toEqual({})
+      expectErrorMessage(res)
       const request2 = await requestAsUser(app, 'admin')
       const res2 = await request2.get('/api/queues/1/staff')
       expect(res2.statusCode).toBe(200)
@@ -282,7 +286,7 @@ describe('Queues API', () => {
       const request = await requestAsUser(app, 'student')
       const res = await request.post('/api/courses/1/queues/1/staff/1')
       expect(res.statusCode).toBe(403)
-      expect(res.body).toEqual({})
+      expectErrorMessage(res)
       const res2 = await request.get('/api/queues/1/staff')
       expect(res2.statusCode).toBe(200)
       expect(res2.body).toHaveLength(0)
@@ -292,7 +296,7 @@ describe('Queues API', () => {
       const request = await requestAsUser(app, '241staff')
       const res = await request.post('/api/courses/1/queues/1/staff/3')
       expect(res.statusCode).toBe(403)
-      expect(res.body).toEqual({})
+      expectErrorMessage(res)
       const res2 = await request.get('/api/queues/1/staff')
       expect(res2.statusCode).toBe(200)
       expect(res2.body).toHaveLength(0)
@@ -373,7 +377,7 @@ describe('Queues API', () => {
       const request = await requestAsUser(app, 'student')
       const res = await request.patch('/api/queues/1').send(attributes)
       expect(res.statusCode).toBe(403)
-      expect(res.body).toEqual({})
+      expectErrorMessage(res)
     })
 
     test('fails for student with well-formed request with location', async () => {
@@ -381,7 +385,7 @@ describe('Queues API', () => {
       const request = await requestAsUser(app, 'student')
       const res = await request.patch('/api/queues/1').send(attributes)
       expect(res.statusCode).toBe(403)
-      expect(res.body).toEqual({})
+      expectErrorMessage(res)
     })
 
     test('fails for course staff of different course with well-formed request no location', async () => {
@@ -389,7 +393,7 @@ describe('Queues API', () => {
       const request = await requestAsUser(app, '241staff')
       const res = await request.patch('/api/queues/1').send(attributes)
       expect(res.statusCode).toBe(403)
-      expect(res.body).toEqual({})
+      expectErrorMessage(res)
     })
 
     test('fails for course staff of different course with well-formed request with location', async () => {
@@ -397,7 +401,7 @@ describe('Queues API', () => {
       const request = await requestAsUser(app, '241staff')
       const res = await request.patch('/api/queues/1').send(attributes)
       expect(res.statusCode).toBe(403)
-      expect(res.body).toEqual({})
+      expectErrorMessage(res)
     })
 
     test('fails for course staff with request to fixed location queue but no location', async () => {
@@ -545,7 +549,7 @@ describe('Queues API', () => {
       const request = await requestAsUser(app, '225staff')
       const res = await request.delete('/api/queues/2')
       expect(res.statusCode).toBe(403)
-      expect(res.body).toEqual({})
+      expectErrorMessage(res)
       const request2 = await requestAsUser(app, 'admin')
       const res2 = await request2.get('/api/queues')
       expect(res2.statusCode).toBe(200)
@@ -558,7 +562,7 @@ describe('Queues API', () => {
       const request = await requestAsUser(app, 'student')
       const res = await request.delete('/api/queues/1')
       expect(res.statusCode).toBe(403)
-      expect(res.body).toEqual({})
+      expectErrorMessage(res)
       const request2 = await requestAsUser(app, 'admin')
       const res2 = await request2.get('/api/queues')
       expect(res2.statusCode).toBe(200)
@@ -600,7 +604,7 @@ describe('Queues API', () => {
       const request2 = await requestAsUser(app, '241staff')
       const res2 = await request2.delete('/api/queues/1/staff/3')
       expect(res2.statusCode).toBe(403)
-      expect(res2.body).toEqual({})
+      expectErrorMessage(res2)
       const request3 = await requestAsUser(app, 'admin')
       const res3 = await request3.get('/api/queues/1/staff')
       expect(res3.statusCode).toBe(200)
@@ -615,7 +619,7 @@ describe('Queues API', () => {
       const request2 = await requestAsUser(app, 'student')
       const res2 = await request2.delete('/api/queues/1/staff/3')
       expect(res2.statusCode).toBe(403)
-      expect(res2.body).toEqual({})
+      expectErrorMessage(res2)
       const request3 = await requestAsUser(app, 'admin')
       const res3 = await request3.get('/api/queues/1/staff')
       expect(res3.statusCode).toBe(200)
@@ -648,7 +652,7 @@ describe('Queues API', () => {
       const request = await requestAsUser(app, '241staff')
       const res = await request.delete('/api/queues/1')
       expect(res.statusCode).toBe(403)
-      expect(res.body).toEqual({})
+      expectErrorMessage(res)
       const request2 = await requestAsUser(app, 'admin')
       const res2 = await request2.get('/api/queues')
       expect(res2.statusCode).toBe(200)
@@ -659,7 +663,7 @@ describe('Queues API', () => {
       const request = await requestAsUser(app, 'student')
       const res = await request.delete('/api/queues/1')
       expect(res.statusCode).toBe(403)
-      expect(res.body).toEqual({})
+      expectErrorMessage(res)
       const request2 = await requestAsUser(app, 'admin')
       const res2 = await request2.get('/api/queues')
       expect(res2.statusCode).toBe(200)
