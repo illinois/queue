@@ -58,7 +58,9 @@ export function createQuestion(queueId, question) {
     dispatch(createQuestionRequest(queueId, question))
 
     return axios
-      .post(`/api/queues/${queueId}/questions`, question)
+      .post(`/api/queues/${queueId}/questions`, question, {
+        showErrorToast: false,
+      })
       .then(res => dispatch(createQuestionSuccess(queueId, res.data)))
       .catch(err => {
         console.error(err)

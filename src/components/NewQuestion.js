@@ -250,7 +250,7 @@ export default class NewQuestion extends React.Component {
                 <Alert
                   color="danger"
                   fade={false}
-                  isOpen={this.props.questionError}
+                  isOpen={!!this.props.questionError}
                 >
                   {this.props.questionError}
                 </Alert>
