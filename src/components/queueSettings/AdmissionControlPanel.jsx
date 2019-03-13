@@ -46,7 +46,9 @@ const AdmissionControlPanel = ({ queue, updateQueue }) => {
           This allows you to disallow questions based on topic, rate-limit
           students on the queue, or even maintain a blacklist of queue users.
           For more information, check out the{' '}
-          <a href="https://queue.illinois.edu">admission control docs.</a>
+          <a href="https://github.com/illinois/queue/blob/master/doc/AdmissionControl.md">
+            admission control docs.
+          </a>
         </p>
         <Form autoComplete="off" onSubmit={onSubmit}>
           <FormGroup row>
