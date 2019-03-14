@@ -17,6 +17,7 @@ with the current date and the next changes should go under a **[Next]** header.
 * Add debugging prints to help identify cause of ActiveStaff query error. ([@nwalters512](https://github.com/nwalters512) in [#231](https://github.com/illinois/queue/pull/231))
 * Implement confidential queues. ([@jackieo5023 ](https://github.com/jackieo5023 ) and [@nwalters512](https://github.com/nwalters512) in [#230](https://github.com/illinois/queue/pull/230))
 * Implement programmatic admission control. ([@nwalters512](https://github.com/nwalters512) in [#228](https://github.com/illinois/queue/pull/228))
+* Fix confidential queue not being shown correctly to course staff by using isUserCourseStaffForQueue instead of isUserCourseStaff. ([@jackieo5023 ](https://github.com/jackieo5023) in [#234](https://github.com/illinois/queue/pull/234))
 
 ## 19 February 2019
 
