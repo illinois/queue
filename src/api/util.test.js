@@ -106,41 +106,32 @@ describe('Testing Utils', () => {
     })
   })
 
-  describe('canUserSeeQuestionDetailsForConfidentialQueue', () => {
-    test('returns true for an admin', () => {
+  describe('isUserStudent', () => {
+    test('returns false for an admin', () => {
       const userAuthz = {
         isAdmin: true,
         staffedCourseIds: [],
       }
-      const value = util.canUserSeeQuestionDetailsForConfidentialQueue(
-        userAuthz,
-        123
-      )
-      expect(value).toBeTruthy()
+      const value = util.isUserStudent(userAuthz, 123)
+      expect(value).toBeFalsy()
     })
 
-    test('returns true for course staff', () => {
+    test('returns false for course staff', () => {
       const userAuthz = {
         isAdmin: false,
         staffedCourseIds: [123],
       }
-      const value = util.canUserSeeQuestionDetailsForConfidentialQueue(
-        userAuthz,
-        123
-      )
-      expect(value).toBeTruthy()
+      const value = util.isUserStudent(userAuthz, 123)
+      expect(value).toBeFalsy()
     })
 
-    test('returns false for non-admin, non-course staff', () => {
+    test('returns true for non-admin, non-course staff', () => {
       const userAuthz = {
         isAdmin: false,
         staffedCourseIds: [],
       }
-      const value = util.canUserSeeQuestionDetailsForConfidentialQueue(
-        userAuthz,
-        123
-      )
-      expect(value).toBeFalsy()
+      const value = util.isUserStudent(userAuthz, 123)
+      expect(value).toBeTruthy()
     })
   })
 

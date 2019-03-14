@@ -13,7 +13,7 @@ const {
   requireQueueForQuestion,
   requireQuestion,
   failIfErrors,
-  canUserSeeQuestionDetailsForConfidentialQueue,
+  isUserStudent,
   filterConfidentialQueueQuestionsForUser,
   ApiError,
 } = require('./util')
@@ -173,7 +173,7 @@ router.get(
     )
     if (isConfidential) {
       const { userAuthz } = res.locals
-      if (!canUserSeeQuestionDetailsForConfidentialQueue(userAuthz, courseId)) {
+      if (isUserStudent(userAuthz, courseId)) {
         const { id: userId } = res.locals.userAuthn
         questions = filterConfidentialQueueQuestionsForUser(userId, questions)
       }
@@ -191,7 +191,7 @@ router.get(
     if (isConfidential) {
       const { id: userId } = res.locals.userAuthn
       const { userAuthz } = res.locals
-      if (!canUserSeeQuestionDetailsForConfidentialQueue(userAuthz, courseId)) {
+      if (isUserStudent(userAuthz, courseId)) {
         if (res.locals.question.askedById !== userId) {
           res.status(403).send('You are not authorized to access that question')
           return

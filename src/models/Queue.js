@@ -1,4 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
+  const privateAttributes = ['admissionControlEnabled', 'admissionControlUrl']
+
   const obj = sequelize.define(
     'queue',
     {
@@ -66,6 +68,8 @@ module.exports = (sequelize, DataTypes) => {
       ],
     })
   }
+
+  obj.privateAttributes = privateAttributes
 
   return obj
 }
