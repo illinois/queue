@@ -27,7 +27,7 @@ import QuestionNotificationsToggle from '../components/QuestionNotificationsTogg
 import QueueStatusToggleContainer from '../containers/QueueStatusToggleContainer'
 import DeleteAllQuestionsButtonContainer from '../containers/DeleteAllQuestionsButtonContainer'
 import QueueMessageEnabledToggleContainer from '../containers/QueueMessageEnabledToggleContainer'
-import { isUserCourseStaff, isUserAdmin } from '../selectors'
+import { isUserCourseStaffForQueue, isUserAdmin } from '../selectors'
 import ConfidentialQueuePanelContainer from '../containers/ConfidentialQueuePanelContainer'
 
 class Queue extends React.Component {
@@ -175,7 +175,7 @@ const mapStateToProps = (state, ownProps) => ({
   isFetching: state.queues.isFetching,
   hasQueue: !!state.queues.queues[ownProps.queueId],
   queue: state.queues.queues[ownProps.queueId],
-  isUserCourseStaff: isUserCourseStaff(state, ownProps),
+  isUserCourseStaff: isUserCourseStaffForQueue(state, ownProps),
   isUserAdmin: isUserAdmin(state, ownProps),
 })
 
