@@ -6,6 +6,7 @@ When a new version is deployed, the changes since the last deploy should be labe
 with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
+* Improve queue settings security. ([@james9909](https://github.com/james9909) in [#233](https://github.com/illinois/queue/pull/233))
 
 ## 13 March 2019
 
