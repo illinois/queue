@@ -33,18 +33,11 @@ function validateLocation(req, res, next) {
 router.get(
   '/',
   safeAsync(async (req, res, _next) => {
-    const { userAuthz } = res.locals
-
-    const queuesResult = await Queue.scope('questionCount').findAll()
-    const queues = queuesResult.map(queueResult => {
-      const queue = queueResult.get({ plain: true })
-      if (isUserStudent(userAuthz, queue.courseId)) {
-        Queue.privateAttributes.forEach(attr => {
-          delete queue[attr]
-        })
-      }
-      return queue
-    })
+    const queuesResult = await Queue.scope(
+      'defaultScope',
+      'questionCount'
+    ).findAll()
+    const queues = queuesResult.map(queue => queue.get({ plain: true }))
     res.json(queues)
   })
 )
@@ -94,7 +87,20 @@ router.get(
   [requireQueue, failIfErrors],
   safeAsync(async (req, res, _next) => {
     const { id: queueId } = res.locals.queue
-    const queueResults = await Queue.findOne({
+    let queueResult = await Queue.findOne({
+      where: {
+        id: queueId,
+      },
+      attributes: ['courseId'],
+    })
+
+    // Convert to plain object that we can manipulate/filter/etc. before
+    // sending back to the client
+    const { userAuthz } = res.locals
+    const isStudent = isUserStudent(userAuthz, queueResult.courseId)
+
+    const scope = isStudent ? 'defaultScope' : 'courseStaff'
+    queueResult = await Queue.scope(scope).findOne({
       where: {
         id: queueId,
       },
@@ -118,13 +124,9 @@ router.get(
       ],
       order: [[Question, 'id', 'ASC']],
     })
-
     // Convert to plain object that we can manipulate/filter/etc. before
     // sending back to the client
-    const queue = queueResults.get({ plain: true })
-
-    const { userAuthz } = res.locals
-    const isStudent = isUserStudent(userAuthz, queue.courseId)
+    const queue = queueResult.get({ plain: true })
 
     // If this is a confidential queue, don't send any actual question data
     // back to the client, besides IDs
@@ -137,12 +139,6 @@ router.get(
         )
         queue.questions = filtered
       }
-    }
-
-    if (isStudent) {
-      Queue.privateAttributes.forEach(attr => {
-        delete queue[attr]
-      })
     }
 
     res.json(queue)
