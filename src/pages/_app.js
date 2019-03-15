@@ -4,6 +4,7 @@ import { Provider } from 'react-redux'
 import withRedux from 'next-redux-wrapper'
 import { config } from '@fortawesome/fontawesome-svg-core'
 
+import HeadTitle from '../components/HeadTitle'
 import makeStore from '../redux/makeStore'
 import AppContainer from '../components/AppContainer'
 
@@ -19,10 +20,13 @@ class MyApp extends React.Component {
   }
 
   render() {
+    console.log('RENDERRRRR')
+    console.log(HeadTitle)
     /* eslint-disable react/prop-types */
     const { Component, pageProps, router, store } = this.props
     return (
       <Provider store={store}>
+        <HeadTitle />
         <AppContainer>
           <Component {...pageProps} key={router.route} />
         </AppContainer>

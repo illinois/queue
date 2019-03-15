@@ -46,7 +46,6 @@ export default class MyDocument extends Document {
             crossOrigin="use-credentials"
             href={manifestPath}
           />
-          <title>Queues@Illinois</title>
           <style>{dom.css()}</style>
           <link rel="icon" href={faviconPath} type="image/png" />
           <script dangerouslySetInnerHTML={script} />

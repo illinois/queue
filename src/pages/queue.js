@@ -29,6 +29,7 @@ import DeleteAllQuestionsButtonContainer from '../containers/DeleteAllQuestionsB
 import QueueMessageEnabledToggleContainer from '../containers/QueueMessageEnabledToggleContainer'
 import { isUserCourseStaffForQueue, isUserAdmin } from '../selectors'
 import ConfidentialQueuePanelContainer from '../containers/ConfidentialQueuePanelContainer'
+import HeadTitle from '../components/HeadTitle'
 
 class Queue extends React.Component {
   static getInitialProps({ isServer, store, query }) {
@@ -80,6 +81,7 @@ class Queue extends React.Component {
         : 'You'
     return (
       <Container fluid>
+        <HeadTitle title={this.props.queue.name} />
         <h3>
           {this.props.queue.isConfidential && (
             <span>

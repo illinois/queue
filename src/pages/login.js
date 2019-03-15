@@ -5,6 +5,7 @@ import { Button } from 'reactstrap'
 
 import DevModeLogin from '../components/DevModeLogin'
 import { withBaseUrl, isDev, isNow } from '../util'
+import HeadTitle from '../components/HeadTitle'
 
 class Login extends React.Component {
   static async getInitialProps({ req }) {
@@ -25,6 +26,7 @@ class Login extends React.Component {
     }
     return (
       <Fragment>
+        <HeadTitle title="Login" />
         <div className="login-container">
           <h1 className="text-center display-4">Log in</h1>
           <p className="text-center text-secondary">

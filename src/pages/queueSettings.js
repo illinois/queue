@@ -14,6 +14,7 @@ import GeneralPanel from '../components/queueSettings/GeneralPanel'
 import AdmissionControlPanel from '../components/queueSettings/AdmissionControlPanel'
 import PageWithUser from '../components/PageWithUser'
 import DangerPanel from '../components/queueSettings/DangerPanel'
+import HeadTitle from '../components/HeadTitle'
 
 class QueueSettings extends React.Component {
   static async getInitialProps({ isServer, store, query }) {
@@ -51,6 +52,7 @@ class QueueSettings extends React.Component {
     if (!this.props.queue) return null
     return (
       <Container>
+        <HeadTitle title={`Settings · ${this.props.queue.name}`} />
         <h1 className="display-4">Queue Settings</h1>
         <h2 className="mb-5">{this.props.queue.name}</h2>
         <GeneralPanel

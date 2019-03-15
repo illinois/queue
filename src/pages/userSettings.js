@@ -4,6 +4,7 @@ import { Container, Card, CardHeader, CardTitle, CardBody } from 'reactstrap'
 
 import PageWithUser from '../components/PageWithUser'
 import UserProfileSettingsContainer from '../containers/UserProfileSettingsContainer'
+import HeadTitle from '../components/HeadTitle'
 
 class UserSettings extends React.Component {
   static async getInitialProps() {
@@ -13,6 +14,7 @@ class UserSettings extends React.Component {
   render() {
     return (
       <Container fluid>
+        <HeadTitle title="User Settings" />
         <Card className="settings-card">
           <CardHeader className="bg-primary text-white d-flex align-items-center">
             <CardTitle tag="h4" className="mb-0">

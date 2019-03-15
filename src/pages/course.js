@@ -17,6 +17,7 @@ import NewQueue from '../components/NewQueue'
 import QueueCardListContainer from '../containers/QueueCardListContainer'
 import ShowForCourseStaff from '../components/ShowForCourseStaff'
 import CourseShortCodeInfo from '../components/CourseShortCodeInfo'
+import HeadTitle from '../components/HeadTitle'
 
 class Course extends React.Component {
   static async getInitialProps({ isServer, store, query }) {
@@ -79,6 +80,7 @@ class Course extends React.Component {
 
     return (
       <Fragment>
+        <HeadTitle title={this.props.course.name} />
         <Container>
           <div className="d-flex flex-wrap align-items-center mb-4">
             <h1 className="display-4 d-inline-block mb-0 mt-3 mr-auto pr-3">

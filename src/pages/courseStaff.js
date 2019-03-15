@@ -22,6 +22,7 @@ import {
 import PageWithUser from '../components/PageWithUser'
 import AddStaff from '../components/AddStaff'
 import CourseStaffMember from '../components/CourseStaffMember'
+import HeadTitle from '../components/HeadTitle'
 
 class CourseStaff extends React.Component {
   static async getInitialProps({ isServer, store, query }) {
@@ -85,6 +86,7 @@ class CourseStaff extends React.Component {
 
     return (
       <Fragment>
+        <HeadTitle title={`Staff · ${this.props.course.name}`} />
         <Container fluid>
           <Card className="staff-card">
             <CardHeader className="bg-primary text-white d-flex align-items-center">
