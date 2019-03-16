@@ -38,7 +38,8 @@ module.exports.initSequelize = sequelize => {
 }
 
 const sequelizeConfig = {
-  operatorsAliases: Sequelize.Op,
+  // See http://docs.sequelizejs.com/manual/querying.html#operators-security
+  operatorsAliases: false,
   dialectOptions: {
     multipleStatements: true,
   },

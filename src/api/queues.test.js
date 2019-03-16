@@ -40,11 +40,8 @@ describe('Queues API', () => {
       expect(res.body[1].id).toBe(2)
 
       res.body.forEach(queue => {
-        if (user === 'admin') {
-          includesPrivateAttributes(queue)
-        } else {
-          excludesPrivateAttributes(queue)
-        }
+        // This endpoint shouldn't include private attributes
+        excludesPrivateAttributes(queue)
       })
     }
     test('succeeds for admin', async () => {

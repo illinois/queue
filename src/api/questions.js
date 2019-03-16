@@ -137,17 +137,21 @@ router.post(
       }
     }
 
-    const question = Question.build({
-      name: data.name,
-      // Questions in fixed-location queues should never have a location
-      location: res.locals.queue.fixedLocation ? '' : data.location,
-      topic: data.topic,
-      enqueueTime: new Date(),
-      queueId,
-      askedById: askerId,
-    })
+    const question = await Question.create(
+      {
+        name: data.name,
+        // Questions in fixed-location queues should never have a location
+        location: res.locals.queue.fixedLocation ? '' : data.location,
+        topic: data.topic,
+        enqueueTime: new Date(),
+        queueId,
+        askedById: askerId,
+      },
+      {
+        include: [{ model: User, as: 'askedBy' }],
+      }
+    )
 
-    await question.save()
     await question.reload()
     res.status(201).send(question)
   })
