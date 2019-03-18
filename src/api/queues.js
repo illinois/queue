@@ -86,21 +86,12 @@ router.get(
   '/:queueId',
   [requireQueue, failIfErrors],
   safeAsync(async (req, res, _next) => {
-    const { id: queueId } = res.locals.queue
-    let queueResult = await Queue.findOne({
-      where: {
-        id: queueId,
-      },
-      attributes: ['courseId'],
-    })
-
-    // Convert to plain object that we can manipulate/filter/etc. before
-    // sending back to the client
+    const { id: queueId, courseId } = res.locals.queue
     const { userAuthz } = res.locals
-    const isStudent = isUserStudent(userAuthz, queueResult.courseId)
+    const isStudent = isUserStudent(userAuthz, courseId)
 
     const scope = isStudent ? 'defaultScope' : 'courseStaff'
-    queueResult = await Queue.scope(scope).findOne({
+    const queueResult = await Queue.scope(scope).findOne({
       where: {
         id: queueId,
       },
