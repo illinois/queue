@@ -49,7 +49,8 @@ export const createQuestionSuccess = makeActionCreator(
 const createQuestionFailure = makeActionCreator(
   types.CREATE_QUESTION.FAILURE,
   'queueId',
-  'question'
+  'question',
+  'message'
 )
 
 export function createQuestion(queueId, question) {
@@ -57,11 +58,14 @@ export function createQuestion(queueId, question) {
     dispatch(createQuestionRequest(queueId, question))
 
     return axios
-      .post(`/api/queues/${queueId}/questions`, question)
+      .post(`/api/queues/${queueId}/questions`, question, {
+        showErrorToast: false,
+      })
       .then(res => dispatch(createQuestionSuccess(queueId, res.data)))
       .catch(err => {
         console.error(err)
-        dispatch(createQuestionFailure(queueId, question))
+        const { message } = err.response.data
+        return dispatch(createQuestionFailure(queueId, question, message))
       })
   }
 }

@@ -1,4 +1,5 @@
 /* eslint-env jest */
+const testutil = require('../../test/util')
 const requireCourseStaff = require('./requireCourseStaff')
 
 const makeReq = courseId => ({
@@ -7,48 +8,36 @@ const makeReq = courseId => ({
   },
 })
 
-function makeRes(isCourseStaff) {
-  const status = jest.fn()
-  const send = jest.fn()
-  status.mockReturnValue({ send })
-  const res = {
-    locals: {
-      userAuthz: {
-        staffedCourseIds: isCourseStaff ? [1] : [],
-      },
+const makeRes = isCourseStaff => ({
+  locals: {
+    userAuthz: {
+      staffedCourseIds: isCourseStaff ? [1] : [],
     },
-    status,
-  }
-
-  return { res, status, send }
-}
+  },
+})
 
 describe('requireCourseStaff middleware', () => {
   test('responds with 403 for non-course staff user', () => {
     const req = makeReq('1')
-    const { res, status, send } = makeRes(false)
+    const res = makeRes(false)
     const next = jest.fn()
     requireCourseStaff(req, res, next)
-    expect(status).toBeCalledWith(403)
-    expect(send).toBeCalled()
-    expect(next).not.toBeCalled()
+    testutil.expectNextCalledWithApiError(next, 403)
   })
 
   test('proceeds for coures staff user', () => {
     const req = makeReq('1')
-    const { res } = makeRes(true)
+    const res = makeRes(true)
     const next = jest.fn()
     requireCourseStaff(req, res, next)
     expect(next).toBeCalled()
   })
 
-  test('returns 500 status if queueId is invalid', async () => {
+  test('returns 400 status if queueId is invalid', async () => {
     const req = makeReq('hello')
-    const { res, status, send } = makeRes([1])
+    const res = makeRes([1])
     const next = jest.fn()
     await requireCourseStaff(req, res, next)
-    expect(status).toBeCalledWith(500)
-    expect(send).toBeCalled()
-    expect(next).not.toBeCalled()
+    testutil.expectNextCalledWithApiError(next, 400)
   })
 })

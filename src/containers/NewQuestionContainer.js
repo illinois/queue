@@ -9,6 +9,7 @@ function mapStateToProps(state, ownProps) {
     user: state.user.user,
     queueId: ownProps.queueId,
     queue: state.queues.queues[ownProps.queueId],
+    questionError: state.questions.error,
     isUserCourseStaff:
       isUserCourseStaffForQueue(state, ownProps) ||
       isUserAdmin(state, ownProps),

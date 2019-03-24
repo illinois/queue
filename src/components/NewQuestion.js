@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import {
+  Alert,
   Collapse,
   Card,
   CardBody,
@@ -19,6 +20,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
 import constants from '../constants'
+import { CREATE_QUESTION } from '../constants/ActionTypes'
 
 const fields = [
   {
@@ -48,17 +50,11 @@ export default class NewQuestion extends React.Component {
       location: '',
       fieldErrors: {},
       isOpen: !this.props.isUserCourseStaff,
+      submitInProgress: false,
     }
 
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.handleKeyPress = this.handleKeyPress.bind(this)
-  }
-
-  handleKeyPress(e) {
-    if (e.key === 'Enter') {
-      this.handleSubmit()
-    }
   }
 
   onCardHeaderClick() {
@@ -75,7 +71,8 @@ export default class NewQuestion extends React.Component {
     })
   }
 
-  handleSubmit() {
+  handleSubmit(e) {
+    e.preventDefault()
     const fieldErrors = {}
     let valid = true
 
@@ -107,14 +104,23 @@ export default class NewQuestion extends React.Component {
       location: this.state.location,
       topic: this.state.topic,
     }
-    this.props.createQuestion(this.props.queueId, question).then(() => {
-      // Clear out all fields so user can add a new question
+    // Disable the button while the request is in flight
+    this.setState({
+      submitInProgress: true,
+    })
+    this.props.createQuestion(this.props.queueId, question).then(action => {
       this.setState({
-        netid: '',
-        name: this.props.isUserCourseStaff ? '' : this.props.user.name || '',
-        location: '',
-        topic: '',
+        submitInProgress: false,
       })
+      if (action.type === CREATE_QUESTION.SUCCESS) {
+        // Clear out all fields so user can add a new question
+        this.setState({
+          netid: '',
+          name: this.props.isUserCourseStaff ? '' : this.props.user.name || '',
+          location: '',
+          topic: '',
+        })
+      }
     })
   }
 
@@ -168,17 +174,16 @@ export default class NewQuestion extends React.Component {
               <Form onSubmit={this.handleSubmit} autoComplete="off">
                 {isUserCourseStaff && (
                   <FormGroup row>
-                    <Label for="netid" sm={2}>
+                    <Label for="netid" sm={2} md={3}>
                       Net ID
                     </Label>
-                    <Col sm={10}>
+                    <Col sm={10} md={9}>
                       <Input
                         name="netid"
                         id="netid"
                         placeholder="Enter a Net ID (optional)"
                         value={this.state.netid}
                         onChange={this.handleInputChange}
-                        onKeyDown={this.handleKeyPress}
                       />
                       <FormText color="muted">
                         This allows you to add a question on behalf of a
@@ -188,17 +193,16 @@ export default class NewQuestion extends React.Component {
                   </FormGroup>
                 )}
                 <FormGroup row>
-                  <Label for="name" sm={2}>
+                  <Label for="name" sm={2} md={3}>
                     Name
                   </Label>
-                  <Col sm={10}>
+                  <Col sm={10} md={9}>
                     <Input
                       name="name"
                       id="name"
                       placeholder={namePlaceholder}
                       value={this.state.name}
                       onChange={this.handleInputChange}
-                      onKeyDown={this.handleKeyPress}
                       invalid={isInvalid(this.state.fieldErrors.name)}
                     />
                     <FormFeedback>{this.state.fieldErrors.name}</FormFeedback>
@@ -206,27 +210,26 @@ export default class NewQuestion extends React.Component {
                   </Col>
                 </FormGroup>
                 <FormGroup row>
-                  <Label for="topic" sm={2}>
+                  <Label for="topic" sm={2} md={3}>
                     Topic
                   </Label>
-                  <Col sm={10}>
+                  <Col sm={10} md={9}>
                     <Input
                       name="topic"
                       id="topic"
                       placeholder={topicPlaceholder}
                       value={this.state.topic}
                       onChange={this.handleInputChange}
-                      onKeyDown={this.handleKeyPress}
                       invalid={isInvalid(this.state.fieldErrors.topic)}
                     />
                     <FormFeedback>{this.state.fieldErrors.topic}</FormFeedback>
                   </Col>
                 </FormGroup>
                 <FormGroup row>
-                  <Label for="location" sm={2}>
+                  <Label for="location" sm={2} md={3}>
                     Location
                   </Label>
-                  <Col sm={10}>
+                  <Col sm={10} md={9}>
                     <Input
                       name="location"
                       id="location"
@@ -234,7 +237,6 @@ export default class NewQuestion extends React.Component {
                       value={queueLocation}
                       disabled={fixedLocation}
                       onChange={this.handleInputChange}
-                      onKeyDown={this.handleKeyPress}
                       invalid={isInvalid(this.state.fieldErrors.location)}
                     />
                     <FormFeedback>
@@ -245,11 +247,18 @@ export default class NewQuestion extends React.Component {
                     )}
                   </Col>
                 </FormGroup>
+                <Alert
+                  color="danger"
+                  fade={false}
+                  isOpen={!!this.props.questionError}
+                >
+                  {this.props.questionError}
+                </Alert>
                 <Button
                   block
                   color="primary"
-                  type="button"
-                  onClick={this.handleSubmit}
+                  type="submit"
+                  disabled={this.state.submitInProgress}
                 >
                   Add to queue
                 </Button>
@@ -278,6 +287,7 @@ NewQuestion.defaultProps = {
     location: '',
     fixedLocation: false,
   },
+  questionError: null,
 }
 
 NewQuestion.propTypes = {
@@ -290,5 +300,6 @@ NewQuestion.propTypes = {
     name: PropTypes.string,
   }).isRequired,
   createQuestion: PropTypes.func.isRequired,
+  questionError: PropTypes.string,
   isUserCourseStaff: PropTypes.bool.isRequired,
 }

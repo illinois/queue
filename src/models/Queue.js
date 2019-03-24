@@ -21,11 +21,23 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+      admissionControlEnabled: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      admissionControlUrl: DataTypes.TEXT,
       startTime: DataTypes.DATE,
       endTime: DataTypes.DATE,
     },
     {
       paranoid: true, // Don't actually delete
+      scopes: {
+        courseStaff: {
+          attributes: {
+            include: ['courseId', 'createdByUserId'],
+          },
+        },
+      },
     }
   )
 
@@ -40,6 +52,7 @@ module.exports = (sequelize, DataTypes) => {
       {
         attributes: {
           include: ['courseId', 'createdByUserId'],
+          exclude: ['admissionControlEnabled', 'admissionControlUrl'],
         },
         include: [
           {

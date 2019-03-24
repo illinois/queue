@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import React from 'react'
 import { shallow } from 'enzyme'
-import { Input, Button } from 'reactstrap'
+import { Input, Form } from 'reactstrap'
 import NewQuestion from './NewQuestion'
 
 const makeProps = (queueId, userName = null) => ({
@@ -41,8 +41,8 @@ describe('<NewQuestion />', () => {
     doInputChange(wrapper, 'name', 'My Name')
     doInputChange(wrapper, 'location', 'Right here')
     doInputChange(wrapper, 'topic', 'MP1')
-    const submitButton = wrapper.find(Button)
-    submitButton.simulate('click')
+    const form = wrapper.find(Form)
+    form.simulate('submit', { preventDefault() {} })
     expect(props.createQuestion).toBeCalledWith(50, {
       name: 'My Name',
       location: 'Right here',
@@ -55,8 +55,8 @@ describe('<NewQuestion />', () => {
     const wrapper = shallow(<NewQuestion {...props} />)
     doInputChange(wrapper, 'location', 'Right here')
     doInputChange(wrapper, 'topic', 'MP1')
-    const submitButton = wrapper.find(Button)
-    submitButton.simulate('click')
+    const form = wrapper.find(Form)
+    form.simulate('submit', { preventDefault() {} })
     expect(props.createQuestion).not.toBeCalled()
   })
 
@@ -65,8 +65,8 @@ describe('<NewQuestion />', () => {
     const wrapper = shallow(<NewQuestion {...props} />)
     doInputChange(wrapper, 'name', 'My Name')
     doInputChange(wrapper, 'topic', 'MP1')
-    const submitButton = wrapper.find(Button)
-    submitButton.simulate('click')
+    const form = wrapper.find(Form)
+    form.simulate('submit', { preventDefault() {} })
     expect(props.createQuestion).not.toBeCalled()
   })
 
@@ -75,8 +75,8 @@ describe('<NewQuestion />', () => {
     const wrapper = shallow(<NewQuestion {...props} />)
     doInputChange(wrapper, 'name', 'My Name')
     doInputChange(wrapper, 'location', 'Right here')
-    const submitButton = wrapper.find(Button)
-    submitButton.simulate('click')
+    const form = wrapper.find(Form)
+    form.simulate('submit', { preventDefault() {} })
     expect(props.createQuestion).not.toBeCalled()
   })
 

@@ -4,6 +4,7 @@ const router = require('express').Router({
 
 const { check } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
+const axios = require('axios')
 
 const constants = require('../constants')
 const { Course, Queue, Question, User } = require('../models/')
@@ -12,8 +13,9 @@ const {
   requireQueueForQuestion,
   requireQuestion,
   failIfErrors,
-  canUserSeeQuestionDetailsForConfidentialQueue,
+  isUserStudent,
   filterConfidentialQueueQuestionsForUser,
+  ApiError,
 } = require('./util')
 const requireCourseStaffForQueue = require('../middleware/requireCourseStaffForQueue')
 const requireCourseStaffForQueueForQuestion = require('../middleware/requireCourseStaffForQueueForQuestion')
@@ -58,7 +60,7 @@ router.post(
     checkLocation,
     failIfErrors,
   ],
-  safeAsync(async (req, res, _next) => {
+  safeAsync(async (req, res, next) => {
     const data = matchedData(req)
     const {
       userAuthz,
@@ -66,21 +68,23 @@ router.post(
     } = res.locals
     // make sure queue is open
     if (!res.locals.queue.open) {
-      res.status(422).send('This queue is closed')
+      next(new ApiError(422, 'This queue is closed'))
       return
     }
 
     // First, let's check if the request is coming from course staff and
     // includes a specific netid
+    let askerUser = res.locals.userAuthn
     let askerId = res.locals.userAuthn.id
     if (data.netid) {
       if (userAuthz.isAdmin || userAuthz.staffedCourseIds.includes(courseId)) {
         // The user is allowed to do this!
         const [netid] = data.netid.split('@')
         const [user] = await User.findOrCreate({ where: { netid } })
+        askerUser = user
         askerId = user.id
       } else {
-        res.status(403).send("You don't have authorization to set a netid")
+        next(new ApiError(403, "You don't have authoriation to set a netid"))
         return
       }
     }
@@ -94,21 +98,60 @@ router.post(
       },
     })
     if (existingQuestion) {
-      res.status(422).send('You already have a question on this queue')
+      next(new ApiError(422, 'You already have a question on this queue'))
       return
     }
 
-    const question = Question.build({
-      name: data.name,
-      // Questions in fixed-location queues should never have a location
-      location: res.locals.queue.fixedLocation ? '' : data.location,
-      topic: data.topic,
-      enqueueTime: new Date(),
-      queueId,
-      askedById: askerId,
-    })
+    // If this queue has an admission control policy, let's query it to see
+    // if this question will be allowed
+    if (res.locals.queue.admissionControlEnabled) {
+      let questionAllowed = true
+      let questionAllowedReason = null
+      try {
+        const allowedResponse = await axios.post(
+          res.locals.queue.admissionControlUrl,
+          {
+            name: data.name,
+            location: data.location,
+            topic: data.topic,
+            askedBy: askerUser,
+          },
+          {
+            // Don't allow receivers to keep requests open indefinitely
+            timeout: 10000,
+          }
+        )
+        questionAllowed = allowedResponse.data.allowed
+        questionAllowedReason =
+          allowedResponse.data.reason ||
+          'No reason was given by the course admission control policy'
+      } catch (e) {
+        // TODO log or something?
+        questionAllowed = false
+        questionAllowedReason = 'Error querying admission control API'
+      }
 
-    await question.save()
+      if (!questionAllowed) {
+        next(new ApiError(422, questionAllowedReason))
+        return
+      }
+    }
+
+    const question = await Question.create(
+      {
+        name: data.name,
+        // Questions in fixed-location queues should never have a location
+        location: res.locals.queue.fixedLocation ? '' : data.location,
+        topic: data.topic,
+        enqueueTime: new Date(),
+        queueId,
+        askedById: askerId,
+      },
+      {
+        include: [{ model: User, as: 'askedBy' }],
+      }
+    )
+
     await question.reload()
     res.status(201).send(question)
   })
@@ -134,7 +177,7 @@ router.get(
     )
     if (isConfidential) {
       const { userAuthz } = res.locals
-      if (!canUserSeeQuestionDetailsForConfidentialQueue(userAuthz, courseId)) {
+      if (isUserStudent(userAuthz, courseId)) {
         const { id: userId } = res.locals.userAuthn
         questions = filterConfidentialQueueQuestionsForUser(userId, questions)
       }
@@ -152,7 +195,7 @@ router.get(
     if (isConfidential) {
       const { id: userId } = res.locals.userAuthn
       const { userAuthz } = res.locals
-      if (!canUserSeeQuestionDetailsForConfidentialQueue(userAuthz, courseId)) {
+      if (isUserStudent(userAuthz, courseId)) {
         if (res.locals.question.askedById !== userId) {
           res.status(403).send('You are not authorized to access that question')
           return
@@ -194,12 +237,12 @@ router.post(
     requireQueueForQuestion,
     failIfErrors,
   ],
-  safeAsync(async (req, res, _next) => {
+  safeAsync(async (req, res, next) => {
     const { queue, question } = res.locals
 
     if (question.beingAnswered) {
       // Forbid someone else from taking over this question
-      res.status(403).send('Another user is already answering this question')
+      next(new ApiError(403, 'Another user is already answering this question'))
       return
     }
 
@@ -213,9 +256,12 @@ router.post(
     })
 
     if (otherQuestions !== null) {
-      res
-        .status(403)
-        .send('You are already answering another question on this queue')
+      next(
+        new ApiError(
+          403,
+          'You are already answering another question on this queue'
+        )
+      )
       return
     }
 
@@ -292,7 +338,7 @@ router.patch(
     checkLocation,
     failIfErrors,
   ],
-  safeAsync(async (req, res, _next) => {
+  safeAsync(async (req, res, next) => {
     const { userAuthn, question, queue } = res.locals
     const data = matchedData(req)
 
@@ -303,9 +349,12 @@ router.patch(
       })
       res.status(201).send(question)
     } else {
-      res
-        .status(403)
-        .send("You don't have authorization to update this question")
+      next(
+        new ApiError(
+          403,
+          "You don't have authorization to update this question"
+        )
+      )
     }
   })
 )
@@ -316,7 +365,7 @@ router.patch(
 router.delete(
   '/:questionId',
   [requireQuestion, failIfErrors],
-  safeAsync(async (req, res, _next) => {
+  safeAsync(async (req, res, next) => {
     const { userAuthn, userAuthz, question } = res.locals
     const { queueId } = question
 
@@ -341,9 +390,12 @@ router.delete(
       })
       res.status(204).send()
     } else {
-      res
-        .status(403)
-        .send("You don't have authorization to delete this question")
+      next(
+        new ApiError(
+          403,
+          "You don't have authorization to delete this question"
+        )
+      )
     }
   })
 )

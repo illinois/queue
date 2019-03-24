@@ -8,16 +8,10 @@ import {
   faEyeSlash,
 } from '@fortawesome/free-solid-svg-icons'
 
+import { Router } from '../routes'
 import ShowForCourseStaff from './ShowForCourseStaff'
 
-const QueueCard = ({
-  queue,
-  courseName,
-  open,
-  onDelete,
-  onUpdate,
-  ...rest
-}) => {
+const QueueCard = ({ queue, courseName, open, ...rest }) => {
   const { name: queueName, location, questionCount, isConfidential } = queue
 
   const questionCountText = `${questionCount} Question${
@@ -25,20 +19,10 @@ const QueueCard = ({
   }`
   const locationText = location || 'No location specified'
 
-  const handleDelete = e => {
+  const handleSettings = e => {
     e.stopPropagation()
     e.preventDefault()
-    onDelete()
-  }
-
-  const handleUpdate = e => {
-    e.stopPropagation()
-    e.preventDefault()
-    onUpdate()
-  }
-
-  const preventKeyBubbleUp = e => {
-    e.stopPropagation()
+    Router.pushRoute('queueSettings', { id: queue.id })
   }
 
   const title = courseName || queueName
@@ -60,25 +44,13 @@ const QueueCard = ({
           <div>
             <ShowForCourseStaff courseId={queue.courseId}>
               <Button
-                color="danger"
+                color="secondary"
                 size="sm"
                 outline
-                onClick={handleDelete}
-                onKeyPress={preventKeyBubbleUp}
+                onClick={handleSettings}
+                onKeyPress={handleSettings}
               >
-                Delete
-              </Button>
-            </ShowForCourseStaff>
-            <ShowForCourseStaff courseId={queue.courseId}>
-              <Button
-                color="primary"
-                size="sm"
-                className="mr-0 ml-1"
-                outline
-                onClick={handleUpdate}
-                onKeyPress={preventKeyBubbleUp}
-              >
-                Edit
+                Settings
               </Button>
             </ShowForCourseStaff>
           </div>
@@ -131,8 +103,6 @@ QueueCard.propTypes = {
   }).isRequired,
   courseName: PropTypes.string,
   open: PropTypes.bool,
-  onUpdate: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
 }
 
 export default QueueCard
