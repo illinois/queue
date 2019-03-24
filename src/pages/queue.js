@@ -51,7 +51,7 @@ class Queue extends React.Component {
         this.props.pageTransitionReadyToEnter()
       }
       // We won't block the page from showing while we load the course - we'll
-      // simply slow the course name as soon as it's available
+      // simply show the course name as soon as it's available
       return this.props.fetchCourse(action.queue.courseId)
     })
   }
