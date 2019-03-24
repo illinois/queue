@@ -54,10 +54,10 @@ class Header extends React.Component {
     // login page
     const brandLink = user ? (
       <Link route="index" passHref>
-        <NavbarBrand>Queues@Illinois</NavbarBrand>
+        <NavbarBrand>Queue@Illinois</NavbarBrand>
       </Link>
     ) : (
-      <NavbarBrand tag="span">Queues@Illinois</NavbarBrand>
+      <NavbarBrand tag="span">Queue@Illinois</NavbarBrand>
     )
 
     return (
