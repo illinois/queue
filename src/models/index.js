@@ -38,7 +38,6 @@ module.exports.initSequelize = sequelize => {
 }
 
 const sequelizeConfig = {
-  operatorsAliases: Sequelize.Op,
   dialectOptions: {
     multipleStatements: true,
   },

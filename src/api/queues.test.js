@@ -15,6 +15,16 @@ const expectErrorMessage = res => {
   expect(Object.keys(res.body)).toEqual(['message'])
 }
 
+const includesPrivateAttributes = queue => {
+  expect(queue.admissionControlEnabled).toBeDefined()
+  expect(queue.admissionControlUrl).toBeDefined()
+}
+
+const excludesPrivateAttributes = queue => {
+  expect(queue.admissionControlEnabled).toBeUndefined()
+  expect(queue.admissionControlUrl).toBeUndefined()
+}
+
 describe('Queues API', () => {
   describe('GET /api/queues', () => {
     const doGetTest = async user => {
@@ -28,6 +38,11 @@ describe('Queues API', () => {
       expect(res.body[1].location).toBe('There')
       expect(res.body[0].id).toBe(1)
       expect(res.body[1].id).toBe(2)
+
+      res.body.forEach(queue => {
+        // This endpoint shouldn't include private attributes
+        excludesPrivateAttributes(queue)
+      })
     }
     test('succeeds for admin', async () => {
       await doGetTest('admin')
@@ -51,6 +66,7 @@ describe('Queues API', () => {
       expect(res.body.questions).toHaveLength(0)
       expect(res.body).toHaveProperty('activeStaff')
       expect(res.body.activeStaff).toHaveLength(0)
+      includesPrivateAttributes(res.body)
 
       const question = { name: 'a', location: 'b', topic: 'c' }
       const res2 = await request.post('/api/queues/2/questions').send(question)
@@ -61,6 +77,7 @@ describe('Queues API', () => {
       expect(res3.body.questions).toHaveLength(1)
       expect(res3.body.questions[0]).toHaveProperty('askedBy')
       expect(res3.body.questions[0].askedBy.netid).toBe('admin')
+      includesPrivateAttributes(res3.body)
     })
 
     test('succeeds for non-admin', async () => {
@@ -76,6 +93,7 @@ describe('Queues API', () => {
       expect(res.body.questions).toHaveLength(0)
       expect(res.body).toHaveProperty('activeStaff')
       expect(res.body.activeStaff).toHaveLength(0)
+      excludesPrivateAttributes(res.body)
 
       const question = { name: 'a', location: 'b', topic: 'c' }
       const request2 = await requestAsUser(app, 'admin')
@@ -87,6 +105,7 @@ describe('Queues API', () => {
       expect(res3.body.questions).toHaveLength(1)
       expect(res3.body.questions[0]).toHaveProperty('askedBy')
       expect(res3.body.questions[0].askedBy.netid).toBe('admin')
+      excludesPrivateAttributes(res3.body)
     })
   })
 
@@ -102,6 +121,7 @@ describe('Queues API', () => {
       expect(question1).toHaveProperty('askedBy.netid', 'student')
       expect(question2).toHaveProperty('askedById', 6)
       expect(question2).toHaveProperty('askedBy.netid', 'otherstudent')
+      includesPrivateAttributes(res.body)
     }
 
     test('includes all question data for admin', async () => {
@@ -127,6 +147,7 @@ describe('Queues API', () => {
           expect(Object.keys(question)).toEqual(['id'])
         }
       })
+      excludesPrivateAttributes(res.body)
     }
 
     test('excludes question data for other course staff on confidential queue', async () => {
@@ -161,6 +182,8 @@ describe('Queues API', () => {
       expect(res.body.location).toBe('Where')
       expect(res.body.questionCount).toBe(0)
       expect(res.body.isConfidential).toBe(false)
+      expect(res.body.admissionControlEnabled).toBe(false)
+      expect(res.body.admissionControlUrl).toBe(null)
     })
 
     test('succeeds for course staff', async () => {
@@ -176,6 +199,8 @@ describe('Queues API', () => {
       expect(res.body.location).toBe('Where')
       expect(res.body.questionCount).toBe(0)
       expect(res.body.isConfidential).toBe(false)
+      expect(res.body.admissionControlEnabled).toBe(false)
+      expect(res.body.admissionControlUrl).toBe(null)
     })
 
     test('succeeds for confidential queue', async () => {
@@ -191,6 +216,8 @@ describe('Queues API', () => {
       expect(res.body.location).toBe('Where')
       expect(res.body.questionCount).toBe(0)
       expect(res.body.isConfidential).toBe(true)
+      expect(res.body.admissionControlEnabled).toBe(false)
+      expect(res.body.admissionControlUrl).toBe(null)
     })
 
     test('fails if name is missing', async () => {
@@ -312,6 +339,8 @@ describe('Queues API', () => {
       expect(res.body.name).toBe('CS 225 Queue 1 Alter')
       expect(res.body.id).toBe(1)
       expect(res.body.location).toBe('')
+      expect(res.body.admissionControlEnabled).toBe(false)
+      expect(res.body.admissionControlUrl).toBe(null)
     })
 
     test('succeeds for course staff with well-formed request with location', async () => {
@@ -322,6 +351,8 @@ describe('Queues API', () => {
       expect(res.body.name).toBe('CS 225 Queue 1 Alter')
       expect(res.body.id).toBe(1)
       expect(res.body.location).toBe('Where')
+      expect(res.body.admissionControlEnabled).toBe(false)
+      expect(res.body.admissionControlUrl).toBe(null)
     })
 
     test('succeeds for admin with well-formed request no location', async () => {
@@ -332,6 +363,8 @@ describe('Queues API', () => {
       expect(res.body.name).toBe('CS 225 Queue 1 Alter')
       expect(res.body.id).toBe(1)
       expect(res.body.location).toBe('')
+      expect(res.body.admissionControlEnabled).toBe(false)
+      expect(res.body.admissionControlUrl).toBe(null)
     })
 
     test('succeeds for admin with well-formed request with location', async () => {
@@ -342,6 +375,32 @@ describe('Queues API', () => {
       expect(res.body.name).toBe('CS 225 Queue 1 Alter')
       expect(res.body.id).toBe(1)
       expect(res.body.location).toBe('Where')
+      expect(res.body.admissionControlEnabled).toBe(false)
+      expect(res.body.admissionControlUrl).toBe(null)
+    })
+
+    test('succeeds for course staff with well-formed request with admissionControlUrl', async () => {
+      const attributes = { admissionControlUrl: 'http://localhost:3000' }
+      const request = await requestAsUser(app, '225staff')
+      const res = await request.patch('/api/queues/1').send(attributes)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.name).toBe('CS225 Queue')
+      expect(res.body.id).toBe(1)
+      expect(res.body.location).toBe('Here')
+      expect(res.body.admissionControlEnabled).toBe(false)
+      expect(res.body.admissionControlUrl).toBe('http://localhost:3000')
+    })
+
+    test('succeeds for course staff with well-formed request with admissionControlEnabled', async () => {
+      const attributes = { admissionControlEnabled: true }
+      const request = await requestAsUser(app, '225staff')
+      const res = await request.patch('/api/queues/1').send(attributes)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.name).toBe('CS225 Queue')
+      expect(res.body.id).toBe(1)
+      expect(res.body.location).toBe('Here')
+      expect(res.body.admissionControlEnabled).toBe(true)
+      expect(res.body.admissionControlUrl).toBe(null)
     })
 
     test('fails for course staff with ill-formed request no location', async () => {

@@ -101,7 +101,8 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 })
 
+const permissions = { requireCourseStaff: true }
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(PageWithUser(QueueSettings))
+)(PageWithUser(QueueSettings, permissions))

@@ -5,7 +5,7 @@ const logger = require('../util/logger')
 const { sequelize, Question, User, ActiveStaff, Queue } = require('../models')
 const { getUserFromJwt, getAuthzForUser } = require('../auth/util')
 const {
-  canUserSeeQuestionDetailsForConfidentialQueue,
+  isUserStudent,
   filterConfidentialQueueQuestionsForUser,
 } = require('../api/util')
 
@@ -201,12 +201,9 @@ module.exports = newIo => {
           userAuthzPromise,
         ])
         const { courseId, isConfidential } = queue
-        const canSeeQuestionDetails = canUserSeeQuestionDetailsForConfidentialQueue(
-          userAuthz,
-          courseId
-        )
+        const isStudent = !isUserStudent(userAuthz, courseId)
         let sendCompleteQuestionData = true
-        if (isConfidential && !canSeeQuestionDetails) {
+        if (isConfidential && isStudent) {
           // All users that shouldn't see confidential information are added
           // to a "public" version of the room that receives the minimum
           // possible set of information

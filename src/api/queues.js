@@ -13,7 +13,7 @@ const {
   requireQueue,
   requireUser,
   failIfErrors,
-  canUserSeeQuestionDetailsForConfidentialQueue,
+  isUserStudent,
   filterConfidentialQueueQuestionsForUser,
 } = require('./util')
 
@@ -33,7 +33,11 @@ function validateLocation(req, res, next) {
 router.get(
   '/',
   safeAsync(async (req, res, _next) => {
-    const queues = await Queue.scope('questionCount').findAll()
+    const queuesResult = await Queue.scope(
+      'defaultScope',
+      'questionCount'
+    ).findAll()
+    const queues = queuesResult.map(queue => queue.get({ plain: true }))
     res.json(queues)
   })
 )
@@ -82,8 +86,12 @@ router.get(
   '/:queueId',
   [requireQueue, failIfErrors],
   safeAsync(async (req, res, _next) => {
-    const { id: queueId } = res.locals.queue
-    const queueResults = await Queue.findOne({
+    const { id: queueId, courseId } = res.locals.queue
+    const { userAuthz } = res.locals
+    const isStudent = isUserStudent(userAuthz, courseId)
+
+    const scope = isStudent ? 'defaultScope' : 'courseStaff'
+    const queueResult = await Queue.scope(scope).findOne({
       where: {
         id: queueId,
       },
@@ -96,6 +104,7 @@ router.get(
           },
           required: false,
           include: [User],
+          attributes: ['startTime', 'endTime'],
         },
         {
           model: Question,
@@ -103,25 +112,29 @@ router.get(
           where: {
             dequeueTime: null,
           },
+          attributes: [
+            'id',
+            'name',
+            'topic',
+            'beingAnswered',
+            'answerStartTime',
+            'enqueueTime',
+            'dequeueTime',
+            'askedById',
+          ],
+          include: [{ model: User, as: 'askedBy' }],
         },
       ],
       order: [[Question, 'id', 'ASC']],
     })
-
     // Convert to plain object that we can manipulate/filter/etc. before
     // sending back to the client
-    const queue = queueResults.get({ plain: true })
+    const queue = queueResult.get({ plain: true })
 
     // If this is a confidential queue, don't send any actual question data
     // back to the client, besides IDs
     if (queue.isConfidential) {
-      const { userAuthz } = res.locals
-      if (
-        !canUserSeeQuestionDetailsForConfidentialQueue(
-          userAuthz,
-          queue.courseId
-        )
-      ) {
+      if (isStudent) {
         const { id: userId } = res.locals.userAuthn
         const filtered = filterConfidentialQueueQuestionsForUser(
           userId,

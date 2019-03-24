@@ -65,10 +65,10 @@ const requireModelForModel = (
   next()
 }
 
-const canUserSeeQuestionDetailsForConfidentialQueue = (userAuthz, courseId) => {
+const isUserStudent = (userAuthz, courseId) => {
   const { isAdmin, staffedCourseIds } = userAuthz
   const staffsQueue = staffedCourseIds.findIndex(id => id === courseId) !== -1
-  return isAdmin || staffsQueue
+  return !isAdmin && !staffsQueue
 }
 
 /**
@@ -114,6 +114,6 @@ module.exports = {
   requireModel,
 
   // Stuff for confidential queues
-  canUserSeeQuestionDetailsForConfidentialQueue,
+  isUserStudent,
   filterConfidentialQueueQuestionsForUser,
 }

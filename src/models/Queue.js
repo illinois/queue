@@ -34,6 +34,14 @@ module.exports = (sequelize, DataTypes) => {
       defaultScope: {
         attributes: {
           include: ['courseId', 'createdByUserId'],
+          exclude: ['admissionControlEnabled', 'admissionControlUrl'],
+        },
+      },
+      scopes: {
+        courseStaff: {
+          attributes: {
+            include: ['courseId', 'createdByUserId'],
+          },
         },
       },
     }
