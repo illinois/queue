@@ -7,8 +7,8 @@ with the current date and the next changes should go under a **[Next]** header.
 
 ## [Next]
 * Improve queue settings security. ([@james9909](https://github.com/james9909) in [#233](https://github.com/illinois/queue/pull/233))
-
 * Fix confidential queue not being shown correctly to course staff by using `isUserCourseStaffForQueue` instead of `isUserCourseStaff`. ([@jackieo5023](https://github.com/jackieo5023) in [#234](https://github.com/illinois/queue/pull/234))
+* Show course name on queue page. ([@nwalters512](https://github.com/nwalters512) in [#236](https://github.com/illinois/queue/pull/236))
 
 ## 13 March 2019
 
