@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMapMarker, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
 import { fetchQueue, fetchQueueRequest } from '../actions/queue'
+import { fetchCourse } from '../actions/course'
 import { connectToQueue, disconnectFromQueue } from '../socket/client'
 
 import PageWithUser from '../components/PageWithUser'
@@ -38,22 +39,29 @@ class Queue extends React.Component {
     }
     return {
       queueId,
-      isFetching: isServer,
+      isFetchingQueue: isServer,
     }
   }
 
   static pageTransitionDelayEnter = true
 
   componentDidMount() {
-    this.props.fetchQueue(this.props.queueId).then(() => {
+    this.props.fetchQueue(this.props.queueId).then(action => {
       if (this.props.pageTransitionReadyToEnter) {
         this.props.pageTransitionReadyToEnter()
       }
+      // We won't block the page from showing while we load the course - we'll
+      // simply slow the course name as soon as it's available
+      return this.props.fetchCourse(action.queue.courseId)
     })
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.isFetching && !this.props.isFetching && this.props.hasQueue) {
+    if (
+      prevProps.isFetchingQueue &&
+      !this.props.isFetchingQueue &&
+      this.props.hasQueue
+    ) {
       // We have finished fetching the queue and the queue exists (was not a 404)
       // It's now safe to connect to the websocket
       connectToQueue(this.props.dispatch, this.props.queueId)
@@ -65,12 +73,12 @@ class Queue extends React.Component {
   }
 
   render() {
-    const { isFetching, hasQueue } = this.props
+    const { isFetchingQueue, hasQueue } = this.props
 
-    if (isFetching) {
+    if (isFetchingQueue) {
       return null
     }
-    if (!isFetching && !hasQueue) {
+    if (!isFetchingQueue && !hasQueue) {
       return <Error statusCode={404} />
     }
     const locationText = this.props.queue.location || 'No location specified'
@@ -78,6 +86,13 @@ class Queue extends React.Component {
       this.props.isUserCourseStaff || this.props.isUserAdmin
         ? 'Students'
         : 'You'
+
+    let queueName = ''
+    const { name } = this.props.queue
+    if (this.props.course) {
+      queueName += `${this.props.course.name} — `
+    }
+    queueName += name
     return (
       <Container fluid>
         <h3>
@@ -95,7 +110,7 @@ class Queue extends React.Component {
               </UncontrolledTooltip>
             </span>
           )}
-          {this.props.queue.name}
+          {queueName}
         </h3>
         <h5 className="mb-3 text-muted">
           <FontAwesomeIcon icon={faMapMarker} fixedWidth className="mr-2" />
@@ -146,9 +161,10 @@ class Queue extends React.Component {
 }
 
 Queue.propTypes = {
-  isFetching: PropTypes.bool.isRequired,
+  isFetchingQueue: PropTypes.bool.isRequired,
   hasQueue: PropTypes.bool.isRequired,
   fetchQueue: PropTypes.func.isRequired,
+  fetchCourse: PropTypes.func.isRequired,
   queueId: PropTypes.number.isRequired,
   dispatch: PropTypes.func.isRequired,
   isUserCourseStaff: PropTypes.bool.isRequired,
@@ -163,24 +179,35 @@ Queue.propTypes = {
     message: PropTypes.string,
     messageEnabled: PropTypes.bool,
   }),
+  course: PropTypes.shape({
+    name: PropTypes.string,
+  }),
   pageTransitionReadyToEnter: PropTypes.func,
 }
 
 Queue.defaultProps = {
   queue: null,
+  course: null,
   pageTransitionReadyToEnter: null,
 }
 
-const mapStateToProps = (state, ownProps) => ({
-  isFetching: state.queues.isFetching,
-  hasQueue: !!state.queues.queues[ownProps.queueId],
-  queue: state.queues.queues[ownProps.queueId],
-  isUserCourseStaff: isUserCourseStaffForQueue(state, ownProps),
-  isUserAdmin: isUserAdmin(state, ownProps),
-})
+const mapStateToProps = (state, ownProps) => {
+  const queue = state.queues.queues[ownProps.queueId]
+  const course = queue && state.courses.courses[queue.courseId]
+  return {
+    isFetchingQueue: state.queues.isFetching,
+    hasQueue: !!queue,
+    hasCourse: !!course,
+    queue,
+    course,
+    isUserCourseStaff: isUserCourseStaffForQueue(state, ownProps),
+    isUserAdmin: isUserAdmin(state, ownProps),
+  }
+}
 
 const mapDispatchToProps = dispatch => ({
   fetchQueue: queueId => dispatch(fetchQueue(queueId)),
+  fetchCourse: courseId => dispatch(fetchCourse(courseId)),
   dispatch,
 })
 
