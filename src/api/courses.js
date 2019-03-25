@@ -28,11 +28,10 @@ router.get(
     } = res
 
     const includes = []
+    const includeStaffList =
+      userAuthz.isAdmin || userAuthz.staffedCourseIds.indexOf(courseId) !== -1
     // Only include list of course staff for other course staff or admins
-    if (
-      userAuthz.isAdmin ||
-      userAuthz.staffedCourseIds.indexOf(courseId) !== -1
-    ) {
+    if (includeStaffList) {
       includes.push({
         model: User,
         as: 'staff',
@@ -47,6 +46,14 @@ router.get(
       where: { id: courseId },
       include: includes,
     })).toJSON()
+
+    if (includeStaffList) {
+      // This is a workaround to https://github.com/sequelize/sequelize/issues/10552
+      // TODO remove this once the issue is fixed in sequelize
+      course.staff = course.staff.map(user => {
+        return { name: user.preferredName || user.universityName, ...user }
+      })
+    }
 
     // It turns out that sequelize can only generate queries that include the
     // question count if we query for queues separately from the course
