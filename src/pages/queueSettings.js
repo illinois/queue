@@ -10,10 +10,12 @@ import {
   updateQueue,
   deleteQueue,
 } from '../actions/queue'
+import Error from '../components/Error'
 import GeneralPanel from '../components/queueSettings/GeneralPanel'
 import AdmissionControlPanel from '../components/queueSettings/AdmissionControlPanel'
 import PageWithUser from '../components/PageWithUser'
 import DangerPanel from '../components/queueSettings/DangerPanel'
+import { isUserCourseStaffForQueue, isUserAdmin } from '../selectors'
 
 class QueueSettings extends React.Component {
   static async getInitialProps({ isServer, store, query }) {
@@ -49,6 +51,9 @@ class QueueSettings extends React.Component {
 
   render() {
     if (!this.props.queue) return null
+    if (!this.props.isUserAdmin && !this.props.isUserCourseStaffForQueue) {
+      return <Error statusCode={403} />
+    }
     return (
       <Container>
         <h1 className="display-4">Queue Settings</h1>
@@ -91,6 +96,9 @@ const mapStateToProps = (state, ownProps) => ({
   isFetching: state.queues.isFetching,
   hasQueue: !!state.queues.queues[ownProps.queueId],
   queue: state.queues.queues[ownProps.queueId],
+  isUserCourseStaffForQueue: isUserCourseStaffForQueue(state, ownProps),
+  isUserAdmin: isUserAdmin(state, ownProps),
+  user: state.user.user,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -101,8 +109,7 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 })
 
-const permissions = { requireCourseStaff: true }
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(PageWithUser(QueueSettings, permissions))
+)(PageWithUser(QueueSettings))
