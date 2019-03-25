@@ -14,9 +14,9 @@ module.exports.destroyTestDb = async () => {
 module.exports.createTestUsers = async () => {
   await models.User.bulkCreate([
     { netid: 'dev', isAdmin: true },
-    { netid: 'admin', isAdmin: true },
-    { netid: '225staff', isAdmin: false },
-    { netid: '241staff', isAdmin: false },
+    { netid: 'admin', universityName: 'Admin', isAdmin: true },
+    { netid: '225staff', universityName: '225 Staff', isAdmin: false },
+    { netid: '241staff', universityName: '241 Staff', isAdmin: false },
     { netid: 'student', isAdmin: false },
     { netid: 'otherstudent', isAdmin: false },
   ])

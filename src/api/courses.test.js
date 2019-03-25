@@ -51,6 +51,7 @@ describe('Courses API', () => {
       expect(res.body).toHaveProperty('staff')
       expect(res.body.staff).toHaveLength(1)
       expect(res.body.staff[0].netid).toBe('241staff')
+      expect(res.body.staff[0].name).toBe('241 Staff')
       expect(res.body.staff[0].id).toBe(4)
     })
 
