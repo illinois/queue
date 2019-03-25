@@ -7,6 +7,7 @@ with the current semantic version and the next changes should go under a **[Next
 
 ## [Next]
 
+* Allow course staff to access queue settings. ([@nwalters512](https://github.com/nwalters512) in [#239](https://github.com/illinois/queue/pull/239))
 * Fix user names not being shown on the course staff page. ([@nwalters512](https://github.com/nwalters512) in [#240](https://github.com/illinois/queue/pull/240))
 
 ## v1.0.0
