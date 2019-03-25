@@ -7,6 +7,10 @@ with the current semantic version and the next changes should go under a **[Next
 
 ## [Next]
 
+* Add debugging logs to help track down [#241](https://github.com/illinois/queue/issues/241). ([@nwalters512](https://github.com/nwalters512) in [#242](https://github.com/illinois/queue/pull/242)) 
+
+## v1.0.1
+
 * Allow course staff to access queue settings. ([@nwalters512](https://github.com/nwalters512) in [#239](https://github.com/illinois/queue/pull/239))
 * Fix user names not being shown on the course staff page. ([@nwalters512](https://github.com/nwalters512) in [#240](https://github.com/illinois/queue/pull/240))
 

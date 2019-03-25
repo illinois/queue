@@ -48,12 +48,19 @@ module.exports.addJwtCookie = (req, res, user) => {
 }
 
 module.exports.getUserFromJwt = async token => {
+  if (!token) {
+    return null
+  }
   try {
     const jwtData = jwt.verify(token, JWT_SECRET)
     const netid = jwtData.sub
     const user = await User.findOne({ where: { netid } })
     return user
   } catch (e) {
+    // This is probably a bit overzealous, and will log for cases like a token
+    // expiring.
+    // TODO remove once https://github.com/illinois/queue/issues/241 is fixed
+    console.error(e)
     return null
   }
 }

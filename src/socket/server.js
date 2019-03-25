@@ -179,10 +179,17 @@ module.exports = newIo => {
   // After this middleware, you can access the current user as
   // `socket.request.user`
   io.use(async (socket, next) => {
-    const user = await getUserFromJwt(socket.request.cookies.jwt)
-    // eslint-disable-next-line no-param-reassign
-    socket.request.user = user
-    next()
+    const jwtCookie = socket.request.cookies.jwt
+    const user = await getUserFromJwt(jwtCookie)
+    if (!user) {
+      console.error('failed to authenticate socket')
+      console.error(`jwt cookie present? ${!!jwtCookie}`)
+      next(new Error('Could not authenticate socket connection'))
+    } else {
+      // eslint-disable-next-line no-param-reassign
+      socket.request.user = user
+      next()
+    }
   })
 
   queueNamespace = io.of('/queue')
