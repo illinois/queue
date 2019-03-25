@@ -47,6 +47,11 @@ router.get(
       where: { id: courseId },
       include: includes,
     })).toJSON()
+    // This is a workaround to https://github.com/sequelize/sequelize/issues/10552
+    // TODO remove this once the issue is fixed in sequelize
+    course.staff = course.staff.map(user => {
+      return { name: user.preferredName || user.universityName, ...user }
+    })
 
     // It turns out that sequelize can only generate queries that include the
     // question count if we query for queues separately from the course
