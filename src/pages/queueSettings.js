@@ -84,6 +84,8 @@ QueueSettings.propTypes = {
     admissionControlEnabled: PropTypes.bool,
     admissionControlUrl: PropTypes.string,
   }),
+  isUserCourseStaffForQueue: PropTypes.bool.isRequired,
+  isUserAdmin: PropTypes.bool.isRequired,
   pageTransitionReadyToEnter: PropTypes.func,
 }
 
