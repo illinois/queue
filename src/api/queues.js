@@ -122,10 +122,6 @@ router.get(
             'dequeueTime',
             'askedById',
           ],
-          include: [
-            { model: User, as: 'askedBy' },
-            { model: User, as: 'answeredBy' },
-          ],
         },
       ],
       order: [[Question, 'id', 'ASC']],

@@ -24,16 +24,6 @@ const sendInitialState = (
       dequeueTime: null,
     },
     order: [['id', 'ASC']],
-    include: [
-      {
-        model: User,
-        as: 'askedBy',
-      },
-      {
-        model: User,
-        as: 'answeredBy',
-      },
-    ],
   })
 
   const activeStaffPromise = ActiveStaff.findAll({
@@ -79,7 +69,6 @@ const handleQuestionCreate = async (id, queueId) => {
 const handleQuestionUpdate = async (id, queueId) => {
   const question = await Question.findOne({
     where: { id },
-    include: [{ model: User, as: 'answeredBy' }],
   })
 
   // This is a workaround to https://github.com/sequelize/sequelize/issues/10552

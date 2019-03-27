@@ -268,9 +268,7 @@ router.post(
     modifyBeingAnswered(question, true)
     question.answeredById = res.locals.userAuthn.id
     await question.save()
-    await question.reload({
-      include: [{ model: User, as: 'answeredBy' }],
-    })
+    await question.reload()
 
     const questionData = question.toJSON()
     // This is a workaround to https://github.com/sequelize/sequelize/issues/10552
