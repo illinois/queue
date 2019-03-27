@@ -4,6 +4,18 @@ const app = require('../app')
 const testutil = require('../../test/util')
 const { requestAsUser } = require('../../test/util')
 
+let server
+let ioServer
+
+beforeAll(() => {
+  ;({ server, ioServer } = testutil.setupServer(app))
+})
+
+afterAll(() => {
+  server.close()
+  ioServer.close()
+})
+
 beforeEach(async () => {
   await testutil.setupTestDb()
   await testutil.populateTestDb()
@@ -265,27 +277,59 @@ describe('Queues API', () => {
 
   describe('POST /api/queues/1/staff/:userId', () => {
     test('succeeds for course staff to add self', async () => {
+      const sockets = testutil.createTestSockets('student', '225staff', 'admin')
+      sockets.forEach(socket => {
+        socket.emit('join', { queueId: 1 }, () => {})
+      })
       const request = await requestAsUser(app, '225staff')
       const res = await request.post('/api/queues/1/staff/2')
       expect(res.statusCode).toBe(202)
+
+      sockets.forEach(socket => {
+        expect(socket.events).toHaveLength(1)
+        expect(socket.events[0].event).toBe('activeStaff:create')
+        expect(socket.events[0].data).toHaveProperty('activeStaff')
+        expect(socket.events[0].data.activeStaff.userId).toBe(3)
+      })
+
       const request2 = await requestAsUser(app, 'admin')
       const res2 = await request2.get('/api/queues/1/staff')
       expect(res2.statusCode).toBe(200)
       expect(res2.body).toHaveLength(1)
       expect(res2.body[0].user.netid).toBe('225staff')
+      sockets.forEach(socket => {
+        socket.close()
+      })
     })
 
     test('succeeds if user is already active course staff', async () => {
+      const sockets = testutil.createTestSockets('student', '225staff', 'admin')
+      sockets.forEach(socket => {
+        socket.emit('join', { queueId: 1 }, () => {})
+      })
+
       const request = await requestAsUser(app, '225staff')
       const res = await request.post('/api/queues/1/staff/2')
       expect(res.statusCode).toBe(202)
+      sockets.forEach(socket => {
+        expect(socket.events).toHaveLength(1)
+        expect(socket.events[0].event).toBe('activeStaff:create')
+      })
+
       const res2 = await request.post('/api/queues/1/staff/2')
+      sockets.forEach(socket => {
+        expect(socket.events).toHaveLength(1) // Shouldn't receive another event
+      })
+
       expect(res2.statusCode).toBe(202)
       const request2 = await requestAsUser(app, 'admin')
       const res3 = await request2.get('/api/queues/1/staff')
       expect(res3.statusCode).toBe(200)
       expect(res3.body).toHaveLength(1)
       expect(res3.body[0].user.netid).toBe('225staff')
+      sockets.forEach(socket => {
+        socket.close()
+      })
     })
 
     test('succeeds for admin to add admin', async () => {

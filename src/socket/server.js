@@ -172,7 +172,7 @@ stream.on('data', data => {
   }
 })
 
-module.exports = newIo => {
+module.exports.init = newIo => {
   io = newIo
 
   io.use(parseSocketCookies())

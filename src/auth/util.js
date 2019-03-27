@@ -27,6 +27,10 @@ module.exports.createOrUpdateUser = async (req, netid) => {
   return user
 }
 
+module.exports.jwtSign = (tokenData, tokenOptions) => {
+  return jwt.sign(tokenData, JWT_SECRET, tokenOptions)
+}
+
 module.exports.addJwtCookie = (req, res, user) => {
   // We'll now create a token for this user. This will be set as a cookie
   // and sent back to us with any future requests.
@@ -36,7 +40,7 @@ module.exports.addJwtCookie = (req, res, user) => {
   const tokenOptions = {
     expiresIn: '28 days',
   }
-  const token = jwt.sign(tokenData, JWT_SECRET, tokenOptions)
+  const token = module.exports.jwtSign(tokenData, tokenOptions)
 
   res.cookie('jwt', token, {
     maxAge: 1000 * 60 * 60 * 24 * 28, // 28 days

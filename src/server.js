@@ -45,7 +45,7 @@ co(function*() {
 
   // Websocket stuff
   const socket = io(server, { path: `${baseUrl}/socket.io` })
-  serverSocket(socket)
+  serverSocket.init(socket)
 
   app.use(handler)
 

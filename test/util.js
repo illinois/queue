@@ -1,7 +1,15 @@
 /* eslint-env jest */
+const { Server } = require('http')
+const ioBack = require('socket.io')
+const io = require('socket.io-client')
+
 const session = require('supertest-session')
 const models = require('../src/models')
 const { ApiError } = require('../src/api/util')
+const { jwtSign } = require('../src/auth/util')
+const serverSocket = require('../src/socket/server')
+
+const TEST_SERVER_PORT = 3001
 
 module.exports.setupTestDb = async () => {
   await models.sequelize.sync()
@@ -118,4 +126,44 @@ module.exports.expectNextCalledWithApiError = (next, statusCode) => {
   const arg = next.mock.calls[0][0]
   expect(arg).toBeInstanceOf(ApiError)
   expect(arg.httpStatusCode).toEqual(statusCode)
+}
+
+module.exports.setupServer = app => {
+  const server = Server(app)
+  const ioServer = ioBack(server, {
+    path: '/socket.io',
+  })
+  serverSocket.init(ioServer)
+  server.listen(TEST_SERVER_PORT)
+  return {
+    server,
+    ioServer,
+  }
+}
+
+module.exports.createTestSocket = netid => {
+  const socket = io(`http://localhost:${TEST_SERVER_PORT}/queue`, {
+    path: '/socket.io',
+    reconnection: false,
+    transports: ['polling'], // only polling supports sending extra headers
+    forceNew: true,
+    transportOptions: {
+      polling: {
+        extraHeaders: {
+          Cookie: `jwt=${jwtSign({ sub: netid })}`,
+        },
+      },
+    },
+  })
+  socket.events = []
+  // Record all socket events
+  socket.onevent = packet => {
+    const [event, data] = packet.data
+    socket.events.push({ event, data })
+  }
+  return socket
+}
+
+module.exports.createTestSockets = (...netids) => {
+  return netids.map(netid => module.exports.createTestSocket(netid))
 }
