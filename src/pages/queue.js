@@ -32,6 +32,7 @@ import QueueMessageEnabledToggleContainer from '../containers/QueueMessageEnable
 import { isUserCourseStaffForQueue, isUserAdmin } from '../selectors'
 import ConfidentialQueuePanelContainer from '../containers/ConfidentialQueuePanelContainer'
 import SocketErrorModal from '../components/SocketErrorModal'
+import { resetSocketState } from '../actions/socket'
 
 class Queue extends React.Component {
   static getInitialProps({ isServer, store, query }) {
@@ -72,6 +73,7 @@ class Queue extends React.Component {
 
   componentWillUnmount() {
     disconnectFromQueue(this.props.queueId)
+    resetSocketState()
   }
 
   render() {
@@ -217,6 +219,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => ({
   fetchQueue: queueId => dispatch(fetchQueue(queueId)),
   fetchCourse: courseId => dispatch(fetchCourse(courseId)),
+  resetSocketState: () => dispatch(resetSocketState()),
   dispatch,
 })
 
