@@ -9,7 +9,6 @@ import {
   CardBody,
   Collapse,
   UncontrolledTooltip,
-  Alert,
 } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMapMarker, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
