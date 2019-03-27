@@ -122,7 +122,10 @@ router.get(
             'dequeueTime',
             'askedById',
           ],
-          include: [{ model: User, as: 'askedBy' }],
+          include: [
+            { model: User, as: 'askedBy' },
+            { model: User, as: 'answeredBy' },
+          ],
         },
       ],
       order: [[Question, 'id', 'ASC']],
@@ -130,6 +133,17 @@ router.get(
     // Convert to plain object that we can manipulate/filter/etc. before
     // sending back to the client
     const queue = queueResult.get({ plain: true })
+
+    // This is a workaround to https://github.com/sequelize/sequelize/issues/10552
+    // TODO remove this once the issue is fixed in sequelize
+    queue.questions = queue.questions.map(question => {
+      if (!question.beingAnswered) {
+        return question
+      }
+      const { answeredBy } = question
+      answeredBy.name = answeredBy.preferredName || answeredBy.universityName
+      return { ...question, answeredBy }
+    })
 
     // If this is a confidential queue, don't send any actual question data
     // back to the client, besides IDs

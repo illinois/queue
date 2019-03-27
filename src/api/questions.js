@@ -268,7 +268,19 @@ router.post(
     modifyBeingAnswered(question, true)
     question.answeredById = res.locals.userAuthn.id
     await question.save()
-    res.send(question)
+    await question.reload({
+      include: [{ model: User, as: 'answeredBy' }],
+    })
+
+    const questionData = question.toJSON()
+    // This is a workaround to https://github.com/sequelize/sequelize/issues/10552
+    // TODO remove this once the issue is fixed in sequelize
+    if (questionData.beingAnswered) {
+      const { answeredBy } = questionData
+      answeredBy.name = answeredBy.preferredName || answeredBy.universityName
+      questionData.answeredBy = answeredBy
+    }
+    res.send(questionData)
   })
 )
 
