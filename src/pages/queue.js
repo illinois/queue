@@ -9,6 +9,7 @@ import {
   CardBody,
   Collapse,
   UncontrolledTooltip,
+  Alert,
 } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMapMarker, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
@@ -30,6 +31,7 @@ import DeleteAllQuestionsButtonContainer from '../containers/DeleteAllQuestionsB
 import QueueMessageEnabledToggleContainer from '../containers/QueueMessageEnabledToggleContainer'
 import { isUserCourseStaffForQueue, isUserAdmin } from '../selectors'
 import ConfidentialQueuePanelContainer from '../containers/ConfidentialQueuePanelContainer'
+import SocketErrorModal from '../components/SocketErrorModal'
 
 class Queue extends React.Component {
   static getInitialProps({ isServer, store, query }) {
@@ -155,6 +157,10 @@ class Queue extends React.Component {
             <QuestionListContainer queueId={this.props.queueId} />
           </Col>
         </Row>
+        <SocketErrorModal
+          isOpen={!!this.props.socketError}
+          error={this.props.socketError}
+        />
       </Container>
     )
   }
@@ -183,12 +189,14 @@ Queue.propTypes = {
     name: PropTypes.string,
   }),
   pageTransitionReadyToEnter: PropTypes.func,
+  socketError: PropTypes.string,
 }
 
 Queue.defaultProps = {
   queue: null,
   course: null,
   pageTransitionReadyToEnter: null,
+  socketError: null,
 }
 
 const mapStateToProps = (state, ownProps) => {
@@ -202,6 +210,7 @@ const mapStateToProps = (state, ownProps) => {
     course,
     isUserCourseStaff: isUserCourseStaffForQueue(state, ownProps),
     isUserAdmin: isUserAdmin(state, ownProps),
+    socketError: state.socket.error,
   }
 }
 
