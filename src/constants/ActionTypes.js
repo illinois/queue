@@ -42,3 +42,8 @@ export const UPDATE_USER_PREFERRED_NAME = makeActionStrings(
 export const REPLACE_QUESTIONS = 'REPLACE_QUESTIONS'
 export const UPDATE_QUEUES = 'UPDATE_QUEUES'
 export const REPLACE_ACTIVE_STAFF = 'REPLACE_ACTIVE_STAFF'
+
+/* Actions for socket status */
+export const SET_SOCKET_STATUS = 'SET_SOCKET_STATUS'
+export const SET_SOCKET_ERROR = 'SET_SOCKET_ERROR'
+export const RESET_SOCKET_STATE = 'RESET_SOCKET_STATE'

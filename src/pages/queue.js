@@ -30,6 +30,8 @@ import DeleteAllQuestionsButtonContainer from '../containers/DeleteAllQuestionsB
 import QueueMessageEnabledToggleContainer from '../containers/QueueMessageEnabledToggleContainer'
 import { isUserCourseStaffForQueue, isUserAdmin } from '../selectors'
 import ConfidentialQueuePanelContainer from '../containers/ConfidentialQueuePanelContainer'
+import SocketErrorModal from '../components/SocketErrorModal'
+import { resetSocketState } from '../actions/socket'
 
 class Queue extends React.Component {
   static getInitialProps({ isServer, store, query }) {
@@ -70,6 +72,7 @@ class Queue extends React.Component {
 
   componentWillUnmount() {
     disconnectFromQueue(this.props.queueId)
+    resetSocketState()
   }
 
   render() {
@@ -155,6 +158,10 @@ class Queue extends React.Component {
             <QuestionListContainer queueId={this.props.queueId} />
           </Col>
         </Row>
+        <SocketErrorModal
+          isOpen={!!this.props.socketError}
+          error={this.props.socketError}
+        />
       </Container>
     )
   }
@@ -183,12 +190,14 @@ Queue.propTypes = {
     name: PropTypes.string,
   }),
   pageTransitionReadyToEnter: PropTypes.func,
+  socketError: PropTypes.string,
 }
 
 Queue.defaultProps = {
   queue: null,
   course: null,
   pageTransitionReadyToEnter: null,
+  socketError: null,
 }
 
 const mapStateToProps = (state, ownProps) => {
@@ -202,12 +211,14 @@ const mapStateToProps = (state, ownProps) => {
     course,
     isUserCourseStaff: isUserCourseStaffForQueue(state, ownProps),
     isUserAdmin: isUserAdmin(state, ownProps),
+    socketError: state.socket.error,
   }
 }
 
 const mapDispatchToProps = dispatch => ({
   fetchQueue: queueId => dispatch(fetchQueue(queueId)),
   fetchCourse: courseId => dispatch(fetchCourse(courseId)),
+  resetSocketState: () => dispatch(resetSocketState()),
   dispatch,
 })
 

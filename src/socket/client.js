@@ -13,6 +13,7 @@ import {
 import { replaceActiveStaff } from '../actions/activeStaff'
 import { normalizeActiveStaff } from '../reducers/normalize'
 import { baseUrl } from '../util'
+import { setSocketError } from '../actions/socket'
 
 const socketOpts = {
   path: `${baseUrl}/socket.io`,
@@ -54,6 +55,14 @@ export const connectToQueue = (dispatch, queueId) => {
       dispatch(replaceQuestions(queueId, questions))
       dispatch(replaceActiveStaff(queueId, activeStaff))
     })
+  })
+  socket.on('connect_failed', err => {
+    dispatch(setSocketError(err))
+    console.error(err)
+  })
+  socket.on('error', err => {
+    dispatch(setSocketError(err))
+    console.error(err)
   })
   socket.on('question:create', ({ question }) =>
     handleQuestionCreate(dispatch, queueId, question)
