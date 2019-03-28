@@ -6,9 +6,9 @@ When a new version is tagged, the changes since the last deploy should be labele
 with the current semantic version and the next changes should go under a **[Next]** header.
 
 ## [Next]
-* Fix staff names not showing up on answering badges. ([@james9909](https://github.com/james9909) in [#249](https://github.com/illinois/queue/pull/249))
 
-* Add user-facing warning about socket errors to help track down [#241](https://github.com/illinois/queue/issues/241). ([@nwalters512](https://github.com/nwalters512) in [#250](https://github.com/illinois/queue/pull/250))  
+* Add user-facing warning about socket errors to help track down [#241](https://github.com/illinois/queue/issues/241). ([@nwalters512](https://github.com/nwalters512) in [#250](https://github.com/illinois/queue/pull/250))
+* Fix staff names not showing up on answering badges. ([@james9909](https://github.com/james9909) in [#249](https://github.com/illinois/queue/pull/249))
 
 ## v1.0.2
 
