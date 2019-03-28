@@ -361,6 +361,7 @@ describe('Questions API', () => {
       expect(res.statusCode).toBe(200)
       expect(res.body).toHaveProperty('askedBy')
       expect(res.body.askedBy.netid).toBe('admin')
+      expect(res.body.answeredBy.name).toBe('Admin')
       expect(res.body.beingAnswered).toBe(true)
     })
 
@@ -370,6 +371,7 @@ describe('Questions API', () => {
       expect(res.statusCode).toBe(200)
       expect(res.body).toHaveProperty('askedBy')
       expect(res.body.askedBy.netid).toBe('admin')
+      expect(res.body.answeredBy.name).toBe('225 Staff')
       expect(res.body.beingAnswered).toBe(true)
     })
 

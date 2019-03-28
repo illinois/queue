@@ -37,6 +37,18 @@ const sendInitialState = (
   Promise.all([questionPromise, activeStaffPromise]).then(results => {
     const [questionsResult, activeStaff] = results
     let questions = questionsResult.map(q => q.get({ plain: true }))
+
+    // This is a workaround to https://github.com/sequelize/sequelize/issues/10552
+    // TODO remove this once the issue is fixed in sequelize
+    questions = questions.map(question => {
+      if (!question.beingAnswered) {
+        return question
+      }
+      const { answeredBy } = question
+      answeredBy.name = answeredBy.preferredName || answeredBy.universityName
+      return { ...question, answeredBy }
+    })
+
     if (!sendCompleteQuestionData) {
       questions = filterConfidentialQueueQuestionsForUser(userId, questions)
     }
@@ -55,7 +67,18 @@ const handleQuestionCreate = async (id, queueId) => {
 }
 
 const handleQuestionUpdate = async (id, queueId) => {
-  const question = await Question.findOne({ where: { id } })
+  const question = await Question.findOne({
+    where: { id },
+  })
+
+  // This is a workaround to https://github.com/sequelize/sequelize/issues/10552
+  // TODO remove this once the issue is fixed in sequelize
+  if (question.beingAnswered) {
+    const { answeredBy } = question
+    answeredBy.name = answeredBy.preferredName || answeredBy.universityName
+    question.answeredBy = answeredBy
+  }
+
   // Public confidential queues don't need to know about question updates
   // However, the user that *asked* the question should in fact get this update
   queueNamespace

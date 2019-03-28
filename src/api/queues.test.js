@@ -71,13 +71,21 @@ describe('Queues API', () => {
       const question = { name: 'a', location: 'b', topic: 'c' }
       const res2 = await request.post('/api/queues/2/questions').send(question)
       expect(res2.body.askedBy.netid).toBe('admin')
+      const questionId = res2.body.id
 
-      const res3 = await request.get('/api/queues/2')
-      expect(res3.body).toHaveProperty('questions')
-      expect(res3.body.questions).toHaveLength(1)
-      expect(res3.body.questions[0]).toHaveProperty('askedBy')
-      expect(res3.body.questions[0].askedBy.netid).toBe('admin')
-      includesPrivateAttributes(res3.body)
+      const res3 = await request.post(
+        `/api/queues/2/questions/${questionId}/answering`
+      )
+      expect(res3.body.answeredBy.name).toBe('Admin')
+
+      const res4 = await request.get('/api/queues/2')
+      expect(res4.body).toHaveProperty('questions')
+      expect(res4.body.questions).toHaveLength(1)
+      expect(res4.body.questions[0]).toHaveProperty('askedBy')
+      expect(res4.body.questions[0].askedBy.netid).toBe('admin')
+      expect(res4.body.questions[0]).toHaveProperty('answeredBy')
+      expect(res4.body.questions[0].answeredBy.name).toBe('Admin')
+      includesPrivateAttributes(res4.body)
     })
 
     test('succeeds for non-admin', async () => {
@@ -99,13 +107,21 @@ describe('Queues API', () => {
       const request2 = await requestAsUser(app, 'admin')
       const res2 = await request2.post('/api/queues/2/questions').send(question)
       expect(res2.body.askedBy.netid).toBe('admin')
+      const questionId = res2.body.id
 
-      const res3 = await request.get('/api/queues/2')
-      expect(res3.body).toHaveProperty('questions')
-      expect(res3.body.questions).toHaveLength(1)
-      expect(res3.body.questions[0]).toHaveProperty('askedBy')
-      expect(res3.body.questions[0].askedBy.netid).toBe('admin')
-      excludesPrivateAttributes(res3.body)
+      const res3 = await request2.post(
+        `/api/queues/2/questions/${questionId}/answering`
+      )
+      expect(res3.body.answeredBy.name).toBe('Admin')
+
+      const res4 = await request.get('/api/queues/2')
+      expect(res4.body).toHaveProperty('questions')
+      expect(res4.body.questions).toHaveLength(1)
+      expect(res4.body.questions[0]).toHaveProperty('askedBy')
+      expect(res4.body.questions[0].askedBy.netid).toBe('admin')
+      expect(res4.body.questions[0]).toHaveProperty('answeredBy')
+      expect(res4.body.questions[0].answeredBy.name).toBe('Admin')
+      excludesPrivateAttributes(res4.body)
     })
   })
 
