@@ -28,7 +28,7 @@ const AppContainer = props => {
         loadingClassNames="indicator"
         monkeyPatchScrolling
       >
-        {props.children}
+        <main id="main">{props.children}</main>
       </PageTransition>
       <Footer />
       <style global jsx>{`
