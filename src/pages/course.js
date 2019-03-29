@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Container, Row, Card, CardBody, Button } from 'reactstrap'
+import { Container, Card, CardBody, Button } from 'reactstrap'
 import Error from 'next/error'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

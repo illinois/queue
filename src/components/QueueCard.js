@@ -9,7 +9,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import classNames from 'classnames'
 
-import { Router, Link } from '../routes'
+import { Link } from '../routes'
 import ShowForCourseStaff from './ShowForCourseStaff'
 
 const QueueCard = ({ queue, courseName, open, ...rest }) => {
@@ -19,12 +19,6 @@ const QueueCard = ({ queue, courseName, open, ...rest }) => {
     questionCount !== 1 ? 's' : ''
   }`
   const locationText = location || 'No location specified'
-
-  const handleSettings = e => {
-    e.stopPropagation()
-    e.preventDefault()
-    Router.pushRoute('queueSettings', { id: queue.id })
-  }
 
   const title = courseName || queueName
   const accessibilityName = `${courseName} ${queueName}`
