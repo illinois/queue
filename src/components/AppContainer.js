@@ -19,6 +19,7 @@ const AppContainer = props => {
       <PageTransition
         timeout={TIMEOUT}
         classNames="page-transition"
+        tag="main"
         loadingComponent={<Loading />}
         loadingDelay={500}
         loadingTimeout={{
@@ -28,7 +29,7 @@ const AppContainer = props => {
         loadingClassNames="indicator"
         monkeyPatchScrolling
       >
-        <main id="main">{props.children}</main>
+        {props.children}
       </PageTransition>
       <Footer />
       <style global jsx>{`
