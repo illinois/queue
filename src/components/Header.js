@@ -75,7 +75,7 @@ class Header extends React.Component {
           <Fragment>
             <NavbarToggler onClick={() => this.toggle()} />
             <Collapse isOpen={this.state.isOpen} navbar>
-              <Nav navbar className="ml-auto">
+              <Nav navbar className="ml-auto" aria-label="Account tools">
                 <Link route="userSettings" passHref>
                   <NavLink
                     className="navbar-text mr-3"
