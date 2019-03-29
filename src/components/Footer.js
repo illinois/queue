@@ -4,12 +4,12 @@ import { faGithub } from '@fortawesome/free-brands-svg-icons'
 
 const Footer = () => (
   <Fragment>
-    <div className="footer p-3 bg-light d-flex justify-content-center text-muted">
+    <footer className="footer p-3 bg-light d-flex justify-content-center text-muted">
       <a href="https://github.com/illinois/queue" className="text-muted">
         <FontAwesomeIcon icon={faGithub} className="mr-2" />
         GitHub
       </a>
-    </div>
+    </footer>
     <style global jsx>{`
       .footer {
         position: absolute;
