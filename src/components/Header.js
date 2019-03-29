@@ -54,7 +54,7 @@ class Header extends React.Component {
     // login page
     const brandLink = user ? (
       <Link route="index" passHref>
-        <NavbarBrand>Queue@Illinois</NavbarBrand>
+        <NavbarBrand aria-label="Queue Home">Queue@Illinois</NavbarBrand>
       </Link>
     ) : (
       <NavbarBrand tag="span">Queue@Illinois</NavbarBrand>
@@ -62,11 +62,13 @@ class Header extends React.Component {
 
     return (
       <Navbar
+        tag="header"
         color="dark"
         dark
         className="mb-3 fixed-top"
         style={styles.navbar}
         expand="sm"
+        aria-label="Main navigation"
       >
         {brandLink}
         {user && (
@@ -75,7 +77,10 @@ class Header extends React.Component {
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav navbar className="ml-auto">
                 <Link route="userSettings" passHref>
-                  <NavLink className="navbar-text mr-3">
+                  <NavLink
+                    className="navbar-text mr-3"
+                    aria-label="User profile"
+                  >
                     <FontAwesomeIcon icon={faUser} className="mr-2" />
                     {userName}
                   </NavLink>
