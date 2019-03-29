@@ -126,20 +126,13 @@ class Course extends React.Component {
               </CardBody>
             </Card>
           )}
-          <Row className="equal-height mb-5">
-            <QueueCardListContainer queueIds={openQueueIds} openQueue />
-          </Row>
+          <QueueCardListContainer queueIds={openQueueIds} openQueue />
           <div className="d-flex flex-wrap align-items-center mb-4">
             <h2 className="d-inline-block mb-0 mt-3 mr-auto pr-3">
               Closed Queues
             </h2>
           </div>
-          <Row className="equal-height mb-5">
-            <QueueCardListContainer
-              queueIds={closedQueueIds}
-              openQueue={false}
-            />
-          </Row>
+          <QueueCardListContainer queueIds={closedQueueIds} openQueue={false} />
           <CourseShortCodeInfo course={this.props.course} />
         </Container>
         <style jsx>{`

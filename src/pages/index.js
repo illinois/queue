@@ -110,102 +110,78 @@ class Index extends React.Component {
       .map(queue => queue.id)
 
     return (
-      <Fragment>
-        <Container>
-          <DevWorkshopAd />
-          <div className="d-flex flex-wrap align-items-center mb-4">
-            <h1 className="display-4 d-inline-block mb-0 mt-3 mr-auto pr-3">
-              Open queues
-            </h1>
-            {this.props.showCreateQueueButton && (
-              <Button
-                color="primary"
-                className="mt-3"
-                onClick={() => this.showCreateQueuePanel(true)}
-              >
-                <FontAwesomeIcon icon={faPlus} className="mr-2" />
-                Create queue
-              </Button>
-            )}
-          </div>
-          {this.state.showCreateQueuePanel && (
-            <Card className="mb-4">
-              <CardBody>
-                <NewQueue
-                  showCourseSelector
-                  onCreateQueue={(queue, courseId) =>
-                    this.createQueue(queue, courseId)
-                  }
-                  onCancel={() => this.showCreateQueuePanel(false)}
-                />
-              </CardBody>
-            </Card>
+      <Container>
+        <DevWorkshopAd />
+        <div className="d-flex flex-wrap align-items-center mb-4">
+          <h1 className="display-4 d-inline-block mb-0 mt-3 mr-auto pr-3">
+            Open queues
+          </h1>
+          {this.props.showCreateQueueButton && (
+            <Button
+              color="primary"
+              className="mt-3"
+              onClick={() => this.showCreateQueuePanel(true)}
+            >
+              <FontAwesomeIcon icon={faPlus} className="mr-2" />
+              Create queue
+            </Button>
           )}
-          <Row className="equal-height mb-4">
-            <QueueCardListContainer
-              queueIds={openQueueIds}
-              showCourseName
-              openQueue
-            />
-          </Row>
-          <div className="d-flex flex-wrap align-items-center mb-4">
-            <h3 className="d-inline-block mb-0 mt-3 mr-auto pr-3">
-              Or, select a course
-            </h3>
-            <ShowForAdmin>
-              <Button
-                color="primary"
-                className="mt-3"
-                onClick={() => this.showCreateCoursePanel(true)}
-              >
-                <FontAwesomeIcon icon={faPlus} className="mr-2" />
-                Create course
-              </Button>
-            </ShowForAdmin>
-          </div>
-          {this.state.showCreateCoursePanel && (
-            <Card className="mb-4">
-              <CardBody>
-                <NewCourse
-                  onCreateCourse={course => this.createCourse(course)}
-                  onCancel={() => this.showCreateCoursePanel(false)}
-                />
-              </CardBody>
-            </Card>
-          )}
-          <div className="mb-1">{courseButtons}</div>
-          <div className="d-flex flex-wrap align-items-center mb-4">
-            <h1 className="display-4 d-inline-block mb-0 mt-3 mr-auto pr-3">
-              Closed queues
-            </h1>
-          </div>
-          <Row className="equal-height mb-4">
-            <QueueCardListContainer
-              queueIds={closedQueueIds}
-              showCourseName
-              openQueue={false}
-            />
-          </Row>
-        </Container>
-        <style global jsx>{`
-          .courses-card {
-            width: 100%;
-            max-width: 500px;
-            margin: auto;
-          }
-          .row.equal-height {
-            display: flex;
-            flex-wrap: wrap;
-          }
-          .row.equal-height > [class*='col-'] {
-            display: flex;
-            flex-direction: column;
-          }
-          .row.equal-height .card {
-            flex: 1;
-          }
-        `}</style>
-      </Fragment>
+        </div>
+        {this.state.showCreateQueuePanel && (
+          <Card className="mb-4">
+            <CardBody>
+              <NewQueue
+                showCourseSelector
+                onCreateQueue={(queue, courseId) =>
+                  this.createQueue(queue, courseId)
+                }
+                onCancel={() => this.showCreateQueuePanel(false)}
+              />
+            </CardBody>
+          </Card>
+        )}
+        <QueueCardListContainer
+          queueIds={openQueueIds}
+          showCourseName
+          openQueue
+        />
+        <div className="d-flex flex-wrap align-items-center mb-4">
+          <h3 className="d-inline-block mb-0 mt-3 mr-auto pr-3">
+            Or, select a course
+          </h3>
+          <ShowForAdmin>
+            <Button
+              color="primary"
+              className="mt-3"
+              onClick={() => this.showCreateCoursePanel(true)}
+            >
+              <FontAwesomeIcon icon={faPlus} className="mr-2" />
+              Create course
+            </Button>
+          </ShowForAdmin>
+        </div>
+        {this.state.showCreateCoursePanel && (
+          <Card className="mb-4">
+            <CardBody>
+              <NewCourse
+                onCreateCourse={course => this.createCourse(course)}
+                onCancel={() => this.showCreateCoursePanel(false)}
+              />
+            </CardBody>
+          </Card>
+        )}
+        <div className="mb-1">{courseButtons}</div>
+        <div className="d-flex flex-wrap align-items-center mb-4">
+          <h1 className="display-4 d-inline-block mb-0 mt-3 mr-auto pr-3">
+            Closed queues
+          </h1>
+        </div>
+        <QueueCardListContainer
+          queueIds={closedQueueIds}
+          showCourseName
+          openQueue={false}
+        />
+      </Container>
     )
   }
 }

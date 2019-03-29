@@ -7,8 +7,9 @@ import {
   faQuestionCircle,
   faEyeSlash,
 } from '@fortawesome/free-solid-svg-icons'
+import classNames from 'classnames'
 
-import { Router } from '../routes'
+import { Router, Link } from '../routes'
 import ShowForCourseStaff from './ShowForCourseStaff'
 
 const QueueCard = ({ queue, courseName, open, ...rest }) => {
@@ -26,11 +27,20 @@ const QueueCard = ({ queue, courseName, open, ...rest }) => {
   }
 
   const title = courseName || queueName
+  const accessibilityName = `${courseName} ${queueName}`
+  const cardAccessibilityLabel = `Queue for ${accessibilityName}`
+  const settingsAccessibilityLabel = `${accessibilityName} settings`
   const showQueueNameInBody = !!courseName
+
+  const cardClasses = classNames('queue-card', {
+    'bg-light': !open,
+  })
 
   return (
     <Card
-      className={open ? 'queue-card' : 'closed-queue-card bg-light'}
+      className={cardClasses}
+      role="link"
+      aria-label={cardAccessibilityLabel}
       {...rest}
     >
       <CardBody>
@@ -41,19 +51,20 @@ const QueueCard = ({ queue, courseName, open, ...rest }) => {
             )}
             {title}
           </span>
-          <div>
-            <ShowForCourseStaff courseId={queue.courseId}>
+          <ShowForCourseStaff courseId={queue.courseId}>
+            <Link passHref route="queueSettings" params={{ id: queue.id }}>
               <Button
+                tag="a"
+                role="link"
                 color="secondary"
                 size="sm"
+                aria-label={settingsAccessibilityLabel}
                 outline
-                onClick={handleSettings}
-                onKeyPress={handleSettings}
               >
                 Settings
               </Button>
-            </ShowForCourseStaff>
-          </div>
+            </Link>
+          </ShowForCourseStaff>
         </CardTitle>
         {showQueueNameInBody && (
           <CardSubtitle className="mb-2">
@@ -76,8 +87,7 @@ const QueueCard = ({ queue, courseName, open, ...rest }) => {
         </div>
       </CardBody>
       <style global jsx>{`
-        .queue-card,
-        .closed-queue-card {
+        .queue-card {
           transition: all 200ms;
           cursor: pointer;
         }
@@ -86,6 +96,11 @@ const QueueCard = ({ queue, courseName, open, ...rest }) => {
           box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2),
             0px 2px 2px 0px rgba(0, 0, 0, 0.14),
             0px 3px 1px -2px rgba(0, 0, 0, 0.12);
+        }
+        .queue-card:focus {
+          transform: none;
+          box-shadow: 0 0 0 0.25rem rgba(108, 117, 125, 0.5);
+          outline: none;
         }
       `}</style>
     </Card>
