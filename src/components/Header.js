@@ -52,12 +52,18 @@ class Header extends React.Component {
     // on the login page. If that's the case, disable the link to the homepage
     // so they can't cycle repeatedly back and forth between that and the
     // login page
+    const brandText = (
+      <>
+        <span style={{ textDecoration: 'line-through' }}>Queue</span>
+        Stack@Illinois
+      </>
+    )
     const brandLink = user ? (
       <Link route="index" passHref>
-        <NavbarBrand>Queue@Illinois</NavbarBrand>
+        <NavbarBrand>{brandText}</NavbarBrand>
       </Link>
     ) : (
-      <NavbarBrand tag="span">Queue@Illinois</NavbarBrand>
+      <NavbarBrand tag="span">{brandText}</NavbarBrand>
     )
 
     return (
