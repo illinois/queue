@@ -3,6 +3,7 @@ import React from 'react'
 import Document, { Head, Main, NextScript } from 'next/document'
 import flush from 'styled-jsx/server'
 import { dom } from '@fortawesome/fontawesome-svg-core'
+import moment from 'moment'
 
 import { baseUrl, isDev, isNow } from '../util'
 
@@ -27,6 +28,7 @@ export default class MyDocument extends Document {
     }
     const faviconPath = `${baseUrl}/static/favicon.ico`
     const manifestPath = `${baseUrl}/static/manifest.json`
+    const isAprilFools = moment().isBefore('2019-04-02 00:00:00.000-05')
     return (
       <html lang="en">
         <Head>
@@ -46,7 +48,7 @@ export default class MyDocument extends Document {
             crossOrigin="use-credentials"
             href={manifestPath}
           />
-          <title>Queue@Illinois</title>
+          <title>{isAprilFools ? 'Stack@Illinois' : 'Queue@Illinois'}</title>
           <style>{dom.css()}</style>
           <link rel="icon" href={faviconPath} type="image/png" />
           <script dangerouslySetInnerHTML={script} />

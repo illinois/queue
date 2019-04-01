@@ -20,6 +20,7 @@ import NewQueue from '../components/NewQueue'
 import ShowForAdmin from '../components/ShowForAdmin'
 import DevWorkshopAd from '../components/DevWorkshopAd'
 import QueueCardListContainer from '../containers/QueueCardListContainer'
+import StackRebrandingAlert from '../components/StackRebrandingAlert'
 
 class Index extends React.Component {
   static async getInitialProps({ store, isServer }) {
@@ -113,6 +114,7 @@ class Index extends React.Component {
       <Fragment>
         <Container>
           <DevWorkshopAd />
+          <StackRebrandingAlert />
           <div className="d-flex flex-wrap align-items-center mb-4">
             <h1 className="display-4 d-inline-block mb-0 mt-3 mr-auto pr-3">
               Open queues
