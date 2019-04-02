@@ -52,6 +52,7 @@ const QueueCard = ({ queue, courseName, open, ...rest }) => {
                 role="link"
                 color="secondary"
                 size="sm"
+                onClick={e => e.stopPropagation()}
                 aria-label={settingsAccessibilityLabel}
                 outline
               >
