@@ -161,6 +161,9 @@ const parseSocketCookies = () => {
 
 const stream = sequelizeStream(sequelize)
 stream.on('data', data => {
+  if (!queueNamespace) {
+    return
+  }
   const { event, instance } = data
   // Need to have isConfidential in  question?
   if (instance instanceof Question) {
