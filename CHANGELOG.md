@@ -8,6 +8,7 @@ with the current semantic version and the next changes should go under a **[Next
 ## [Next]
 
 * Fix logic for filtering confidential questions. ([@james9909](https://github.com/james9909) in [#257](https://github.com/illinois/queue/pull/257))
+* Remove unused style tag. ([@nwalters512](https://github.com/nwalters512) in [#259](https://github.com/illinois/queue/pull/259))
 
 ## v1.0.4
 
