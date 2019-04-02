@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Container, Row, Card, CardBody, Button } from 'reactstrap'
+import { Container, Card, CardBody, Button } from 'reactstrap'
 import Error from 'next/error'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -126,20 +126,13 @@ class Course extends React.Component {
               </CardBody>
             </Card>
           )}
-          <Row className="equal-height mb-5">
-            <QueueCardListContainer queueIds={openQueueIds} openQueue />
-          </Row>
+          <QueueCardListContainer queueIds={openQueueIds} openQueue />
           <div className="d-flex flex-wrap align-items-center mb-4">
             <h2 className="d-inline-block mb-0 mt-3 mr-auto pr-3">
               Closed Queues
             </h2>
           </div>
-          <Row className="equal-height mb-5">
-            <QueueCardListContainer
-              queueIds={closedQueueIds}
-              openQueue={false}
-            />
-          </Row>
+          <QueueCardListContainer queueIds={closedQueueIds} openQueue={false} />
           <CourseShortCodeInfo course={this.props.course} />
         </Container>
         <style jsx>{`

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
-import { Col, Card, CardBody } from 'reactstrap'
+import { Row, Col, Card, CardBody } from 'reactstrap'
 
 import { Router } from '../routes'
 
@@ -40,6 +40,7 @@ const QueueCardList = props => {
       md={{ size: 6 }}
       lg={{ size: 4 }}
       className="mb-3"
+      tag="li"
       {...rest}
     >
       {children}
@@ -54,13 +55,14 @@ const QueueCardList = props => {
 
     const handleQueueKeyPress = (e, id) => {
       if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault()
         handleQueueClick(id)
       }
     }
 
     props.queueIds.sort(queueSorter)
 
-    queues = props.queueIds.map(queueId => {
+    const queueCards = props.queueIds.map(queueId => {
       const queue = props.queues[queueId]
       const courseName = props.courses[queue.courseId].name
       return (
@@ -76,6 +78,11 @@ const QueueCardList = props => {
         </CardCol>
       )
     })
+    queues = (
+      <Row className="equal-height mb-5 queue-card-row" tag="ul">
+        {queueCards}
+      </Row>
+    )
   } else {
     queues = (
       <Col>
@@ -103,6 +110,9 @@ const QueueCardList = props => {
         }
         .row.equal-height .card {
           flex: 1;
+        }
+        .queue-card-row {
+          padding: 0;
         }
       `}</style>
     </Fragment>
