@@ -231,7 +231,7 @@ module.exports = newIo => {
           userAuthzPromise,
         ])
         const { courseId, isConfidential } = queue
-        const isStudent = !isUserStudent(userAuthz, courseId)
+        const isStudent = isUserStudent(userAuthz, courseId)
         let sendCompleteQuestionData = true
         if (isConfidential && isStudent) {
           // All users that shouldn't see confidential information are added

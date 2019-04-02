@@ -7,6 +7,12 @@ with the current semantic version and the next changes should go under a **[Next
 
 ## [Next]
 
+* Fix logic for filtering confidential questions. ([@james9909](https://github.com/james9909) in [#257](https://github.com/illinois/queue/pull/257))
+
+## v1.0.4
+
+* Rebrand to Stack@Illinois. ([@nwalters512](https://github.com/nwalters512) in [#256](https://github.com/illinois/queue/pull/256))
+
 ## v1.0.3
 
 * Add user-facing warning about socket errors to help track down [#241](https://github.com/illinois/queue/issues/241). ([@nwalters512](https://github.com/nwalters512) in [#250](https://github.com/illinois/queue/pull/250))

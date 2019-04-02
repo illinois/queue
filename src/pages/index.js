@@ -20,6 +20,7 @@ import NewQueue from '../components/NewQueue'
 import ShowForAdmin from '../components/ShowForAdmin'
 import DevWorkshopAd from '../components/DevWorkshopAd'
 import QueueCardListContainer from '../containers/QueueCardListContainer'
+import StackRebrandingAlert from '../components/StackRebrandingAlert'
 
 class Index extends React.Component {
   static async getInitialProps({ store, isServer }) {
