@@ -38,6 +38,29 @@ describe('Users API', () => {
     })
   })
 
+  describe('GET /api/users/admins', () => {
+    test('returns correct users for admin', async () => {
+      const request = await requestAsUser(app, 'dev')
+      const res = await request.get('/api/users/admins')
+      expect(res.statusCode).toBe(200)
+      expect(res.body).toHaveLength(2)
+      expect(res.body[0].netid).toBe('dev')
+      expect(res.body[1].netid).toBe('admin')
+    })
+
+    test('returns 403 for 225staff', async () => {
+      const request = await requestAsUser(app, '225staff')
+      const res = await request.get('/api/users/admins')
+      expect(res.statusCode).toBe(403)
+    })
+
+    test('returns 403 for student', async () => {
+      const request = await requestAsUser(app, 'student')
+      const res = await request.get('/api/users/admins')
+      expect(res.statusCode).toBe(403)
+    })
+  })
+
   describe('GET /api/users', () => {
     test('returns all users for admin', async () => {
       const request = await requestAsUser(app, 'admin')
