@@ -33,6 +33,20 @@ router.get(
   })
 )
 
+// Get a list of all admins
+router.get(
+  '/admins',
+  [requireAdmin, failIfErrors],
+  safeAsync(async (req, res, _next) => {
+    const users = await User.findAll({
+      where: {
+        isAdmin: true,
+      },
+    })
+    res.send(users)
+  })
+)
+
 // Updates the information for a given user
 router.patch(
   '/me',
