@@ -18,7 +18,10 @@ const syncLogout = e => {
 export default function(AuthedComponent, permissions) {
   class PageWithUser extends React.Component {
     static async getInitialProps(ctx) {
-      return AuthedComponent.getInitialProps(ctx)
+      if (AuthedComponent.getInitialProps) {
+        return AuthedComponent.getInitialProps(ctx)
+      }
+      return null
     }
 
     constructor(props) {

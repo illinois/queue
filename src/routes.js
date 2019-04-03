@@ -19,5 +19,7 @@ routes
   .add('courseStaff', withBaseUrl('/course/:id/staff'))
   .add('createQueue', withBaseUrl('/course/:courseId/queue/create'))
   .add('userSettings', withBaseUrl('/settings'))
+  .add('adminIndex', withBaseUrl('/admin'))
+  .add('courseRequests', withBaseUrl('/admin/courseRequests'))
 
 module.exports = routes
