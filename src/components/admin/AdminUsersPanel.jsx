@@ -26,6 +26,19 @@ const AdminUsersPanel = () => {
         setAdmins(err)
       })
   }, [])
+
+  let adminItems
+  if (admins.length > 0) {
+    adminItems = admins.map(admin => (
+      <ListGroupItem>{admin.netid}</ListGroupItem>
+    ))
+  } else {
+    adminItems = (
+      <ListGroupItem>
+        <span className="text-muted">There are no admins. Yikes.</span>
+      </ListGroupItem>
+    )
+  }
   return (
     <Card>
       <CardHeader>
@@ -33,11 +46,7 @@ const AdminUsersPanel = () => {
           Admin users
         </CardTitle>
       </CardHeader>
-      <ListGroup flush>
-        {admins.map(admin => (
-          <ListGroupItem>{admin.netid}</ListGroupItem>
-        ))}
-      </ListGroup>
+      <ListGroup flush>{adminItems}</ListGroup>
       <CardBody className="bg-light">
         <p>Search for users by NetID or name</p>
         <InputGroup>
