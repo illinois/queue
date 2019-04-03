@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import {
   Card,
@@ -23,9 +24,9 @@ import Loading from '../Loading'
 
 import 'react-bootstrap-typeahead/css/Typeahead.css'
 import 'react-bootstrap-typeahead/css/Typeahead-bs4.css'
-import AdminListItem from './AdminListItem'
+import RemoveableUserItem from '../RemoveableUserItem'
 
-const AdminUsersPanel = () => {
+const AdminUsersPanel = props => {
   const [admins, setAdmins] = useState([])
   const [adminsLoading, setAdminsLoading] = useState(true)
   const netidInput = useInput('')
@@ -41,7 +42,7 @@ const AdminUsersPanel = () => {
         setAdminsLoading(false)
       })
       .catch(err => {
-        setAdmins(err)
+        console.error(err)
       })
   }, [])
   useEffect(() => {
@@ -69,7 +70,9 @@ const AdminUsersPanel = () => {
           setUserSuggestionsLoading(false)
         })
       })
-      .catch(err => {})
+      .catch(err => {
+        console.error(err)
+      })
     return () => {
       source.cancel()
     }
@@ -79,6 +82,10 @@ const AdminUsersPanel = () => {
     const user = pendingAdmin[0]
     setPendingAdmin([])
     setAdmins([...admins, user])
+  }
+
+  const removeAdmin = userId => {
+    setAdmins(admins.filter(admin => admin.id !== userId))
   }
 
   let contents
@@ -91,7 +98,18 @@ const AdminUsersPanel = () => {
       </div>
     )
   } else if (admins.length > 0) {
-    contents = admins.map(admin => <AdminListItem key={admin.id} {...admin} />)
+    contents = admins.map(admin => {
+      // Don't allow users to remove themselves as admins
+      const showRemoveButton = admin.id !== props.user.id
+      return (
+        <RemoveableUserItem
+          key={admin.id}
+          onRemove={removeAdmin}
+          showRemoveButton={showRemoveButton}
+          {...admin}
+        />
+      )
+    })
   } else {
     contents = (
       <div>
@@ -156,6 +174,13 @@ const AdminUsersPanel = () => {
       </CardBody>
     </Card>
   )
+}
+
+AdminUsersPanel.propTypes = {
+  user: PropTypes.shape({
+    netid: PropTypes.string,
+    id: PropTypes.number,
+  }).isRequired,
 }
 
 export default AdminUsersPanel
