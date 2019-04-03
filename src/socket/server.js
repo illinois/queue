@@ -218,38 +218,44 @@ module.exports = newIo => {
   queueNamespace = io.of('/queue')
   queueNamespace.on('connection', socket => {
     socket.on('join', async (msg, callback) => {
-      if ('queueId' in msg) {
-        const { queueId } = msg
-        const queuePromise = Queue.findOne({
-          where: {
-            id: queueId,
-          },
-        })
-        const userAuthzPromise = getAuthzForUser(socket.request.user)
-        const [queue, userAuthz] = await Promise.all([
-          queuePromise,
-          userAuthzPromise,
-        ])
-        const { courseId, isConfidential } = queue
-        const isStudent = isUserStudent(userAuthz, courseId)
-        let sendCompleteQuestionData = true
-        if (isConfidential && isStudent) {
-          // All users that shouldn't see confidential information are added
-          // to a "public" version of the room that receives the minimum
-          // possible set of information
-          socket.join(`queue-${queueId}-public`)
-          // Users will also join a specific room for themselves so that they
-          // receive updates about questions being answered, etc.
-          socket.join(`queue-${queueId}-user-${socket.request.user.id}`)
-          sendCompleteQuestionData = false
-        } else {
-          // For non-confidential queues, this room will consider receiving all
-          // updates for all users. For confidential queues, only admins and
-          // course staff will be subscribed to this room
-          socket.join(`queue-${queueId}`)
+      try {
+        if ('queueId' in msg) {
+          const { queueId } = msg
+          const queuePromise = Queue.findOne({
+            where: {
+              id: queueId,
+            },
+          })
+          const userAuthzPromise = getAuthzForUser(socket.request.user)
+          const [queue, userAuthz] = await Promise.all([
+            queuePromise,
+            userAuthzPromise,
+          ])
+          const { courseId, isConfidential } = queue
+          const isStudent = isUserStudent(userAuthz, courseId)
+          let sendCompleteQuestionData = true
+          if (isConfidential && isStudent) {
+            // All users that shouldn't see confidential information are added
+            // to a "public" version of the room that receives the minimum
+            // possible set of information
+            socket.join(`queue-${queueId}-public`)
+            // Users will also join a specific room for themselves so that they
+            // receive updates about questions being answered, etc.
+            socket.join(`queue-${queueId}-user-${socket.request.user.id}`)
+            sendCompleteQuestionData = false
+          } else {
+            // For non-confidential queues, this room will consider receiving all
+            // updates for all users. For confidential queues, only admins and
+            // course staff will be subscribed to this room
+            socket.join(`queue-${queueId}`)
+          }
+          const { id: userId } = socket.request.user
+          sendInitialState(queueId, userId, sendCompleteQuestionData, callback)
         }
-        const { id: userId } = socket.request.user
-        sendInitialState(queueId, userId, sendCompleteQuestionData, callback)
+      } catch (err) {
+        logger.error('failed to initialize socket for message')
+        logger.error(err)
+        logger.error(msg)
       }
     })
   })
