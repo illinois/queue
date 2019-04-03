@@ -34,6 +34,7 @@ const AdminUsersPanel = props => {
   const [userSuggestions, setUserSuggestions] = useState([])
   const [userSuggestionsLoading, setUserSuggestionsLoading] = useState(false)
   const [pendingAdmin, setPendingAdmin] = useState([])
+
   useEffect(() => {
     axios
       .get('/api/users/admins')
@@ -45,6 +46,7 @@ const AdminUsersPanel = props => {
         console.error(err)
       })
   }, [])
+
   useEffect(() => {
     if (!netidQuery) {
       return () => {}
@@ -80,12 +82,22 @@ const AdminUsersPanel = props => {
 
   const addAdmin = () => {
     const user = pendingAdmin[0]
-    setPendingAdmin([])
-    setAdmins([...admins, user])
+    axios
+      .put(`/api/users/admins/${user.id}`)
+      .then(res => {
+        setPendingAdmin([])
+        setAdmins([...admins, res.data])
+      })
+      .catch(err => console.error(err))
   }
 
   const removeAdmin = userId => {
-    setAdmins(admins.filter(admin => admin.id !== userId))
+    axios
+      .delete(`/api/users/admins/${userId}`)
+      .then(() => {
+        setAdmins(admins.filter(admin => admin.id !== userId))
+      })
+      .catch(err => console.error(err))
   }
 
   let contents
@@ -136,9 +148,12 @@ const AdminUsersPanel = props => {
         </FlipMove>
       </ListGroup>
       <CardBody className="bg-light">
-        <FormText color="muted">Search for users by NetID</FormText>
+        <FormText color="muted" className="mb-2">
+          Search for users by NetID
+        </FormText>
         <InputGroup>
           <AsyncTypeahead
+            id="admin-search"
             isLoading={userSuggestionsLoading}
             options={userSuggestions}
             onSearch={() => {

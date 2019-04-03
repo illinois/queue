@@ -47,6 +47,36 @@ router.get(
   })
 )
 
+// Add the specified user to the list of admins
+router.put(
+  '/admins/:userId',
+  [requireAdmin, requireUser, failIfErrors],
+  safeAsync(async (req, res, _next) => {
+    const { user } = res.locals
+    if (user.isAdmin) {
+      res.status(204).send()
+      return
+    }
+    user.isAdmin = true
+    await user.save()
+    res.status(201).send(user)
+  })
+)
+
+// Remove the specified user from the list of admins
+router.delete(
+  '/admins/:userId',
+  [requireAdmin, requireUser, failIfErrors],
+  safeAsync(async (req, res, _next) => {
+    const { user } = res.locals
+    if (user.isAdmin) {
+      user.isAdmin = false
+      await user.save()
+    }
+    res.status(204).send()
+  })
+)
+
 // Updates the information for a given user
 router.patch(
   '/me',
