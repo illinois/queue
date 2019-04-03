@@ -21,7 +21,7 @@ import {
 
 import PageWithUser from '../components/PageWithUser'
 import AddStaff from '../components/AddStaff'
-import CourseStaffMember from '../components/CourseStaffMember'
+import RemoveableUserItem from '../components/RemoveableUserItem'
 
 class CourseStaff extends React.Component {
   static async getInitialProps({ isServer, store, query }) {
@@ -66,11 +66,9 @@ class CourseStaff extends React.Component {
       users = this.props.course.staff.map(id => {
         const user = this.props.users[id]
         return (
-          <CourseStaffMember
+          <RemoveableUserItem
             key={user.id}
-            removeCourseStaff={userId =>
-              this.props.removeCourseStaff(courseId, userId)
-            }
+            onRemove={userId => this.props.removeCourseStaff(courseId, userId)}
             {...user}
           />
         )
