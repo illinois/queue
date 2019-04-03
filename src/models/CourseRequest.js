@@ -4,6 +4,14 @@ module.exports = (sequelize, DataTypes) => {
     {},
     {
       name: DataTypes.STRING,
+      status: {
+        type: DataTypes.ENUM('submitted', 'accepted', 'rejected'),
+        defaultValue: 'submitted',
+      },
+      reviewerComment: {
+        type: DataTypes.STRING,
+        defaultValue: null,
+      },
     }
   )
 
