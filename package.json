@@ -51,6 +51,7 @@
     "pg": "^7.8.0",
     "prop-types": "^15.7.1",
     "react": "^16.8.1",
+    "react-bootstrap-typeahead": "^4.0.0-alpha.6",
     "react-dom": "^16.8.1",
     "react-flip-move": "^3.0.3",
     "react-fontawesome": "^1.6.1",
@@ -71,6 +72,7 @@
     "styled-jsx": "^3.2.1",
     "supertest-session": "^3.3.0",
     "umzug": "^2.2.0",
+    "use-debounce": "^1.1.1",
     "validator": "^10.11.0",
     "winston": "^3.2.1"
   },

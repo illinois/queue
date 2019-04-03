@@ -11,13 +11,17 @@ router.get(
   [requireAdmin, failIfErrors],
   safeAsync(async (req, res, next) => {
     const { q } = req.query
-    if (!q) {
+    if (q === null || q === undefined) {
       next(new ApiError(422, 'No query specified'))
       return
     }
     const users = await User.findAll({
       where: {
-        [Sequelize.Op.like]: `%${q}%`,
+        [Sequelize.Op.or]: {
+          netid: {
+            [Sequelize.Op.like]: `${q}%`,
+          },
+        },
       },
       limit: 10,
     })
