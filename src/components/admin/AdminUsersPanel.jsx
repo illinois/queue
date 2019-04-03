@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import ReactDOM from 'react-dom'
 import {
   Card,
   CardHeader,
@@ -57,14 +58,16 @@ const AdminUsersPanel = () => {
         cancelToken: source.token,
       })
       .then(res => {
-        setUserSuggestions(
-          res.data.filter(user => {
-            console.log('USER', user)
-            console.log('ADMINS', admins)
-            return admins.findIndex(admin => admin.netid === user.netid) === -1
-          })
-        )
-        setUserSuggestionsLoading(false)
+        ReactDOM.unstable_batchedUpdates(() => {
+          setUserSuggestions(
+            res.data.filter(user => {
+              return (
+                admins.findIndex(admin => admin.netid === user.netid) === -1
+              )
+            })
+          )
+          setUserSuggestionsLoading(false)
+        })
       })
       .catch(err => {})
     return () => {
@@ -74,8 +77,6 @@ const AdminUsersPanel = () => {
 
   const addAdmin = () => {
     const user = pendingAdmin[0]
-    console.log('adding adming!')
-    console.log(user)
     setPendingAdmin([])
     setAdmins([...admins, user])
   }
@@ -127,8 +128,8 @@ const AdminUsersPanel = () => {
             }}
             labelKey="netid"
             selected={pendingAdmin}
-            onChange={setPendingAdmin}
-            onInputChange={netidInput.setValue}
+            onChange={options => setPendingAdmin(options)}
+            onInputChange={value => netidInput.setValue(value)}
             minLength={1}
             useCache={false}
             renderMenuItemChildren={(option, typeaheadProps) => {
