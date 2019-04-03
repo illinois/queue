@@ -1,6 +1,6 @@
 const router = require('express').Router()
 
-const { requireUser, failIfErrors } = require('./util')
+const { requireUser, failIfErrors, ApiError } = require('./util')
 
 const { User, Course } = require('../models')
 
@@ -68,7 +68,13 @@ router.delete(
   '/admins/:userId',
   [requireAdmin, requireUser, failIfErrors],
   safeAsync(async (req, res, _next) => {
+    const { id } = res.locals.userAuthn
     const { user } = res.locals
+    // Prevent user from removing themselves as an admin
+    if (user.id === id) {
+      _next(new ApiError(403, 'You cannot remove yourself'))
+      return
+    }
     if (user.isAdmin) {
       user.isAdmin = false
       await user.save()

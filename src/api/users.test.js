@@ -4,12 +4,12 @@ const app = require('../app')
 const testutil = require('../../test/util')
 const { requestAsUser } = require('../../test/util')
 
-beforeAll(async () => {
+beforeEach(async () => {
   await testutil.setupTestDb()
   await testutil.populateTestDb()
 })
 
-afterAll(async () => {
+afterEach(async () => {
   await testutil.destroyTestDb()
 })
 
@@ -57,6 +57,55 @@ describe('Users API', () => {
     test('returns 403 for student', async () => {
       const request = await requestAsUser(app, 'student')
       const res = await request.get('/api/users/admins')
+      expect(res.statusCode).toBe(403)
+    })
+  })
+
+  describe('PUT /api/users/admins/:userId', () => {
+    test('succeeds for existing admin', async () => {
+      const request = await requestAsUser(app, 'dev')
+      // make "225staff" an admin
+      const res = await request.put('/api/users/admins/3')
+      expect(res.statusCode).toBe(201)
+      expect(res.body.isAdmin).toBe(true)
+    })
+
+    test('fails for non-admin', async () => {
+      const request = await requestAsUser(app, '241staff')
+      const res = await request.put('/api/users/admins/3')
+      expect(res.statusCode).toBe(403)
+    })
+
+    test('fails for student', async () => {
+      const request = await requestAsUser(app, 'student')
+      const res = await request.put('/api/users/admins/3')
+      expect(res.statusCode).toBe(403)
+    })
+  })
+
+  describe('DELETE /api/users/admins/:userId', () => {
+    test('succeeds for existing admin', async () => {
+      const request = await requestAsUser(app, 'dev')
+      // make "admin" not an admin
+      const res = await request.delete('/api/users/admins/2')
+      expect(res.statusCode).toBe(204)
+    })
+
+    test('fails for self', async () => {
+      const request = await requestAsUser(app, 'dev')
+      const res = await request.delete('/api/users/admins/1')
+      expect(res.statusCode).toBe(403)
+    })
+
+    test('fails for non-admin', async () => {
+      const request = await requestAsUser(app, '241staff')
+      const res = await request.delete('/api/users/admins/2')
+      expect(res.statusCode).toBe(403)
+    })
+
+    test('fails for student', async () => {
+      const request = await requestAsUser(app, 'student')
+      const res = await request.delete('/api/users/admins/2')
       expect(res.statusCode).toBe(403)
     })
   })
