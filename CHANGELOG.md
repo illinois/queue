@@ -10,6 +10,7 @@ with the current semantic version and the next changes should go under a **[Next
 * Fix logic for filtering confidential questions. ([@james9909](https://github.com/james9909) in [#257](https://github.com/illinois/queue/pull/257))
 * Add logging for new socket initialization error. ([@nwalters512](https://github.com/nwalters512) in [#258](https://github.com/illinois/queue/pull/258))
 * Remove unused style tag. ([@nwalters512](https://github.com/nwalters512) in [#259](https://github.com/illinois/queue/pull/259))
+* Fix active staff socket errors. ([@nwalters512](https://github.com/nwalters512) in [#262](https://github.com/illinois/queue/pull/262))
 
 ## v1.0.4
 
