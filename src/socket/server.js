@@ -1,6 +1,6 @@
-const sequelizeStream = require('sequelize-stream')
 const cookieParser = require('cookie-parser')
 
+const sequelizeStream = require('./sequelizeStream')
 const logger = require('../util/logger')
 const { sequelize, Question, User, ActiveStaff, Queue } = require('../models')
 const { getUserFromJwt, getAuthzForUser } = require('../auth/util')
@@ -57,8 +57,11 @@ const sendInitialState = (
   })
 }
 
-const handleQuestionCreate = async (id, queueId) => {
-  const question = await Question.findOne({ where: { id } })
+const handleQuestionCreate = async (id, queueId, options) => {
+  const question = await Question.findOne({
+    where: { id },
+    transaction: options.transaction,
+  })
   queueNamespace.to(`queue-${queueId}`).emit('question:create', { question })
   // Public confidential queues only need to learn that a question was added
   queueNamespace
@@ -66,9 +69,10 @@ const handleQuestionCreate = async (id, queueId) => {
     .emit('question:create', { question: { id } })
 }
 
-const handleQuestionUpdate = async (id, queueId) => {
+const handleQuestionUpdate = async (id, queueId, options) => {
   const question = await Question.findOne({
     where: { id },
+    transaction: options.transaction,
   })
 
   // This is a workaround to https://github.com/sequelize/sequelize/issues/10552
@@ -94,17 +98,17 @@ const handleQuestionDelete = (id, queueId) => {
     .emit('question:delete', { id })
 }
 
-const handleQuestionEvent = (event, instance) => {
+const handleQuestionEvent = (event, instance, options) => {
   switch (event) {
     case 'create':
-      handleQuestionCreate(instance.id, instance.queueId)
+      handleQuestionCreate(instance.id, instance.queueId, options)
       break
     case 'update':
       if (instance.dequeueTime !== null) {
         // Treat this as a delete
         handleQuestionDelete(instance.id, instance.queueId)
       } else {
-        handleQuestionUpdate(instance.id, instance.queueId)
+        handleQuestionUpdate(instance.id, instance.queueId, options)
       }
       break
     default:
@@ -112,11 +116,12 @@ const handleQuestionEvent = (event, instance) => {
   }
 }
 
-const handleActiveStaffCreate = instance => {
+const handleActiveStaffCreate = (instance, options) => {
   const { id } = instance
   ActiveStaff.findOne({
     where: { id },
     include: [User],
+    transaction: options.transaction,
   }).then(activeStaff => {
     // TODO remove once we can fix https://github.com/illinois/queue/issues/92
     if (activeStaff === null) {
@@ -140,13 +145,13 @@ const handleActiveStaffDelete = (id, queueId) => {
     .emit('activeStaff:delete', { id })
 }
 
-const handleActiveStaffEvent = (event, instance) => {
+const handleActiveStaffEvent = (event, instance, options) => {
   // Too lazy to do this correctly for now
   if (!('queueId' in instance)) return
 
   switch (event) {
     case 'create':
-      handleActiveStaffCreate(instance)
+      handleActiveStaffCreate(instance, options)
       break
     case 'update':
       handleActiveStaffDelete(instance.id, instance.queueId)
@@ -156,19 +161,21 @@ const handleActiveStaffEvent = (event, instance) => {
   }
 }
 
-const handleQueueUpdate = id => {
-  Queue.findOne({ where: { id } }).then(queue => {
-    queueNamespace
-      .to(`queue-${id}`)
-      .to(`queue-${id}-public`)
-      .emit('queue:update', { id, queue })
-  })
+const handleQueueUpdate = (id, options) => {
+  Queue.findOne({ where: { id }, transaction: options.transaction }).then(
+    queue => {
+      queueNamespace
+        .to(`queue-${id}`)
+        .to(`queue-${id}-public`)
+        .emit('queue:update', { id, queue })
+    }
+  )
 }
 
-const handleQueueEvent = (event, instance) => {
+const handleQueueEvent = (event, instance, options) => {
   switch (event) {
     case 'update':
-      handleQueueUpdate(instance.id)
+      handleQueueUpdate(instance.id, options)
       break
     default:
     // Do nothing
@@ -184,14 +191,14 @@ const parseSocketCookies = () => {
 
 const stream = sequelizeStream(sequelize)
 stream.on('data', data => {
-  const { event, instance } = data
+  const { event, instance, options } = data
   // Need to have isConfidential in  question?
   if (instance instanceof Question) {
-    handleQuestionEvent(event, instance)
+    handleQuestionEvent(event, instance, options)
   } else if (instance instanceof ActiveStaff) {
-    handleActiveStaffEvent(event, instance)
+    handleActiveStaffEvent(event, instance, options)
   } else if (instance instanceof Queue) {
-    handleQueueEvent(event, instance)
+    handleQueueEvent(event, instance, options)
   }
 })
 
