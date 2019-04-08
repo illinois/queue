@@ -64,6 +64,15 @@ export const connectToQueue = (dispatch, queueId) => {
     dispatch(setSocketError(err))
     console.error(err)
   })
+  socket.on('reconnect_attempt', attempt => {
+    console.log(`reconnection attempt ${attempt}`)
+  })
+  socket.on('reconnecting', () => {
+    console.log('reconnecting...')
+  })
+  socket.on('reconnect', attempt => {
+    console.log(`reconnection successful on attempt ${attempt}`)
+  })
   socket.on('question:create', ({ question }) =>
     handleQuestionCreate(dispatch, queueId, question)
   )
