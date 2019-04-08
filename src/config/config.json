@@ -4,12 +4,17 @@
     "storage": "./dev.sqlite",
     "logging": false
   },
+  "now": {
+    "dialect": "sqlite",
+    "storage": "./dev.sqlite",
+    "logging": false
+  },
   "test": {
     "dialect": "sqlite",
     "storage": ":memory:",
     "logging": false
   },
-  "now": {
+  "now2": {
     "dialect": "sqlite",
     "storage": "/tmp/now.sqlite",
     "logging": false

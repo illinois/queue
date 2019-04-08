@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { usePrevious } from 'react-hanger'
 import {
   Container,
   Row,
@@ -9,6 +10,7 @@ import {
   CardBody,
   Collapse,
   UncontrolledTooltip,
+  Alert,
 } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMapMarker, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
@@ -34,6 +36,12 @@ import ConfidentialQueuePanelContainer from '../containers/ConfidentialQueuePane
 import SocketErrorModal from '../components/SocketErrorModal'
 import { resetSocketState } from '../actions/socket'
 import { FETCH_QUEUE } from '../constants/ActionTypes'
+import {
+  SOCKET_CONNECTING,
+  SOCKET_CONNECTED,
+  SOCKET_ERROR,
+} from '../constants/socketStatus'
+import SocketStatusAlert from '../components/SocketStatusAlert'
 
 const buildQueueName = (queue, course) => {
   return (
@@ -54,6 +62,8 @@ const buildQueueName = (queue, course) => {
 
 const Queue = props => {
   const [queueLoading, setQueueLoading] = useState(true)
+  const [showSocketStatus, setShowSocketStatus] = useState(false)
+  const previousSocketStatus = usePrevious(props.socketStatus)
 
   useEffect(() => {
     setQueueLoading(true)
@@ -76,6 +86,29 @@ const Queue = props => {
     }
   }, [props.queueId])
 
+  useEffect(() => {
+    const NOOP = () => {}
+    if (previousSocketStatus === props.socketStatus) return NOOP
+    if (
+      previousSocketStatus === SOCKET_CONNECTED &&
+      props.socketStatus !== SOCKET_CONNECTED
+    ) {
+      setShowSocketStatus(true)
+      return NOOP
+    }
+    if (props.socketStatus === SOCKET_ERROR) {
+      setShowSocketStatus(true)
+      return NOOP
+    }
+    if (props.socketStatus === SOCKET_CONNECTED) {
+      const timeoutId = setTimeout(() => {
+        setShowSocketStatus(false)
+      }, 1000)
+      return () => clearTimeout(timeoutId)
+    }
+    return NOOP
+  }, [props.socketStatus])
+
   if (queueLoading) {
     return null
   }
@@ -90,6 +123,10 @@ const Queue = props => {
     props.isUserCourseStaff || props.isUserAdmin ? 'Students' : 'You'
   return (
     <Container fluid>
+      <SocketStatusAlert
+        status={props.socketStatus}
+        isOpen={showSocketStatus}
+      />
       <h3>
         {props.queue.isConfidential && (
           <span>
@@ -186,6 +223,7 @@ Queue.propTypes = {
     name: PropTypes.string,
   }),
   pageTransitionReadyToEnter: PropTypes.func,
+  socketStatus: PropTypes.string,
   socketError: PropTypes.string,
 }
 
@@ -193,6 +231,7 @@ Queue.defaultProps = {
   queue: null,
   course: null,
   pageTransitionReadyToEnter: null,
+  socketStatus: SOCKET_CONNECTING,
   socketError: null,
 }
 
@@ -204,6 +243,7 @@ const mapStateToProps = (state, ownProps) => {
     course,
     isUserCourseStaff: isUserCourseStaffForQueue(state, ownProps),
     isUserAdmin: isUserAdmin(state, ownProps),
+    socketStatus: state.socket.status,
     socketError: state.socket.error,
   }
 }
