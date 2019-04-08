@@ -61,7 +61,7 @@ export const connectToQueue = (dispatch, queueId) => {
     console.error(err)
   })
   socket.on('error', err => {
-    dispatch(setSocketError(err))
+    dispatch(setSocketError(err.message))
     console.error(err)
   })
   socket.on('reconnect_attempt', attempt => {
