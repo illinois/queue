@@ -238,6 +238,10 @@ module.exports = newIo => {
             queuePromise,
             userAuthzPromise,
           ])
+          if (!queue) {
+            // User tried to connect to a non-existent queue
+            return
+          }
           const { courseId, isConfidential } = queue
           const isStudent = isUserStudent(userAuthz, courseId)
           let sendCompleteQuestionData = true
