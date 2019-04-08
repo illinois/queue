@@ -59,6 +59,7 @@ class Queue extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    console.log('componentDidUpdate', prevProps, this.props)
     if (
       prevProps.isFetchingQueue &&
       !this.props.isFetchingQueue &&

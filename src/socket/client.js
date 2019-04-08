@@ -54,6 +54,8 @@ const handleQueueUpdate = (dispatch, queueId, queue) => {
 }
 
 export const connectToQueue = (dispatch, queueId) => {
+  console.log('connecting...')
+  console.log(new Error('tracing...'))
   const socket = io('/queue', socketOpts)
   queueSockets[queueId] = socket
   socket.on('connect', () => {
@@ -69,6 +71,7 @@ export const connectToQueue = (dispatch, queueId) => {
   })
   socket.on('error', err => {
     dispatch(setSocketStatus(SOCKET_ERROR))
+    dispatch(setSocketError(err))
     console.error(err)
   })
   socket.on('reconnecting', () => {
@@ -81,6 +84,10 @@ export const connectToQueue = (dispatch, queueId) => {
   })
   socket.on('disconnect', () => {
     console.log('disconnected')
+  })
+  socket.on('connect', () => {
+    dispatch(setSocketStatus(SOCKET_CONNECTED))
+    console.log('connect!')
   })
   socket.on('question:create', ({ question }) =>
     handleQuestionCreate(dispatch, queueId, question)
