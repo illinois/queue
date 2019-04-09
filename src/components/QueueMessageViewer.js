@@ -110,10 +110,14 @@ const QueueMessageViewer = props => {
 
 QueueMessageViewer.propTypes = {
   queueId: PropTypes.number.isRequired,
-  message: PropTypes.string.isRequired,
+  message: PropTypes.string,
   collapsible: PropTypes.bool.isRequired,
   editable: PropTypes.bool.isRequired,
   onEdit: PropTypes.func.isRequired,
+}
+
+QueueMessageViewer.defaultProps = {
+  message: '',
 }
 
 export default QueueMessageViewer
