@@ -104,7 +104,7 @@ router.get(
           },
           required: false,
           include: [User],
-          attributes: ['startTime', 'endTime'],
+          attributes: ['id', 'startTime', 'endTime'],
         },
         {
           model: Question,
