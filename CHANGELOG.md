@@ -11,6 +11,7 @@ with the current semantic version and the next changes should go under a **[Next
 * Add logging for new socket initialization error. ([@nwalters512](https://github.com/nwalters512) in [#258](https://github.com/illinois/queue/pull/258))
 * Remove unused style tag. ([@nwalters512](https://github.com/nwalters512) in [#259](https://github.com/illinois/queue/pull/259))
 * Fix active staff socket errors. ([@nwalters512](https://github.com/nwalters512) in [#262](https://github.com/illinois/queue/pull/262))
+* Rewrite queue setting page with hooks to fix bug with admission control "Update" button. ([@nwalters512](https://github.com/nwalters512) in [#264](https://github.com/illinois/queue/pull/264))
 
 ## v1.0.4
 
