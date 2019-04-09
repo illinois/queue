@@ -214,7 +214,7 @@ module.exports = newIo => {
     if (!user) {
       console.error('failed to authenticate socket')
       console.error(`jwt cookie present? ${!!jwtCookie}`)
-      next(new Error('Could not authenticate socket connection'))
+      next(new Error('Authentication error'))
     } else {
       // eslint-disable-next-line no-param-reassign
       socket.request.user = user

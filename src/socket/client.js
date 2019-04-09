@@ -15,10 +15,10 @@ import { normalizeActiveStaff } from '../reducers/normalize'
 import { baseUrl } from '../util'
 import { setSocketStatus } from '../actions/socket'
 import {
-  SOCKET_CONNECT_FAILED,
   SOCKET_ERROR,
   SOCKET_CONNECTING,
   SOCKET_CONNECTED,
+  SOCKET_AUTHENTICATION_ERROR,
 } from '../constants/socketStatus'
 
 const socketOpts = {
@@ -64,12 +64,12 @@ export const connectToQueue = (dispatch, queueId) => {
       dispatch(replaceActiveStaff(queueId, activeStaff))
     })
   })
-  socket.on('connect_failed', err => {
-    dispatch(setSocketStatus(SOCKET_CONNECT_FAILED))
-    console.error(err)
-  })
   socket.on('error', err => {
-    dispatch(setSocketStatus(SOCKET_ERROR))
+    if (err === 'Authentication error') {
+      dispatch(setSocketStatus(SOCKET_AUTHENTICATION_ERROR))
+    } else {
+      dispatch(setSocketStatus(SOCKET_ERROR))
+    }
     console.error(err)
   })
   socket.on('reconnecting', () => {

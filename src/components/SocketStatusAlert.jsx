@@ -5,6 +5,7 @@ import {
   SOCKET_CONNECTED,
   SOCKET_CONNECTING,
   SOCKET_ERROR,
+  SOCKET_STATUS_TYPES,
 } from '../constants/socketStatus'
 
 const SocketStatusAlert = ({ isOpen, status }) => {
@@ -37,7 +38,7 @@ const SocketStatusAlert = ({ isOpen, status }) => {
 
 SocketStatusAlert.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  status: PropTypes.oneOf([SOCKET_CONNECTED, SOCKET_CONNECTING, SOCKET_ERROR]),
+  status: PropTypes.oneOf(SOCKET_STATUS_TYPES),
 }
 
 SocketStatusAlert.defaultProps = {

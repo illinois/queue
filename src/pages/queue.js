@@ -39,7 +39,7 @@ import {
   SOCKET_CONNECTING,
   SOCKET_CONNECTED,
   SOCKET_ERROR,
-  SOCKET_CONNECT_FAILED,
+  SOCKET_AUTHENTICATION_ERROR,
 } from '../constants/socketStatus'
 import SocketStatusAlert from '../components/SocketStatusAlert'
 
@@ -96,7 +96,10 @@ const Queue = props => {
       setShowSocketStatus(true)
       return NOOP
     }
-    if (props.socketStatus === SOCKET_ERROR) {
+    if (
+      props.socketStatus === SOCKET_ERROR ||
+      props.socketStatus === SOCKET_AUTHENTICATION_ERROR
+    ) {
       setShowSocketStatus(true)
       return NOOP
     }
@@ -187,7 +190,9 @@ const Queue = props => {
           <QuestionListContainer queueId={props.queueId} />
         </Col>
       </Row>
-      <SocketErrorModal isOpen={props.socketStatus === SOCKET_CONNECT_FAILED} />
+      <SocketErrorModal
+        isOpen={props.socketStatus === SOCKET_AUTHENTICATION_ERROR}
+      />
     </Container>
   )
 }
