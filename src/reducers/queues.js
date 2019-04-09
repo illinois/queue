@@ -28,8 +28,6 @@ const defaultState = {
 
 function normalizeQueue(queue) {
   const normalized = normalizeQueueHelper(queue)
-  console.log('original queue', queue)
-  console.log('normalized queue', normalized)
   return normalized.entities.queues[normalized.result]
 }
 

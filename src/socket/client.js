@@ -13,7 +13,7 @@ import {
 import { replaceActiveStaff } from '../actions/activeStaff'
 import { normalizeActiveStaff } from '../reducers/normalize'
 import { baseUrl } from '../util'
-import { setSocketError, setSocketStatus } from '../actions/socket'
+import { setSocketStatus } from '../actions/socket'
 import {
   SOCKET_CONNECT_FAILED,
   SOCKET_ERROR,
@@ -59,36 +59,27 @@ export const connectToQueue = (dispatch, queueId) => {
   queueSockets[queueId] = socket
   socket.on('connect', () => {
     socket.emit('join', { queueId }, ({ questions, activeStaff }) => {
+      dispatch(setSocketStatus(SOCKET_CONNECTED))
       dispatch(replaceQuestions(queueId, questions))
       dispatch(replaceActiveStaff(queueId, activeStaff))
     })
   })
   socket.on('connect_failed', err => {
     dispatch(setSocketStatus(SOCKET_CONNECT_FAILED))
-    dispatch(setSocketError(err))
     console.error(err)
   })
   socket.on('error', err => {
     dispatch(setSocketStatus(SOCKET_ERROR))
-    dispatch(setSocketError(err))
     console.error(err)
-    console.error('error!')
   })
   socket.on('reconnecting', () => {
     dispatch(setSocketStatus(SOCKET_CONNECTING))
-    console.log('reconnecting...')
   })
-  socket.on('reconnect', attempt => {
+  socket.on('reconnect', () => {
     dispatch(setSocketStatus(SOCKET_CONNECTED))
-    console.log(`reconnection successful on attempt ${attempt}`)
   })
   socket.on('reconnect_failed', () => {
     dispatch(setSocketStatus(SOCKET_ERROR))
-    console.log('reconnect failed')
-  })
-  socket.on('connect', () => {
-    dispatch(setSocketStatus(SOCKET_CONNECTED))
-    console.log('connect!')
   })
   socket.on('question:create', ({ question }) =>
     handleQuestionCreate(dispatch, queueId, question)

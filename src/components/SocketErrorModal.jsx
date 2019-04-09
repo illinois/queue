@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal, ModalHeader, ModalBody } from 'reactstrap'
 
-const SocketErrorModal = ({ isOpen, toggle, error }) => (
-  <Modal isOpen={isOpen} toggle={toggle}>
+const SocketErrorModal = ({ isOpen }) => (
+  <Modal isOpen={isOpen}>
     <ModalHeader>Socket error</ModalHeader>
     <ModalBody>
       <p>
@@ -14,28 +14,12 @@ const SocketErrorModal = ({ isOpen, toggle, error }) => (
         developers can get in touch with you! In the meantime, please try
         accessing the Queue from another browser or device.
       </p>
-      {error && (
-        <>
-          <p>
-            <b>Please include the below message in your email:</b>
-          </p>
-          <pre>
-            <code>{error}</code>
-          </pre>
-        </>
-      )}
     </ModalBody>
   </Modal>
 )
 
 SocketErrorModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  toggle: PropTypes.func.isRequired,
-  error: PropTypes.string,
-}
-
-SocketErrorModal.defaultProps = {
-  error: null,
 }
 
 export default SocketErrorModal

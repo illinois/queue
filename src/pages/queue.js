@@ -10,7 +10,6 @@ import {
   CardBody,
   Collapse,
   UncontrolledTooltip,
-  Alert,
 } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMapMarker, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
@@ -40,6 +39,7 @@ import {
   SOCKET_CONNECTING,
   SOCKET_CONNECTED,
   SOCKET_ERROR,
+  SOCKET_CONNECT_FAILED,
 } from '../constants/socketStatus'
 import SocketStatusAlert from '../components/SocketStatusAlert'
 
@@ -187,10 +187,7 @@ const Queue = props => {
           <QuestionListContainer queueId={props.queueId} />
         </Col>
       </Row>
-      <SocketErrorModal
-        isOpen={!!props.socketError}
-        error={props.socketError}
-      />
+      <SocketErrorModal isOpen={props.socketStatus === SOCKET_CONNECT_FAILED} />
     </Container>
   )
 }
@@ -224,7 +221,6 @@ Queue.propTypes = {
   }),
   pageTransitionReadyToEnter: PropTypes.func,
   socketStatus: PropTypes.string,
-  socketError: PropTypes.string,
 }
 
 Queue.defaultProps = {
@@ -232,7 +228,6 @@ Queue.defaultProps = {
   course: null,
   pageTransitionReadyToEnter: null,
   socketStatus: SOCKET_CONNECTING,
-  socketError: null,
 }
 
 const mapStateToProps = (state, ownProps) => {
@@ -244,7 +239,6 @@ const mapStateToProps = (state, ownProps) => {
     isUserCourseStaff: isUserCourseStaffForQueue(state, ownProps),
     isUserAdmin: isUserAdmin(state, ownProps),
     socketStatus: state.socket.status,
-    socketError: state.socket.error,
   }
 }
 

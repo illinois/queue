@@ -58,17 +58,11 @@ class StaffSidebar extends React.Component {
     if (this.props.queue) {
       const { removeStaff, queue } = this.props
       const activeStaffIds = queue.activeStaff
-      console.log('queue', queue)
-      console.log('users', this.props.users)
-      console.log('active staff', this.props.activeStaff)
 
       if (activeStaffIds && activeStaffIds.length > 0) {
-        console.log(activeStaffIds)
         staffList = activeStaffIds.map(id => {
           const activeStaffId = id
           const user = this.props.users[this.props.activeStaff[id].user]
-          console.log('USER')
-          console.log(user)
           return (
             <div key={user.id}>
               <StaffMember

@@ -24,7 +24,6 @@ const SocketStatusAlert = ({ isOpen, status }) => {
       color = 'danger'
       break
     default:
-      // uhhhhhhhhhh
       return null
   }
   return (
@@ -38,8 +37,11 @@ const SocketStatusAlert = ({ isOpen, status }) => {
 
 SocketStatusAlert.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  status: PropTypes.oneOf([SOCKET_CONNECTED, SOCKET_CONNECTING, SOCKET_ERROR])
-    .isRequired,
+  status: PropTypes.oneOf([SOCKET_CONNECTED, SOCKET_CONNECTING, SOCKET_ERROR]),
+}
+
+SocketStatusAlert.defaultProps = {
+  status: null,
 }
 
 export default SocketStatusAlert
