@@ -95,6 +95,12 @@ const AdminUsersPanel = props => {
       .catch(err => console.error(err))
   }
 
+  const handleKeyDown = event => {
+    if (event.key === 'Enter' && pendingAdmin.length > 0) {
+      addAdmin()
+    }
+  }
+
   let contents
   if (adminsLoading) {
     contents = (
@@ -165,6 +171,7 @@ const AdminUsersPanel = props => {
             onInputChange={value => netidInput.setValue(value)}
             minLength={1}
             useCache={false}
+            onKeyDown={handleKeyDown}
             renderMenuItemChildren={(option, typeaheadProps) => {
               return (
                 <>
