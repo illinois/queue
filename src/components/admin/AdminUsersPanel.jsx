@@ -168,10 +168,12 @@ const AdminUsersPanel = props => {
             renderMenuItemChildren={(option, typeaheadProps) => {
               return (
                 <>
-                  {option.name && <h6>{option.name}</h6>}
                   <Highlighter search={typeaheadProps.text}>
                     {option.netid}
                   </Highlighter>
+                  {option.name && (
+                    <span className="text-muted ml-2">({option.name})</span>
+                  )}
                 </>
               )
             }}
