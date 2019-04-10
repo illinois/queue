@@ -13,10 +13,17 @@ import {
 import { replaceActiveStaff } from '../actions/activeStaff'
 import { normalizeActiveStaff } from '../reducers/normalize'
 import { baseUrl } from '../util'
-import { setSocketError } from '../actions/socket'
+import { setSocketStatus } from '../actions/socket'
+import {
+  SOCKET_ERROR,
+  SOCKET_CONNECTING,
+  SOCKET_CONNECTED,
+  SOCKET_AUTHENTICATION_ERROR,
+} from '../constants/socketStatus'
 
 const socketOpts = {
   path: `${baseUrl}/socket.io`,
+  reconnectionAttempts: 5,
 }
 
 const queueSockets = {}
@@ -52,17 +59,27 @@ export const connectToQueue = (dispatch, queueId) => {
   queueSockets[queueId] = socket
   socket.on('connect', () => {
     socket.emit('join', { queueId }, ({ questions, activeStaff }) => {
+      dispatch(setSocketStatus(SOCKET_CONNECTED))
       dispatch(replaceQuestions(queueId, questions))
       dispatch(replaceActiveStaff(queueId, activeStaff))
     })
   })
-  socket.on('connect_failed', err => {
-    dispatch(setSocketError(err))
+  socket.on('error', err => {
+    if (err === 'Authentication error') {
+      dispatch(setSocketStatus(SOCKET_AUTHENTICATION_ERROR))
+    } else {
+      dispatch(setSocketStatus(SOCKET_ERROR))
+    }
     console.error(err)
   })
-  socket.on('error', err => {
-    dispatch(setSocketError(err))
-    console.error(err)
+  socket.on('reconnecting', () => {
+    dispatch(setSocketStatus(SOCKET_CONNECTING))
+  })
+  socket.on('reconnect', () => {
+    dispatch(setSocketStatus(SOCKET_CONNECTED))
+  })
+  socket.on('reconnect_failed', () => {
+    dispatch(setSocketStatus(SOCKET_ERROR))
   })
   socket.on('question:create', ({ question }) =>
     handleQuestionCreate(dispatch, queueId, question)

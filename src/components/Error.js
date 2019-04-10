@@ -34,15 +34,20 @@ const styles = {
 
 const Error = props => {
   const { statusCode } = props
-  const title =
-    statusCode === 404
-      ? 'This page could not be found'
-      : HTTPStatus[statusCode] || 'An unexpected error has occurred'
+  const title = statusCode !== null ? statusCode : 'RIP'
+  let message
+  if (statusCode) {
+    message = HTTPStatus[statusCode] || 'RIP'
+  } else if (props.message) {
+    message = props.message || 'An unexpected error occurred'
+  } else {
+    message = 'An unexpected error occurred'
+  }
 
   return (
     <div style={styles.error}>
-      <h1 className="display-2">{statusCode || 'Error!'}</h1>
-      <h6>{title}.</h6>
+      <h1 className="display-2">{title}</h1>
+      <h6>{message}</h6>
       <Link passHref route="index">
         <Button outline color="secondary" tag="a" className="mt-4">
           Go to homepage
@@ -54,10 +59,12 @@ const Error = props => {
 
 Error.defaultProps = {
   statusCode: 404,
+  message: null,
 }
 
 Error.propTypes = {
   statusCode: PropTypes.number,
+  message: PropTypes.string,
 }
 
 export default Error

@@ -63,7 +63,6 @@ export function createQueue(courseId, queue) {
 /**
  * Fetch a queue
  */
-
 export const fetchQueueRequest = makeActionCreator(
   types.FETCH_QUEUE.REQUEST,
   'queueId'
@@ -88,7 +87,7 @@ export function fetchQueue(queueId) {
       .then(res => dispatch(fetchQueueSuccess(queueId, res.data)))
       .catch(err => {
         console.error(err)
-        dispatch(fetchQueueFailure(queueId, err))
+        return dispatch(fetchQueueFailure(queueId, err))
       })
   }
 }

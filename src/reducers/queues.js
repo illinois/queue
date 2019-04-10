@@ -100,8 +100,6 @@ function addActiveStaffToQueue(state, queueId, activeStaffId) {
   return newState
 }
 
-// We need to extract the queues from
-
 const queues = (state = defaultState, action) => {
   switch (action.type) {
     case FETCH_COURSE.REQUEST: {
@@ -117,8 +115,12 @@ const queues = (state = defaultState, action) => {
         queues: {
           ...state.queues,
           ...action.course.queues.reduce((obj, item) => {
+            const newQueue = normalizeQueue(item)
+            // We'll merge in any new info about this queue but keep existing
+            // info, since the queue models returned in course requests aren't
+            // complete
             // eslint-disable-next-line no-param-reassign
-            obj[item.id] = normalizeQueue(item)
+            obj[item.id] = { ...state.queues[item.id], ...newQueue }
             return obj
           }, {}),
         },

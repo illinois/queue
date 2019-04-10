@@ -58,6 +58,7 @@ class StaffSidebar extends React.Component {
     if (this.props.queue) {
       const { removeStaff, queue } = this.props
       const activeStaffIds = queue.activeStaff
+
       if (activeStaffIds && activeStaffIds.length > 0) {
         staffList = activeStaffIds.map(id => {
           const activeStaffId = id
