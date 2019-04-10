@@ -62,13 +62,8 @@ const AdminUsersPanel = props => {
       })
       .then(res => {
         ReactDOM.unstable_batchedUpdates(() => {
-          setUserSuggestions(
-            res.data.filter(user => {
-              return (
-                admins.findIndex(admin => admin.netid === user.netid) === -1
-              )
-            })
-          )
+          // The typeahead component will filter out existing admins
+          setUserSuggestions(res.data)
           setUserSuggestionsLoading(false)
         })
       })
@@ -158,6 +153,11 @@ const AdminUsersPanel = props => {
             options={userSuggestions}
             onSearch={() => {
               /* This is handled by hooks, but prop must be specified */
+            }}
+            filterBy={option => {
+              return (
+                admins.findIndex(admin => admin.netid === option.netid) === -1
+              )
             }}
             labelKey="netid"
             selected={pendingAdmin}
