@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const rewrite = require('express-urlrewrite')
 
+const logger = require('./util/logger')
 const { baseUrl, isDev, isNow } = require('./util')
 
 app.use(cookieParser())
@@ -49,12 +50,14 @@ app.use(
   require('./api/questions')
 )
 app.use(`${baseUrl}/api/queues/:queueId/questions`, require('./api/questions'))
+app.use(`${baseUrl}/api/autocomplete`, require('./api/autocomplete'))
 
 // Use special not-found/error middleware for the API
 app.use(`${baseUrl}/api`, (err, _req, res, _next) => {
   const statusCode = err.httpStatusCode || 500
   const message = err.message || 'Something went wrong'
   res.status(statusCode).json({ message })
+  logger.error(err)
 })
 app.use(`${baseUrl}/api`, (_req, res, _next) => {
   res.status(404).json({

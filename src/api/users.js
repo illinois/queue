@@ -1,6 +1,6 @@
 const router = require('express').Router()
 
-const { requireUser, failIfErrors } = require('./util')
+const { requireUser, failIfErrors, ApiError } = require('./util')
 
 const { User, Course } = require('../models')
 
@@ -30,6 +30,56 @@ router.get(
       ],
     })
     res.send(user)
+  })
+)
+
+// Get a list of all admins
+router.get(
+  '/admins',
+  [requireAdmin, failIfErrors],
+  safeAsync(async (req, res, _next) => {
+    const users = await User.findAll({
+      where: {
+        isAdmin: true,
+      },
+    })
+    res.send(users)
+  })
+)
+
+// Add the specified user to the list of admins
+router.put(
+  '/admins/:userId',
+  [requireAdmin, requireUser, failIfErrors],
+  safeAsync(async (req, res, _next) => {
+    const { user } = res.locals
+    if (user.isAdmin) {
+      res.status(204).send()
+      return
+    }
+    user.isAdmin = true
+    await user.save()
+    res.status(201).send(user)
+  })
+)
+
+// Remove the specified user from the list of admins
+router.delete(
+  '/admins/:userId',
+  [requireAdmin, requireUser, failIfErrors],
+  safeAsync(async (req, res, _next) => {
+    const { id } = res.locals.userAuthn
+    const { user } = res.locals
+    // Prevent user from removing themselves as an admin
+    if (user.id === id) {
+      _next(new ApiError(403, 'You cannot remove yourself'))
+      return
+    }
+    if (user.isAdmin) {
+      user.isAdmin = false
+      await user.save()
+    }
+    res.status(204).send()
   })
 )
 

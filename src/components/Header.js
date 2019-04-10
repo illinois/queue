@@ -85,6 +85,13 @@ class Header extends React.Component {
           <Fragment>
             <NavbarToggler onClick={() => this.toggle()} />
             <Collapse isOpen={this.state.isOpen} navbar>
+              {user.isAdmin && (
+                <Nav navbar>
+                  <Link route="adminIndex" passHref>
+                    <NavLink>Admin</NavLink>
+                  </Link>
+                </Nav>
+              )}
               <Nav navbar className="ml-auto">
                 <Link route="userSettings" passHref>
                   <NavLink className="navbar-text mr-3">

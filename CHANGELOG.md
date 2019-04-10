@@ -7,6 +7,8 @@ with the current semantic version and the next changes should go under a **[Next
 
 ## [Next]
 
+* Add page for admin management. ([@nwalters512](https://github.com/nwalters512) in [#265](https://github.com/illinois/queue/pull/265))
+
 ## v1.0.5
 
 * Fix logic for filtering confidential questions. ([@james9909](https://github.com/james9909) in [#257](https://github.com/illinois/queue/pull/257))

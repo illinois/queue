@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import { ListGroupItem, Button } from 'reactstrap'
 
 // eslint-disable-next-line react/prefer-stateless-function
-class CourseStaffMember extends React.Component {
+class RemoveableUserItem extends React.Component {
   render() {
     const netidClasses = classNames('text-muted', 'small', {
       'ml-2': this.props.name,
@@ -16,29 +16,32 @@ class CourseStaffMember extends React.Component {
           {this.props.name}
           <span className={netidClasses}>({this.props.netid})</span>
         </div>
-        <Button
-          color="danger"
-          tag="div"
-          className="ml-auto"
-          size="sm"
-          onClick={() => this.props.removeCourseStaff(this.props.id)}
-        >
-          Remove
-        </Button>
+        {this.props.showRemoveButton && (
+          <Button
+            color="danger"
+            className="ml-auto"
+            size="sm"
+            onClick={() => this.props.onRemove(this.props.id)}
+          >
+            Remove
+          </Button>
+        )}
       </ListGroupItem>
     )
   }
 }
 
-CourseStaffMember.defaultProps = {
+RemoveableUserItem.defaultProps = {
   name: null,
+  showRemoveButton: true,
 }
 
-CourseStaffMember.propTypes = {
+RemoveableUserItem.propTypes = {
   id: PropTypes.number.isRequired,
   netid: PropTypes.string.isRequired,
   name: PropTypes.string,
-  removeCourseStaff: PropTypes.func.isRequired,
+  showRemoveButton: PropTypes.bool,
+  onRemove: PropTypes.func.isRequired,
 }
 
-export default CourseStaffMember
+export default RemoveableUserItem
