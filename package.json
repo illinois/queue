@@ -69,7 +69,6 @@
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0",
     "styled-jsx": "^3.2.1",
-    "supertest-session": "^3.3.0",
     "umzug": "^2.2.0",
     "use-debounce": "^1.1.1",
     "validator": "^10.11.0",
@@ -99,7 +98,8 @@
     "react-test-renderer": "^16.8.1",
     "rimraf": "^2.6.3",
     "sqlite3": "^4.0.6",
-    "supertest": "^3.4.2"
+    "supertest": "^4.0.2",
+    "supertest-session": "^4.0.0"
   },
   "jest": {
     "setupFilesAfterEnv": [
