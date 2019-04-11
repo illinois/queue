@@ -70,7 +70,7 @@
     "socket.io-client": "^2.2.0",
     "styled-jsx": "^3.2.1",
     "umzug": "^2.2.0",
-    "use-debounce": "^1.1.1",
+    "use-debounce": "^1.1.2",
     "validator": "^10.11.0",
     "winston": "^3.2.1"
   },
