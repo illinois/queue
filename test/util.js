@@ -22,6 +22,18 @@ module.exports.createTestUsers = async () => {
   ])
 }
 
+module.exports.createTestTokens = async () => {
+  // Hash is for the following UUID:
+  // 3b0886cd-84ef-4702-8016-cfa7e20418f9
+  await models.AccessToken.bulkCreate([
+    {
+      name: 'Admin test token',
+      hash: '8b66be9b382176ea802a06d1be2a5e66d53fadf279a5fc40e17c6862c75d4e0f',
+      userId: 2,
+    },
+  ])
+}
+
 module.exports.createTestCourses = async () => {
   await models.Course.bulkCreate([{ name: 'CS225' }, { name: 'CS241' }])
 }
@@ -95,6 +107,7 @@ module.exports.createTestQuestions = async () => {
 
 module.exports.populateTestDb = async () => {
   await module.exports.createTestUsers()
+  await module.exports.createTestTokens()
   await module.exports.createTestCourses()
 
   const staff225 = await models.User.findOne({ where: { netid: '225staff' } })

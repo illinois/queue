@@ -72,6 +72,7 @@
     "supertest-session": "^3.3.0",
     "umzug": "^2.2.0",
     "use-debounce": "^1.1.1",
+    "uuid": "^3.3.2",
     "validator": "^10.11.0",
     "winston": "^3.2.1"
   },
