@@ -8,6 +8,7 @@ with the current semantic version and the next changes should go under a **[Next
 ## [Next]
 
 * Add page for admin management. ([@nwalters512](https://github.com/nwalters512) in [#265](https://github.com/illinois/queue/pull/265))
+* Update all dependencies. ([@nwalters512](https://github.com/nwalters512) in [#267](https://github.com/illinois/queue/pull/267))
 
 ## v1.0.5
 
