@@ -48,7 +48,7 @@
     "next-redux-wrapper": "^3.0.0-alpha.2",
     "next-routes": "^1.4.2",
     "normalizr": "^3.3.0",
-    "pg": "^7.8.0",
+    "pg": "^7.9.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-bootstrap-typeahead": "^4.0.0-alpha.9",
