@@ -54,6 +54,12 @@ describe('Tokens API', () => {
         hash: expect.any(String),
         lastUsedAt: null,
       })
+
+      // Check that we can now fetch the new token
+      const res2 = await request.get('/api/tokens')
+      expect(res2.statusCode).toBe(200)
+      expect(res2.body).toHaveLength(2)
+      expect(res2.body[1].name).toBe('my new token')
     })
   })
 })

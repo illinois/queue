@@ -51,6 +51,7 @@ router.post(
   '/',
   [check('name').isLength({ min: 1 }), failIfErrors],
   safeAsync(async (req, res, _next) => {
+    const { id: userId } = res.locals.userAuthn
     const data = matchedData(req)
     const token = uuidv4()
     const tokenHash = crypto
@@ -60,6 +61,7 @@ router.post(
     const newToken = await AccessToken.create({
       name: data.name,
       hash: tokenHash,
+      userId,
     })
     res.status(201).send({ ...newToken.toJSON(), token })
   })
