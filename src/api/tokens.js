@@ -15,7 +15,7 @@ const safeAsync = require('../middleware/safeAsync')
 // Get all tokens for authenticated user
 router.get(
   '/',
-  safeAsync(async (req, res, next) => {
+  safeAsync(async (req, res, _next) => {
     const { id } = res.locals.userAuthn
     const tokens = await AccessToken.findAll({
       where: {
@@ -50,7 +50,7 @@ router.get(
 router.post(
   '/',
   [check('name').isLength({ min: 1 }), failIfErrors],
-  safeAsync(async (req, res, next) => {
+  safeAsync(async (req, res, _next) => {
     const data = matchedData(req)
     const token = uuidv4()
     const tokenHash = crypto
@@ -61,8 +61,6 @@ router.post(
       name: data.name,
       hash: tokenHash,
     })
-    console.log(newToken)
-    console.log({ ...newToken })
     res.status(201).send({ ...newToken.toJSON(), token })
   })
 )
