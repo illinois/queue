@@ -18,7 +18,7 @@ import { connect } from 'react-redux'
 import { updateUserPreferredName as updateUserPreferredNameAction } from '../../actions/user'
 
 const UserProfilePanel = ({ user, updateUserPreferredName }) => {
-  const preferredNameInput = useInput(user.preferredName)
+  const preferredNameInput = useInput(user.preferredName || '')
   const changed = preferredNameInput.value !== user.preferredName
 
   const onSubmit = e => {
