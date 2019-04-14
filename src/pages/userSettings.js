@@ -4,6 +4,7 @@ import { Container } from 'reactstrap'
 
 import PageWithUser from '../components/PageWithUser'
 import UserProfilePanel from '../components/userSettings/UserProfilePanel'
+import AccessTokensPanel from '../components/userSettings/AccessTokensPanel'
 
 class UserSettings extends React.Component {
   static async getInitialProps() {
@@ -15,6 +16,7 @@ class UserSettings extends React.Component {
       <Container>
         <h1 className="display-4">User Settings</h1>
         <UserProfilePanel />
+        <AccessTokensPanel />
       </Container>
     )
   }
