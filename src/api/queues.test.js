@@ -95,6 +95,8 @@ describe('Queues API', () => {
       expect(res5.body.questions[0].askedBy.netid).toBe(username)
       expect(res5.body.questions[0]).toHaveProperty('answeredBy')
       expect(res5.body.questions[0].answeredBy.name).toBe('241 Staff')
+      expect(res5.body.questions[0].location).toBe('b')
+      expect(res5.body.questions[0].topic).toBe('c')
       expect(res5.body).toHaveProperty('activeStaff')
       expect(res5.body.activeStaff).toHaveLength(1)
       expect(res5.body.activeStaff[0]).toHaveProperty('id')
