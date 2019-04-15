@@ -54,12 +54,7 @@ const AccessTokenListGroupItem = props => {
                 innerRef={inputRef}
               />
               <InputGroupAddon addonType="append">
-                <Button
-                  color="secondary"
-                  outline
-                  className="bg-light"
-                  onClick={copyValue}
-                >
+                <Button color="secondary" onClick={copyValue}>
                   Copy
                 </Button>
               </InputGroupAddon>
