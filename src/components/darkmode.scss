@@ -33,4 +33,17 @@ body.darkmode {
     border: 1px solid #595959 !important;
     color: #fff !important;
   }
+
+  .nav-tabs .nav-link.active {
+    background-color: transparent !important;
+    color: inherit;
+    border-color: #444 #444 transparent !important;
+  }
+  .nav-link:hover {
+    border-color: #444 #444 #444 !important;
+  }
+
+  pre {
+    color: #fff !important;
+  }
 }

@@ -18,7 +18,7 @@ import {
 import ParrotMarkdown from './ParrotMarkdown'
 
 const QueueMessageEditor = props => {
-  const messageInput = useInput(props.message)
+  const messageInput = useInput(props.message || '')
   const messageInputRef = useRef(null)
   const [activeTab, setActiveTab] = useState('1')
   useEffect(() => {

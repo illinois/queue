@@ -78,7 +78,7 @@ const QueueCard = ({ queue, courseName, open, ...rest }) => {
       <style global jsx>{`
         .queue-card,
         .closed-queue-card {
-          transition: all 200ms;
+          transition: transform 200ms, box-shadow 200ms;
           cursor: pointer;
         }
         .queue-card:hover {
