@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       hash: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING(64),
         allowNull: false,
         unique: true,
       },

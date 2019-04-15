@@ -12,7 +12,7 @@ module.exports = {
         allowNull: false,
       },
       hash: {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING(64),
         allowNull: false,
         unique: true,
       },
