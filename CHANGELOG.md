@@ -7,6 +7,8 @@ with the current semantic version and the next changes should go under a **[Next
 
 ## [Next]
 
+* Fix sequelize stream handling of bulk updates. ([@nwalters512](https://github.com/nwalters512) in [#270](https://github.com/illinois/queue/pull/270))
+
 ## v1.1.0
 
 * Add page for admin management. ([@nwalters512](https://github.com/nwalters512) in [#265](https://github.com/illinois/queue/pull/265))
