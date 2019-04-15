@@ -14,9 +14,10 @@ import {
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { useBoolean } from 'react-hanger'
+import Switch from 'react-switch'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUser } from '@fortawesome/free-solid-svg-icons'
+import { faUser, faSun, faMoon } from '@fortawesome/free-solid-svg-icons'
 
 import { Link } from '../routes'
 import { withBaseUrl } from '../util'
@@ -92,7 +93,43 @@ const Header = props => {
                 </NavLink>
               </Link>
               <NavItem>
-                <Button onClick={theme.toggle}>Toggle theme</Button>
+                <div
+                  className="d-flex flex-row align-items-center mr-3"
+                  style={{ marginTop: '6px', marginBottom: '6px' }}
+                >
+                  <Switch
+                    onChange={checked => theme.set(checked)}
+                    checked={theme.darkMode}
+                    handleDiameter={16}
+                    height={28}
+                    offColor="#6c757d"
+                    onColor="#375a7f"
+                    offHandleColor="#fff"
+                    onHandleColor="#fff"
+                    checkedIcon={
+                      <FontAwesomeIcon
+                        icon={faMoon}
+                        color="white"
+                        style={{
+                          padding: '6px',
+                          width: '100%',
+                          height: '100%',
+                        }}
+                      />
+                    }
+                    uncheckedIcon={
+                      <FontAwesomeIcon
+                        icon={faSun}
+                        color="white"
+                        style={{
+                          padding: '6px',
+                          width: '100%',
+                          height: '100%',
+                        }}
+                      />
+                    }
+                  />
+                </div>
               </NavItem>
               <NavItem>
                 <Button

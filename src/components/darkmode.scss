@@ -1,6 +1,11 @@
+$page-background: #222;
+$dark-background: #343a40;
+$dark-border: #444;
+$text-color: #fff;
+
 body.darkmode {
-  color: #fff !important;
-  background-color: #222 !important;
+  color: $text-color !important;
+  background-color: $page-background !important;
 
   .text-muted {
     color: #999 !important;
@@ -8,7 +13,7 @@ body.darkmode {
 
   .card,
   .list-group-item {
-    background-color: #303030 !important;
+    background-color: $dark-background !important;
   }
 
   .card-header {
@@ -16,34 +21,38 @@ body.darkmode {
   }
 
   .modal-content {
-    background-color: #303030 !important;
-    border: 1px solid #444 !important;
+    background-color: $dark-background !important;
+    border: 1px solid $dark-border !important;
   }
 
   .modal-header {
-    border-bottom: 1px solid #444 !important;
+    border-bottom: 1px solid $dark-border !important;
   }
 
   .modal-footer {
-    border-top: 1px solid #444 !important;
+    border-top: 1px solid $dark-border !important;
   }
 
   .form-control {
     background-color: rgba(255, 255, 255, 0.09) !important;
     border: 1px solid #595959 !important;
-    color: #fff !important;
+    color: $text-color !important;
   }
 
   .nav-tabs .nav-link.active {
     background-color: transparent !important;
     color: inherit;
-    border-color: #444 #444 transparent !important;
+    border-color: $dark-border $dark-border transparent !important;
   }
   .nav-link:hover {
-    border-color: #444 #444 #444 !important;
+    border-color: $dark-border $dark-border $dark-border !important;
+  }
+
+  .bg-light {
+    background-color: $dark-background !important;
   }
 
   pre {
-    color: #fff !important;
+    color: $text-color !important;
   }
 }
