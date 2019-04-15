@@ -119,16 +119,17 @@ class Index extends React.Component {
             <h1 className="display-4 d-inline-block mb-0 mt-3 mr-auto pr-3">
               Open queues
             </h1>
-            {(this.props.showCreateQueueButton && !this.state.showCreateQueuePanel) && ( // check once create queue
-              <Button
-                color="primary"
-                className="mt-3"
-                onClick={() => this.showCreateQueuePanel(true)}
-              >
-                <FontAwesomeIcon icon={faPlus} className="mr-2" />
-                Create queue
-              </Button>
-            )}
+            {this.props.showCreateQueueButton &&
+              !this.state.showCreateQueuePanel && (
+                <Button
+                  color="primary"
+                  className="mt-3"
+                  onClick={() => this.showCreateQueuePanel(true)}
+                >
+                  <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                  Create queue
+                </Button>
+              )}
           </div>
           {this.state.showCreateQueuePanel && (
             <Card className="mb-4">
