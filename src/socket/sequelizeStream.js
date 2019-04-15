@@ -40,21 +40,18 @@ const addHooks = ({ sequelize, stream }) => {
     }
   )
 
-  sequelize.addHook(
-    'afterBulkUpdate',
-    `${PREFIX}-afterBulkUpdate`,
-    ({ model, attributes }, options) => {
-      // this is a hacky way to get the updated rows
-      const { updatedAt } = attributes
-      return model
-        .findAll({ where: { updatedAt }, transaction: options.transaction })
-        .then(instances => {
-          instances.forEach(instance => {
-            stream.push({ event: EVENTS.UPDATE, instance, options })
-          })
+  sequelize.addHook('afterBulkUpdate', `${PREFIX}-afterBulkUpdate`, options => {
+    // this is a hacky way to get the updated rows
+    const { model, attributes } = options
+    const { updatedAt } = attributes
+    return model
+      .findAll({ where: { updatedAt }, transaction: options.transaction })
+      .then(instances => {
+        instances.forEach(instance => {
+          stream.push({ event: EVENTS.UPDATE, instance, options })
         })
-    }
-  )
+      })
+  })
 
   sequelize.addHook(
     'afterDestroy',

@@ -7,6 +7,7 @@ with the current semantic version and the next changes should go under a **[Next
 
 ## [Next]
 
+* Fix sequelize stream handling of bulk updates. ([@nwalters512](https://github.com/nwalters512) in [#270](https://github.com/illinois/queue/pull/270))
 * Add personal access tokens for API access. ([@nwalters512](https://github.com/nwalters512) in [#271](https://github.com/illinois/queue/pull/271))
 
 ## v1.1.0
