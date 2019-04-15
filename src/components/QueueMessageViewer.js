@@ -16,6 +16,11 @@ const { className, styles } = css.resolve`
     background-color: #cce5ff;
   }
 
+  :global(body.darkmode) .bg-primary-light {
+    color: inherit !important;
+    background-color: #375a7f !important;
+  }
+
   .bg-primary-light .card-header {
     background-color: #acd5ff;
   }
@@ -25,7 +30,7 @@ const { className, styles } = css.resolve`
   }
 
   .queue-message-expand {
-    transition: all 400ms;
+    transition: transform 400ms;
   }
 
   .queue-message-expand.open {
