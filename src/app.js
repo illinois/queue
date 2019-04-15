@@ -31,7 +31,9 @@ if (isDev || isNow) {
 app.use(`${baseUrl}/login/shib`, require('./auth/shibboleth'))
 app.use(`${baseUrl}/logout`, require('./auth/logout'))
 
+app.use(`${baseUrl}/api`, require('./middleware/authnToken'))
 app.use(`${baseUrl}/api`, require('./middleware/authnJwt'))
+app.use(`${baseUrl}/api`, require('./middleware/checkAuthn'))
 app.use(`${baseUrl}/api`, require('./middleware/authz'))
 
 // This will selectively send redirects if the user needs to (re)authenticate
