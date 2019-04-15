@@ -11,6 +11,7 @@ import {
   Button,
   ListGroup,
   ListGroupItem,
+  FormText,
 } from 'reactstrap'
 import { useInput } from 'react-hanger'
 
@@ -43,6 +44,7 @@ const AccessTokensPanel = () => {
       })
       .then(res => {
         setTokens([...tokens, res.data])
+        newTokenNameInput.setValue('')
       })
       .catch(err => console.error(err))
   }
@@ -96,13 +98,17 @@ const AccessTokensPanel = () => {
       <CardBody className="bg-light">
         <Form autoComplete="off" onSubmit={createToken}>
           <InputGroup>
-            <Input {...newTokenNameInput.bindToInput} />
+            <Input
+              placeholder="Token name"
+              {...newTokenNameInput.bindToInput}
+            />
             <InputGroupAddon addonType="append">
               <Button color="primary" type="submit">
                 Add token
               </Button>
             </InputGroupAddon>
           </InputGroup>
+          <FormText>Each token needs an associated name.</FormText>
         </Form>
       </CardBody>
     </Card>
