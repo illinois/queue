@@ -52,8 +52,7 @@ export default class MyDocument extends Document {
           <link rel="icon" href={faviconPath} type="image/png" />
           <script dangerouslySetInnerHTML={script} />
         </Head>
-        <body className="custom_class">
-          {this.props.customValue}
+        <body>
           <Main />
           <NextScript />
         </body>

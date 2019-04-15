@@ -6,6 +6,7 @@ import { config } from '@fortawesome/fontawesome-svg-core'
 
 import makeStore from '../redux/makeStore'
 import AppContainer from '../components/AppContainer'
+import { ThemeProvider } from '../components/ThemeProvider'
 
 // We add this during SSR in _document.js
 config.autoAddCss = false
@@ -23,9 +24,11 @@ class MyApp extends React.Component {
     const { Component, pageProps, router, store } = this.props
     return (
       <Provider store={store}>
-        <AppContainer>
-          <Component {...pageProps} key={router.route} />
-        </AppContainer>
+        <ThemeProvider>
+          <AppContainer>
+            <Component {...pageProps} key={router.route} />
+          </AppContainer>
+        </ThemeProvider>
       </Provider>
     )
   }
