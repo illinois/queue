@@ -119,7 +119,7 @@ class Index extends React.Component {
             <h1 className="display-4 d-inline-block mb-0 mt-3 mr-auto pr-3">
               Open queues
             </h1>
-            {this.props.showCreateQueueButton && (
+            {(this.props.showCreateQueueButton && !this.state.showCreateQueuePanel) && ( // check once create queue
               <Button
                 color="primary"
                 className="mt-3"
