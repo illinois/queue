@@ -55,4 +55,20 @@ body.darkmode {
   pre {
     color: $text-color !important;
   }
+
+  .dropdown-menu {
+    color: $text-color !important;
+    background-color: $page-background !important;
+    border: 1px solod $dark-border !important;
+  }
+
+  .dropdown-item {
+    color: $text-color !important;
+
+    &:hover,
+    &:focus,
+    &.active {
+      color: $text-color !important;
+    }
+  }
 }
