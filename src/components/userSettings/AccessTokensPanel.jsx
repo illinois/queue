@@ -103,7 +103,11 @@ const AccessTokensPanel = () => {
               {...newTokenNameInput.bindToInput}
             />
             <InputGroupAddon addonType="append">
-              <Button color="primary" type="submit">
+              <Button
+                color="primary"
+                type="submit"
+                disabled={!newTokenNameInput.hasValue}
+              >
                 Add token
               </Button>
             </InputGroupAddon>
