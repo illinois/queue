@@ -69,7 +69,7 @@ const questions = (state = defaultState, action) => {
     case DELETE_ALL_QUESTIONS.SUCCESS: {
       return {
         ...state,
-        questions: [],
+        questions: {},
       }
     }
     case REPLACE_QUESTIONS: {
