@@ -3,6 +3,8 @@ const session = require('supertest-session')
 const models = require('../src/models')
 const { ApiError } = require('../src/api/util')
 
+module.exports.TOKEN = '3b0886cd-84ef-4702-8016-cfa7e20418f9'
+
 module.exports.setupTestDb = async () => {
   await models.sequelize.sync()
 }
