@@ -8,7 +8,7 @@ import { useTheme } from '../components/ThemeProvider'
 import { withBaseUrl, isDev, isNow } from '../util'
 
 const Login = props => {
-  useTheme().useDisableDarkModeEffect()
+  useTheme().useOverrideDarkModeEffect()
   const showDevModeLogin = isDev || isNow
   let shibUrl = withBaseUrl('/login/shib')
   const { redirect } = props

@@ -10,26 +10,30 @@ const useTheme = () => React.useContext(ThemeContext)
 
 const ThemeProvider = ({ children }) => {
   const [isDarkMode, setIsDarkMode] = useLocalStorage('darkmode', false)
-  const [isDarkModeDisabed, setIsDarkModeDisabled] = useState(false)
-  const useDisableDarkModeEffect = () =>
+  const [isDarkModeOverridden, setIsDarkModeOverridden] = useState(false)
+  const [darkModeOverriddenValue, setDarkModeOverriddenValue] = useState(false)
+  const useOverrideDarkModeEffect = value =>
     useEffect(() => {
-      setIsDarkModeDisabled(true)
+      setIsDarkModeOverridden(true)
+      setDarkModeOverriddenValue(value)
       return () => {
-        setIsDarkModeDisabled(false)
+        setIsDarkModeOverridden(false)
       }
     })
   const toggle = () => {
     setIsDarkMode(!isDarkMode)
   }
   useEffect(() => {
-    const darkMode = isDarkMode && !isDarkModeDisabed
+    const darkMode =
+      (!isDarkModeOverridden && isDarkMode) ||
+      (isDarkModeOverridden && darkModeOverriddenValue)
     const { classList } = document.getElementsByTagName('body')[0]
     if (darkMode) {
       classList.add('darkmode')
     } else {
       classList.remove('darkmode')
     }
-  }, [isDarkMode, isDarkModeDisabed])
+  }, [isDarkMode, isDarkModeOverridden, darkModeOverriddenValue])
   return (
     <>
       <ThemeContext.Provider
@@ -37,7 +41,7 @@ const ThemeProvider = ({ children }) => {
           darkMode: isDarkMode,
           toggle,
           set: setIsDarkMode,
-          useDisableDarkModeEffect,
+          useOverrideDarkModeEffect,
         }}
       >
         {children}
