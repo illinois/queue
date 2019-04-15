@@ -1,5 +1,5 @@
 /* eslint-env browser */
-import React, { useState, Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import {
   Navbar,
@@ -75,7 +75,7 @@ const Header = props => {
     >
       {brandLink}
       {user && (
-        <Fragment>
+        <>
           <NavbarToggler onClick={isOpen.toggle} />
           <Collapse isOpen={isOpen.value} navbar>
             {user.isAdmin && (
@@ -145,7 +145,7 @@ const Header = props => {
               </NavItem>
             </Nav>
           </Collapse>
-        </Fragment>
+        </>
       )}
     </Navbar>
   )

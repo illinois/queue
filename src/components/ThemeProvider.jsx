@@ -1,5 +1,6 @@
 /* eslint-env browser */
 import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import useLocalStorage from '@illinois/react-use-local-storage'
 
 import './darkmode.scss'
@@ -18,7 +19,6 @@ const ThemeProvider = ({ children }) => {
       }
     })
   const toggle = () => {
-    console.log('toggling themes!')
     setIsDarkMode(!isDarkMode)
   }
   useEffect(() => {
@@ -44,6 +44,14 @@ const ThemeProvider = ({ children }) => {
       </ThemeContext.Provider>
     </>
   )
+}
+
+ThemeProvider.propTypes = {
+  children: PropTypes.node,
+}
+
+ThemeProvider.defaultProps = {
+  children: null,
 }
 
 export { useTheme, ThemeProvider }
