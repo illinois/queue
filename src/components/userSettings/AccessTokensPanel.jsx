@@ -33,7 +33,7 @@ const AccessTokensPanel = () => {
       .catch(err => console.error(err))
   }, [])
 
-  const onCreateToken = e => {
+  const createToken = e => {
     e.preventDefault()
     axios
       .post('/api/tokens', {
@@ -41,6 +41,15 @@ const AccessTokensPanel = () => {
       })
       .then(res => {
         setTokens([...tokens, res.data])
+      })
+      .catch(err => console.error(err))
+  }
+
+  const deleteToken = tokenId => {
+    axios
+      .delete(`/api/tokens/${tokenId}`)
+      .then(() => {
+        setTokens(tokens.filter(token => token.id !== tokenId))
       })
       .catch(err => console.error(err))
   }
@@ -58,11 +67,15 @@ const AccessTokensPanel = () => {
       </CardBody>
       <ListGroup flush>
         {tokens.map(token => (
-          <AccessTokenListGroupItem {...token} />
+          <AccessTokenListGroupItem
+            {...token}
+            key={token.id}
+            onDeleteToken={() => deleteToken(token.id)}
+          />
         ))}
       </ListGroup>
       <CardBody className="bg-light">
-        <Form autoComplete="off" onSubmit={onCreateToken}>
+        <Form autoComplete="off" onSubmit={createToken}>
           <InputGroup>
             <Input {...newTokenNameInput.bindToInput} />
             <InputGroupAddon addonType="append">

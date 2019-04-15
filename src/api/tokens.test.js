@@ -62,4 +62,26 @@ describe('Tokens API', () => {
       expect(res2.body[1].name).toBe('my new token')
     })
   })
+
+  describe('DELETE /tokens', () => {
+    it('removes a token for a user', async () => {
+      const request = await requestAsUser(app, 'admin')
+      const res = await request.delete('/api/tokens/1')
+      expect(res.statusCode).toBe(204)
+
+      const res2 = await request.get('/api/tokens/1')
+      expect(res2.statusCode).toBe(404)
+    })
+
+    it('fails for user who does not own the token', async () => {
+      const request = await requestAsUser(app, 'student')
+      const res = await request.delete('/api/tokens/1')
+      expect(res.statusCode).toBe(404)
+
+      const adminRequest = await requestAsUser(app, 'admin')
+      const res2 = await adminRequest.get('/api/tokens/1')
+      expect(res2.statusCode).toBe(200)
+      expect(res2.body.name).toBe('Admin test token')
+    })
+  })
 })

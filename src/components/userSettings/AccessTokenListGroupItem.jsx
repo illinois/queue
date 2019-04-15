@@ -20,13 +20,25 @@ const AccessTokenListGroupItem = props => {
   }
 
   return (
-    <ListGroupItem key={props.id}>
-      <div className="d-flex flex-column">
-        <strong>{props.name}</strong>
-        <span className="text-muted">Created at {props.createdAt}</span>
-        <span className="text-muted">
-          {props.lastUsedAt ? `Last used at ${props.createdAt}` : 'Never used'}
-        </span>
+    <ListGroupItem>
+      <div className="d-flex flex-row align-items-center">
+        <div className="d-flex flex-column">
+          <strong>{props.name}</strong>
+          <span className="text-muted">Created at {props.createdAt}</span>
+          <span className="text-muted">
+            {props.lastUsedAt
+              ? `Last used at ${props.createdAt}`
+              : 'Never used'}
+          </span>
+        </div>
+        <Button
+          color="danger"
+          outline
+          className="ml-auto"
+          onClick={props.onDeleteToken}
+        >
+          Delete
+        </Button>
       </div>
       {props.token && (
         <>
@@ -60,11 +72,11 @@ const AccessTokenListGroupItem = props => {
 }
 
 AccessTokenListGroupItem.propTypes = {
-  id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   createdAt: PropTypes.string.isRequired,
   lastUsedAt: PropTypes.string,
   token: PropTypes.string,
+  onDeleteToken: PropTypes.func.isRequired,
 }
 
 AccessTokenListGroupItem.defaultProps = {

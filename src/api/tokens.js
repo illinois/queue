@@ -67,4 +67,25 @@ router.post(
   })
 )
 
+router.delete(
+  '/:tokenId',
+  safeAsync(async (req, res, _next) => {
+    const { id: userId } = res.locals.userAuthn
+    const { tokenId: id } = req.params
+
+    const deleteCount = await AccessToken.destroy({
+      where: {
+        id,
+        userId,
+      },
+    })
+
+    if (deleteCount === 0) {
+      res.status(404).send()
+    } else {
+      res.status(204).send()
+    }
+  })
+)
+
 module.exports = router
