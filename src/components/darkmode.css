@@ -3,13 +3,17 @@ body {
   background-color: #222 !important;
 }
 
+.text-muted {
+  color: #999 !important;
+}
+
 .card,
 .list-group-item {
   background-color: #303030 !important;
 }
 
-.text-muted {
-  color: #999 !important;
+.card-header {
+  background-color: rgba(0, 0, 0, 0.1) !important;
 }
 
 .modal-content {
