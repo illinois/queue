@@ -112,6 +112,7 @@ const Header = props => {
                         color="white"
                         style={{
                           padding: '6px',
+                          paddingLeft: '0px',
                           width: '100%',
                           height: '100%',
                         }}
@@ -123,6 +124,7 @@ const Header = props => {
                         color="white"
                         style={{
                           padding: '6px',
+                          paddingRight: '0px',
                           width: '100%',
                           height: '100%',
                         }}
