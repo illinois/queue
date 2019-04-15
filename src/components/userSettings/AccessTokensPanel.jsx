@@ -85,7 +85,7 @@ const AccessTokensPanel = () => {
     <Card className="mb-3">
       <CardHeader>
         <CardTitle tag="h5" className="mb-0">
-          Access Tokens
+          Access tokens
         </CardTitle>
       </CardHeader>
       <CardBody>
