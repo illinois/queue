@@ -27,7 +27,7 @@ const AccessTokenListGroupItem = props => {
           <span className="text-muted">Created at {props.createdAt}</span>
           <span className="text-muted">
             {props.lastUsedAt
-              ? `Last used at ${props.createdAt}`
+              ? `Last used at ${props.lastUsedAt}`
               : 'Never used'}
           </span>
         </div>

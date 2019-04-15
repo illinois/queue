@@ -48,5 +48,8 @@ module.exports = safeAsync(async (req, res, next) => {
 
   res.locals.userAuthn = tokenWithUser.user
 
+  tokenWithUser.lastUsedAt = new Date()
+  await tokenWithUser.save()
+
   next()
 })
