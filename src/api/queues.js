@@ -104,7 +104,6 @@ router.get(
           },
           required: false,
           include: [User],
-          attributes: ['id', 'startTime', 'endTime'],
         },
         {
           model: Question,
@@ -112,16 +111,6 @@ router.get(
           where: {
             dequeueTime: null,
           },
-          attributes: [
-            'id',
-            'name',
-            'topic',
-            'beingAnswered',
-            'answerStartTime',
-            'enqueueTime',
-            'dequeueTime',
-            'askedById',
-          ],
         },
       ],
       order: [[Question, 'id', 'ASC']],
