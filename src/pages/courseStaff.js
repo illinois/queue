@@ -10,7 +10,6 @@ import {
 } from 'reactstrap'
 import { connect } from 'react-redux'
 import FlipMove from 'react-flip-move'
-import Error from 'next/error'
 
 import {
   fetchCourse,
@@ -19,6 +18,7 @@ import {
   removeCourseStaff,
 } from '../actions/course'
 
+import Error from '../components/Error'
 import PageWithUser from '../components/PageWithUser'
 import AddStaff from '../components/AddStaff'
 import RemoveableUserItem from '../components/RemoveableUserItem'

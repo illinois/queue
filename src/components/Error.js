@@ -4,10 +4,10 @@ import HTTPStatus from 'http-status'
 import { Button } from 'reactstrap'
 
 import { Link } from '../routes'
+import { useTheme } from '../components/ThemeProvider'
 
 const styles = {
   error: {
-    color: '#000',
     textAlign: 'center',
     display: 'flex',
     flexDirection: 'column',
@@ -33,6 +33,7 @@ const styles = {
 }
 
 const Error = props => {
+  const { darkMode } = useTheme()
   const { statusCode } = props
   const title = statusCode !== null ? statusCode : 'RIP'
   let message
@@ -49,7 +50,12 @@ const Error = props => {
       <h1 className="display-2">{title}</h1>
       <h6>{message}</h6>
       <Link passHref route="index">
-        <Button outline color="secondary" tag="a" className="mt-4">
+        <Button
+          outline
+          color={darkMode ? 'light' : 'secondary'}
+          tag="a"
+          className="mt-4"
+        >
           Go to homepage
         </Button>
       </Link>
