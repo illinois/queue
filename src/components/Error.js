@@ -4,7 +4,7 @@ import HTTPStatus from 'http-status'
 import { Button } from 'reactstrap'
 
 import { Link } from '../routes'
-import { useTheme } from '../components/ThemeProvider'
+import { useTheme } from './ThemeProvider'
 
 const styles = {
   error: {

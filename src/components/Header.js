@@ -74,81 +74,81 @@ const Header = props => {
       expand="sm"
     >
       {brandLink}
-      {user && (
-        <>
-          <NavbarToggler onClick={isOpen.toggle} />
-          <Collapse isOpen={isOpen.value} navbar>
-            {user.isAdmin && (
-              <Nav navbar>
-                <Link route="adminIndex" passHref>
-                  <NavLink>Admin</NavLink>
-                </Link>
-              </Nav>
-            )}
-            <Nav navbar className="ml-auto">
-              <Link route="userSettings" passHref>
-                <NavLink className="navbar-text mr-3">
-                  <FontAwesomeIcon icon={faUser} className="mr-2" />
-                  {userName}
-                </NavLink>
-              </Link>
-              <NavItem>
-                <div
-                  className="d-flex flex-row align-items-center mr-3"
-                  style={{ marginTop: '6px', marginBottom: '6px' }}
-                >
-                  <Switch
-                    onChange={checked => theme.set(checked)}
-                    checked={theme.darkMode}
-                    handleDiameter={16}
-                    height={28}
-                    offColor="#6c757d"
-                    onColor="#375a7f"
-                    offHandleColor="#fff"
-                    onHandleColor="#fff"
-                    checkedIcon={
-                      <FontAwesomeIcon
-                        icon={faMoon}
-                        color="white"
-                        style={{
-                          padding: '6px',
-                          paddingLeft: '0px',
-                          width: '100%',
-                          height: '100%',
-                        }}
-                      />
-                    }
-                    uncheckedIcon={
-                      <FontAwesomeIcon
-                        icon={faSun}
-                        color="white"
-                        style={{
-                          padding: '6px',
-                          paddingRight: '0px',
-                          width: '100%',
-                          height: '100%',
-                        }}
-                      />
-                    }
+      <NavbarToggler onClick={isOpen.toggle} />
+      <Collapse isOpen={isOpen.value} navbar>
+        {user && user.isAdmin && (
+          <Nav navbar>
+            <Link route="adminIndex" passHref>
+              <NavLink>Admin</NavLink>
+            </Link>
+          </Nav>
+        )}
+        <Nav navbar className="ml-auto">
+          <NavItem>
+            <div
+              className={`d-flex flex-row align-items-center ${user && 'mr-3'}`}
+              style={{ marginTop: '6px', marginBottom: '6px' }}
+            >
+              <Switch
+                onChange={checked => theme.set(checked)}
+                checked={theme.darkMode}
+                handleDiameter={16}
+                height={28}
+                offColor="#6c757d"
+                onColor="#375a7f"
+                offHandleColor="#fff"
+                onHandleColor="#fff"
+                checkedIcon={
+                  <FontAwesomeIcon
+                    icon={faMoon}
+                    color="white"
+                    style={{
+                      padding: '6px',
+                      paddingLeft: '0px',
+                      width: '100%',
+                      height: '100%',
+                    }}
                   />
-                </div>
-              </NavItem>
-              <NavItem>
-                <Button
-                  color="secondary"
-                  type="button"
-                  onClick={() => {
-                    window.localStorage.setItem('logout', Date.now())
-                    window.location = logoutRoute
-                  }}
-                >
-                  Logout
-                </Button>
-              </NavItem>
-            </Nav>
-          </Collapse>
-        </>
-      )}
+                }
+                uncheckedIcon={
+                  <FontAwesomeIcon
+                    icon={faSun}
+                    color="white"
+                    style={{
+                      padding: '6px',
+                      paddingRight: '0px',
+                      width: '100%',
+                      height: '100%',
+                    }}
+                  />
+                }
+              />
+            </div>
+          </NavItem>
+          {user && (
+            <Link route="userSettings" passHref>
+              <NavLink className="navbar-text mr-3">
+                <FontAwesomeIcon icon={faUser} className="mr-2" />
+                {userName}
+              </NavLink>
+            </Link>
+          )}
+          {user && (
+            <NavItem>
+              <Button
+                color="secondary"
+                type="button"
+                onClick={() => {
+                  window.localStorage.setItem('logout', Date.now())
+                  window.location = logoutRoute
+                }}
+              >
+                Logout
+              </Button>
+            </NavItem>
+          )}
+        </Nav>
+      </Collapse>
     </Navbar>
   )
 }
