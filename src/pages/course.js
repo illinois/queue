@@ -164,7 +164,6 @@ const mapStateToProps = (state, ownProps) => {
   return {
     course,
     queues: mapObjectToArray(state.queues.queues),
-    isFetching: state.courses.isFetching || state.queues.isFetching,
   }
 }
 
