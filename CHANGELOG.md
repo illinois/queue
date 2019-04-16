@@ -9,6 +9,7 @@ with the current semantic version and the next changes should go under a **[Next
 
 * Fix sequelize stream handling of bulk updates. ([@nwalters512](https://github.com/nwalters512) in [#270](https://github.com/illinois/queue/pull/270))
 * Add dark mode. ([@nwalters512](https://github.com/nwalters512) in [#273](https://github.com/illinois/queue/pull/273))
+* Hides the create queue button when creating a queue and the create course button when creating a course. ([@jackieo5023](https://github.com/jackieo5023) in [#274](https://github.com/illinois/queue/pull/274))
 
 ## v1.1.0
 

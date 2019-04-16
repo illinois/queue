@@ -102,16 +102,18 @@ class Course extends React.Component {
             <h2 className="d-inline-block mb-0 mt-3 mr-auto pr-3">
               Open Queues
             </h2>
-            <ShowForCourseStaff courseId={this.props.courseId}>
-              <Button
-                color="primary"
-                className="mt-3"
-                onClick={() => this.showCreateQueuePanel(true)}
-              >
-                <FontAwesomeIcon icon={faPlus} className="mr-2" />
-                Create queue
-              </Button>
-            </ShowForCourseStaff>
+            {!this.state.showCreateQueuePanel && (
+              <ShowForCourseStaff courseId={this.props.courseId}>
+                <Button
+                  color="primary"
+                  className="mt-3"
+                  onClick={() => this.showCreateQueuePanel(true)}
+                >
+                  <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                  Create queue
+                </Button>
+              </ShowForCourseStaff>
+            )}
           </div>
           {this.state.showCreateQueuePanel && (
             <Card className="mb-4">

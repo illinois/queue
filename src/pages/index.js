@@ -119,16 +119,17 @@ class Index extends React.Component {
             <h1 className="display-4 d-inline-block mb-0 mt-3 mr-auto pr-3">
               Open queues
             </h1>
-            {this.props.showCreateQueueButton && (
-              <Button
-                color="primary"
-                className="mt-3"
-                onClick={() => this.showCreateQueuePanel(true)}
-              >
-                <FontAwesomeIcon icon={faPlus} className="mr-2" />
-                Create queue
-              </Button>
-            )}
+            {this.props.showCreateQueueButton &&
+              !this.state.showCreateQueuePanel && (
+                <Button
+                  color="primary"
+                  className="mt-3"
+                  onClick={() => this.showCreateQueuePanel(true)}
+                >
+                  <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                  Create queue
+                </Button>
+              )}
           </div>
           {this.state.showCreateQueuePanel && (
             <Card className="mb-4">
@@ -154,16 +155,18 @@ class Index extends React.Component {
             <h3 className="d-inline-block mb-0 mt-3 mr-auto pr-3">
               Or, select a course
             </h3>
-            <ShowForAdmin>
-              <Button
-                color="primary"
-                className="mt-3"
-                onClick={() => this.showCreateCoursePanel(true)}
-              >
-                <FontAwesomeIcon icon={faPlus} className="mr-2" />
-                Create course
-              </Button>
-            </ShowForAdmin>
+            {!this.state.showCreateCoursePanel && (
+              <ShowForAdmin>
+                <Button
+                  color="primary"
+                  className="mt-3"
+                  onClick={() => this.showCreateCoursePanel(true)}
+                >
+                  <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                  Create course
+                </Button>
+              </ShowForAdmin>
+            )}
           </div>
           {this.state.showCreateCoursePanel && (
             <Card className="mb-4">
