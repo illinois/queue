@@ -8,8 +8,12 @@ import './darkmode.scss'
 const ThemeContext = React.createContext()
 const useTheme = () => React.useContext(ThemeContext)
 
-const ThemeProvider = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useLocalStorage('darkmode', false)
+const ThemeProvider = ({ children, isDarkMode: isDarkModeInitial }) => {
+  const [isDarkMode, setIsDarkMode] = useLocalStorage(
+    'darkmode',
+    isDarkModeInitial
+  )
+  console.log('darkmode?', isDarkMode)
   const [isDarkModeOverridden, setIsDarkModeOverridden] = useState(false)
   const [darkModeOverriddenValue, setDarkModeOverriddenValue] = useState(false)
   const useOverrideDarkModeEffect = value =>
@@ -54,10 +58,12 @@ const ThemeProvider = ({ children }) => {
 
 ThemeProvider.propTypes = {
   children: PropTypes.node,
+  isDarkMode: PropTypes.bool,
 }
 
 ThemeProvider.defaultProps = {
   children: null,
+  isDarkMode: false,
 }
 
 export { useTheme, ThemeProvider }

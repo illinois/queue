@@ -65,6 +65,8 @@ const Header = props => {
     <NavbarBrand tag="span">{brandText}</NavbarBrand>
   )
 
+  console.log('header dark mode?', theme.darkMode)
+
   return (
     <Navbar
       color="dark"
