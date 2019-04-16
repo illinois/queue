@@ -13,7 +13,6 @@ const ThemeProvider = ({ children, isDarkMode: isDarkModeInitial }) => {
     'darkmode',
     isDarkModeInitial
   )
-  console.log('darkmode?', isDarkMode)
   const [isDarkModeOverridden, setIsDarkModeOverridden] = useState(false)
   const [darkModeOverriddenValue, setDarkModeOverriddenValue] = useState(false)
   const useOverrideDarkModeEffect = value =>
