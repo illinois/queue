@@ -9,6 +9,7 @@ with the current semantic version and the next changes should go under a **[Next
 
 * Fix sequelize stream handling of bulk updates. ([@nwalters512](https://github.com/nwalters512) in [#270](https://github.com/illinois/queue/pull/270))
 * Add dark mode. ([@nwalters512](https://github.com/nwalters512) in [#273](https://github.com/illinois/queue/pull/273))
+* Fix double rendering of the course page. ([@james9909](https://github.com/james9909) in [#275](https://github.com/illinois/queue/pull/275))
 
 ## v1.1.0
 
