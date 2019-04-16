@@ -4,12 +4,15 @@ import Document, { Head, Main, NextScript } from 'next/document'
 import flush from 'styled-jsx/server'
 import { dom } from '@fortawesome/fontawesome-svg-core'
 import moment from 'moment'
+import nextCookies from 'next-cookies'
 
 import { baseUrl, isDev, isNow } from '../util'
 
 export default class MyDocument extends Document {
-  static getInitialProps({ renderPage }) {
-    const { html, head, errorHtml, chunks } = renderPage()
+  static getInitialProps(ctx) {
+    const { html, head, errorHtml, chunks } = ctx.renderPage()
+    const { darkmode } = nextCookies(ctx)
+    const isDarkMode = darkmode === 'true'
     const styles = flush()
     return {
       html,
@@ -17,6 +20,7 @@ export default class MyDocument extends Document {
       errorHtml,
       chunks,
       styles,
+      isDarkMode,
     }
   }
 
@@ -52,7 +56,7 @@ export default class MyDocument extends Document {
           <link rel="icon" href={faviconPath} type="image/png" />
           <script dangerouslySetInnerHTML={script} />
         </Head>
-        <body>
+        <body className={this.props.isDarkMode ? 'darkmode' : null}>
           <Main />
           <NextScript />
         </body>

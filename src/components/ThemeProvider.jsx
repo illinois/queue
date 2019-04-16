@@ -33,6 +33,8 @@ const ThemeProvider = ({ children }) => {
     } else {
       classList.remove('darkmode')
     }
+    // Save as a cookie so we can correctly SSR with dark styles
+    document.cookie = `darkmode=${isDarkMode}`
   }, [isDarkMode, isDarkModeOverridden, darkModeOverriddenValue])
   return (
     <>
