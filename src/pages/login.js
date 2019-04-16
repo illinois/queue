@@ -8,7 +8,9 @@ import { useTheme } from '../components/ThemeProvider'
 import { withBaseUrl, isDev, isNow } from '../util'
 
 const Login = props => {
-  useTheme().useOverrideDarkModeEffect()
+  const { darkMode } = useTheme()
+  console.log(useTheme())
+  // useTheme().useOverrideDarkModeEffect()
   const showDevModeLogin = isDev || isNow
   let shibUrl = withBaseUrl('/login/shib')
   const { redirect } = props
@@ -19,7 +21,7 @@ const Login = props => {
     <Fragment>
       <div className="login-container">
         <h1 className="text-center display-4">Log in</h1>
-        <p className="text-center text-secondary">
+        <p className="text-center text-muted">
           Welcome back! Log in to access the Queue.
         </p>
         <Button className="btn-illinois" color={null} block href={shibUrl}>
@@ -40,7 +42,7 @@ const Login = props => {
           margin-left: auto;
           max-width: 500px;
           padding: 2rem;
-          background-color: white;
+          background-color: ${darkMode ? '#343a40' : 'white'};
         }
         @media (min-width: 576px) {
           body {
@@ -49,7 +51,7 @@ const Login = props => {
           .login-container {
             margin-top: 3rem;
             border-radius: 0.5rem;
-            border: 1px solid white;
+            border: 1px solid ${darkMode ? '#444' : 'white'};
             box-shadow: 0px 6px 33px 2px rgba(0,0,0,0.36);
           }
         }
