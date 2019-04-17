@@ -39,7 +39,7 @@ const QueueCard = ({ queue, courseName, open, ...rest }) => {
           <div>
             <ShowForCourseStaff courseId={queue.courseId}>
               <Link passHref route="queueSettings" params={{ id: queue.id }}>
-                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                {/* eslint-disable-next-line */}
                 <a className="p-1" onClick={e => e.stopPropagation()}>
                   <span className="sr-only">Queue settings</span>
                   <FontAwesomeIcon icon={faCog} size="lg" />
