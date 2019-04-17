@@ -4,8 +4,36 @@ $dark-border: #444;
 $text-color: #fff;
 $tab-border: rgba(0, 0, 0, 0.25);
 
+$primary: #2c7be5;
+$secondary: #6e84a3;
+$success: #00d97e;
+$info: #39afd1;
+$warning: #f6c343;
+$danger: #e63757;
+$dark: #222;
+
+$theme-colors: () !default;
+$theme-colors: map-merge(
+  (
+    'primary': $primary,
+    'secondary': $secondary,
+    'success': $success,
+    'info': $info,
+    'warning': $warning,
+    'danger': $danger,
+    'dark': $dark-background,
+  ),
+  $theme-colors
+);
+
+@function border($color) {
+  @return darken($color, 7.5%);
+}
+
 $color-primary: #2c7be5;
 $color-primary-border: #2c7be5;
+$color-primary-hover: #1a68d1;
+$color-primary-hover-border: #1862c6;
 
 $color-success: #00d97e !important;
 $color-success-border: #00d97e !important;
@@ -25,7 +53,7 @@ body.darkmode {
   a {
     color: $color-primary;
     &:hover {
-      color: darken($color-primary, 10%);
+      color: darken($color-primary, 7.5%);
     }
   }
 
@@ -35,53 +63,56 @@ body.darkmode {
 
   /* Alerts */
 
-  .alert-success {
-    color: $page-background !important;
-    background-color: $color-success !important;
-    border-color: $color-success-border !important;
+  @each $color, $value in $theme-colors {
+    .alert-#{$color} {
+      color: $page-background !important;
+      background-color: $value !important;
+      border-color: border($value) !important;
+    }
   }
 
-  .alert-warning {
-    color: $page-background;
-    background-color: $color-warning !important;
-    border-color: $color-warning-border !important;
-  }
+  /* Badges */
 
-  .alert-danger {
-    color: $text-color !important;
-    background-color: $color-danger !important;
-    border-color: $color-danger-border !important;
+  @each $color, $value in $theme-colors {
+    .badge-#{$color} {
+      color: $text-color !important;
+      background-color: $value !important;
+    }
   }
 
   /* Buttons */
 
-  .btn-primary {
-    color: $text-color !important;
-    background-color: $color-primary !important;
-    border-color: $color-primary-border !important;
-  }
-
-  .btn-outline-primary {
-    color: $color-primary !important;
-    border-color: $color-primary !important;
-    &:hover,
-    &:active {
+  @each $color, $value in $theme-colors {
+    .btn-#{$color} {
       color: $text-color !important;
+      background-color: $value !important;
+      border-color: $value !important;
+
+      &:hover {
+        background-color: darken($value, 7.5%) !important;
+        border-color: darken($value, 10%) !important;
+      }
+
+      &:active {
+        background-color: darken($value, 10%) !important;
+        border-color: darken($value, 12.5%) !important;
+      }
     }
-  }
 
-  .btn-danger {
-    color: $text-color !important;
-    background-color: $color-danger !important;
-    border-color: $color-danger-border !important;
-  }
+    .btn-outline-#{$color} {
+      color: $value !important;
+      border-color: $value !important;
 
-  .btn-danger-outline {
-    color: $color-danger !important;
-    border-color: $color-danger !important;
-    &:hover,
-    &:active {
-      color: $text-color !important;
+      &:hover {
+        color: $text-color !important;
+        background-color: $value !important;
+      }
+
+      &:active {
+        color: $text-color !important;
+        background-color: darken($value, 7.5%);
+        border-color: darken($value, 10%);
+      }
     }
   }
 
@@ -156,30 +187,24 @@ body.darkmode {
 
   /* Navs */
 
+  .nav-tabs .nav-link:hover {
+    background-color: $dark-background !important;
+    border-color: transparent !important;
+    border-bottom-color: $tab-border !important;
+  }
+
   .nav-tabs .nav-link.active {
     background-color: $dark-background !important;
     color: inherit;
     border-color: $tab-border $tab-border transparent !important;
   }
 
-  .nav-link:hover {
-    background-color: $dark-background !important;
-    border-color: transparent !important;
-    border-bottom-color: $tab-border !important;
-  }
-
   /* Utilities */
 
-  .bg-primary {
-    background-color: $color-primary !important;
-  }
-
-  .bg-success {
-    background-color: $color-success !important;
-  }
-
-  .bg-danger {
-    background-color: $color-danger !important;
+  @each $color, $value in $theme-colors {
+    .bg-#{$color} {
+      background-color: $value !important;
+    }
   }
 
   .bg-light {
