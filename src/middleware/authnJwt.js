@@ -20,7 +20,6 @@ module.exports = safeAsync(async (req, res, next) => {
   if (user === null) {
     // This shouldn't ever happen, but if it does...
     next(new ApiError(401, 'Invalid cookie'))
-    res.status(401).send()
     return
   }
 
