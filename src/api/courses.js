@@ -57,7 +57,10 @@ router.get(
 
     // It turns out that sequelize can only generate queries that include the
     // question count if we query for queues separately from the course
-    const queues = await Queue.scope('questionCount').findAll({
+    const queues = await Queue.scope(
+      'defaultScope', // Queues in the course endpoint don't need to include private attributes
+      'questionCount'
+    ).findAll({
       where: { courseId },
     })
 

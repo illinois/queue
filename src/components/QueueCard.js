@@ -1,14 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Card, CardBody, CardTitle, CardSubtitle, Button } from 'reactstrap'
+import { Card, CardBody, CardTitle, CardSubtitle } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faMapMarker,
   faQuestionCircle,
   faEyeSlash,
+  faCog,
 } from '@fortawesome/free-solid-svg-icons'
 
-import { Router } from '../routes'
+import { Link } from '../routes'
 import ShowForCourseStaff from './ShowForCourseStaff'
 
 const QueueCard = ({ queue, courseName, open, ...rest }) => {
@@ -19,12 +20,6 @@ const QueueCard = ({ queue, courseName, open, ...rest }) => {
   }`
   const locationText = location || 'No location specified'
 
-  const handleSettings = e => {
-    e.stopPropagation()
-    e.preventDefault()
-    Router.pushRoute('queueSettings', { id: queue.id })
-  }
-
   const title = courseName || queueName
   const showQueueNameInBody = !!courseName
 
@@ -34,7 +29,7 @@ const QueueCard = ({ queue, courseName, open, ...rest }) => {
       {...rest}
     >
       <CardBody>
-        <CardTitle className="d-flex flex-wrap align-items-center">
+        <CardTitle className="d-flex">
           <span className="h5 mb-2 mr-auto pr-3">
             {isConfidential && !showQueueNameInBody && (
               <FontAwesomeIcon icon={faEyeSlash} fixedWidth className="mr-2" />
@@ -43,15 +38,13 @@ const QueueCard = ({ queue, courseName, open, ...rest }) => {
           </span>
           <div>
             <ShowForCourseStaff courseId={queue.courseId}>
-              <Button
-                color="secondary"
-                size="sm"
-                outline
-                onClick={handleSettings}
-                onKeyPress={handleSettings}
-              >
-                Settings
-              </Button>
+              <Link passHref route="queueSettings" params={{ id: queue.id }}>
+                {/* eslint-disable-next-line */}
+                <a className="p-1" onClick={e => e.stopPropagation()}>
+                  <span className="sr-only">Queue settings</span>
+                  <FontAwesomeIcon icon={faCog} size="lg" />
+                </a>
+              </Link>
             </ShowForCourseStaff>
           </div>
         </CardTitle>
@@ -78,7 +71,7 @@ const QueueCard = ({ queue, courseName, open, ...rest }) => {
       <style global jsx>{`
         .queue-card,
         .closed-queue-card {
-          transition: all 200ms;
+          transition: transform 200ms, box-shadow 200ms;
           cursor: pointer;
         }
         .queue-card:hover {

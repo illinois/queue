@@ -53,7 +53,7 @@ const QueueCardList = props => {
     }
 
     const handleQueueKeyPress = (e, id) => {
-      if (e.key === 'Enter' || e.key === ' ') {
+      if (e.key === 'Enter') {
         handleQueueClick(id)
       }
     }

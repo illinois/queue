@@ -42,7 +42,7 @@ class DevModeLogin extends React.Component {
   render() {
     return (
       <div>
-        <p className="text-center text-secondary">
+        <p className="text-center text-muted">
           Looks like you&apos;re running in dev mode! Enter a Net ID to emulate
           signing in as a different user.
         </p>

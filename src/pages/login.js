@@ -4,43 +4,35 @@ import PropTypes from 'prop-types'
 import { Button } from 'reactstrap'
 
 import DevModeLogin from '../components/DevModeLogin'
+import { useTheme } from '../components/ThemeProvider'
 import { withBaseUrl, isDev, isNow } from '../util'
 
-class Login extends React.Component {
-  static async getInitialProps({ req }) {
-    if (req) {
-      return {
-        redirect: req.query.redirect,
-      }
-    }
-    return {}
+const Login = props => {
+  const { isDarkMode } = useTheme()
+  const showDevModeLogin = isDev || isNow
+  let shibUrl = withBaseUrl('/login/shib')
+  const { redirect } = props
+  if (redirect !== withBaseUrl('') && redirect !== withBaseUrl('/')) {
+    shibUrl += `?redirect=${redirect}`
   }
-
-  render() {
-    const showDevModeLogin = isDev || isNow
-    let shibUrl = withBaseUrl('/login/shib')
-    const { redirect } = this.props
-    if (redirect !== withBaseUrl('') && redirect !== withBaseUrl('/')) {
-      shibUrl += `?redirect=${redirect}`
-    }
-    return (
-      <Fragment>
-        <div className="login-container">
-          <h1 className="text-center display-4">Log in</h1>
-          <p className="text-center text-secondary">
-            Welcome back! Log in to access the Queue.
-          </p>
-          <Button className="btn-illinois" color={null} block href={shibUrl}>
-            Log in with Illinois
-          </Button>
-          {showDevModeLogin && (
-            <Fragment>
-              <hr />
-              <DevModeLogin redirect={redirect} />
-            </Fragment>
-          )}
-        </div>
-        <style jsx global>{`
+  return (
+    <Fragment>
+      <div className="login-container">
+        <h1 className="text-center display-4">Log in</h1>
+        <p className="text-center text-muted">
+          Welcome back! Log in to access the Queue.
+        </p>
+        <Button className="btn-illinois" color={null} block href={shibUrl}>
+          Log in with Illinois
+        </Button>
+        {showDevModeLogin && (
+          <Fragment>
+            <hr />
+            <DevModeLogin redirect={redirect} />
+          </Fragment>
+        )}
+      </div>
+      <style jsx global>{`
         .login-container {
           margin-top:
           width: 100%;
@@ -48,7 +40,7 @@ class Login extends React.Component {
           margin-left: auto;
           max-width: 500px;
           padding: 2rem;
-          background-color: white;
+          background-color: ${isDarkMode ? '#343a40' : 'white'};
         }
         @media (min-width: 576px) {
           body {
@@ -57,7 +49,7 @@ class Login extends React.Component {
           .login-container {
             margin-top: 3rem;
             border-radius: 0.5rem;
-            border: 1px solid white;
+            border: 1px solid ${isDarkMode ? '#444' : 'white'};
             box-shadow: 0px 6px 33px 2px rgba(0,0,0,0.36);
           }
         }
@@ -79,9 +71,17 @@ class Login extends React.Component {
           border-color: #B93B1F;
         }
       `}</style>
-      </Fragment>
-    )
+    </Fragment>
+  )
+}
+
+Login.getInitialProps = async ({ req }) => {
+  if (req) {
+    return {
+      redirect: req.query.redirect,
+    }
   }
+  return {}
 }
 
 Login.propTypes = {
