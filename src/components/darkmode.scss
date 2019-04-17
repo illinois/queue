@@ -78,4 +78,22 @@ body.darkmode {
     color: #adb5bd !important;
     border-color: transparent !important;
   }
+
+  .alert-success {
+    color: $page-background !important;
+    background-color: #00d97e !important;
+    border-color: #00d97e !important;
+  }
+
+  .alert-warning {
+    color: $page-background;
+    background-color: #f6c343;
+    border-color: #f6c343;
+  }
+
+  .alert-danger {
+    color: $text-color;
+    background-color: #e63757;
+    border-color: #e63757;
+  }
 }
