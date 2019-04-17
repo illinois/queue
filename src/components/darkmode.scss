@@ -11,6 +11,7 @@ $info: #39afd1;
 $warning: #f6c343;
 $danger: #e63757;
 $dark: #222;
+$light: #eee;
 
 $theme-colors: () !default;
 $theme-colors: map-merge(
@@ -22,8 +23,20 @@ $theme-colors: map-merge(
     'warning': $warning,
     'danger': $danger,
     'dark': $dark-background,
+    'light': $light,
   ),
   $theme-colors
+);
+
+$theme-text-colors: (
+  'primary': $text-color,
+  'secondary': $text-color,
+  'success': $text-color,
+  'info': $text-color,
+  'warning': $dark-background,
+  'danger': $text-color,
+  'dark': $text-color,
+  'light': $dark-background,
 );
 
 @function border($color) {
@@ -65,7 +78,7 @@ body.darkmode {
 
   @each $color, $value in $theme-colors {
     .alert-#{$color} {
-      color: $page-background !important;
+      color: map-get($theme-text-colors, $color) !important;
       background-color: $value !important;
       border-color: border($value) !important;
     }
@@ -75,7 +88,7 @@ body.darkmode {
 
   @each $color, $value in $theme-colors {
     .badge-#{$color} {
-      color: $text-color !important;
+      color: map-get($theme-text-colors, $color) !important;
       background-color: $value !important;
     }
   }
@@ -84,7 +97,7 @@ body.darkmode {
 
   @each $color, $value in $theme-colors {
     .btn-#{$color} {
-      color: $text-color !important;
+      color: map-get($theme-text-colors, $color) !important;
       background-color: $value !important;
       border-color: $value !important;
 
@@ -104,12 +117,12 @@ body.darkmode {
       border-color: $value !important;
 
       &:hover {
-        color: $text-color !important;
+        color: map-get($theme-text-colors, $color) !important;
         background-color: $value !important;
       }
 
       &:active {
-        color: $text-color !important;
+        color: map-get($theme-text-colors, $color) !important;
         background-color: darken($value, 7.5%);
         border-color: darken($value, 10%);
       }
