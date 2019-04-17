@@ -100,7 +100,7 @@ const QueueMessageEditor = props => {
           </TabPane>
         </TabContent>
         <div className="d-flex flex-column flex-sm-row align-items-sm-center mt-2">
-          <span className="text-secondary small">
+          <span className="text-muted small">
             You can use markdown to format this message.
           </span>
           <div className="ml-auto mt-2 mt-sm-0">

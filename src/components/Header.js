@@ -74,18 +74,18 @@ const Header = props => {
       expand="sm"
     >
       {brandLink}
-      {user && (
-        <>
-          <NavbarToggler onClick={isOpen.toggle} />
-          <Collapse isOpen={isOpen.value} navbar>
-            {user.isAdmin && (
-              <Nav navbar>
-                <Link route="adminIndex" passHref>
-                  <NavLink>Admin</NavLink>
-                </Link>
-              </Nav>
-            )}
-            <Nav navbar className="ml-auto">
+      <NavbarToggler onClick={isOpen.toggle} />
+      <Collapse isOpen={isOpen.value} navbar>
+        {user && user.isAdmin && (
+          <Nav navbar>
+            <Link route="adminIndex" passHref>
+              <NavLink>Admin</NavLink>
+            </Link>
+          </Nav>
+        )}
+        <Nav navbar className="ml-auto">
+          {user && (
+            <>
               <Link route="userSettings" passHref>
                 <NavLink className="navbar-text mr-3">
                   <FontAwesomeIcon icon={faUser} className="mr-2" />
@@ -93,50 +93,10 @@ const Header = props => {
                 </NavLink>
               </Link>
               <NavItem>
-                <div
-                  className="d-flex flex-row align-items-center mr-3"
-                  style={{ marginTop: '6px', marginBottom: '6px' }}
-                >
-                  <Switch
-                    onChange={checked => theme.set(checked)}
-                    checked={theme.darkMode}
-                    handleDiameter={16}
-                    height={28}
-                    offColor="#6c757d"
-                    onColor="#375a7f"
-                    offHandleColor="#fff"
-                    onHandleColor="#fff"
-                    checkedIcon={
-                      <FontAwesomeIcon
-                        icon={faMoon}
-                        color="white"
-                        style={{
-                          padding: '6px',
-                          paddingLeft: '0px',
-                          width: '100%',
-                          height: '100%',
-                        }}
-                      />
-                    }
-                    uncheckedIcon={
-                      <FontAwesomeIcon
-                        icon={faSun}
-                        color="white"
-                        style={{
-                          padding: '6px',
-                          paddingRight: '0px',
-                          width: '100%',
-                          height: '100%',
-                        }}
-                      />
-                    }
-                  />
-                </div>
-              </NavItem>
-              <NavItem>
                 <Button
                   color="secondary"
                   type="button"
+                  className="mr-3"
                   onClick={() => {
                     window.localStorage.setItem('logout', Date.now())
                     window.location = logoutRoute
@@ -145,10 +105,51 @@ const Header = props => {
                   Logout
                 </Button>
               </NavItem>
-            </Nav>
-          </Collapse>
-        </>
-      )}
+            </>
+          )}
+          <NavItem>
+            <div
+              className="d-flex flex-row align-items-center"
+              style={{ marginTop: '6px', marginBottom: '6px' }}
+            >
+              <Switch
+                onChange={checked => theme.setIsDarkMode(checked)}
+                checked={theme.isDarkMode}
+                handleDiameter={16}
+                height={28}
+                offColor="#6c757d"
+                onColor="#375a7f"
+                offHandleColor="#fff"
+                onHandleColor="#fff"
+                checkedIcon={
+                  <FontAwesomeIcon
+                    icon={faMoon}
+                    color="white"
+                    style={{
+                      padding: '6px',
+                      paddingLeft: '0px',
+                      width: '100%',
+                      height: '100%',
+                    }}
+                  />
+                }
+                uncheckedIcon={
+                  <FontAwesomeIcon
+                    icon={faSun}
+                    color="white"
+                    style={{
+                      padding: '6px',
+                      paddingRight: '0px',
+                      width: '100%',
+                      height: '100%',
+                    }}
+                  />
+                }
+              />
+            </div>
+          </NavItem>
+        </Nav>
+      </Collapse>
     </Navbar>
   )
 }

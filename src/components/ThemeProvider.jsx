@@ -1,5 +1,5 @@
 /* eslint-env browser */
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import useLocalStorage from '@illinois/react-use-local-storage'
 
@@ -8,40 +8,31 @@ import './darkmode.scss'
 const ThemeContext = React.createContext()
 const useTheme = () => React.useContext(ThemeContext)
 
-const ThemeProvider = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useLocalStorage('darkmode', false)
-  const [isDarkModeOverridden, setIsDarkModeOverridden] = useState(false)
-  const [darkModeOverriddenValue, setDarkModeOverriddenValue] = useState(false)
-  const useOverrideDarkModeEffect = value =>
-    useEffect(() => {
-      setIsDarkModeOverridden(true)
-      setDarkModeOverriddenValue(value)
-      return () => {
-        setIsDarkModeOverridden(false)
-      }
-    })
-  const toggle = () => {
+const ThemeProvider = ({ children, isDarkMode: isDarkModeInitial }) => {
+  const [isDarkMode, setIsDarkMode] = useLocalStorage(
+    'darkmode',
+    isDarkModeInitial
+  )
+  const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode)
   }
   useEffect(() => {
-    const darkMode =
-      (!isDarkModeOverridden && isDarkMode) ||
-      (isDarkModeOverridden && darkModeOverriddenValue)
     const { classList } = document.getElementsByTagName('body')[0]
-    if (darkMode) {
+    if (isDarkMode) {
       classList.add('darkmode')
     } else {
       classList.remove('darkmode')
     }
-  }, [isDarkMode, isDarkModeOverridden, darkModeOverriddenValue])
+    // Save as a cookie so we can correctly SSR with dark styles
+    document.cookie = `darkmode=${isDarkMode}`
+  }, [isDarkMode])
   return (
     <>
       <ThemeContext.Provider
         value={{
-          darkMode: isDarkMode,
-          toggle,
-          set: setIsDarkMode,
-          useOverrideDarkModeEffect,
+          isDarkMode,
+          toggleDarkMode,
+          setIsDarkMode,
         }}
       >
         {children}
@@ -52,10 +43,12 @@ const ThemeProvider = ({ children }) => {
 
 ThemeProvider.propTypes = {
   children: PropTypes.node,
+  isDarkMode: PropTypes.bool,
 }
 
 ThemeProvider.defaultProps = {
   children: null,
+  isDarkMode: false,
 }
 
 export { useTheme, ThemeProvider }

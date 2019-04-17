@@ -71,4 +71,11 @@ body.darkmode {
       color: $text-color !important;
     }
   }
+
+  .input-group > .input-group-append > .input-group-text,
+  .input-group > .input-group-prepend > .input-group-text {
+    background-color: $dark-border !important;
+    color: #adb5bd !important;
+    border-color: transparent !important;
+  }
 }
