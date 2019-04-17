@@ -11,6 +11,9 @@ import { baseUrl, isDev, isNow } from '../util'
 export default class MyDocument extends Document {
   static getInitialProps(ctx) {
     const { html, head, errorHtml, chunks } = ctx.renderPage()
+    // This cookie is set on the client; we read it here to know if we should
+    // render the body with the 'darkmode' class on the server to avoid a flash
+    // of white background if darkmode is enabled
     const { darkmode } = nextCookies(ctx)
     const isDarkMode = darkmode === 'true'
     const styles = flush()

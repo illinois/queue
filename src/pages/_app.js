@@ -17,6 +17,8 @@ class MyApp extends React.Component {
     const pageProps = Component.getInitialProps
       ? await Component.getInitialProps(ctx)
       : {}
+    // We need to figure out if we're in darkmode so we can render the switch
+    // in the correct state on the server.
     const { darkmode } = nextCookies(ctx)
     const isDarkMode = darkmode === 'true'
     return { pageProps, isDarkMode }

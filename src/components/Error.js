@@ -33,7 +33,7 @@ const styles = {
 }
 
 const Error = props => {
-  const { darkMode } = useTheme()
+  const { isDarkMode } = useTheme()
   const { statusCode } = props
   const title = statusCode !== null ? statusCode : 'RIP'
   let message
@@ -52,7 +52,7 @@ const Error = props => {
       <Link passHref route="index">
         <Button
           outline
-          color={darkMode ? 'light' : 'secondary'}
+          color={isDarkMode ? 'light' : 'secondary'}
           tag="a"
           className="mt-4"
         >

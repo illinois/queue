@@ -4,7 +4,7 @@ import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { useTheme } from './ThemeProvider'
 
 const Footer = () => {
-  const { darkMode } = useTheme()
+  const { isDarkMode } = useTheme()
   return (
     <Fragment>
       <div className="footer p-3 bg-light d-flex justify-content-center text-muted">
@@ -25,7 +25,7 @@ const Footer = () => {
         .footer a:hover,
         .footer a:focus {
           text-decoration: none;
-          color: ${darkMode ? 'white' : 'black'} !important;
+          color: ${isDarkMode ? 'white' : 'black'} !important;
         }
       `}</style>
     </Fragment>

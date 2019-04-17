@@ -90,8 +90,8 @@ const Header = props => {
               style={{ marginTop: '6px', marginBottom: '6px' }}
             >
               <Switch
-                onChange={checked => theme.set(checked)}
-                checked={theme.darkMode}
+                onChange={checked => theme.setDarkMode(checked)}
+                checked={theme.isDarkMode}
                 handleDiameter={16}
                 height={28}
                 offColor="#6c757d"
