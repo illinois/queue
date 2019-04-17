@@ -9,6 +9,7 @@ import {
   InputGroupAddon,
   Button,
 } from 'reactstrap'
+import moment from 'moment'
 
 const AccessTokenListGroupItem = props => {
   const inputRef = useRef()
@@ -19,15 +20,24 @@ const AccessTokenListGroupItem = props => {
     e.target.focus()
   }
 
+  const createdAt = moment(props.createdAt)
+  const createdAtHumanReadable = createdAt.fromNow()
+  const createdAtCalendar = createdAt.calendar()
+  const lastUsedAt = moment(props.lastUsedAt)
+  const lastUsedAtHumanReadable = lastUsedAt.fromNow()
+  const lastUsedAtCalendar = lastUsedAt.calendar()
+
   return (
     <ListGroupItem>
       <div className="d-flex flex-row align-items-center">
         <div className="d-flex flex-column">
           <strong>{props.name}</strong>
-          <span className="text-muted">Created at {props.createdAt}</span>
-          <span className="text-muted">
+          <span className="text-muted" title={createdAtCalendar}>
+            Created {createdAtHumanReadable}
+          </span>
+          <span className="text-muted" title={lastUsedAtCalendar}>
             {props.lastUsedAt
-              ? `Last used at ${props.lastUsedAt}`
+              ? `Last used ${lastUsedAtHumanReadable}`
               : 'Never used'}
           </span>
         </div>
@@ -43,8 +53,10 @@ const AccessTokenListGroupItem = props => {
       {props.token && (
         <>
           <Alert fade={false} color="success" className="mt-3">
-            New access token created! Be sure to copy it now, as you won&apos;t
-            be able to see it later.
+            <strong className="alert-heading">Token created!</strong>
+            <br />
+            Be sure to take note of it now, as you won&apos;t be able to see it
+            later.
             <InputGroup className="mt-2">
               <Input
                 className="bg-light"
