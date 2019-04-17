@@ -35,3 +35,14 @@ described here are located under `/api/`.
 | `/questions/:questionId/answering` | `POST`                 | Mark a question as being answered                   |
 | `/questions/:questionId/answering` | `DELETE`               | Mark a question as no longer being answered         |
 | `/questions/:questionId/answered`  | `POST`                 | Mark the question as answered                       |
+
+## API Access Tokens
+
+When logged into [queue.illinois.edu/q](https://queue.illinois.edu/q), you're automatically authenticated with the API. However, if you want to access the API from outside the queue to programmatically access or manipulate it, you can create personal access tokens that don't rely on Shibboleth for authentication.
+
+To create a token, visit https://queue.illinois.edu/q/settings. After copying down your token, you can pass the token either with the `private_token` query parameter or the `Private-Token` header:
+
+```
+curl -H "Private-Token: TOKEN" https://queue.illinois.edu/q/api/<REST_OF_PATH>
+curl https://queue.illinois.edu/q/api/<REST_OF_PATH>?private_token=TOKEN
+```

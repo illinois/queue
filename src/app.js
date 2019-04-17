@@ -31,7 +31,9 @@ if (isDev || isNow) {
 app.use(`${baseUrl}/login/shib`, require('./auth/shibboleth'))
 app.use(`${baseUrl}/logout`, require('./auth/logout'))
 
+app.use(`${baseUrl}/api`, require('./middleware/authnToken'))
 app.use(`${baseUrl}/api`, require('./middleware/authnJwt'))
+app.use(`${baseUrl}/api`, require('./middleware/checkAuthn'))
 app.use(`${baseUrl}/api`, require('./middleware/authz'))
 
 // This will selectively send redirects if the user needs to (re)authenticate
@@ -41,6 +43,7 @@ app.use(`${baseUrl}/`, require('./middleware/redirectIfNeedsAuthn'))
 
 // API routes
 app.use(`${baseUrl}/api/users`, require('./api/users'))
+app.use(`${baseUrl}/api/tokens`, require('./api/tokens'))
 app.use(`${baseUrl}/api/courses`, require('./api/courses'))
 app.use(`${baseUrl}/api/queues`, require('./api/queues'))
 app.use(`${baseUrl}/api/questions`, require('./api/questions'))
@@ -57,7 +60,9 @@ app.use(`${baseUrl}/api`, (err, _req, res, _next) => {
   const statusCode = err.httpStatusCode || 500
   const message = err.message || 'Something went wrong'
   res.status(statusCode).json({ message })
-  logger.error(err)
+  if (process.env.NODE_ENV !== 'test') {
+    logger.error(err)
+  }
 })
 app.use(`${baseUrl}/api`, (_req, res, _next) => {
   res.status(404).json({

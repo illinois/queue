@@ -12,6 +12,7 @@ with the current semantic version and the next changes should go under a **[Next
 * Hides the create queue button when creating a queue and the create course button when creating a course. ([@jackieo5023](https://github.com/jackieo5023) in [#274](https://github.com/illinois/queue/pull/274))
 * Fix double rendering of the course page. ([@james9909](https://github.com/james9909) in [#275](https://github.com/illinois/queue/pull/275))
 * Add improved styles, docs, and server-side rendering for dark mode. ([@nwalters512](https://github.com/nwalters512) in [#276](https://github.com/illinois/queue/pull/276))
+* Add personal access tokens for API access. ([@nwalters512](https://github.com/nwalters512) in [#271](https://github.com/illinois/queue/pull/271))
 
 ## v1.1.0
 

@@ -1,5 +1,4 @@
 /* eslint-env jest */
-// const request = require('supertest')
 const app = require('../app')
 const testutil = require('../../test/util')
 const { requestAsUser } = require('../../test/util')

@@ -1,9 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Container, Card, CardHeader, CardTitle, CardBody } from 'reactstrap'
+import { Container } from 'reactstrap'
 
 import PageWithUser from '../components/PageWithUser'
-import UserProfileSettingsContainer from '../containers/UserProfileSettingsContainer'
+import UserProfilePanel from '../components/userSettings/UserProfilePanel'
+import AccessTokensPanel from '../components/userSettings/AccessTokensPanel'
 
 class UserSettings extends React.Component {
   static async getInitialProps() {
@@ -12,25 +13,10 @@ class UserSettings extends React.Component {
 
   render() {
     return (
-      <Container fluid>
-        <Card className="settings-card">
-          <CardHeader className="bg-primary text-white d-flex align-items-center">
-            <CardTitle tag="h4" className="mb-0">
-              Settings
-            </CardTitle>
-          </CardHeader>
-          <CardBody>
-            <CardTitle tag="h5">User profile</CardTitle>
-            <UserProfileSettingsContainer />
-          </CardBody>
-        </Card>
-        <style jsx>{`
-          :global(.settings-card) {
-            width: 100%;
-            max-width: 500px;
-            margin: auto;
-          }
-        `}</style>
+      <Container>
+        <h1 className="display-4">User Settings</h1>
+        <UserProfilePanel />
+        <AccessTokensPanel />
       </Container>
     )
   }

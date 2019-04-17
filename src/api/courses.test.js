@@ -106,7 +106,7 @@ describe('Courses API', () => {
     })
   })
 
-  describe('POST /api/course/:courseId/staff', async () => {
+  describe('POST /api/course/:courseId/staff', () => {
     test('succeeds for admin', async () => {
       const newUser = { netid: 'newnetid' }
       const request = await requestAsUser(app, 'admin')

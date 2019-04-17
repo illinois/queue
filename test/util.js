@@ -3,6 +3,8 @@ const session = require('supertest-session')
 const models = require('../src/models')
 const { ApiError } = require('../src/api/util')
 
+module.exports.TOKEN = '3b0886cd-84ef-4702-8016-cfa7e20418f9'
+
 module.exports.setupTestDb = async () => {
   await models.sequelize.sync()
 }
@@ -19,6 +21,18 @@ module.exports.createTestUsers = async () => {
     { netid: '241staff', universityName: '241 Staff', isAdmin: false },
     { netid: 'student', isAdmin: false },
     { netid: 'otherstudent', isAdmin: false },
+  ])
+}
+
+module.exports.createTestTokens = async () => {
+  // Hash is for the following UUID:
+  // 3b0886cd-84ef-4702-8016-cfa7e20418f9
+  await models.AccessToken.bulkCreate([
+    {
+      name: 'Admin test token',
+      hash: '8b66be9b382176ea802a06d1be2a5e66d53fadf279a5fc40e17c6862c75d4e0f',
+      userId: 2,
+    },
   ])
 }
 
@@ -95,6 +109,7 @@ module.exports.createTestQuestions = async () => {
 
 module.exports.populateTestDb = async () => {
   await module.exports.createTestUsers()
+  await module.exports.createTestTokens()
   await module.exports.createTestCourses()
 
   const staff225 = await models.User.findOne({ where: { netid: '225staff' } })
