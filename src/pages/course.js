@@ -72,16 +72,18 @@ const Course = props => {
         </div>
         <div className="d-flex flex-wrap align-items-center mb-4">
           <h2 className="d-inline-block mb-0 mt-3 mr-auto pr-3">Open Queues</h2>
-          <ShowForCourseStaff courseId={props.courseId}>
-            <Button
-              color="primary"
-              className="mt-3"
-              onClick={() => setShowCreateQueuePanel(true)}
-            >
-              <FontAwesomeIcon icon={faPlus} className="mr-2" />
-              Create queue
-            </Button>
-          </ShowForCourseStaff>
+          {showCreateQueuePanel && (
+            <ShowForCourseStaff courseId={props.courseId}>
+              <Button
+                color="primary"
+                className="mt-3"
+                onClick={() => setShowCreateQueuePanel(true)}
+              >
+                <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                Create queue
+              </Button>
+            </ShowForCourseStaff>
+          )}
         </div>
         {showCreateQueuePanel && (
           <Card className="mb-4">
