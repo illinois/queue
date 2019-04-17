@@ -23,7 +23,7 @@ $theme-colors: map-merge(
     'warning': $warning,
     'danger': $danger,
     'dark': $dark-background,
-    'light': $light,
+    'light': $dark-background,
   ),
   $theme-colors
 );
@@ -36,7 +36,7 @@ $theme-text-colors: (
   'warning': $dark-background,
   'danger': $text-color,
   'dark': $text-color,
-  'light': $dark-background,
+  'light': $text-color,
 );
 
 @function border($color) {
@@ -64,9 +64,9 @@ body.darkmode {
   /* Content */
 
   a {
-    color: $color-primary;
+    color: $primary;
     &:hover {
-      color: darken($color-primary, 7.5%);
+      color: darken($primary, 7.5%);
     }
   }
 
@@ -218,10 +218,9 @@ body.darkmode {
     .bg-#{$color} {
       background-color: $value !important;
     }
-  }
-
-  .bg-light {
-    background-color: $dark-background !important;
+    .border-#{$color} {
+      border-color: $value !important;
+    }
   }
 
   .text-muted {
