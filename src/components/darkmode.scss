@@ -2,14 +2,90 @@ $page-background: #222;
 $dark-background: #343a40;
 $dark-border: #444;
 $text-color: #fff;
+$tab-border: rgba(0, 0, 0, 0.25);
+
+$color-primary: #2c7be5;
+$color-primary-border: #2c7be5;
+
+$color-success: #00d97e !important;
+$color-success-border: #00d97e !important;
+
+$color-warning: #f6c343;
+$color-warning-border: #f6c343;
+
+$color-danger: #e63757;
+$color-danger-border: #e63757;
 
 body.darkmode {
   color: $text-color !important;
   background-color: $page-background !important;
 
-  .text-muted {
-    color: #999 !important;
+  /* Content */
+
+  a {
+    color: $color-primary;
+    &:hover {
+      color: darken($color-primary, 10%);
+    }
   }
+
+  pre {
+    color: $text-color !important;
+  }
+
+  /* Alerts */
+
+  .alert-success {
+    color: $page-background !important;
+    background-color: $color-success !important;
+    border-color: $color-success-border !important;
+  }
+
+  .alert-warning {
+    color: $page-background;
+    background-color: $color-warning !important;
+    border-color: $color-warning-border !important;
+  }
+
+  .alert-danger {
+    color: $text-color !important;
+    background-color: $color-danger !important;
+    border-color: $color-danger-border !important;
+  }
+
+  /* Buttons */
+
+  .btn-primary {
+    color: $text-color !important;
+    background-color: $color-primary !important;
+    border-color: $color-primary-border !important;
+  }
+
+  .btn-outline-primary {
+    color: $color-primary !important;
+    border-color: $color-primary !important;
+    &:hover,
+    &:active {
+      color: $text-color !important;
+    }
+  }
+
+  .btn-danger {
+    color: $text-color !important;
+    background-color: $color-danger !important;
+    border-color: $color-danger-border !important;
+  }
+
+  .btn-danger-outline {
+    color: $color-danger !important;
+    border-color: $color-danger !important;
+    &:hover,
+    &:active {
+      color: $text-color !important;
+    }
+  }
+
+  /* Cards */
 
   .card,
   .list-group-item {
@@ -20,41 +96,7 @@ body.darkmode {
     background-color: rgba(0, 0, 0, 0.1) !important;
   }
 
-  .modal-content {
-    background-color: $dark-background !important;
-    border: 1px solid $dark-border !important;
-  }
-
-  .modal-header {
-    border-bottom: 1px solid $dark-border !important;
-  }
-
-  .modal-footer {
-    border-top: 1px solid $dark-border !important;
-  }
-
-  .form-control {
-    background-color: rgba(255, 255, 255, 0.09) !important;
-    border: 1px solid #595959 !important;
-    color: $text-color !important;
-  }
-
-  .nav-tabs .nav-link.active {
-    background-color: transparent !important;
-    color: inherit;
-    border-color: $dark-border $dark-border transparent !important;
-  }
-  .nav-link:hover {
-    border-color: $dark-border $dark-border $dark-border !important;
-  }
-
-  .bg-light {
-    background-color: $dark-background !important;
-  }
-
-  pre {
-    color: $text-color !important;
-  }
+  /* Dropdowns */
 
   .dropdown-menu {
     color: $text-color !important;
@@ -72,6 +114,14 @@ body.darkmode {
     }
   }
 
+  /* Forms & inputs */
+
+  .form-control {
+    background-color: rgba(255, 255, 255, 0.09) !important;
+    border: 1px solid #595959 !important;
+    color: $text-color !important;
+  }
+
   .input-group > .input-group-append > .input-group-text,
   .input-group > .input-group-prepend > .input-group-text {
     background-color: $dark-border !important;
@@ -79,21 +129,64 @@ body.darkmode {
     border-color: transparent !important;
   }
 
-  .alert-success {
-    color: $page-background !important;
-    background-color: #00d97e !important;
-    border-color: #00d97e !important;
+  .dropdown-item.active,
+  .dropdown-item:active {
+    background-color: $color-primary !important;
   }
 
-  .alert-warning {
-    color: $page-background;
-    background-color: #f6c343;
-    border-color: #f6c343;
+  .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: $color-primary !important;
+    border-color: $color-primary-border !important;
   }
 
-  .alert-danger {
-    color: $text-color;
-    background-color: #e63757;
-    border-color: #e63757;
+  /* Modals */
+
+  .modal-content {
+    background-color: $dark-background !important;
+    border: 1px solid $dark-border !important;
+  }
+
+  .modal-header {
+    border-bottom: 1px solid $dark-border !important;
+  }
+
+  .modal-footer {
+    border-top: 1px solid $dark-border !important;
+  }
+
+  /* Navs */
+
+  .nav-tabs .nav-link.active {
+    background-color: $dark-background !important;
+    color: inherit;
+    border-color: $tab-border $tab-border transparent !important;
+  }
+
+  .nav-link:hover {
+    background-color: $dark-background !important;
+    border-color: transparent !important;
+    border-bottom-color: $tab-border !important;
+  }
+
+  /* Utilities */
+
+  .bg-primary {
+    background-color: $color-primary !important;
+  }
+
+  .bg-success {
+    background-color: $color-success !important;
+  }
+
+  .bg-danger {
+    background-color: $color-danger !important;
+  }
+
+  .bg-light {
+    background-color: $dark-background !important;
+  }
+
+  .text-muted {
+    color: #999 !important;
   }
 }
