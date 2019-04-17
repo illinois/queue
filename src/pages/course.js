@@ -72,7 +72,7 @@ const Course = props => {
         </div>
         <div className="d-flex flex-wrap align-items-center mb-4">
           <h2 className="d-inline-block mb-0 mt-3 mr-auto pr-3">Open Queues</h2>
-          {showCreateQueuePanel && (
+          {!showCreateQueuePanel && (
             <ShowForCourseStaff courseId={props.courseId}>
               <Button
                 color="primary"
