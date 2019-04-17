@@ -11,6 +11,7 @@ with the current semantic version and the next changes should go under a **[Next
 * Add dark mode. ([@nwalters512](https://github.com/nwalters512) in [#273](https://github.com/illinois/queue/pull/273))
 * Hides the create queue button when creating a queue and the create course button when creating a course. ([@jackieo5023](https://github.com/jackieo5023) in [#274](https://github.com/illinois/queue/pull/274))
 * Fix double rendering of the course page. ([@james9909](https://github.com/james9909) in [#275](https://github.com/illinois/queue/pull/275))
+* Add improved styles, docs, and server-side rendering for dark mode. ([@nwalters512](https://github.com/nwalters512) in [#276](https://github.com/illinois/queue/pull/276))
 
 ## v1.1.0
 
