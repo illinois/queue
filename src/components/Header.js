@@ -84,13 +84,36 @@ const Header = props => {
           </Nav>
         )}
         <Nav navbar className="ml-auto">
+          {user && (
+            <>
+              <Link route="userSettings" passHref>
+                <NavLink className="navbar-text mr-3">
+                  <FontAwesomeIcon icon={faUser} className="mr-2" />
+                  {userName}
+                </NavLink>
+              </Link>
+              <NavItem>
+                <Button
+                  color="secondary"
+                  type="button"
+                  className="mr-3"
+                  onClick={() => {
+                    window.localStorage.setItem('logout', Date.now())
+                    window.location = logoutRoute
+                  }}
+                >
+                  Logout
+                </Button>
+              </NavItem>
+            </>
+          )}
           <NavItem>
             <div
-              className={`d-flex flex-row align-items-center ${user && 'mr-3'}`}
+              className="d-flex flex-row align-items-center"
               style={{ marginTop: '6px', marginBottom: '6px' }}
             >
               <Switch
-                onChange={checked => theme.setDarkMode(checked)}
+                onChange={checked => theme.setIsDarkMode(checked)}
                 checked={theme.isDarkMode}
                 handleDiameter={16}
                 height={28}
@@ -125,28 +148,6 @@ const Header = props => {
               />
             </div>
           </NavItem>
-          {user && (
-            <Link route="userSettings" passHref>
-              <NavLink className="navbar-text mr-3">
-                <FontAwesomeIcon icon={faUser} className="mr-2" />
-                {userName}
-              </NavLink>
-            </Link>
-          )}
-          {user && (
-            <NavItem>
-              <Button
-                color="secondary"
-                type="button"
-                onClick={() => {
-                  window.localStorage.setItem('logout', Date.now())
-                  window.location = logoutRoute
-                }}
-              >
-                Logout
-              </Button>
-            </NavItem>
-          )}
         </Nav>
       </Collapse>
     </Navbar>
