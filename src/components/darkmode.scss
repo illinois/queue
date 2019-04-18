@@ -43,20 +43,6 @@ $theme-text-colors: (
   @return darken($color, 7.5%);
 }
 
-$color-primary: #2c7be5;
-$color-primary-border: #2c7be5;
-$color-primary-hover: #1a68d1;
-$color-primary-hover-border: #1862c6;
-
-$color-success: #00d97e !important;
-$color-success-border: #00d97e !important;
-
-$color-warning: #f6c343;
-$color-warning-border: #f6c343;
-
-$color-danger: #e63757;
-$color-danger-border: #e63757;
-
 body.darkmode {
   color: $text-color !important;
   background-color: $page-background !important;
@@ -175,12 +161,12 @@ body.darkmode {
 
   .dropdown-item.active,
   .dropdown-item:active {
-    background-color: $color-primary !important;
+    background-color: $primary !important;
   }
 
   .custom-control-input:checked ~ .custom-control-label::before {
-    background-color: $color-primary !important;
-    border-color: $color-primary-border !important;
+    background-color: $primary !important;
+    border-color: $primary !important;
   }
 
   /* Modals */
