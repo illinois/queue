@@ -30,7 +30,7 @@ const AdminThemePreview = () => {
     <Container>
       <Header>Alerts</Header>
       {colors.map(color => (
-        <Alert color={color} key={color}>
+        <Alert color={color} key={color} fade={false}>
           Here&apos;s a {color} alert. Neat, huh?
         </Alert>
       ))}
@@ -76,7 +76,9 @@ const AdminThemePreview = () => {
       </div>
       <Header>Background utilities</Header>
       {colors.map(color => (
-        <div className={`p-3 mb-3 bg-${color}`}>bg-{color}</div>
+        <div className={`p-3 mb-3 bg-${color}`} key={color}>
+          bg-{color}
+        </div>
       ))}
     </Container>
   )
