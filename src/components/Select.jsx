@@ -1,6 +1,9 @@
 /* eslint-disable no-nested-ternary */
 import React from 'react'
+import PropTypes from 'prop-types'
 import ReactSelect from 'react-select'
+import classnames from 'classnames'
+
 import { useTheme } from './ThemeProvider'
 
 const Select = props => {
@@ -33,7 +36,7 @@ const Select = props => {
       ...provided,
       ...customStylesCommon.control(provided, state),
       backgroundColor: state.isDisabled ? '#e9ecef' : 'white',
-      borderColor: '#ced4da',
+      borderColor: props.invalid ? '#dc3545' : '#ced4da',
     }),
     option: (provided, state) => ({
       ...provided,
@@ -55,7 +58,7 @@ const Select = props => {
       ...provided,
       ...customStylesCommon.control(provided, state),
       backgroundColor: '#464c50',
-      borderColor: '#595959',
+      borderColor: props.invalid ? '#e63757' : '#595959',
     }),
     option: (provided, state) => ({
       ...provided,
@@ -108,6 +111,14 @@ const Select = props => {
   const styles = isDarkMode ? customStylesDark : customStylesLight
 
   return <ReactSelect {...props} theme={theme} styles={styles} />
+}
+
+Select.propTypes = {
+  invalid: PropTypes.bool,
+}
+
+Select.defaultProps = {
+  invalid: false,
 }
 
 export default Select

@@ -12,7 +12,9 @@ import {
   Button,
 } from 'reactstrap'
 import { connect } from 'react-redux'
+import classnames from 'classnames'
 
+import Select from './Select'
 import { mapObjectToArray } from '../util'
 
 const isInvalid = error => error !== undefined && error !== ''
@@ -96,7 +98,7 @@ class NewQueue extends React.Component {
 
   render() {
     const { courses, user, showCourseSelector } = this.props
-    let courseOptions
+    let courseOptions = []
     if (showCourseSelector) {
       let userCourses = courses
       if (!user.isAdmin) {
@@ -104,11 +106,10 @@ class NewQueue extends React.Component {
           c => user.staffAssignments.indexOf(c.id) !== -1
         )
       }
-      courseOptions = userCourses.map(course => (
-        <option value={course.id} key={course.id}>
-          {course.name}
-        </option>
-      ))
+      courseOptions = userCourses.map(course => ({
+        value: course.id,
+        label: course.name,
+      }))
     }
 
     return (
@@ -119,20 +120,27 @@ class NewQueue extends React.Component {
               Course
             </Label>
             <Col sm={9}>
-              <CustomInput
+              <Select
                 type="select"
                 name="course"
                 id="course"
                 onChange={this.handleInputChange}
                 value={this.state.course}
                 invalid={isInvalid(this.state.fieldErrors.course)}
+                options={courseOptions}
               >
                 <option value="none" disabled>
                   Select a course
                 </option>
                 {courseOptions}
-              </CustomInput>
-              <FormFeedback>{this.state.fieldErrors.course}</FormFeedback>
+              </Select>
+              <FormFeedback
+                className={classnames({
+                  'd-block': !!this.state.fieldErrors.course,
+                })}
+              >
+                {this.state.fieldErrors.course}
+              </FormFeedback>
             </Col>
           </FormGroup>
         )}

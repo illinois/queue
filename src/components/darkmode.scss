@@ -163,6 +163,10 @@ body.darkmode {
     color: $text-color !important;
   }
 
+  .form-control.is-invalid {
+    border-color: $danger !important;
+  }
+
   .input-group > .input-group-append > .input-group-text,
   .input-group > .input-group-prepend > .input-group-text {
     background-color: $dark-border !important;
