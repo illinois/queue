@@ -111,6 +111,7 @@
     "sqlite3": "^4.0.6",
     "supertest": "^4.0.2",
     "supertest-session": "^4.0.0",
+    "ts-jest": "^24.0.2",
     "ts-node": "^8.1.0",
     "typescript": "^3.4.4"
   },
@@ -120,7 +121,19 @@
     ],
     "testRegex": "src/.*test.js",
     "collectCoverage": true,
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest",
+      "^.+\\.jsx?$": "babel-jest"
+    }
   },
   "husky": {
     "hooks": {
