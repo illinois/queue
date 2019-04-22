@@ -23,4 +23,11 @@ module.exports = {
     ],
     'react-hooks/rules-of-hooks': 'error',
   },
+  settings: {
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      },
+    },
+  },
 }
