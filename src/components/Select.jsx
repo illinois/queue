@@ -73,6 +73,10 @@ const Select = props => {
       ...provided,
       ...customStylesCommon.menuList(),
     }),
+    placeholder: provided => ({
+      ...provided,
+      color: '#939ca9',
+    }),
   }
 
   const themeColorsDark = {

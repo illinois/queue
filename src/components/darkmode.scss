@@ -167,6 +167,17 @@ body.darkmode {
     border-color: $danger !important;
   }
 
+  .form-control:-ms-input-placeholder,
+  .form-control::-ms-input-placeholder {
+    color: #939ca9;
+    opacity: 1;
+  }
+
+  .form-control::placeholder {
+    color: #939ca9;
+    opacity: 1;
+  }
+
   .input-group > .input-group-append > .input-group-text,
   .input-group > .input-group-prepend > .input-group-text {
     background-color: $dark-border !important;
