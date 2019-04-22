@@ -1,15 +1,122 @@
 $page-background: #222;
 $dark-background: #343a40;
+$control-background: #464c50;
 $dark-border: #444;
 $text-color: #fff;
+$tab-border: rgba(0, 0, 0, 0.25);
+
+$primary: #2c7be5;
+$secondary: #6e84a3;
+$success: #00d97e;
+$info: #39afd1;
+$warning: #f6c343;
+$danger: #e63757;
+$dark: #222;
+$light: #eee;
+
+$theme-colors: () !default;
+$theme-colors: map-merge(
+  (
+    'primary': $primary,
+    'secondary': $secondary,
+    'success': $success,
+    'info': $info,
+    'warning': $warning,
+    'danger': $danger,
+    'dark': $dark-background,
+    'light': $dark-background,
+  ),
+  $theme-colors
+);
+
+$theme-text-colors: (
+  'primary': $text-color,
+  'secondary': $text-color,
+  'success': $text-color,
+  'info': $text-color,
+  'warning': $dark-background,
+  'danger': $text-color,
+  'dark': $text-color,
+  'light': $text-color,
+);
+
+@function border($color) {
+  @return darken($color, 7.5%);
+}
 
 body.darkmode {
   color: $text-color !important;
   background-color: $page-background !important;
 
-  .text-muted {
-    color: #999 !important;
+  /* Content */
+
+  a {
+    color: $primary;
+    &:hover {
+      color: darken($primary, 7.5%);
+    }
   }
+
+  pre {
+    color: $text-color !important;
+  }
+
+  /* Alerts */
+
+  @each $color, $value in $theme-colors {
+    .alert-#{$color} {
+      color: map-get($theme-text-colors, $color) !important;
+      background-color: $value !important;
+      border-color: border($value) !important;
+    }
+  }
+
+  /* Badges */
+
+  @each $color, $value in $theme-colors {
+    .badge-#{$color} {
+      color: map-get($theme-text-colors, $color) !important;
+      background-color: $value !important;
+    }
+  }
+
+  /* Buttons */
+
+  @each $color, $value in $theme-colors {
+    .btn-#{$color} {
+      color: map-get($theme-text-colors, $color) !important;
+      background-color: $value !important;
+      border-color: $value !important;
+
+      &:hover {
+        background-color: darken($value, 7.5%) !important;
+        border-color: darken($value, 10%) !important;
+      }
+
+      &:active {
+        background-color: darken($value, 10%) !important;
+        border-color: darken($value, 12.5%) !important;
+      }
+    }
+
+    .btn-outline-#{$color} {
+      color: $value !important;
+      border-color: $value !important;
+
+      &:hover {
+        color: map-get($theme-text-colors, $color) !important;
+        background-color: $value !important;
+      }
+
+      &:active {
+        color: map-get($theme-text-colors, $color) !important;
+        background-color: darken($value, 7.5%);
+        border-color: darken($value, 10%);
+      }
+    }
+  }
+
+  /* Cards */
 
   .card,
   .list-group-item {
@@ -19,6 +126,71 @@ body.darkmode {
   .card-header {
     background-color: rgba(0, 0, 0, 0.1) !important;
   }
+
+  /* Dropdowns */
+
+  .dropdown-menu {
+    color: $text-color !important;
+    background-color: $control-background !important;
+    border: 1px solod $dark-border !important;
+  }
+
+  .dropdown-item {
+    color: $text-color !important;
+
+    &:hover {
+      background-color: lighten($control-background, 10%);
+    }
+
+    &:hover,
+    &:focus,
+    &.active {
+      color: $text-color !important;
+    }
+  }
+
+  .dropdown-item.active,
+  .dropdown-item:active {
+    background-color: $primary !important;
+  }
+
+  /* Forms & inputs */
+
+  .form-control,
+  .custom-select {
+    background-color: $control-background !important;
+    border: 1px solid #595959 !important;
+    color: $text-color !important;
+  }
+
+  .form-control.is-invalid {
+    border-color: $danger !important;
+  }
+
+  .form-control:-ms-input-placeholder,
+  .form-control::-ms-input-placeholder {
+    color: #939ca9;
+    opacity: 1;
+  }
+
+  .form-control::placeholder {
+    color: #939ca9;
+    opacity: 1;
+  }
+
+  .input-group > .input-group-append > .input-group-text,
+  .input-group > .input-group-prepend > .input-group-text {
+    background-color: $dark-border !important;
+    color: #adb5bd !important;
+    border-color: transparent !important;
+  }
+
+  .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: $primary !important;
+    border-color: $primary !important;
+  }
+
+  /* Modals */
 
   .modal-content {
     background-color: $dark-background !important;
@@ -33,67 +205,32 @@ body.darkmode {
     border-top: 1px solid $dark-border !important;
   }
 
-  .form-control {
-    background-color: rgba(255, 255, 255, 0.09) !important;
-    border: 1px solid #595959 !important;
-    color: $text-color !important;
+  /* Navs */
+
+  .nav-tabs .nav-link:hover {
+    background-color: $dark-background !important;
+    border-color: transparent !important;
+    border-bottom-color: $tab-border !important;
   }
 
   .nav-tabs .nav-link.active {
-    background-color: transparent !important;
-    color: inherit;
-    border-color: $dark-border $dark-border transparent !important;
-  }
-  .nav-link:hover {
-    border-color: $dark-border $dark-border $dark-border !important;
-  }
-
-  .bg-light {
     background-color: $dark-background !important;
+    color: inherit;
+    border-color: $tab-border $tab-border transparent !important;
   }
 
-  pre {
-    color: $text-color !important;
-  }
+  /* Utilities */
 
-  .dropdown-menu {
-    color: $text-color !important;
-    background-color: $page-background !important;
-    border: 1px solod $dark-border !important;
-  }
-
-  .dropdown-item {
-    color: $text-color !important;
-
-    &:hover,
-    &:focus,
-    &.active {
-      color: $text-color !important;
+  @each $color, $value in $theme-colors {
+    .bg-#{$color} {
+      background-color: $value !important;
+    }
+    .border-#{$color} {
+      border-color: $value !important;
     }
   }
 
-  .input-group > .input-group-append > .input-group-text,
-  .input-group > .input-group-prepend > .input-group-text {
-    background-color: $dark-border !important;
-    color: #adb5bd !important;
-    border-color: transparent !important;
-  }
-
-  .alert-success {
-    color: $page-background !important;
-    background-color: #00d97e !important;
-    border-color: #00d97e !important;
-  }
-
-  .alert-warning {
-    color: $page-background;
-    background-color: #f6c343;
-    border-color: #f6c343;
-  }
-
-  .alert-danger {
-    color: $text-color;
-    background-color: #e63757;
-    border-color: #e63757;
+  .text-muted {
+    color: #999 !important;
   }
 }
