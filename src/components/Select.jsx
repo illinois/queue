@@ -12,7 +12,7 @@ const Select = props => {
     }),
     control: (provided, state) => ({
       boxShadow: state.isFocused ? '0 0 0 0.2rem rgba(0,123,255,.25)' : null,
-      transition: null,
+      transition: 'border-color .15s ease-in-out, box-shadow .15s ease-in-out',
       '&:hover': null,
     }),
     option: () => ({

@@ -6,7 +6,14 @@ import {
   Button,
   Card,
   CardBody,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
   Input,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
   FormGroup,
   ModalHeader,
   ModalBody,
@@ -71,9 +78,32 @@ const AdminThemePreview = () => {
       <Card>
         <CardBody>This is some card content.</CardBody>
       </Card>
+      <Header>Dropdowns</Header>
+      <UncontrolledDropdown>
+        <DropdownToggle caret>Dropdown</DropdownToggle>
+        <DropdownMenu>
+          <DropdownItem header>Header</DropdownItem>
+          <DropdownItem disabled>Action</DropdownItem>
+          <DropdownItem>Another Action</DropdownItem>
+          <DropdownItem divider />
+          <DropdownItem>Another Action</DropdownItem>
+        </DropdownMenu>
+      </UncontrolledDropdown>
       <Header>Forms</Header>
       <FormGroup>
         <Input />
+      </FormGroup>
+      <FormGroup>
+        <InputGroup>
+          <InputGroupAddon addonType="prepend">
+            <InputGroupText>$</InputGroupText>
+            <InputGroupText>$</InputGroupText>
+          </InputGroupAddon>
+          <Input placeholder="Dolla dolla billz yo!" />
+          <InputGroupAddon addonType="append">
+            <Button color="primary">Swag</Button>
+          </InputGroupAddon>
+        </InputGroup>
       </FormGroup>
       <FormGroup>
         <Input disabled placeholder="Disabled input" />
@@ -88,6 +118,18 @@ const AdminThemePreview = () => {
         <CardBody>
           <FormGroup>
             <Input />
+          </FormGroup>
+          <FormGroup>
+            <InputGroup>
+              <InputGroupAddon addonType="prepend">
+                <InputGroupText>$</InputGroupText>
+                <InputGroupText>$</InputGroupText>
+              </InputGroupAddon>
+              <Input placeholder="Dolla dolla billz yo!" />
+              <InputGroupAddon addonType="append">
+                <Button color="primary">Swag</Button>
+              </InputGroupAddon>
+            </InputGroup>
           </FormGroup>
           <FormGroup>
             <Input disabled placeholder="Disabled input" />
