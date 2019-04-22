@@ -1,5 +1,6 @@
 $page-background: #222;
 $dark-background: #343a40;
+$control-background: #464c50;
 $dark-border: #444;
 $text-color: #fff;
 $tab-border: rgba(0, 0, 0, 0.25);
@@ -130,12 +131,16 @@ body.darkmode {
 
   .dropdown-menu {
     color: $text-color !important;
-    background-color: $page-background !important;
+    background-color: $control-background !important;
     border: 1px solod $dark-border !important;
   }
 
   .dropdown-item {
     color: $text-color !important;
+
+    &:hover {
+      background-color: lighten($control-background, 10%);
+    }
 
     &:hover,
     &:focus,
@@ -144,11 +149,16 @@ body.darkmode {
     }
   }
 
+  .dropdown-item.active,
+  .dropdown-item:active {
+    background-color: $primary !important;
+  }
+
   /* Forms & inputs */
 
   .form-control,
   .custom-select {
-    background-color: rgba(255, 255, 255, 0.09) !important;
+    background-color: $control-background !important;
     border: 1px solid #595959 !important;
     color: $text-color !important;
   }
@@ -158,11 +168,6 @@ body.darkmode {
     background-color: $dark-border !important;
     color: #adb5bd !important;
     border-color: transparent !important;
-  }
-
-  .dropdown-item.active,
-  .dropdown-item:active {
-    background-color: $primary !important;
   }
 
   .custom-control-input:checked ~ .custom-control-label::before {

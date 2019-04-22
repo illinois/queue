@@ -8,24 +8,24 @@ const Select = props => {
 
   const customStylesCommon = {
     menu: () => ({
-      marginTop: 0,
+      marginTop: '2px',
     }),
     control: (provided, state) => ({
       boxShadow: state.isFocused ? '0 0 0 0.2rem rgba(0,123,255,.25)' : null,
+      transition: null,
       '&:hover': null,
     }),
-    option: (provided, state) => ({
+    option: () => ({
       cursor: 'pointer',
-      backgroundColor: state.isSelected
-        ? 'red'
-        : state.isFocused
-        ? 'blue'
-        : 'transparent',
+    }),
+    menuList: () => ({
+      paddingTop: '0.5rem',
+      paddingBottom: '0.5rem',
     }),
   }
 
   const customStylesLight = {
-    menu: (provided, state) => ({
+    menu: provided => ({
       ...provided,
       ...customStylesCommon.menu(),
     }),
@@ -39,46 +39,69 @@ const Select = props => {
       ...provided,
       ...customStylesCommon.option(provided, state),
     }),
+    menuList: provided => ({
+      ...provided,
+      ...customStylesCommon.menuList(),
+    }),
   }
 
   const customStylesDark = {
-    menu: (provided, state) => ({
+    menu: provided => ({
       ...provided,
       ...customStylesCommon.menu(),
-      backgroundColor: '#222',
+      backgroundColor: '#464c50',
     }),
     control: (provided, state) => ({
-      wig3: console.log(state.menuIsOpen),
       ...provided,
       ...customStylesCommon.control(provided, state),
-      backgroundColor: 'rgba(255, 255, 255, 0.09)',
+      backgroundColor: '#464c50',
       borderColor: '#595959',
     }),
     option: (provided, state) => ({
       ...provided,
       ...customStylesCommon.option(provided, state),
-      backgroundColor: state.isSelected
-        ? '#2c7be5'
-        : state.isFocused
-        ? '#5997eb'
-        : 'transparent',
-      ':active': {
-        backgroundColor: state.isSelected ? '#2c7be5' : '#4a8ee9',
-      },
+      color: 'white',
     }),
     singleValue: provided => ({
       ...provided,
       color: '#fff',
     }),
+    menuList: provided => ({
+      ...provided,
+      ...customStylesCommon.menuList(),
+    }),
   }
+
+  const themeColorsDark = {
+    primary: '#2c7be5',
+    primary25: '#5997eb',
+    primary50: '#4a8ee9',
+    primary75: '',
+    neutral90: 'hsl(0, 0%, 100%)',
+    neutral80: 'hsl(0, 0%, 95%)',
+    neutral70: 'hsl(0, 0%, 90%)',
+    neutral60: 'hsl(0, 0%, 80%)',
+    neutral50: 'hsl(0, 0%, 70%)',
+    neutral40: 'hsl(0, 0%, 60%)',
+    neutral30: 'hsl(0, 0%, 50%)',
+    neutral20: 'hsl(0, 0%, 40%)',
+    neutral10: 'hsl(0, 0%, 30%)',
+    neutral5: 'hsl(0, 0%, 20%)',
+    neutral0: 'hsl(0, 0%, 10%)',
+  }
+
+  const themeColorsLight = {
+    primary: '#007bff',
+  }
+
+  const themeColors = isDarkMode ? themeColorsDark : themeColorsLight
 
   const theme = existingTheme => ({
     ...existingTheme,
     borderRadius: '0.25rem',
     colors: {
       ...existingTheme.colors,
-      primary: isDarkMode ? '#2c7be5' : '#007bff',
-      // neutral0: isDarkMode ? '#343a40' : existingTheme.colors.neutral0,
+      ...themeColors,
     },
   })
 

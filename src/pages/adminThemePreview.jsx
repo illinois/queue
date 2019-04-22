@@ -4,6 +4,8 @@ import {
   Alert,
   Badge,
   Button,
+  Card,
+  CardBody,
   Input,
   FormGroup,
   ModalHeader,
@@ -65,12 +67,16 @@ const AdminThemePreview = () => {
           {color}
         </Button>
       ))}
+      <Header>Cards</Header>
+      <Card>
+        <CardBody>This is some card content.</CardBody>
+      </Card>
       <Header>Forms</Header>
       <FormGroup>
         <Input />
       </FormGroup>
       <FormGroup>
-        <Input disabled />
+        <Input disabled placeholder="Disabled input" />
       </FormGroup>
       <FormGroup>
         <Select options={selectOptions} />
@@ -78,6 +84,22 @@ const AdminThemePreview = () => {
       <FormGroup>
         <Select options={selectOptions} isDisabled />
       </FormGroup>
+      <Card>
+        <CardBody>
+          <FormGroup>
+            <Input />
+          </FormGroup>
+          <FormGroup>
+            <Input disabled placeholder="Disabled input" />
+          </FormGroup>
+          <FormGroup>
+            <Select options={selectOptions} />
+          </FormGroup>
+          <FormGroup>
+            <Select options={selectOptions} isDisabled />
+          </FormGroup>
+        </CardBody>
+      </Card>
       <Header>Modals</Header>
       <div
         className="modal"
