@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardBody, Button } from 'reactstrap'
 
 import { Link } from '../../routes'
 
-const ThemePreviewPanel = props => {
+const ThemePreviewPanel = () => {
   return (
     <Card className="mb-3">
       <CardHeader>

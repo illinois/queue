@@ -119,7 +119,7 @@ class NewQueue extends React.Component {
               Course
             </Label>
             <Col sm={9}>
-              <Input
+              <CustomInput
                 type="select"
                 name="course"
                 id="course"
@@ -131,7 +131,7 @@ class NewQueue extends React.Component {
                   Select a course
                 </option>
                 {courseOptions}
-              </Input>
+              </CustomInput>
               <FormFeedback>{this.state.fieldErrors.course}</FormFeedback>
             </Col>
           </FormGroup>

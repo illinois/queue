@@ -4,12 +4,14 @@ import {
   Alert,
   Badge,
   Button,
-  Modal,
+  Input,
+  FormGroup,
   ModalHeader,
   ModalBody,
   ModalFooter,
 } from 'reactstrap'
 import PageWithUser from '../components/PageWithUser'
+import Select from '../components/Select'
 
 const colors = [
   'primary',
@@ -26,6 +28,17 @@ const colors = [
 const Header = ({ children }) => <h1 className="mt-4">{children}</h1>
 
 const AdminThemePreview = () => {
+  const selectOptions = [
+    {
+      value: 'thing',
+      label: 'First thing',
+    },
+    {
+      value: 'thing2',
+      label: 'Second thing',
+    },
+  ]
+
   return (
     <Container>
       <Header>Alerts</Header>
@@ -52,6 +65,19 @@ const AdminThemePreview = () => {
           {color}
         </Button>
       ))}
+      <Header>Forms</Header>
+      <FormGroup>
+        <Input />
+      </FormGroup>
+      <FormGroup>
+        <Input disabled />
+      </FormGroup>
+      <FormGroup>
+        <Select options={selectOptions} />
+      </FormGroup>
+      <FormGroup>
+        <Select options={selectOptions} isDisabled />
+      </FormGroup>
       <Header>Modals</Header>
       <div
         className="modal"
@@ -61,7 +87,7 @@ const AdminThemePreview = () => {
           right: 'auto',
           bottom: 'auto',
           left: 'auto',
-          zIndex: 1,
+          zIndex: 0,
           display: 'block',
         }}
       >
