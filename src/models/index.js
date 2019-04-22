@@ -18,9 +18,7 @@ module.exports.initSequelize = sequelize => {
   fs.readdirSync(__dirname)
     .filter(
       file =>
-        file.indexOf('.') !== 0 &&
-        file.indexOf('.js') !== -1 &&
-        file !== 'index.js'
+        file.indexOf('.') !== 0 && file.endsWith('.js') && file !== 'index.js'
     )
     .forEach(file => {
       const model = sequelize.import(path.join(__dirname, file))

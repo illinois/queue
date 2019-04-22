@@ -1,7 +1,7 @@
 /* eslint-env jest */
 const app = require('../app')
-const testutil = require('../../test/util')
-const { requestAsUser } = require('../../test/util')
+const testutil = require('../test/util')
+const { requestAsUser } = require('../test/util')
 
 beforeEach(async () => {
   await testutil.setupTestDb()

@@ -1,8 +1,8 @@
 /* eslint-env jest */
 // const request = require('supertest')
 const app = require('../app')
-const testutil = require('../../test/util')
-const { requestAsUser } = require('../../test/util')
+const testutil = require('../test/util')
+const { requestAsUser } = require('../test/util')
 const { User } = require('../models')
 
 beforeEach(async () => {

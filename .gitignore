@@ -30,8 +30,9 @@ build/Release
 node_modules
 jspm_packages
 
-# Next.js build directory
+# Build directories
 build
+nextbuild
 .next
 
 # Optional npm cache directory

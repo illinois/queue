@@ -1,6 +1,6 @@
 /* eslint-env jest */
 const authnToken = require('./authnToken')
-const testutil = require('../../test/util')
+const testutil = require('../test/util')
 
 beforeAll(async () => {
   await testutil.setupTestDb()

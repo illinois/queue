@@ -3,7 +3,9 @@
   "compilerOptions": {
     "module": "commonjs",
     "sourceMap": true,
-    "outDir": "bin/"
+    "outDir": "build/",
+    "rootDir": "src/"
   },
-  "include": ["server/**/*.ts", "typings/**/*.ts"]
+  "include": ["src/**/*"],
+  "exclude": ["src/.next/**/*"]
 }
