@@ -20,5 +20,6 @@ routes
   .add('createQueue', withBaseUrl('/course/:courseId/queue/create'))
   .add('userSettings', withBaseUrl('/settings'))
   .add('adminIndex', withBaseUrl('/admin'))
+  .add('adminThemePreview', withBaseUrl('/admin/theme'))
 
 module.exports = routes

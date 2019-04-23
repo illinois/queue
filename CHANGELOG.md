@@ -7,6 +7,8 @@ with the current semantic version and the next changes should go under a **[Next
 
 ## [Next]
 
+* Refine dark mode: better styles, new Bootstrap colors, and a custom select component. ([@nwalters512](https://github.com/nwalters512) in [#279](https://github.com/illinois/queue/pull/279))
+
 ## v1.2.0
 
 * Fix sequelize stream handling of bulk updates. ([@nwalters512](https://github.com/nwalters512) in [#270](https://github.com/illinois/queue/pull/270))

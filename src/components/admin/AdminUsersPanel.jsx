@@ -133,7 +133,7 @@ const AdminUsersPanel = props => {
     )
   }
   return (
-    <Card>
+    <Card className="mb-3">
       <CardHeader>
         <CardTitle tag="h5" className="mb-0">
           Admin users
