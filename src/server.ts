@@ -7,15 +7,15 @@ import * as nextJs from 'next'
 import co from 'co'
 
 import * as app from './app'
-import * as logger from './util/logger'
+import logger from './util/logger'
 import * as models from './models'
 import * as migrations from './migrations/util'
 import * as routes from './routes'
 import * as serverSocket from './socket/server'
 import { baseUrl } from './util'
 
-const DEV =
-  ['now', 'staging', 'production'].indexOf(process.env.NODE_ENV) === -1
+const prodEnvironments = ['now', 'staging', 'production']
+const DEV = prodEnvironments.indexOf(process.env.NODE_ENV as string) === -1
 const PORT = process.env.PORT || 3000
 
 const nextApp = nextJs({ dev: DEV, dir: DEV ? 'src' : 'build', quiet: true })

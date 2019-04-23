@@ -7,7 +7,7 @@
     "allowJs": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "strict": false,
+    "strict": true,
     "removeComments": false,
     "preserveConstEnums": true,
     "sourceMap": true,
@@ -15,5 +15,6 @@
     "baseUrl": ".",
     "typeRoots": ["./node_modules/@types"],
     "lib": ["dom", "es2015", "es2016"]
-  }
+  },
+  "include": ["src"]
 }

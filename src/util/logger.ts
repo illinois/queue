@@ -1,5 +1,5 @@
-const { createLogger, transports, format } = require('winston')
-const { inspect } = require('util')
+import { createLogger, transports, format } from 'winston'
+import { inspect } from 'util'
 
 const { combine, colorize, timestamp, errors, splat } = format
 
@@ -10,7 +10,7 @@ const outputFormat = format.printf(info => {
   return `${info.timestamp} [${info.level}]: ${message}`
 })
 
-module.exports = createLogger({
+export default createLogger({
   format: combine(
     errors({ stack: true }),
     colorize(),
