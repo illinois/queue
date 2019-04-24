@@ -12,7 +12,7 @@
     "test": "NODE_ENV=test jest",
     "test-sequential": "jest --runInBand",
     "lint-js": "eslint --ext .js,.jsx ./src",
-    "fix-lint-js": "npm run lint -- --fix",
+    "fix-lint-js": "npm run lint-js -- --fix",
     "typecheck": "npx tsc --noEmit",
     "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
     "prettier-diff": "prettier --list-different \"src/**/*.{js,jsx,ts,tsx}\"",
