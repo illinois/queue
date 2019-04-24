@@ -10,7 +10,7 @@ const outputFormat = format.printf(info => {
   return `${info.timestamp} [${info.level}]: ${message}`
 })
 
-export default createLogger({
+const logger = createLogger({
   format: combine(
     errors({ stack: true }),
     colorize(),
@@ -24,3 +24,5 @@ export default createLogger({
     }),
   ],
 })
+
+export { logger }

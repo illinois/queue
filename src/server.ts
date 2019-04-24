@@ -7,10 +7,10 @@ import * as nextJs from 'next'
 import co from 'co'
 
 import * as app from './app'
-import logger from './util/logger'
+import { logger } from './util/logger'
 import * as models from './models'
 import * as migrations from './migrations/util'
-import * as routes from './routes'
+import routes from './routes'
 import * as serverSocket from './socket/server'
 import { baseUrl } from './util'
 

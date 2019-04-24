@@ -89,6 +89,7 @@
     "@types/next": "^8.0.3",
     "@types/react-bootstrap-typeahead": "^3.4.4",
     "@types/react-dom": "^16.8.4",
+    "@types/react-redux": "^7.0.8",
     "@types/reactstrap": "^8.0.1",
     "@types/socket.io": "^2.1.2",
     "babel-eslint": "^10.0.1",

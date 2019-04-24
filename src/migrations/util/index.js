@@ -3,7 +3,7 @@ const Sequelize = require('sequelize')
 const mysql = require('mysql2/promise')
 const path = require('path')
 
-const logger = require('../../util/logger')
+const { logger } = require('../../util/logger')
 const models = require('../../models')
 
 /**

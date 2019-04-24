@@ -4,7 +4,7 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const rewrite = require('express-urlrewrite')
 
-const logger = require('./util/logger')
+const { logger } = require('./util/logger')
 const { baseUrl, isDev, isNow } = require('./util')
 
 app.use(cookieParser())
