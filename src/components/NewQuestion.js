@@ -18,9 +18,12 @@ import {
 import classNames from 'classnames'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import getConfig from 'next/config'
 
 import constants from '../constants'
 import { CREATE_QUESTION } from '../constants/ActionTypes'
+
+const { uidName, uidArticle } = getConfig().publicRuntimeConfig
 
 const fields = [
   {
@@ -175,13 +178,13 @@ export default class NewQuestion extends React.Component {
                 {isUserCourseStaff && (
                   <FormGroup row>
                     <Label for="netid" sm={2} md={3}>
-                      Net ID
+                      {uidName}
                     </Label>
                     <Col sm={10} md={9}>
                       <Input
                         name="netid"
                         id="netid"
-                        placeholder="Enter a Net ID (optional)"
+                        placeholder={`Enter ${uidArticle} ${uidName} (optional)`}
                         value={this.state.netid}
                         onChange={this.handleInputChange}
                       />

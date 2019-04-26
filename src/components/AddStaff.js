@@ -1,6 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { ListGroupItem, Form, Input, Button } from 'reactstrap'
+import getConfig from 'next/config'
+
+const { uidName, uidArticle } = getConfig().publicRuntimeConfig
 
 class AddStaff extends React.Component {
   constructor(props) {
@@ -44,7 +47,7 @@ class AddStaff extends React.Component {
           <Input
             type="text"
             name="netid"
-            placeholder="Enter a NetID"
+            placeholder={`Enter ${uidArticle} ${uidName}`}
             className="mr-3"
             onChange={this.handleInputChange}
             value={this.state.netid}

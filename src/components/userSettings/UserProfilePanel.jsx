@@ -14,8 +14,11 @@ import {
 } from 'reactstrap'
 import { useInput } from 'react-hanger'
 import { connect } from 'react-redux'
+import getConfig from 'next/config'
 
 import { updateUserPreferredName as updateUserPreferredNameAction } from '../../actions/user'
+
+const { uidName } = getConfig().publicRuntimeConfig
 
 const UserProfilePanel = ({ user, updateUserPreferredName }) => {
   const preferredNameInput = useInput(user.preferredName || '')
@@ -35,7 +38,7 @@ const UserProfilePanel = ({ user, updateUserPreferredName }) => {
       </CardHeader>
       <CardBody>
         <div className="mb-3">
-          <div className="text-muted small">Net ID</div>
+          <div className="text-muted small">{uidName}</div>
           <div>{user.netid}</div>
         </div>
         <div className="mb-3">
@@ -74,6 +77,7 @@ const UserProfilePanel = ({ user, updateUserPreferredName }) => {
     </Card>
   )
 }
+
 UserProfilePanel.propTypes = {
   user: PropTypes.shape({
     universityName: PropTypes.string,

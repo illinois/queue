@@ -3,8 +3,11 @@ import PropTypes from 'prop-types'
 import { ListGroupItem, Button, Badge } from 'reactstrap'
 import Moment from 'react-moment'
 import moment from 'moment'
+import getConfig from 'next/config'
 
 import ParrotText from './ParrotText'
+
+const { uidName } = getConfig().publicRuntimeConfig
 
 /* eslint-disable react/prefer-stateless-function */
 class Question extends React.Component {
@@ -142,7 +145,7 @@ class Question extends React.Component {
             <strong className="d-block">
               <span title="Name">{name}</span>
               {isUserCourseStaff && (
-                <span title="NetID" className="text-muted">
+                <span title={uidName} className="text-muted">
                   {' '}
                   ({askedBy.netid})
                 </span>

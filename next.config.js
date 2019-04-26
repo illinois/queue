@@ -5,5 +5,9 @@ module.exports = withSass(
   withCSS({
     useFileSystemPublicRoutes: false,
     assetPrefix: process.env.BASE_URL || '',
+    publicRuntimeConfig: {
+      uidName: 'Net ID',
+      uidArticle: 'a',
+    },
   })
 )
