@@ -97,6 +97,13 @@ body.darkmode {
         background-color: darken($value, 10%) !important;
         border-color: darken($value, 12.5%) !important;
       }
+
+      &.disabled,
+      &:disabled {
+        color: map-get($theme-text-colors, $color) !important;
+        background-color: $value !important;
+        border-color: $value !important;
+      }
     }
 
     .btn-outline-#{$color} {
@@ -112,6 +119,12 @@ body.darkmode {
         color: map-get($theme-text-colors, $color) !important;
         background-color: darken($value, 7.5%);
         border-color: darken($value, 10%);
+      }
+
+      &.disabled,
+      &:disabled {
+        color: $value !important;
+        border-color: $value !important;
       }
     }
   }

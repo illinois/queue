@@ -47,7 +47,7 @@ export default class NewQuestion extends React.Component {
     super(props)
 
     this.state = {
-      netid: '',
+      uid: '',
       name: props.isUserCourseStaff ? '' : props.user.name || '',
       topic: '',
       location: '',
@@ -98,11 +98,11 @@ export default class NewQuestion extends React.Component {
     })
     if (!valid) return
 
-    const netid = this.props.isUserCourseStaff
-      ? this.state.netid || undefined
+    const uid = this.props.isUserCourseStaff
+      ? this.state.uid || undefined
       : undefined
     const question = {
-      netid,
+      uid,
       name: this.state.name,
       location: this.state.location,
       topic: this.state.topic,
@@ -118,7 +118,7 @@ export default class NewQuestion extends React.Component {
       if (action.type === CREATE_QUESTION.SUCCESS) {
         // Clear out all fields so user can add a new question
         this.setState({
-          netid: '',
+          uid: '',
           name: this.props.isUserCourseStaff ? '' : this.props.user.name || '',
           location: '',
           topic: '',
@@ -177,16 +177,17 @@ export default class NewQuestion extends React.Component {
               <Form onSubmit={this.handleSubmit} autoComplete="off">
                 {isUserCourseStaff && (
                   <FormGroup row>
-                    <Label for="netid" sm={2} md={3}>
+                    <Label for="uid" sm={2} md={3}>
                       {uidName}
                     </Label>
                     <Col sm={10} md={9}>
                       <Input
-                        name="netid"
-                        id="netid"
+                        name="uiddd"
+                        id="uid"
                         placeholder={`Enter ${uidArticle} ${uidName} (optional)`}
-                        value={this.state.netid}
+                        value={this.state.uid}
                         onChange={this.handleInputChange}
+                        autoComplete="off"
                       />
                       <FormText color="muted">
                         This allows you to add a question on behalf of a
@@ -207,6 +208,7 @@ export default class NewQuestion extends React.Component {
                       value={this.state.name}
                       onChange={this.handleInputChange}
                       invalid={isInvalid(this.state.fieldErrors.name)}
+                      autoComplete="off"
                     />
                     <FormFeedback>{this.state.fieldErrors.name}</FormFeedback>
                     <FormText color="muted">Using a nickname is fine!</FormText>

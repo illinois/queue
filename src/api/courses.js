@@ -35,7 +35,7 @@ router.get(
       includes.push({
         model: User,
         as: 'staff',
-        attributes: ['id', 'netid', 'name'],
+        attributes: ['id', 'uid', 'name'],
         through: {
           attributes: [],
         },
@@ -90,20 +90,11 @@ router.post(
 )
 
 // Add someone to course staff
-router.post(
-  '/:courseId/staff',
-  [
-    requireCourseStaff,
-    requireCourse,
-    check('netid', 'netid must be specified')
-      .exists()
-      .trim(),
-    failIfErrors,
-  ],
+router.put(
+  '/:courseId/staff/:userId',
+  [requireCourseStaff, requireCourse, requireUser, failIfErrors],
   safeAsync(async (req, res, _next) => {
-    const { netid: originalNetid } = matchedData(req)
-    const [netid] = originalNetid.split('@')
-    const [user] = await User.findOrCreate({ where: { netid } })
+    const { user } = res.locals
     await user.addStaffAssignment(res.locals.course.id)
     res.status(201).send(user)
   })
@@ -115,10 +106,7 @@ router.delete(
   [requireCourseStaff, requireCourse, requireUser, failIfErrors],
   safeAsync(async (req, res, _next) => {
     const { user, course } = res.locals
-    const oldStaffAssignments = await user.getStaffAssignments()
-    await user.setStaffAssignments(
-      oldStaffAssignments.filter(c => c.id !== course.id)
-    )
+    await user.removeStaffAssignment(course)
     res.status(202).send()
   })
 )

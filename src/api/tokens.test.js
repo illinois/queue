@@ -13,7 +13,7 @@ afterEach(() => testutil.destroyTestDb())
 describe('Tokens API', () => {
   describe('GET /tokens', () => {
     it("returns user's own tokens", async () => {
-      const request = await requestAsUser(app, 'admin')
+      const request = await requestAsUser(app, 'admin@illinois.edu')
       const res = await request.get(`/api/tokens`)
       expect(res.statusCode).toEqual(200)
       expect(res.body).toHaveLength(1)
@@ -27,7 +27,7 @@ describe('Tokens API', () => {
     })
 
     it('excludes tokens of other users', async () => {
-      const request = await requestAsUser(app, 'student')
+      const request = await requestAsUser(app, 'student@illinois.edu')
       const res = await request.get(`/api/tokens`)
       expect(res.statusCode).toBe(200)
       expect(res.body).toEqual([])
@@ -35,7 +35,7 @@ describe('Tokens API', () => {
   })
   describe('GET /tokens/:tokenId', () => {
     it("fails for token that doesn't exist", async () => {
-      const request = await requestAsUser(app, 'admin')
+      const request = await requestAsUser(app, 'admin@illinois.edu')
       const res = await request.get(`/api/tokens/1234`)
       expect(res.statusCode).toEqual(404)
     })
@@ -44,7 +44,7 @@ describe('Tokens API', () => {
   describe('POST /tokens', () => {
     it('creates a new token', async () => {
       const token = { name: 'my new token' }
-      const request = await requestAsUser(app, 'admin')
+      const request = await requestAsUser(app, 'admin@illinois.edu')
       const res = await request.post(`/api/tokens`).send(token)
       expect(res.statusCode).toBe(201)
       expect(res.body).toMatchObject({
@@ -65,7 +65,7 @@ describe('Tokens API', () => {
 
   describe('DELETE /tokens', () => {
     it('removes a token for a user', async () => {
-      const request = await requestAsUser(app, 'admin')
+      const request = await requestAsUser(app, 'admin@illinois.edu')
       const res = await request.delete('/api/tokens/1')
       expect(res.statusCode).toBe(204)
 
@@ -74,11 +74,11 @@ describe('Tokens API', () => {
     })
 
     it('fails for user who does not own the token', async () => {
-      const request = await requestAsUser(app, 'student')
+      const request = await requestAsUser(app, 'student@illinois.edu')
       const res = await request.delete('/api/tokens/1')
       expect(res.statusCode).toBe(404)
 
-      const adminRequest = await requestAsUser(app, 'admin')
+      const adminRequest = await requestAsUser(app, 'admin@illinois.edu')
       const res2 = await adminRequest.get('/api/tokens/1')
       expect(res2.statusCode).toBe(200)
       expect(res2.body.name).toBe('Admin test token')

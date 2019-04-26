@@ -56,7 +56,7 @@ router.post(
     check('topic')
       .isLength({ min: 1, max: constants.QUESTION_TOPIC_MAX_LENGTH })
       .trim(),
-    check('netid').optional({ nullable: true }),
+    check('uid').optional({ nullable: true }),
     checkLocation,
     failIfErrors,
   ],
@@ -73,18 +73,18 @@ router.post(
     }
 
     // First, let's check if the request is coming from course staff and
-    // includes a specific netid
+    // includes a specific uid
     let askerUser = res.locals.userAuthn
     let askerId = res.locals.userAuthn.id
-    if (data.netid) {
+    if (data.uid) {
       if (userAuthz.isAdmin || userAuthz.staffedCourseIds.includes(courseId)) {
         // The user is allowed to do this!
-        const [netid] = data.netid.split('@')
-        const [user] = await User.findOrCreate({ where: { netid } })
+        const { uid } = data
+        const [user] = await User.findOrCreate({ where: { uid } })
         askerUser = user
         askerId = user.id
       } else {
-        next(new ApiError(403, "You don't have authoriation to set a netid"))
+        next(new ApiError(403, "You don't have authoriation to set a UID"))
         return
       }
     }

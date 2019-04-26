@@ -95,8 +95,7 @@ export function fetchCourse(courseId) {
 const addCourseStaffRequest = makeActionCreator(
   types.ADD_COURSE_STAFF.REQUEST,
   'courseId',
-  'netid',
-  'name'
+  'userId'
 )
 const addCourseStaffSuccess = makeActionCreator(
   types.ADD_COURSE_STAFF.SUCCESS,
@@ -108,22 +107,17 @@ const addCourseStaffFailure = makeActionCreator(
   'data'
 )
 
-export function addCourseStaff(courseId, netid, name) {
+export function addCourseStaff(courseId, userId) {
   return dispatch => {
-    dispatch(addCourseStaffRequest(courseId, netid, name))
+    dispatch(addCourseStaffRequest(courseId, userId))
 
-    return axios
-      .post(`/api/courses/${courseId}/staff`, {
-        netid,
-        name,
-      })
-      .then(
-        res => dispatch(addCourseStaffSuccess(courseId, res.data)),
-        err => {
-          console.error(err)
-          dispatch(addCourseStaffFailure(err))
-        }
-      )
+    return axios.put(`/api/courses/${courseId}/staff/${userId}`).then(
+      res => dispatch(addCourseStaffSuccess(courseId, res.data)),
+      err => {
+        console.error(err)
+        dispatch(addCourseStaffFailure(err))
+      }
+    )
   }
 }
 

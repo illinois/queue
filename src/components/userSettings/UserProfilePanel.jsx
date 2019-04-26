@@ -39,7 +39,7 @@ const UserProfilePanel = ({ user, updateUserPreferredName }) => {
       <CardBody>
         <div className="mb-3">
           <div className="text-muted small">{uidName}</div>
-          <div>{user.netid}</div>
+          <div>{user.uid}</div>
         </div>
         <div className="mb-3">
           <div className="text-muted small">University Name</div>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Container,
   Alert,
@@ -21,6 +21,7 @@ import {
 } from 'reactstrap'
 import PageWithUser from '../components/PageWithUser'
 import Select from '../components/Select'
+import UserAutocomplete from '../components/UserAutocomplete'
 
 const colors = [
   'primary',
@@ -47,6 +48,8 @@ const AdminThemePreview = () => {
       label: 'Second thing',
     },
   ]
+
+  const [userAutocompleteSelected, setUserAutocompleteSelected] = useState(null)
 
   return (
     <Container>
@@ -114,6 +117,13 @@ const AdminThemePreview = () => {
       <FormGroup>
         <Select options={selectOptions} isDisabled />
       </FormGroup>
+      <FormGroup>
+        <UserAutocomplete
+          id="admin-search"
+          selected={userAutocompleteSelected}
+          onChange={user => setUserAutocompleteSelected[user]}
+        />
+      </FormGroup>
       <Card>
         <CardBody>
           <FormGroup>
@@ -139,6 +149,13 @@ const AdminThemePreview = () => {
           </FormGroup>
           <FormGroup>
             <Select options={selectOptions} isDisabled />
+          </FormGroup>
+          <FormGroup>
+            <UserAutocomplete
+              id="admin-search-card"
+              selected={userAutocompleteSelected}
+              onChange={user => setUserAutocompleteSelected[user]}
+            />
           </FormGroup>
         </CardBody>
       </Card>

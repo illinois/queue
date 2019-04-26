@@ -17,7 +17,7 @@ const AdminIndex = ({ user }) => (
 AdminIndex.propTypes = {
   user: PropTypes.shape({
     name: PropTypes.string,
-    netid: PropTypes.string,
+    uid: PropTypes.string,
   }).isRequired,
 }
 

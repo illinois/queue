@@ -57,7 +57,7 @@ describe('redirectIfNeedsAuthn middleware', () => {
     const { req, res, next } = makeArgs('/queue/1')
 
     addJwtCookie(req, res, {
-      netid: 'student',
+      uid: 'student@illinois.edu',
     })
     await redirectIfNeedsAuthn(req, res, next)
     expect(next).toBeCalled()

@@ -1,69 +1,53 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { ListGroupItem, Form, Input, Button } from 'reactstrap'
+import {
+  ListGroupItem,
+  Form,
+  Button,
+  InputGroup,
+  InputGroupAddon,
+} from 'reactstrap'
 import getConfig from 'next/config'
+import UserAutocomplete from './UserAutocomplete'
 
 const { uidName, uidArticle } = getConfig().publicRuntimeConfig
 
-class AddStaff extends React.Component {
-  constructor(props) {
-    super(props)
+const AddStaff = props => {
+  const [pendingUser, setPendingUser] = useState([])
 
-    this.state = {
-      netid: '',
-    }
-
-    this.handleInputChange = this.handleInputChange.bind(this)
-    this.handleAddStaff = this.handleAddStaff.bind(this)
-  }
-
-  handleInputChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value,
-    })
-  }
-
-  handleAddStaff(e) {
+  const handleAddStaff = e => {
+    console.log('wiggg')
     if (e) e.preventDefault()
-    const staff = {
-      netid: this.state.netid,
-    }
-
-    this.props.onAddStaff(staff)
-
-    // Wipe the netid so more staff can be added
-    this.setState({ netid: '' })
+    props.onAddStaff(pendingUser[0].id)
   }
 
-  render() {
-    return (
-      <ListGroupItem>
-        <Form
-          autoComplete="off"
-          className="d-flex align-items-center"
-          style={{ flexWrap: 'nowrap' }}
-          onSubmit={e => this.handleAddStaff(e)}
-        >
-          <Input
-            type="text"
-            name="netid"
-            placeholder={`Enter ${uidArticle} ${uidName}`}
-            className="mr-3"
-            onChange={this.handleInputChange}
-            value={this.state.netid}
-          />
-
+  return (
+    <Form
+      autoComplete="off"
+      className="d-flex align-items-center"
+      style={{ flexWrap: 'nowrap' }}
+      onSubmit={handleAddStaff}
+    >
+      <InputGroup>
+        <UserAutocomplete
+          id="user-input"
+          selected={pendingUser}
+          onChange={setPendingUser}
+          placeholder={`Enter ${uidArticle} ${uidName}`}
+        />
+        <InputGroupAddon addonType="append">
           <Button
             color="primary"
             type="button"
-            onClick={() => this.handleAddStaff()}
+            onClick={handleAddStaff}
+            disabled={pendingUser.length === 0}
           >
             Add staff
           </Button>
-        </Form>
-      </ListGroupItem>
-    )
-  }
+        </InputGroupAddon>
+      </InputGroup>
+    </Form>
+  )
 }
 
 AddStaff.propTypes = {

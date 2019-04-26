@@ -18,7 +18,7 @@ router.get(
     const users = await User.findAll({
       where: {
         [Sequelize.Op.or]: {
-          netid: {
+          uid: {
             [Sequelize.Op.like]: `${q}%`,
           },
         },
