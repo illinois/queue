@@ -44,10 +44,10 @@ describe('Queues API', () => {
       })
     }
     test('succeeds for admin', async () => {
-      await doGetTest('admin')
+      await doGetTest('admin@illinois.edu')
     })
     test('succeeds for non admin', async () => {
-      await doGetTest('student')
+      await doGetTest('student@illinois.edu')
     })
   })
 
@@ -100,7 +100,7 @@ describe('Queues API', () => {
       expect(res5.body.activeStaff).toHaveLength(1)
       expect(res5.body.activeStaff[0]).toHaveProperty('id')
       expect(res5.body.activeStaff[0].id).toEqual(activeStaffId)
-      expect(res5.body.activeStaff[0].user.uid).toEqual('241staff')
+      expect(res5.body.activeStaff[0].user.uid).toEqual('241staff@illinois.edu')
       expect(res5.body.activeStaff[0].user.name).toEqual('241 Staff')
       if (isAdmin) {
         includesPrivateAttributes(res5.body)
@@ -110,11 +110,11 @@ describe('Queues API', () => {
     }
 
     test('succeeds for admin', async () => {
-      await testForUser('admin', true)
+      await testForUser('admin@illinois.edu', true)
     })
 
     test('succeeds for student', async () => {
-      await testForUser('student', false)
+      await testForUser('student@illinois.edu', false)
     })
   })
 
@@ -127,18 +127,21 @@ describe('Queues API', () => {
       expect(res.body.questions).toHaveLength(2)
       const [question1, question2] = res.body.questions
       expect(question1).toHaveProperty('askedById', 5)
-      expect(question1).toHaveProperty('askedBy.uid', 'student')
+      expect(question1).toHaveProperty('askedBy.uid', 'student@illinois.edu')
       expect(question2).toHaveProperty('askedById', 6)
-      expect(question2).toHaveProperty('askedBy.uid', 'otherstudent')
+      expect(question2).toHaveProperty(
+        'askedBy.uid',
+        'otherstudent@illinois.edu'
+      )
       includesPrivateAttributes(res.body)
     }
 
     test('includes all question data for admin', async () => {
-      await includesDataForUser('admin')
+      await includesDataForUser('admin@illinois.edu')
     })
 
     test('includes all question data for course staff', async () => {
-      await includesDataForUser('225staff')
+      await includesDataForUser('225staff@illinois.edu')
     })
 
     const excludesDataForUser = async user => {
@@ -160,11 +163,11 @@ describe('Queues API', () => {
     }
 
     test('excludes question data for other course staff on confidential queue', async () => {
-      await excludesDataForUser('241staff')
+      await excludesDataForUser('241staff@illinois.edu')
     })
 
     test('excludes question data for students on confidential queue', async () => {
-      await excludesDataForUser('student')
+      await excludesDataForUser('student@illinois.eduk')
     })
   })
 
@@ -281,7 +284,7 @@ describe('Queues API', () => {
       const res2 = await request2.get('/api/queues/1/staff')
       expect(res2.statusCode).toBe(200)
       expect(res2.body).toHaveLength(1)
-      expect(res2.body[0].user.uid).toBe('225staff')
+      expect(res2.body[0].user.uid).toBe('225staff@illinois.edu')
     })
 
     test('succeeds if user is already active course staff', async () => {
@@ -294,7 +297,7 @@ describe('Queues API', () => {
       const res3 = await request2.get('/api/queues/1/staff')
       expect(res3.statusCode).toBe(200)
       expect(res3.body).toHaveLength(1)
-      expect(res3.body[0].user.uid).toBe('225staff')
+      expect(res3.body[0].user.uid).toBe('225staff@illinois.edu')
     })
 
     test('succeeds for admin to add admin', async () => {
@@ -304,7 +307,7 @@ describe('Queues API', () => {
       const res2 = await request.get('/api/queues/1/staff')
       expect(res2.statusCode).toBe(200)
       expect(res2.body).toHaveLength(1)
-      expect(res2.body[0].user.uid).toBe('admin')
+      expect(res2.body[0].user.uid).toBe('admin@illinois.edu')
     })
 
     test('fails for student to add student', async () => {
@@ -677,7 +680,7 @@ describe('Queues API', () => {
       const res3 = await request3.get('/api/queues/1/staff')
       expect(res3.statusCode).toBe(200)
       expect(res3.body).toHaveLength(1)
-      expect(res3.body[0].user.uid).toBe('225staff')
+      expect(res3.body[0].user.uid).toBe('225staff@illinois.edu')
     })
 
     test('fails for student to delete staff', async () => {
@@ -692,7 +695,7 @@ describe('Queues API', () => {
       const res3 = await request3.get('/api/queues/1/staff')
       expect(res3.statusCode).toBe(200)
       expect(res3.body).toHaveLength(1)
-      expect(res3.body[0].user.uid).toBe('225staff')
+      expect(res3.body[0].user.uid).toBe('225staff@illinois.edu')
     })
   })
 

@@ -145,7 +145,7 @@ class Question extends React.Component {
             <strong className="d-block">
               <span title="Name">{name}</span>
               {isUserCourseStaff && (
-                <span title={uidName} className="text-muted">
+                <span title="UID" className="text-muted">
                   {' '}
                   ({askedBy.uid})
                 </span>

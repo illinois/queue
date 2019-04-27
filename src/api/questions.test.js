@@ -209,7 +209,9 @@ describe('Questions API', () => {
     })
 
     test('includes data for course staff on confidential queue', async () => {
-      await checkValidResponseForUserOnConfidentialQueue('225staff')
+      await checkValidResponseForUserOnConfidentialQueue(
+        '225staff@illinois.edu'
+      )
     })
 
     test('fails if queue does not exist', async () => {
@@ -274,7 +276,7 @@ describe('Questions API', () => {
       const res = await request.get('/api/queues/5/questions/4')
       expect(res.statusCode).toBe(200)
       expect(res.body.id).toBe(4)
-      expect(res.body.name).toBe('student@illinois.edu')
+      expect(res.body.name).toBe('Student')
       expect(res.body).toHaveProperty('askedBy.uid', 'student@illinois.edu')
     })
 
@@ -283,7 +285,7 @@ describe('Questions API', () => {
       const res = await request.get('/api/queues/5/questions/4')
       expect(res.statusCode).toBe(200)
       expect(res.body.id).toBe(4)
-      expect(res.body.name).toBe('student@illinois.edu')
+      expect(res.body.name).toBe('Student')
       expect(res.body).toHaveProperty('askedBy.uid', 'student@illinois.edu')
     })
 
@@ -364,7 +366,7 @@ describe('Questions API', () => {
       expect(res.statusCode).toBe(200)
       expect(res.body).toHaveProperty('askedBy')
       expect(res.body.askedBy.uid).toBe('admin@illinois.edu')
-      expect(res.body.answeredBy.name).toBe('admin@illinois.edu')
+      expect(res.body.answeredBy.name).toBe('Admin')
       expect(res.body.beingAnswered).toBe(true)
     })
 
