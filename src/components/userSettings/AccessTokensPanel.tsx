@@ -30,7 +30,7 @@ interface Token {
 const AccessTokensPanel = () => {
   const newTokenNameInput = useInput('')
   const [tokensLoading, setTokensLoading] = useState(true)
-  const [tokens, setTokens] = useState<Array<Token>>([])
+  const [tokens, setTokens] = useState<Token[]>([])
 
   useEffect(() => {
     setTokensLoading(true)

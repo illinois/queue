@@ -43,13 +43,13 @@ type AdminTypeahead = new () => AsyncTypeahead<Admin>
 const AdminTypeahead = AsyncTypeahead as AdminTypeahead
 
 const AdminUsersPanel = (props: AdminUsersPanelProps) => {
-  const [admins, setAdmins] = useState<Array<Admin>>([])
+  const [admins, setAdmins] = useState<Admin[]>([])
   const [adminsLoading, setAdminsLoading] = useState(true)
   const netidInput = useInput('')
   const [netidQuery] = useDebounce(netidInput.value, 500)
   const [userSuggestions, setUserSuggestions] = useState([])
   const [userSuggestionsLoading, setUserSuggestionsLoading] = useState(false)
-  const [pendingAdmin, setPendingAdmin] = useState<Array<Admin>>([])
+  const [pendingAdmin, setPendingAdmin] = useState<Admin[]>([])
 
   useEffect(() => {
     axios
@@ -63,7 +63,7 @@ const AdminUsersPanel = (props: AdminUsersPanelProps) => {
       })
   }, [])
 
-  useEffect(() => {
+  useEffect((): (() => void) => {
     if (!netidQuery) {
       return () => {}
     }

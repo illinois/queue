@@ -46,3 +46,6 @@ nextbuild
 
 # Machine-specific dotenv
 .env
+
+# VSCode
+.vscode

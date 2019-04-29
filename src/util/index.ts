@@ -27,11 +27,11 @@ export const isNow: boolean =
 
 export const withBaseUrl = (url: string) => `${module.exports.baseUrl}${url}`
 
-type ObjectWithIds<T> = {
+interface ObjectWithIds<T> {
   [key: string]: T
 }
 
-export const mapObjectToArray = <T>(o: ObjectWithIds<T>): Array<T> => {
+export const mapObjectToArray = <T>(o: ObjectWithIds<T>): T[] => {
   const keys = Object.keys(o).map(id => Number.parseInt(id, 10))
   const sortKeys = keys.sort((a, b) => (a < b ? -1 : 1))
   return sortKeys.map(id => o[id])

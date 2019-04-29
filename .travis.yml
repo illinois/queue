@@ -16,7 +16,7 @@ script:
   - ./scripts/diff_databases.sh
   - DATABASE_URL=mysql://queue@localhost/queue_test npm run test-sequential
   - npm run typecheck
-  - npm run lint-js
+  - npm run lint
   - npm run prettier-diff
 cache:
   directories:

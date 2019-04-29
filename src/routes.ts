@@ -1,7 +1,7 @@
 import * as Routes from 'next-routes'
 import { baseUrl, withBaseUrl } from './util'
 
-//@ts-ignore
+// @ts-ignore
 const routes = Routes()
 
 // We need to special-case the index route. When running with a non-empty
@@ -13,6 +13,7 @@ if (baseUrl === '') {
 } else {
   routes.add('index', withBaseUrl(''))
 }
+
 routes
   .add('login', withBaseUrl('/login'))
   .add('queue', withBaseUrl('/queue/:id'))
