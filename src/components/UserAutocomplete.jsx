@@ -45,6 +45,8 @@ const UserAutocomplete = props => {
     }
   }, [uidQuery])
 
+  const { inputProps, ...restProps } = props
+
   return (
     <AsyncTypeahead
       isLoading={userSuggestionsLoading}
@@ -56,6 +58,11 @@ const UserAutocomplete = props => {
       onInputChange={value => uidInput.setValue(value)}
       minLength={1}
       useCache={false}
+      // Attempt to force Chrome to hide the native email autocomplete
+      inputProps={{
+        autoComplete: 'new-user-uid',
+        ...inputProps,
+      }}
       renderMenuItemChildren={(option, typeaheadProps) => {
         return (
           <>
@@ -66,7 +73,7 @@ const UserAutocomplete = props => {
           </>
         )
       }}
-      {...props}
+      {...restProps}
     />
   )
 }

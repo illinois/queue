@@ -1,7 +1,7 @@
 /* eslint-env browser */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Form, InputGroup, InputGroupAddon, Input, Button } from 'reactstrap'
+import { Form, Input, Button } from 'reactstrap'
 import getConfig from 'next/config'
 
 import axios from '../actions/axios'

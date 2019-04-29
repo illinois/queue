@@ -7,7 +7,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      uid: {
+      netid: {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true,

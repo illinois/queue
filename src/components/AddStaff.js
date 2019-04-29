@@ -1,12 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import {
-  ListGroupItem,
-  Form,
-  Button,
-  InputGroup,
-  InputGroupAddon,
-} from 'reactstrap'
+import { Form, Button, InputGroup, InputGroupAddon } from 'reactstrap'
 import getConfig from 'next/config'
 import UserAutocomplete from './UserAutocomplete'
 
