@@ -3,9 +3,7 @@ const path = require('path')
 const Sequelize = require('sequelize')
 
 const env = process.env.NODE_ENV || 'development'
-const config = JSON.parse(
-  fs.readFileSync(path.join(__dirname, '..', 'config', 'config.json'), 'utf-8')
-)[env]
+const config = require('../config/config')[env]
 
 /**
  * Loads our models into the given Sequelize instance
@@ -18,9 +16,7 @@ module.exports.initSequelize = sequelize => {
   fs.readdirSync(__dirname)
     .filter(
       file =>
-        file.indexOf('.') !== 0 &&
-        file.indexOf('.js') !== -1 &&
-        file !== 'index.js'
+        file.indexOf('.') !== 0 && file.endsWith('.js') && file !== 'index.js'
     )
     .forEach(file => {
       const model = sequelize.import(path.join(__dirname, file))

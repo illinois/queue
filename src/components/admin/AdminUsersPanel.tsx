@@ -15,7 +15,7 @@ import {
 } from 'reactstrap'
 import { useInput } from 'react-hanger'
 import { useDebounce } from 'use-debounce'
-import { CancelToken } from 'axios'
+import axiosBase from 'axios'
 import FlipMove from 'react-flip-move'
 import { AsyncTypeahead, Highlighter } from 'react-bootstrap-typeahead'
 import getConfig from 'next/config'
@@ -30,14 +30,30 @@ import RemoveableUserItem from '../RemoveableUserItem'
 
 const { uidName } = getConfig().publicRuntimeConfig
 
-const AdminUsersPanel = props => {
-  const [admins, setAdmins] = useState([])
+interface AdminUsersPanelProps {
+  user: {
+    uid: string
+    id: number
+  }
+}
+
+interface Admin {
+  id: number
+  uid: string
+  name: string
+}
+
+type AdminTypeahead = new () => AsyncTypeahead<Admin>
+const AdminTypeahead = AsyncTypeahead as AdminTypeahead
+
+const AdminUsersPanel = (props: AdminUsersPanelProps) => {
+  const [admins, setAdmins] = useState<Admin[]>([])
   const [adminsLoading, setAdminsLoading] = useState(true)
   const uidInput = useInput('')
   const [uidQuery] = useDebounce(uidInput.value, 500)
   const [userSuggestions, setUserSuggestions] = useState([])
   const [userSuggestionsLoading, setUserSuggestionsLoading] = useState(false)
-  const [pendingAdmin, setPendingAdmin] = useState([])
+  const [pendingAdmin, setPendingAdmin] = useState<Admin[]>([])
 
   useEffect(() => {
     axios
@@ -51,11 +67,11 @@ const AdminUsersPanel = props => {
       })
   }, [])
 
-  useEffect(() => {
+  useEffect((): (() => void) => {
     if (!uidQuery) {
       return () => {}
     }
-    const source = CancelToken.source()
+    const source = axiosBase.CancelToken.source()
     setUserSuggestionsLoading(true)
     axios
       .get('/api/autocomplete/users', {
@@ -90,7 +106,7 @@ const AdminUsersPanel = props => {
       .catch(err => console.error(err))
   }
 
-  const removeAdmin = userId => {
+  const removeAdmin = (userId: number) => {
     axios
       .delete(`/api/users/admins/${userId}`)
       .then(() => {
@@ -99,8 +115,8 @@ const AdminUsersPanel = props => {
       .catch(err => console.error(err))
   }
 
-  const handleKeyDown = event => {
-    if (event.key === 'Enter' && pendingAdmin.length > 0) {
+  const handleKeyDown = (event: Event) => {
+    if ((event as KeyboardEvent).key === 'Enter' && pendingAdmin.length > 0) {
       addAdmin()
     }
   }
@@ -157,7 +173,7 @@ const AdminUsersPanel = props => {
           Search for users by {uidName}
         </FormText>
         <InputGroup>
-          <AsyncTypeahead
+          <AdminTypeahead
             id="admin-search"
             isLoading={userSuggestionsLoading}
             options={userSuggestions}
@@ -177,7 +193,7 @@ const AdminUsersPanel = props => {
             renderMenuItemChildren={(option, typeaheadProps) => {
               return (
                 <>
-                  <Highlighter search={typeaheadProps.text}>
+                  <Highlighter search={typeaheadProps.text as string}>
                     {option.uid}
                   </Highlighter>
                   {option.name && (

@@ -1,6 +1,6 @@
 /* eslint-env jest */
 const redirectNoQueue = require('./redirectNoQueue')
-const testutil = require('../../test/util')
+const testutil = require('../test/util')
 const { Queue } = require('../models')
 
 beforeEach(async () => {

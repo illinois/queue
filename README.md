@@ -38,6 +38,8 @@ If you wish to report a bug, feature request, etc., please open a new issue (fir
 
 ### Production config
 
+Run `npm run build` to build assets for production; read more about the build process [in the docs](docs/Build.md). Run `npm run start` to start the application.
+
 Several configuration options are exposed via environment variables:
 
 - `PORT`: controls which port the app will be served from.

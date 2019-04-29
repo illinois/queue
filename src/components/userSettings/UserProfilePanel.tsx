@@ -15,18 +15,30 @@ import {
 import { useInput } from 'react-hanger'
 import { connect } from 'react-redux'
 import getConfig from 'next/config'
+import * as Redux from 'redux'
 
 import { updateUserPreferredName as updateUserPreferredNameAction } from '../../actions/user'
 
 const { uidName } = getConfig().publicRuntimeConfig
 
-const UserProfilePanel = ({ user, updateUserPreferredName }) => {
+interface UserProfilePanelProps {
+  user: {
+    netid: string
+    name: string
+    preferredName?: string
+    universityName?: string
+  }
+  updateUserPreferredName: (name: string) => void
+}
+
+const UserProfilePanel = (props: UserProfilePanelProps) => {
+  const { user } = props
   const preferredNameInput = useInput(user.preferredName || '')
   const changed = preferredNameInput.value !== user.preferredName
 
-  const onSubmit = e => {
+  const onSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    updateUserPreferredName(preferredNameInput.value)
+    props.updateUserPreferredName(preferredNameInput.value)
   }
 
   return (
@@ -86,16 +98,18 @@ UserProfilePanel.propTypes = {
   updateUserPreferredName: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: any) => ({
   user: state.user.user,
 })
 
-const mapDispatchToProps = dispatch => ({
-  updateUserPreferredName: name =>
+const mapDispatchToProps = (dispatch: Redux.Dispatch<any>) => ({
+  updateUserPreferredName: (name: string) =>
     dispatch(updateUserPreferredNameAction(name)),
 })
 
 export default connect(
   mapStateToProps,
+  // @ts-ignore
   mapDispatchToProps
+  // @ts-ignore
 )(UserProfilePanel)

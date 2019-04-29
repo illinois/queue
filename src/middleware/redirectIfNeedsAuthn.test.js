@@ -1,7 +1,7 @@
 /* eslint-env jest */
 const redirectIfNeedsAuthn = require('./redirectIfNeedsAuthn')
 const { addJwtCookie } = require('../auth/util')
-const testutil = require('../../test/util')
+const testutil = require('../test/util')
 
 beforeAll(async () => {
   await testutil.setupTestDb()

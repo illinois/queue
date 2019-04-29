@@ -1,24 +1,24 @@
 /* eslint global-require: "off", no-console: "off" */
-require('dotenv').config()
+import 'dotenv/config'
 
-const { Server } = require('http')
-const io = require('socket.io')
-const nextJs = require('next')
-const co = require('co')
+import { Server } from 'http'
+import * as io from 'socket.io'
+import * as nextJs from 'next'
+import co from 'co'
 
-const app = require('./app')
-const logger = require('./util/logger')
-const models = require('./models')
-const migrations = require('./migrations/util')
-const routes = require('./routes')
-const serverSocket = require('./socket/server')
-const { baseUrl } = require('./util')
+import * as app from './app'
+import { logger } from './util/logger'
+import * as models from './models'
+import * as migrations from './migrations/util'
+import routes from './routes'
+import * as serverSocket from './socket/server'
+import { baseUrl } from './util'
 
-const DEV =
-  ['now', 'staging', 'production'].indexOf(process.env.NODE_ENV) === -1
+const prodEnvironments = ['now', 'staging', 'production']
+const DEV = prodEnvironments.indexOf(process.env.NODE_ENV as string) === -1
 const PORT = process.env.PORT || 3000
 
-const nextApp = nextJs({ dev: DEV, dir: DEV ? 'src' : 'build' })
+const nextApp = nextJs({ dev: DEV, dir: DEV ? 'src' : 'build', quiet: true })
 const handler = routes.getRequestHandler(nextApp)
 
 /* eslint-disable func-names */
@@ -38,10 +38,10 @@ co(function*() {
   yield nextApp.prepare()
 
   // Initialize the database
-  yield migrations.performMigrations(models.sequelize)
+  yield migrations.performMigrations((models as any).sequelize)
 
   // Initialize the server
-  const server = Server(app)
+  const server = new Server(app)
 
   // Websocket stuff
   const socket = io(server, { path: `${baseUrl}/socket.io` })

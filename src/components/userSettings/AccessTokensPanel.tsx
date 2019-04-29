@@ -20,10 +20,17 @@ import axios from '../../actions/axios'
 import AccessTokenListGroupItem from './AccessTokenListGroupItem'
 import Loading from '../Loading'
 
+interface Token {
+  id: number
+  name: string
+  createdAt: string
+  lastUsedAt?: string
+}
+
 const AccessTokensPanel = () => {
   const newTokenNameInput = useInput('')
   const [tokensLoading, setTokensLoading] = useState(true)
-  const [tokens, setTokens] = useState([])
+  const [tokens, setTokens] = useState<Token[]>([])
 
   useEffect(() => {
     setTokensLoading(true)
@@ -36,7 +43,7 @@ const AccessTokensPanel = () => {
       .catch(err => console.error(err))
   }, [])
 
-  const createToken = e => {
+  const createToken = (e: React.FormEvent) => {
     e.preventDefault()
     axios
       .post('/api/tokens', {
@@ -49,7 +56,7 @@ const AccessTokensPanel = () => {
       .catch(err => console.error(err))
   }
 
-  const deleteToken = tokenId => {
+  const deleteToken = (tokenId: number) => {
     axios
       .delete(`/api/tokens/${tokenId}`)
       .then(() => {

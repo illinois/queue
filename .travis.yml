@@ -2,7 +2,7 @@ dist: xenial
 sudo: required
 language: node_js
 node_js:
-  - "9.5"
+  - '9.5'
 services:
   - mysql
 before_install:
@@ -15,8 +15,9 @@ script:
   - npm run build
   - ./scripts/diff_databases.sh
   - DATABASE_URL=mysql://queue@localhost/queue_test npm run test-sequential
+  - npm run typecheck
   - npm run lint
   - npm run prettier-diff
 cache:
   directories:
-    - "node_modules"
+    - 'node_modules'

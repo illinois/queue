@@ -11,7 +11,11 @@ import {
 import { useBoolean } from 'react-hanger'
 import ConfirmDeleteQueueModal from '../ConfirmDeleteQueueModel'
 
-const DangerPanel = props => {
+interface DangerPanelProps {
+  deleteQueue: () => void
+}
+
+const DangerPanel = (props: DangerPanelProps) => {
   const showConfirmModal = useBoolean(false)
   return (
     <>

@@ -11,13 +11,25 @@ import {
 } from 'reactstrap'
 import moment from 'moment'
 
-const AccessTokenListGroupItem = props => {
-  const inputRef = useRef()
+interface AdminTokenListGroupItemProps {
+  createdAt: string
+  lastUsedAt?: string
+  name: string
+  onDeleteToken: () => void
+  token?: string
+}
 
-  const copyValue = e => {
-    inputRef.current.select()
-    document.execCommand('copy')
-    e.target.focus()
+const AccessTokenListGroupItem = (props: AdminTokenListGroupItemProps) => {
+  const inputRef = useRef<HTMLInputElement>() as React.RefObject<
+    HTMLInputElement
+  >
+
+  const copyValue = (e: React.MouseEvent) => {
+    if (inputRef.current) {
+      inputRef.current.select()
+      document.execCommand('copy')
+      ;(e.target as HTMLButtonElement).focus()
+    }
   }
 
   const createdAt = moment(props.createdAt)
