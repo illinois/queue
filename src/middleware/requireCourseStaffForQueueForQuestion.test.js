@@ -1,6 +1,6 @@
 /* eslint-env jest */
 const requireCourseStaffForQueueForQuestion = require('./requireCourseStaffForQueueForQuestion')
-const testutil = require('../../test/util')
+const testutil = require('../test/util')
 
 beforeAll(async () => {
   await testutil.setupTestDb()

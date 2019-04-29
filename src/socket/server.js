@@ -1,7 +1,7 @@
 const cookieParser = require('cookie-parser')
 
 const sequelizeStream = require('./sequelizeStream')
-const logger = require('../util/logger')
+const { logger } = require('../util/logger')
 const { sequelize, Question, User, ActiveStaff, Queue } = require('../models')
 const { getUserFromJwt, getAuthzForUser } = require('../auth/util')
 const {

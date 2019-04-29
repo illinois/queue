@@ -1,5 +1,5 @@
 /* eslint-env jest */
-const testutil = require('../../test/util')
+const testutil = require('../test/util')
 const requireAdmin = require('./requireAdmin')
 
 const makeRes = isAdmin => ({

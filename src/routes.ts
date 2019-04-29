@@ -1,5 +1,8 @@
-const routes = require('next-routes')()
-const { baseUrl, withBaseUrl } = require('./util')
+import * as Routes from 'next-routes'
+import { baseUrl, withBaseUrl } from './util'
+
+// @ts-ignore
+const routes = Routes()
 
 // We need to special-case the index route. When running with a non-empty
 // base URL, for instance /foo, we'll fail to resolve /foo if the index URL
@@ -10,6 +13,7 @@ if (baseUrl === '') {
 } else {
   routes.add('index', withBaseUrl(''))
 }
+
 routes
   .add('login', withBaseUrl('/login'))
   .add('queue', withBaseUrl('/queue/:id'))
@@ -22,4 +26,5 @@ routes
   .add('adminIndex', withBaseUrl('/admin'))
   .add('adminThemePreview', withBaseUrl('/admin/theme'))
 
-module.exports = routes
+export default routes
+export const { Link, Router } = routes

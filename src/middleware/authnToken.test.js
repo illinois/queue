@@ -1,6 +1,6 @@
 /* eslint-env jest */
 const authnToken = require('./authnToken')
-const testutil = require('../../test/util')
+const testutil = require('../test/util')
 
 beforeAll(async () => {
   await testutil.setupTestDb()
@@ -15,6 +15,7 @@ describe('authnToken middleware', () => {
   it('succeeds for a valid token as a query parameter', async () => {
     const req = {
       query: {
+        // eslint-disable-next-line
         private_token: testutil.TOKEN,
       },
     }
@@ -47,6 +48,7 @@ describe('authnToken middleware', () => {
   it('fails for an invalid token', async () => {
     const req = {
       query: {
+        // eslint-disable-next-line
         private_token: `${testutil.TOKEN}bad`,
       },
     }

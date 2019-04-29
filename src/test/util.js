@@ -1,7 +1,7 @@
 /* eslint-env jest */
 const session = require('supertest-session')
-const models = require('../src/models')
-const { ApiError } = require('../src/api/util')
+const models = require('../models')
+const { ApiError } = require('../api/util')
 
 module.exports.TOKEN = '3b0886cd-84ef-4702-8016-cfa7e20418f9'
 

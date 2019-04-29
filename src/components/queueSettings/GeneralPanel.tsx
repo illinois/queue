@@ -14,12 +14,20 @@ import {
 } from 'reactstrap'
 import { useInput } from 'react-hanger'
 
-const GeneralPanel = ({ queue, updateQueue }) => {
+interface GeneralPanelProps {
+  queue: {
+    name: string
+    location: string
+  }
+  updateQueue: (queue: { name: string; location: string }) => void
+}
+
+const GeneralPanel = ({ queue, updateQueue }: GeneralPanelProps) => {
   const name = useInput(queue.name)
   const location = useInput(queue.location)
   const changed = name.value !== queue.name || location.value !== queue.location
 
-  const onSubmit = e => {
+  const onSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     updateQueue({
       name: name.value,
