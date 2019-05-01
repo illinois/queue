@@ -91,7 +91,10 @@ class CourseStaff extends React.Component {
               </CardTitle>
             </CardHeader>
             <CardBody>
-              <AddStaff onAddStaff={userId => this.addStaff(userId)} />
+              <AddStaff
+                onAddStaff={userId => this.addStaff(userId)}
+                existingStaff={this.props.course.staff}
+              />
             </CardBody>
             <ListGroup flush className="position-relative">
               <FlipMove

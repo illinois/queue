@@ -10,9 +10,13 @@ const AddStaff = props => {
   const [pendingUser, setPendingUser] = useState([])
 
   const handleAddStaff = e => {
-    console.log('wiggg')
     if (e) e.preventDefault()
     props.onAddStaff(pendingUser[0].id)
+  }
+
+  // We want to exclude existing staff from the autocompletion list
+  const filterBy = option => {
+    return props.existingStaff.findIndex(user => user === option.id) === -1
   }
 
   return (
@@ -28,6 +32,7 @@ const AddStaff = props => {
           selected={pendingUser}
           onChange={setPendingUser}
           placeholder={`Enter ${uidArticle} ${uidName}`}
+          filterBy={filterBy}
         />
         <InputGroupAddon addonType="append">
           <Button
@@ -45,7 +50,13 @@ const AddStaff = props => {
 }
 
 AddStaff.propTypes = {
+  // This is just an array of user IDs (not UIDs)
+  existingStaff: PropTypes.arrayOf(PropTypes.number),
   onAddStaff: PropTypes.func.isRequired,
+}
+
+AddStaff.defaultProps = {
+  existingStaff: [],
 }
 
 export default AddStaff
