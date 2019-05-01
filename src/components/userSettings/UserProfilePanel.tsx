@@ -23,7 +23,7 @@ const { uidName } = getConfig().publicRuntimeConfig
 
 interface UserProfilePanelProps {
   user: {
-    netid: string
+    uid: string
     name: string
     preferredName?: string
     universityName?: string
