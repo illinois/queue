@@ -7,6 +7,10 @@ const rewrite = require('express-urlrewrite')
 const { logger } = require('./util/logger')
 const { baseUrl, isDev, isNow } = require('./util')
 
+// We're probably running behind a proxy - trust them and derive information
+// from the X-Forwarded-* headers: https://expressjs.com/en/guide/behind-proxies.html
+app.set('trust proxy', 'loopback')
+
 app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
