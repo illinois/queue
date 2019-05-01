@@ -21,6 +21,9 @@ import { updateUserPreferredName as updateUserPreferredNameAction } from '../../
 
 const { uidName } = getConfig().publicRuntimeConfig
 
+const capitalizeString = (string: string) =>
+  string.charAt(0).toUpperCase() + string.slice(1)
+
 interface UserProfilePanelProps {
   user: {
     uid: string
@@ -50,7 +53,7 @@ const UserProfilePanel = (props: UserProfilePanelProps) => {
       </CardHeader>
       <CardBody>
         <div className="mb-3">
-          <div className="text-muted small">{uidName}</div>
+          <div className="text-muted small">{capitalizeString(uidName)}</div>
           <div>{user.uid}</div>
         </div>
         <div className="mb-3">
