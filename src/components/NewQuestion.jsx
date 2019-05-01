@@ -45,6 +45,9 @@ const hasErrors = invalidFields => {
 
 const isInvalid = error => error !== undefined && error !== ''
 
+const capitalizeString = string =>
+  string.charAt(0).toUpperCase() + string.slice(1)
+
 const NewQuestion = props => {
   const [isOpen, setIsOpen] = useState(!props.isUserCourseStaff)
   const [pendingUser, setPendingUser] = useState([])
@@ -163,7 +166,7 @@ const NewQuestion = props => {
               {isUserCourseStaff && (
                 <FormGroup row>
                   <Label for="question-user" sm={2} md={3}>
-                    {uidName}
+                    {capitalizeString(uidName)}
                   </Label>
                   <Col sm={10} md={9}>
                     <UserAutocomplete
@@ -171,6 +174,12 @@ const NewQuestion = props => {
                       placeholder={`Enter ${uidArticle} ${uidName} (optional)`}
                       onChange={onUserChanged}
                       selected={pendingUser}
+                      // This is to account for the case where someone on queue
+                      // staff wants to add a user that's never signed into the
+                      // queue before, and thus doesn't have an account to
+                      // autocomplete
+                      allowNew
+                      newSelectionPrefix="New user: "
                     />
                     <FormText color="muted">
                       This allows you to add a question on behalf of a student.

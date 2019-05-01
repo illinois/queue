@@ -9,7 +9,7 @@ Enzyme.configure({ adapter: new Adapter() })
 
 jest.mock('next/config', () => () => ({
   publicRuntimeConfig: {
-    uidName: 'Illinois email',
+    uidName: 'email',
     uidArticle: 'an',
   },
 }))

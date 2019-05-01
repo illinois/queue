@@ -79,10 +79,11 @@ const UserAutocomplete = props => {
 }
 
 UserAutocomplete.propTypes = {
-  selected: PropTypes.shape({
-    id: PropTypes.number,
-    uid: PropTypes.string,
-  }),
+  selected: PropTypes.arrayOf(
+    PropTypes.shape({
+      uid: PropTypes.string,
+    })
+  ),
   onChange: PropTypes.func.isRequired,
 }
 

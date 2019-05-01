@@ -8,7 +8,7 @@ module.exports = withTypescript(
       useFileSystemPublicRoutes: false,
       assetPrefix: process.env.BASE_URL || '',
       publicRuntimeConfig: {
-        uidName: 'Illinois email',
+        uidName: 'email',
         uidArticle: 'an',
       },
     })
