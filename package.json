@@ -141,6 +141,9 @@
     "transform": {
       "^.+\\.tsx?$": "ts-jest",
       "^.+\\.jsx?$": "babel-jest"
+    },
+    "moduleNameMapper":{
+      "\\.(css|less|sass|scss)$": "<rootDir>/src/test/styleMock.js"
     }
   },
   "husky": {
