@@ -85,10 +85,14 @@ UserAutocomplete.propTypes = {
     })
   ),
   onChange: PropTypes.func.isRequired,
+  // We don't know exactly what these props will be
+  // eslint-disable-next-line react/forbid-prop-types
+  inputProps: PropTypes.object,
 }
 
 UserAutocomplete.defaultProps = {
   selected: null,
+  inputProps: {},
 }
 
 export default UserAutocomplete

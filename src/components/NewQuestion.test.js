@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import React from 'react'
 import { shallow } from 'enzyme'
-import { Input, Form } from 'reactstrap'
+import { Input } from 'reactstrap'
 import NewQuestion from './NewQuestion'
 
 const makeProps = (queueId, userName = null) => ({
@@ -15,10 +15,6 @@ const makeProps = (queueId, userName = null) => ({
   }),
   isUserCourseStaff: false,
 })
-
-const doInputChange = (wrapper, name, value) => {
-  wrapper.instance().handleInputChange({ target: { name, value } })
-}
 
 describe('<NewQuestion />', () => {
   test("defaults to empty name if user doesn't have one set", () => {
