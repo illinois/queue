@@ -7,6 +7,8 @@ with the current semantic version and the next changes should go under a **[Next
 
 ## [Next]
 
+## v1.2.1
+
 * Refine dark mode: better styles, new Bootstrap colors, and a custom select component. ([@nwalters512](https://github.com/nwalters512) in [#279](https://github.com/illinois/queue/pull/279))
 * Add TypeScript support to all build tooling; add some basic types to existing code. ([@nwalters512](https://github.com/nwalters512) in [#281](https://github.com/illinois/queue/pull/281))
 * Configure Express to know that we're running behind a proxy. ([@nwalters512](https://github.com/nwalters512) in [#284](https://github.com/illinois/queue/pull/284))
