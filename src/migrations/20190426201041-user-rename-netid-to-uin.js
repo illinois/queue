@@ -1,17 +1,16 @@
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.changeColumn('users', 'netid', {
-      type: Sequelize.STRING,
-      allowNull: false,
-      unique: false,
-    })
+  up: async (queryInterface, _Sequelize) => {
+    const { sequelize } = queryInterface
+
+    if (sequelize.options.dialect === 'mysql') {
+      await queryInterface.removeConstraint('users', 'netid')
+    }
     await queryInterface.renameColumn('users', 'netid', 'uid')
     await queryInterface.addConstraint('users', ['uid'], {
       type: 'unique',
       name: 'uid',
     })
 
-    const { sequelize } = queryInterface
     const users = await queryInterface.sequelize.query(
       'SELECT uid FROM users',
       { type: sequelize.QueryTypes.SELECT }
