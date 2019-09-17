@@ -13,9 +13,8 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # Set up the verification databases in Node
 npx ts-node --project $DIR/../tsconfig.server.json -e "require('$DIR/../src/migrations/util').createVerificationDatabases()"
 
-server="queue@localhost?collation=utf8mb4_general_ci"
 # Perform the actual diff
-mysqldbcompare --server1="$server" --server2="$server" --run-all-tests --changes-for=server2 queue_sequelize:queue_migrations
+mysqldbcompare --server1="queue@localhost" --server2="queue@localhost" --run-all-tests --changes-for=server2 --character-set=utf8mb4 queue_sequelize:queue_migrations
 EXIT_CODE=$?
 
 # Destroy the verification databases in Node
