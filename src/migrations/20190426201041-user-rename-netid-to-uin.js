@@ -1,5 +1,10 @@
 module.exports = {
-  up: async (queryInterface, _Sequelize) => {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.changeColumn('users', 'netid', {
+      type: Sequelize.STRING,
+      allowNull: false,
+      unique: false,
+    })
     await queryInterface.renameColumn('users', 'netid', 'uid')
     await queryInterface.addConstraint('users', ['uid'], {
       type: 'unique',
