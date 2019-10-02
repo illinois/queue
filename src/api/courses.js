@@ -5,7 +5,7 @@ const router = require('express').Router({
 const { check } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 
-const { Course, Queue, User } = require('../models')
+const { Course, Queue, Question, User, Sequelize } = require('../models')
 const { requireCourse, requireUser, failIfErrors } = require('./util')
 const requireAdmin = require('../middleware/requireAdmin')
 const requireCourseStaff = require('../middleware/requireCourseStaff')
@@ -66,6 +66,100 @@ router.get(
 
     course.queues = queues.map(q => q.toJSON())
     res.send(course)
+  })
+)
+
+// Get course queue data
+router.get(
+  '/:courseId/data',
+  [requireCourseStaff, requireCourse, failIfErrors],
+  safeAsync(async (req, res, _next) => {
+    const { id: courseId } = res.locals.course
+    const questionsFind = await Question.findAll({
+      include: [
+        {
+          model: Queue,
+          include: [
+            {
+              model: Course,
+              attributes: [['name', 'CourseName']],
+              required: true,
+              where: { courseId: Sequelize.col('queue.courseId') },
+            },
+          ],
+          attributes: [
+            ['id', 'queueId'],
+            'courseId',
+            ['name', 'QueueName'],
+            ['location', 'QueueLocation'],
+            [
+              Sequelize.fn(
+                'datetime',
+                Sequelize.col('queue.createdAt'),
+                'localtime'
+              ),
+              'Queue_CreatedAt',
+            ],
+          ],
+          required: true,
+          where: { courseId: courseId, id: Sequelize.col('question.queueId') },
+        },
+        {
+          model: User,
+          as: 'askedBy',
+          attributes: [
+            ['netid', 'AskedBy_netid'],
+            ['universityName', 'AskedBy_RealName'],
+          ],
+          required: true,
+          where: { id: Sequelize.col('question.askedById') },
+        },
+        {
+          model: User,
+          as: 'answeredBy',
+          attributes: [
+            ['netid', 'AnsweredBy_netid'],
+            ['universityName', 'AnsweredBy_RealName'],
+          ],
+          required: false,
+          where: { id: Sequelize.col('question.answeredById') },
+        },
+      ],
+      attributes: [
+        'id',
+        'topic',
+        [
+          Sequelize.fn('datetime', Sequelize.col('enqueueTime'), 'localtime'),
+          'enqueueTime',
+        ],
+        [
+          Sequelize.fn('datetime', Sequelize.col('dequeueTime'), 'localtime'),
+          'dequeueTime',
+        ],
+        [
+          Sequelize.fn(
+            'datetime',
+            Sequelize.col('answerStartTime'),
+            'localtime'
+          ),
+          'answerStartTime',
+        ],
+        [
+          Sequelize.fn(
+            'datetime',
+            Sequelize.col('answerFinishTime'),
+            'localtime'
+          ),
+          'answerFinishTime',
+        ],
+        'comments',
+        'preparedness',
+        ['location', 'UserLocation'],
+      ],
+      order: [['enqueueTime', 'DESC']],
+    })
+    console.log(questionsFind)
+    res.send(questionsFind)
   })
 )
 
