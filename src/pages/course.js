@@ -34,11 +34,11 @@ const Course = props => {
   }, [props.courseId])
 
   const getFlattenedData = resData => {
-    let data = []
-    let columns = new Set()
+    const data = []
+    const columns = new Set()
 
     resData.forEach(question => {
-      let flattenedQuestion = {}
+      const flattenedQuestion = {}
       Object.keys(question).forEach(questionKey => {
         if (
           questionKey === 'queue' ||
@@ -76,7 +76,6 @@ const Course = props => {
   const handleFetchQueueData = () => {
     axios.get(`/api/courses/${props.courseId}/data`).then(
       res => {
-        console.log(res.data)
         const [data, columns] = getFlattenedData(res.data)
 
         // Taken from https://stackoverflow.com/questions/8847766/how-to-convert-json-to-csv-format-and-store-in-a-variable

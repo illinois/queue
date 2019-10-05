@@ -102,7 +102,7 @@ router.get(
             ],
           ],
           required: true,
-          where: { courseId: courseId, id: Sequelize.col('question.queueId') },
+          where: { courseId, id: Sequelize.col('question.queueId') },
         },
         {
           model: User,
