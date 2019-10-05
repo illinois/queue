@@ -75,7 +75,7 @@ router.get(
   [requireCourseStaff, requireCourse, failIfErrors],
   safeAsync(async (req, res, _next) => {
     const { id: courseId } = res.locals.course
-    const questionsFind = await Question.findAll({
+    const questions = await Question.findAll({
       include: [
         {
           model: Queue,
@@ -107,20 +107,44 @@ router.get(
         {
           model: User,
           as: 'askedBy',
-          attributes: [
-            ['netid', 'AskedBy_netid'],
-            ['universityName', 'AskedBy_RealName'],
-          ],
+          attributes: {
+            include: [
+              ['netid', 'AskedBy_netid'],
+              ['universityName', 'AskedBy_RealName'],
+            ],
+            exclude: [
+              'createdAt',
+              'netid',
+              'id',
+              'isAdmin',
+              'name',
+              'preferredName',
+              'universityName',
+              'updatedAt',
+            ],
+          },
           required: true,
           where: { id: Sequelize.col('question.askedById') },
         },
         {
           model: User,
           as: 'answeredBy',
-          attributes: [
-            ['netid', 'AnsweredBy_netid'],
-            ['universityName', 'AnsweredBy_RealName'],
-          ],
+          attributes: {
+            include: [
+              ['netid', 'AnsweredBy_netid'],
+              ['universityName', 'AnsweredBy_RealName'],
+            ],
+            exclude: [
+              'createdAt',
+              'netid',
+              'id',
+              'isAdmin',
+              'name',
+              'preferredName',
+              'universityName',
+              'updatedAt',
+            ],
+          },
           required: false,
           where: { id: Sequelize.col('question.answeredById') },
         },
@@ -158,8 +182,8 @@ router.get(
       ],
       order: [['enqueueTime', 'DESC']],
     })
-    console.log(questionsFind)
-    res.send(questionsFind)
+
+    res.send(questions)
   })
 )
 

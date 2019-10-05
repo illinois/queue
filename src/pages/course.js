@@ -4,8 +4,9 @@ import { connect } from 'react-redux'
 import { Container, Row, Card, CardBody, Button } from 'reactstrap'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faUsers } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faUsers, faDownload } from '@fortawesome/free-solid-svg-icons'
 
+import axios from '../actions/axios'
 import { Link } from '../routes'
 import { fetchCourseRequest, fetchCourse } from '../actions/course'
 import { createQueue } from '../actions/queue'
@@ -32,6 +33,77 @@ const Course = props => {
     })
   }, [props.courseId])
 
+  const getFlattenedData = resData => {
+    let data = []
+    let columns = new Set()
+
+    resData.forEach(question => {
+      let flattenedQuestion = {}
+      Object.keys(question).forEach(questionKey => {
+        if (
+          questionKey === 'queue' ||
+          questionKey === 'askedBy' ||
+          questionKey === 'answeredBy'
+        ) {
+          const nestedObject = question[questionKey]
+          if (nestedObject != null) {
+            Object.keys(nestedObject).forEach(queueKey => {
+              if (queueKey === 'course') {
+                Object.keys(question[questionKey][queueKey]).forEach(
+                  courseKey => {
+                    columns.add(courseKey)
+                    flattenedQuestion[courseKey] =
+                      question[questionKey][queueKey][courseKey]
+                  }
+                )
+              } else {
+                columns.add(queueKey)
+                flattenedQuestion[queueKey] = question[questionKey][queueKey]
+              }
+            })
+          }
+        } else {
+          columns.add(questionKey)
+          flattenedQuestion[questionKey] = question[questionKey]
+        }
+      })
+      data.push(flattenedQuestion)
+    })
+
+    return [data, columns]
+  }
+
+  const handleFetchQueueData = () => {
+    axios.get(`/api/courses/${props.courseId}/data`).then(
+      res => {
+        console.log(res.data)
+        const [data, columns] = getFlattenedData(res.data)
+
+        // Taken from https://stackoverflow.com/questions/8847766/how-to-convert-json-to-csv-format-and-store-in-a-variable
+        const header = Array.from(columns)
+        const replacer = (key, value) => (value === null ? '' : value)
+        let csv = data.map(row =>
+          header
+            .map(fieldName => JSON.stringify(row[fieldName], replacer))
+            .join(',')
+        )
+        csv.unshift(header.join(','))
+        csv = csv.join('\r\n')
+
+        // Taken from https://stackoverflow.com/questions/44656610/download-a-string-as-txt-file-in-react
+        const element = document.createElement('a')
+        const csvFile = new Blob([csv], { type: 'text/csv' })
+        element.href = URL.createObjectURL(csvFile)
+        element.download = 'queueData.csv'
+        document.body.appendChild(element) // Required for this to work in FireFox
+        element.click()
+      },
+      err => {
+        console.error(err)
+      }
+    )
+  }
+
   if (courseLoading) {
     return null
   }
@@ -57,6 +129,14 @@ const Course = props => {
             {props.course.name}
           </h1>
           <ShowForCourseStaff courseId={props.courseId}>
+            <Button
+              color="primary"
+              className="mr-3 mt-3"
+              onClick={() => handleFetchQueueData()}
+            >
+              <FontAwesomeIcon icon={faDownload} className="mr-2" />
+              Download Queue Data
+            </Button>
             <Link
               route="courseStaff"
               params={{ id: props.courseId }}
