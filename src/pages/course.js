@@ -33,65 +33,12 @@ const Course = props => {
     })
   }, [props.courseId])
 
-  const getFlattenedData = resData => {
-    const data = []
-    const columns = new Set()
-
-    resData.forEach(question => {
-      const flattenedQuestion = {}
-      Object.keys(question).forEach(questionKey => {
-        if (
-          questionKey === 'queue' ||
-          questionKey === 'askedBy' ||
-          questionKey === 'answeredBy'
-        ) {
-          const nestedObject = question[questionKey]
-          if (nestedObject != null) {
-            Object.keys(nestedObject).forEach(queueKey => {
-              if (queueKey === 'course') {
-                Object.keys(question[questionKey][queueKey]).forEach(
-                  courseKey => {
-                    columns.add(courseKey)
-                    flattenedQuestion[courseKey] =
-                      question[questionKey][queueKey][courseKey]
-                  }
-                )
-              } else {
-                columns.add(queueKey)
-                flattenedQuestion[queueKey] = question[questionKey][queueKey]
-              }
-            })
-          }
-        } else {
-          columns.add(questionKey)
-          flattenedQuestion[questionKey] = question[questionKey]
-        }
-      })
-      data.push(flattenedQuestion)
-    })
-
-    return [data, columns]
-  }
-
   const handleFetchQueueData = () => {
-    axios.get(`/api/courses/${props.courseId}/data`).then(
+    axios.get(`/api/courses/${props.courseId}/data/questions`).then(
       res => {
-        const [data, columns] = getFlattenedData(res.data)
-
-        // Taken from https://stackoverflow.com/questions/8847766/how-to-convert-json-to-csv-format-and-store-in-a-variable
-        const header = Array.from(columns)
-        const replacer = (key, value) => (value === null ? '' : value)
-        let csv = data.map(row =>
-          header
-            .map(fieldName => JSON.stringify(row[fieldName], replacer))
-            .join(',')
-        )
-        csv.unshift(header.join(','))
-        csv = csv.join('\r\n')
-
         // Taken from https://stackoverflow.com/questions/44656610/download-a-string-as-txt-file-in-react
         const element = document.createElement('a')
-        const csvFile = new Blob([csv], { type: 'text/csv' })
+        const csvFile = new Blob([res.data], { type: 'text/csv' })
         element.href = URL.createObjectURL(csvFile)
         element.download = 'queueData.csv'
         document.body.appendChild(element) // Required for this to work in FireFox
