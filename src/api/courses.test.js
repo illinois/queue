@@ -76,6 +76,36 @@ describe('Courses API', () => {
     })
   })
 
+  describe('GET /api/courses/:courseId/data/questions', () => {
+    test('succeeds for admin', async () => {
+      const request = await requestAsUser(app, 'admin')
+      const res = await request.get('/api/courses/1/data/questions')
+      expect(res.statusCode).toBe(200)
+      expect(res.text).toEqual(
+        expect.stringContaining(
+          'id,topic,enqueueTime,dequeueTime,answerStartTime,answerFinishTime,comments,preparedness,UserLocation,AnsweredBy_netid,AnsweredBy_UniversityName,AskedBy_netid,AskedBy_UniversityName,queueId,courseId,QueueName,QueueLocation,Queue_CreatedAt,id,CourseName\r\n'
+        )
+      )
+    })
+
+    test('succeeds for course staff', async () => {
+      const request = await requestAsUser(app, '225staff')
+      const res = await request.get('/api/courses/1/data/questions')
+      expect(res.statusCode).toBe(200)
+      expect(res.text).toEqual(
+        expect.stringContaining(
+          'id,topic,enqueueTime,dequeueTime,answerStartTime,answerFinishTime,comments,preparedness,UserLocation,AnsweredBy_netid,AnsweredBy_UniversityName,AskedBy_netid,AskedBy_UniversityName,queueId,courseId,QueueName,QueueLocation,Queue_CreatedAt,id,CourseName\r\n'
+        )
+      )
+    })
+
+    test('fails for student', async () => {
+      const request = await requestAsUser(app, 'student')
+      const res = await request.get('/api/courses/1/data/questions')
+      expect(res.statusCode).toBe(403)
+    })
+  })
+
   describe('POST /api/courses', () => {
     test('succeeds for admin', async () => {
       const course = { name: 'CS423', shortcode: 'cs423' }
