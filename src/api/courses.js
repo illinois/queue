@@ -4,6 +4,7 @@ const router = require('express').Router({
 
 const { check } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
+const moment = require('moment')
 
 const { Course, Queue, Question, User, Sequelize } = require('../models')
 const { requireCourse, requireUser, failIfErrors } = require('./util')
@@ -44,6 +45,44 @@ const getColumns = questions => {
     })
   })
   return columns
+}
+
+const getCsv = questions => {
+  const columns = getColumns(questions)
+  // Taken from https://stackoverflow.com/questions/8847766/how-to-convert-json-to-csv-format-and-store-in-a-variable
+  const timeFields = new Set([
+    'queue.Queue_CreatedAt',
+    'enqueueTime',
+    'dequeueTime',
+    'answerStartTime',
+    'answerFinishTime',
+  ])
+  const header = Array.from(columns)
+  const replacer = (key, value) => (value === null ? '' : value)
+  const csv = questions.map(row =>
+    header
+      .map(fieldName => {
+        if (timeFields.has(fieldName)) {
+          const time = row[fieldName]
+          const formattedTime =
+            time !== null
+              ? moment
+                  .tz(moment(time), 'US/Central')
+                  .format('YYYY-MM-DD HH:mm:ss')
+              : ''
+          return JSON.stringify(formattedTime, replacer)
+        }
+        return JSON.stringify(row[fieldName], replacer)
+      })
+      .join(',')
+  )
+  const splitHeader = header.map(h => {
+    const headerSplit = h.split('.')
+    return headerSplit[headerSplit.length - 1]
+  })
+  csv.unshift(splitHeader.join(','))
+
+  return csv.join('\r\n')
 }
 
 // Get all courses
@@ -127,14 +166,7 @@ router.get(
             'courseId',
             ['name', 'QueueName'],
             ['location', 'QueueLocation'],
-            [
-              Sequelize.fn(
-                'datetime',
-                Sequelize.col('queue.createdAt'),
-                'localtime'
-              ),
-              'Queue_CreatedAt',
-            ],
+            ['createdAt', 'Queue_CreatedAt'],
           ],
           required: true,
           where: { courseId, id: Sequelize.col('question.queueId') },
@@ -163,30 +195,10 @@ router.get(
       attributes: [
         'id',
         'topic',
-        [
-          Sequelize.fn('datetime', Sequelize.col('enqueueTime'), 'localtime'),
-          'enqueueTime',
-        ],
-        [
-          Sequelize.fn('datetime', Sequelize.col('dequeueTime'), 'localtime'),
-          'dequeueTime',
-        ],
-        [
-          Sequelize.fn(
-            'datetime',
-            Sequelize.col('answerStartTime'),
-            'localtime'
-          ),
-          'answerStartTime',
-        ],
-        [
-          Sequelize.fn(
-            'datetime',
-            Sequelize.col('answerFinishTime'),
-            'localtime'
-          ),
-          'answerFinishTime',
-        ],
+        'enqueueTime',
+        'dequeueTime',
+        'answerStartTime',
+        'answerFinishTime',
         'comments',
         'preparedness',
         ['location', 'UserLocation'],
@@ -194,24 +206,8 @@ router.get(
       order: [['enqueueTime', 'DESC']],
       raw: true,
     })
-    const columns = getColumns(questions)
 
-    // Taken from https://stackoverflow.com/questions/8847766/how-to-convert-json-to-csv-format-and-store-in-a-variable
-    const header = Array.from(columns)
-    const replacer = (key, value) => (value === null ? '' : value)
-    let csv = questions.map(row =>
-      header
-        .map(fieldName => JSON.stringify(row[fieldName], replacer))
-        .join(',')
-    )
-    const splitHeader = header.map(h => {
-      const headerSplit = h.split('.')
-      return headerSplit[headerSplit.length - 1]
-    })
-    csv.unshift(splitHeader.join(','))
-    csv = csv.join('\r\n')
-
-    res.send(csv)
+    res.send(getCsv(questions))
   })
 )
 
