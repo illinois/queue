@@ -42,19 +42,31 @@ module.exports.createTestCourses = async () => {
 
 module.exports.createTestQueues = async () => {
   await models.Queue.bulkCreate([
-    { name: 'CS225 Queue', location: 'Here', courseId: 1 },
-    { name: 'CS241 Queue', location: 'There', courseId: 2 },
+    {
+      name: 'CS225 Queue',
+      location: 'Here',
+      courseId: 1,
+      createdAt: '10/5/2019  4:05:41 PM',
+    },
+    {
+      name: 'CS241 Queue',
+      location: 'There',
+      courseId: 2,
+      createdAt: '10/5/2019  4:10:41 PM',
+    },
     {
       name: 'CS225 Fixed Location',
       fixedLocation: true,
       location: 'Everywhere',
       courseId: 1,
+      createdAt: '10/5/2019  4:15:41 PM',
     },
     {
       name: 'CS225 Closed',
       open: false,
       location: 'Everywhere',
       courseId: 1,
+      createdAt: '10/5/2019  4:25:41 PM',
     },
     {
       name: 'CS225 Confidential Queue',
@@ -63,6 +75,7 @@ module.exports.createTestQueues = async () => {
       isConfidential: true,
       messageEnabled: true,
       courseId: 1,
+      createdAt: '10/5/2019  4:35:41 PM',
     },
   ])
 }

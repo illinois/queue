@@ -77,26 +77,20 @@ describe('Courses API', () => {
   })
 
   describe('GET /api/courses/:courseId/data/questions', () => {
+    const expectedCsv =
+      'id,topic,enqueueTime,dequeueTime,answerStartTime,answerFinishTime,comments,preparedness,AnsweredBy_netid,AnsweredBy_UniversityName,AskedBy_netid,AskedBy_UniversityName,queueId,courseId,QueueName,QueueLocation,Queue_CreatedAt,CourseName\r\n1,"Queue","","","","","","","","","admin","Admin",1,1,"CS225 Queue","Here","2019-10-05 17:05:41","CS225"\r\n2,"Canada","","","","","","","","","student","",1,1,"CS225 Queue","Here","2019-10-05 17:05:41","CS225"\r\n3,"Sauce","","","","","","","","","admin","Admin",3,1,"CS225 Fixed Location","Everywhere","2019-10-05 17:15:41","CS225"\r\n4,"Secret","","","","","","","","","student","",5,1,"CS225 Confidential Queue","Everywhere","2019-10-05 17:35:41","CS225"\r\n5,"Secret","","","","","","","","","otherstudent","",5,1,"CS225 Confidential Queue","Everywhere","2019-10-05 17:35:41","CS225"'
     test('succeeds for admin', async () => {
       const request = await requestAsUser(app, 'admin')
       const res = await request.get('/api/courses/1/data/questions')
       expect(res.statusCode).toBe(200)
-      expect(res.text).toEqual(
-        expect.stringContaining(
-          'id,topic,enqueueTime,dequeueTime,answerStartTime,answerFinishTime,comments,preparedness,UserLocation,AnsweredBy_netid,AnsweredBy_UniversityName,AskedBy_netid,AskedBy_UniversityName,queueId,courseId,QueueName,QueueLocation,Queue_CreatedAt,id,CourseName\r\n'
-        )
-      )
+      expect(res.text).toEqual(expectedCsv)
     })
 
     test('succeeds for course staff', async () => {
       const request = await requestAsUser(app, '225staff')
       const res = await request.get('/api/courses/1/data/questions')
       expect(res.statusCode).toBe(200)
-      expect(res.text).toEqual(
-        expect.stringContaining(
-          'id,topic,enqueueTime,dequeueTime,answerStartTime,answerFinishTime,comments,preparedness,UserLocation,AnsweredBy_netid,AnsweredBy_UniversityName,AskedBy_netid,AskedBy_UniversityName,queueId,courseId,QueueName,QueueLocation,Queue_CreatedAt,id,CourseName\r\n'
-        )
-      )
+      expect(res.text).toEqual(expectedCsv)
     })
 
     test('fails for student', async () => {

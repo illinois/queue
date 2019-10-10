@@ -14,9 +14,34 @@ const safeAsync = require('../middleware/safeAsync')
 // Helper for getting course question data
 const getColumns = questions => {
   const columns = new Set()
+  const selectedColumns = new Set([
+    'id',
+    'topic',
+    'enqueueTime',
+    'dequeueTime',
+    'answerStartTime',
+    'answerFinishTime',
+    'comments',
+    'preparedness',
+    'askeBy.UserLocation',
+    'answeredBy.AnsweredBy_netid',
+    'answeredBy.AnsweredBy_UniversityName',
+    'askedBy.AskedBy_netid',
+    'askedBy.AskedBy_UniversityName',
+    'queue.queueId',
+    'queue.courseId',
+    'queue.QueueName',
+    'queue.QueueLocation',
+    'queue.Queue_CreatedAt',
+    'queue.course.CourseName',
+  ])
 
   questions.forEach(question => {
-    Object.keys(question).forEach(questionKey => columns.add(questionKey))
+    Object.keys(question).forEach(questionKey => {
+      if (selectedColumns.has(questionKey)) {
+        columns.add(questionKey)
+      }
+    })
   })
   return columns
 }
@@ -85,16 +110,6 @@ router.get(
   [requireCourseStaff, requireCourse, failIfErrors],
   safeAsync(async (req, res, _next) => {
     const { id: courseId } = res.locals.course
-    const userExcludes = [
-      'createdAt',
-      'netid',
-      'id',
-      'isAdmin',
-      'name',
-      'preferredName',
-      'universityName',
-      'updatedAt',
-    ]
     const questions = await Question.findAll({
       include: [
         {
@@ -104,7 +119,7 @@ router.get(
               model: Course,
               attributes: [['name', 'CourseName']],
               required: true,
-              where: { courseId: Sequelize.col('queue.courseId') },
+              where: { id: Sequelize.col('queue.courseId') },
             },
           ],
           attributes: [
@@ -127,26 +142,20 @@ router.get(
         {
           model: User,
           as: 'askedBy',
-          attributes: {
-            include: [
-              ['netid', 'AskedBy_netid'],
-              ['universityName', 'AskedBy_UniversityName'],
-            ],
-            exclude: userExcludes,
-          },
+          attributes: [
+            ['netid', 'AskedBy_netid'],
+            ['universityName', 'AskedBy_UniversityName'],
+          ],
           required: true,
           where: { id: Sequelize.col('question.askedById') },
         },
         {
           model: User,
           as: 'answeredBy',
-          attributes: {
-            include: [
-              ['netid', 'AnsweredBy_netid'],
-              ['universityName', 'AnsweredBy_UniversityName'],
-            ],
-            exclude: userExcludes,
-          },
+          attributes: [
+            ['netid', 'AnsweredBy_netid'],
+            ['universityName', 'AnsweredBy_UniversityName'],
+          ],
           required: false,
           where: { id: Sequelize.col('question.answeredById') },
         },
@@ -192,9 +201,7 @@ router.get(
     const replacer = (key, value) => (value === null ? '' : value)
     let csv = questions.map(row =>
       header
-        .map(fieldName => {
-          return JSON.stringify(row[fieldName], replacer)
-        })
+        .map(fieldName => JSON.stringify(row[fieldName], replacer))
         .join(',')
     )
     const splitHeader = header.map(h => {
