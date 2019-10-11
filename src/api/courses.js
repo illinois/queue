@@ -67,7 +67,7 @@ const getCsv = questions => {
           const formattedTime =
             time !== null
               ? moment
-                  .tz(moment(time), 'US/Central')
+                  .tz(time, 'YYYY-MM-DD HH:mm:ss.SSS Z', 'US/Central')
                   .format('YYYY-MM-DD HH:mm:ss')
               : ''
           return JSON.stringify(formattedTime, replacer)
