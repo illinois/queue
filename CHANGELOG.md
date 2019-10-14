@@ -6,6 +6,8 @@ When a new version is tagged, the changes since the last deploy should be labele
 with the current semantic version and the next changes should go under a **[Next]** header.
 
 ## [Next]
+
+## v1.3.0
 * Add button to download all queue data for a course. ([@jackieo5023](https://github.com/jackieo5023) in [#290](https://github.com/illinois/queue/pull/290))
 
 ## v1.2.1
