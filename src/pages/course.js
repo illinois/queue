@@ -9,7 +9,7 @@ import { faPlus, faUsers, faDownload } from '@fortawesome/free-solid-svg-icons'
 import { Link } from '../routes'
 import { fetchCourseRequest, fetchCourse } from '../actions/course'
 import { createQueue } from '../actions/queue'
-import { mapObjectToArray } from '../util'
+import { mapObjectToArray, withBaseUrl } from '../util'
 
 import Error from '../components/Error'
 import PageWithUser from '../components/PageWithUser'
@@ -60,7 +60,9 @@ const Course = props => {
             <Button
               color="primary"
               className="mr-3 mt-3"
-              href={`/api/courses/${props.courseId}/data/questions`}
+              href={withBaseUrl(
+                `/api/courses/${props.courseId}/data/questions`
+              )}
             >
               <FontAwesomeIcon icon={faDownload} className="mr-2" />
               Download Queue Data

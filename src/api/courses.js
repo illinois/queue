@@ -12,16 +12,8 @@ const requireAdmin = require('../middleware/requireAdmin')
 const requireCourseStaff = require('../middleware/requireCourseStaff')
 const safeAsync = require('../middleware/safeAsync')
 
-/**
- * Helper for getting course question data
- * This filters all present columns in question data returned from the sequelize query to
- * include only the columns in our list of selectedColumns.
- * This is to account for the case where a column may be absent or missing from questions.
- */
-
-const getColumns = questions => {
-  const columns = new Set()
-  const selectedColumns = new Set([
+const getCsv = questions => {
+  const columns = new Set([
     'id',
     'topic',
     'enqueueTime',
@@ -42,20 +34,6 @@ const getColumns = questions => {
     'queue.Queue_CreatedAt',
     'queue.course.CourseName',
   ])
-
-  questions.forEach(question => {
-    Object.keys(question).forEach(questionKey => {
-      if (selectedColumns.has(questionKey)) {
-        columns.add(questionKey)
-      }
-    })
-  })
-  return columns
-}
-
-const getCsv = questions => {
-  const columns = getColumns(questions)
-  // Taken from https://stackoverflow.com/questions/8847766/how-to-convert-json-to-csv-format-and-store-in-a-variable
   const timeFields = new Set([
     'queue.Queue_CreatedAt',
     'enqueueTime',
@@ -63,6 +41,8 @@ const getCsv = questions => {
     'answerStartTime',
     'answerFinishTime',
   ])
+
+  // Taken from https://stackoverflow.com/questions/8847766/how-to-convert-json-to-csv-format-and-store-in-a-variable
   const header = Array.from(columns)
   const replacer = (key, value) => (value === null ? '' : value)
   const csv = questions.map(row =>
@@ -88,7 +68,7 @@ const getCsv = questions => {
   })
   csv.unshift(splitHeader.join(','))
 
-  return csv.join('\r\n')
+  return csv.join('\n')
 }
 
 // Get all courses
