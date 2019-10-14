@@ -12,7 +12,13 @@ const requireAdmin = require('../middleware/requireAdmin')
 const requireCourseStaff = require('../middleware/requireCourseStaff')
 const safeAsync = require('../middleware/safeAsync')
 
-// Helper for getting course question data
+/**
+ * Helper for getting course question data
+ * This filters all present columns in question data returned from the sequelize query to
+ * include only the columns in our list of selectedColumns.
+ * This is to account for the case where a column may be absent or missing from questions.
+ */
+
 const getColumns = questions => {
   const columns = new Set()
   const selectedColumns = new Set([
@@ -207,7 +213,10 @@ router.get(
       raw: true,
     })
 
-    res.send(getCsv(questions))
+    res
+      .type('text/csv')
+      .attachment('queueData.csv')
+      .send(getCsv(questions))
   })
 )
 

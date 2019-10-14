@@ -1,9 +1,6 @@
 module.exports = {
   // parser: 'babel-eslint',
   parser: '@typescript-eslint/parser',
-  env: {
-    browser: true,
-  },
   extends: [
     'airbnb',
     'plugin:@typescript-eslint/recommended',

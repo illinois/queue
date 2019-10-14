@@ -6,7 +6,6 @@ import { Container, Row, Card, CardBody, Button } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faUsers, faDownload } from '@fortawesome/free-solid-svg-icons'
 
-import axios from '../actions/axios'
 import { Link } from '../routes'
 import { fetchCourseRequest, fetchCourse } from '../actions/course'
 import { createQueue } from '../actions/queue'
@@ -32,23 +31,6 @@ const Course = props => {
       }
     })
   }, [props.courseId])
-
-  const handleFetchQueueData = () => {
-    axios.get(`/api/courses/${props.courseId}/data/questions`).then(
-      res => {
-        // Taken from https://stackoverflow.com/questions/44656610/download-a-string-as-txt-file-in-react
-        const element = document.createElement('a')
-        const csvFile = new Blob([res.data], { type: 'text/csv' })
-        element.href = URL.createObjectURL(csvFile)
-        element.download = 'queueData.csv'
-        document.body.appendChild(element) // Required for this to work in FireFox
-        element.click()
-      },
-      err => {
-        console.error(err)
-      }
-    )
-  }
 
   if (courseLoading) {
     return null
@@ -78,7 +60,7 @@ const Course = props => {
             <Button
               color="primary"
               className="mr-3 mt-3"
-              onClick={() => handleFetchQueueData()}
+              href={`/api/courses/${props.courseId}/data/questions`}
             >
               <FontAwesomeIcon icon={faDownload} className="mr-2" />
               Download Queue Data
