@@ -22,7 +22,7 @@ const getCsv = questions => {
     'answerFinishTime',
     'comments',
     'preparedness',
-    'askeBy.UserLocation',
+    'UserLocation',
     'answeredBy.AnsweredBy_netid',
     'answeredBy.AnsweredBy_UniversityName',
     'askedBy.AskedBy_netid',
