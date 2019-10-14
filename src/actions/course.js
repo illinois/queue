@@ -128,7 +128,7 @@ export function addCourseStaff(courseId, netid, name) {
 }
 
 /**
- * Add a user as staff for a course
+ * Remove a user as staff for a course
  */
 const removeCourseStaffRequest = makeActionCreator(
   types.REMOVE_COURSE_STAFF.REQUEST,

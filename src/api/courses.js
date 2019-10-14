@@ -4,12 +4,72 @@ const router = require('express').Router({
 
 const { check } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
+const moment = require('moment')
 
-const { Course, Queue, User } = require('../models')
+const { Course, Queue, Question, User, Sequelize } = require('../models')
 const { requireCourse, requireUser, failIfErrors } = require('./util')
 const requireAdmin = require('../middleware/requireAdmin')
 const requireCourseStaff = require('../middleware/requireCourseStaff')
 const safeAsync = require('../middleware/safeAsync')
+
+const getCsv = questions => {
+  const columns = new Set([
+    'id',
+    'topic',
+    'enqueueTime',
+    'dequeueTime',
+    'answerStartTime',
+    'answerFinishTime',
+    'comments',
+    'preparedness',
+    'UserLocation',
+    'answeredBy.AnsweredBy_netid',
+    'answeredBy.AnsweredBy_UniversityName',
+    'askedBy.AskedBy_netid',
+    'askedBy.AskedBy_UniversityName',
+    'queue.queueId',
+    'queue.courseId',
+    'queue.QueueName',
+    'queue.QueueLocation',
+    'queue.Queue_CreatedAt',
+    'queue.course.CourseName',
+  ])
+  const timeFields = new Set([
+    'queue.Queue_CreatedAt',
+    'enqueueTime',
+    'dequeueTime',
+    'answerStartTime',
+    'answerFinishTime',
+  ])
+
+  // Taken from https://stackoverflow.com/questions/8847766/how-to-convert-json-to-csv-format-and-store-in-a-variable
+  const header = Array.from(columns)
+  const replacer = (key, value) => (value === null ? '' : value)
+  const csv = questions.map(row =>
+    header
+      .map(fieldName => {
+        if (timeFields.has(fieldName)) {
+          const time = row[fieldName]
+          const formattedTime =
+            time !== null
+              ? moment
+                  .tz(time, 'YYYY-MM-DD HH:mm:ss.SSS Z', 'US/Central')
+                  .format('YYYY-MM-DD HH:mm:ss')
+              : ''
+          return JSON.stringify(formattedTime, replacer)
+        }
+        return JSON.stringify(row[fieldName], replacer)
+      })
+      .join(',')
+  )
+  const splitHeader = header.map(h => {
+    const headerSplit = h.split('.')
+    return headerSplit[headerSplit.length - 1]
+  })
+  csv.unshift(splitHeader.join(','))
+
+  return csv.join('\n')
+}
 
 // Get all courses
 router.get(
@@ -66,6 +126,77 @@ router.get(
 
     course.queues = queues.map(q => q.toJSON())
     res.send(course)
+  })
+)
+
+// Get course queue data
+router.get(
+  '/:courseId/data/questions',
+  [requireCourseStaff, requireCourse, failIfErrors],
+  safeAsync(async (req, res, _next) => {
+    const { id: courseId } = res.locals.course
+    const questions = await Question.findAll({
+      include: [
+        {
+          model: Queue,
+          include: [
+            {
+              model: Course,
+              attributes: [['name', 'CourseName']],
+              required: true,
+              where: { id: Sequelize.col('queue.courseId') },
+            },
+          ],
+          attributes: [
+            ['id', 'queueId'],
+            'courseId',
+            ['name', 'QueueName'],
+            ['location', 'QueueLocation'],
+            ['createdAt', 'Queue_CreatedAt'],
+          ],
+          required: true,
+          where: { courseId, id: Sequelize.col('question.queueId') },
+        },
+        {
+          model: User,
+          as: 'askedBy',
+          attributes: [
+            ['netid', 'AskedBy_netid'],
+            ['universityName', 'AskedBy_UniversityName'],
+          ],
+          required: true,
+          where: { id: Sequelize.col('question.askedById') },
+        },
+        {
+          model: User,
+          as: 'answeredBy',
+          attributes: [
+            ['netid', 'AnsweredBy_netid'],
+            ['universityName', 'AnsweredBy_UniversityName'],
+          ],
+          required: false,
+          where: { id: Sequelize.col('question.answeredById') },
+        },
+      ],
+      attributes: [
+        'id',
+        'topic',
+        'enqueueTime',
+        'dequeueTime',
+        'answerStartTime',
+        'answerFinishTime',
+        'comments',
+        'preparedness',
+        ['location', 'UserLocation'],
+      ],
+      order: [['enqueueTime', 'DESC']],
+      raw: true,
+    })
+
+    res
+      .type('text/csv')
+      .attachment('queueData.csv')
+      .send(getCsv(questions))
   })
 )
 
