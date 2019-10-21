@@ -21,9 +21,10 @@ const createCourseFailure = makeActionCreator(
 export function createCourse(course) {
   return dispatch => {
     dispatch(createCourseRequest(course))
-
     return axios.post('/api/courses', course).then(
-      res => dispatch(createCourseSuccess(res.data)),
+      res => {
+        dispatch(createCourseSuccess(res.data))
+      },
       err => {
         console.error(err)
         dispatch(createCourseFailure(err))

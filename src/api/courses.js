@@ -207,13 +207,15 @@ router.post(
     requireAdmin,
     check('name', 'name must be specified').exists(),
     check('shortcode', 'shortcode must be specified').exists(),
+    check('isUnlisted', 'isUnlisted must be specified').exists(),
     failIfErrors,
   ],
   safeAsync(async (req, res, _next) => {
-    const { name, shortcode } = matchedData(req)
+    const { name, shortcode, isUnlisted } = matchedData(req)
     const course = Course.build({
       name,
       shortcode,
+      isUnlisted,
     })
     const newCourse = await course.save()
     res.status(201).send(newCourse)

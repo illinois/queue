@@ -2,6 +2,7 @@ module.exports = (sequelize, DataTypes) => {
   const obj = sequelize.define('course', {
     name: DataTypes.STRING,
     shortcode: DataTypes.STRING,
+    isUnlisted: DataTypes.BOOLEAN,
   })
 
   obj.associate = models => {

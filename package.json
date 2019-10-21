@@ -73,6 +73,7 @@
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
     "sequelize": "^5.3.4",
+    "sequelize-cli": "^5.5.1",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0",
     "styled-jsx": "^3.2.1",

@@ -9,6 +9,7 @@ import {
   Label,
   Input,
   Button,
+  ButtonGroup,
 } from 'reactstrap'
 
 const isInvalid = error => error !== undefined && error !== ''
@@ -20,6 +21,7 @@ class NewCourse extends React.Component {
     this.state = {
       name: '',
       shortcode: '',
+      isUnlisted: false,
       isFieldValid: {},
     }
 
@@ -57,6 +59,7 @@ class NewCourse extends React.Component {
     const course = {
       name: this.state.name,
       shortcode: this.state.shortcode,
+      isUnlisted: this.state.isUnlisted,
     }
 
     this.props.onCreateCourse(course)
@@ -101,6 +104,33 @@ class NewCourse extends React.Component {
               Adding a shortcode will allow you to generate a special link that
               will direct students to your currently open queue when they visit
               it.
+            </FormText>
+          </Col>
+        </FormGroup>
+        <FormGroup row>
+          <Label for="name" sm={3}>
+            Unlisted Course
+          </Label>
+          <Col sm={9}>
+            <ButtonGroup>
+              <Button
+                color="primary"
+                onClick={() => this.setState({ isUnlisted: true })}
+                active={this.state.isUnlisted}
+              >
+                Yes
+              </Button>
+              <Button
+                color="primary"
+                onClick={() => this.setState({ isUnlisted: false })}
+                active={!this.state.isUnlisted}
+              >
+                No
+              </Button>
+            </ButtonGroup>
+            <FormText>
+              Making your course unlisted will only allow students with the
+              course shortcode to view this course.
             </FormText>
           </Col>
         </FormGroup>
