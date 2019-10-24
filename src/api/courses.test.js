@@ -130,6 +130,25 @@ describe('Courses API', () => {
     })
   })
 
+  describe('GET/POST /api/courses', () => {
+    test('check unlisted course creation', async () => {
+      const course = { name: 'CS446', shortcode: 'cs446', isUnlisted: true }
+      const request = await requestAsUser(app, 'admin')
+      const res = await request.post('/api/courses').send(course)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.id).toBe(3)
+      expect(res.body.name).toBe('CS446')
+      expect(res.body.isUnlisted).toBe(true)
+      expect(res.body.shortcode).toBe('cs446')
+
+      const getRes = await request.get('/api/courses/').send(course.shortcode)
+      expect(getRes.body[2].id).toBe(3)
+      expect(getRes.body[2].name).toBe('CS446')
+      expect(getRes.body[2].isUnlisted).toBe(true)
+      expect(getRes.body[2].shortcode).toBe('cs446')
+    })
+  })
+
   describe('POST /api/course/:courseId/staff', () => {
     test('succeeds for admin', async () => {
       const newUser = { netid: 'newnetid' }

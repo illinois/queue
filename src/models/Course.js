@@ -2,7 +2,11 @@ module.exports = (sequelize, DataTypes) => {
   const obj = sequelize.define('course', {
     name: DataTypes.STRING,
     shortcode: DataTypes.STRING,
-    isUnlisted: DataTypes.BOOLEAN,
+    isUnlisted: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   })
 
   obj.associate = models => {

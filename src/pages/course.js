@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Container, Row, Card, CardBody, Button, ButtonGroup } from 'reactstrap'
+import { Container, Row, Card, CardBody, Button } from 'reactstrap'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faUsers, faDownload } from '@fortawesome/free-solid-svg-icons'
@@ -16,7 +16,6 @@ import PageWithUser from '../components/PageWithUser'
 import NewQueue from '../components/NewQueue'
 import QueueCardListContainer from '../containers/QueueCardListContainer'
 import ShowForCourseStaff from '../components/ShowForCourseStaff'
-import ShowForAdmin from '../components/ShowForAdmin'
 import CourseShortCodeInfo from '../components/CourseShortCodeInfo'
 
 const Course = props => {
@@ -57,22 +56,6 @@ const Course = props => {
           <h1 className="display-4 d-inline-block mb-0 mt-3 mr-auto pr-3">
             {props.course.name}
           </h1>
-          {/* <ShowForAdmin>
-            <ButtonGroup className="mr-3 mt-3">
-              <Button
-                color="primary"
-                onClick={() => {props.course.isUnlisted = true}}
-                active={props.course.isUnlisted}
-                >
-                Yes
-              </Button>
-              <Button
-                color="primary"
-                >
-                No
-              </Button>
-            </ButtonGroup>
-          </ShowForAdmin> */}
           <ShowForCourseStaff courseId={props.courseId}>
             <Button
               color="primary"
@@ -165,7 +148,6 @@ Course.propTypes = {
   courseId: PropTypes.number.isRequired,
   course: PropTypes.shape({
     name: PropTypes.string,
-    isUnlisted: PropTypes.boolean,
     queues: PropTypes.arrayOf(PropTypes.number),
   }),
   queues: PropTypes.arrayOf(
