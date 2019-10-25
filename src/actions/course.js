@@ -34,6 +34,40 @@ export function createCourse(course) {
 }
 
 /**
+ * Make a course unlisted/not unlisted
+ */
+const updateUnlistedCourseRequest = makeActionCreator(
+  types.UPDATE_UNLISTED_COURSE.REQUEST,
+  'courseId',
+  'isUnlisted'
+)
+const updateUnlistedCourseSuccess = makeActionCreator(
+  types.UPDATE_UNLISTED_COURSE.SUCCESS,
+  'courseId',
+  'isUnlisted'
+)
+const updateUnlistedCourseFailure = makeActionCreator(
+  types.UPDATE_UNLISTED_COURSE.FAILURE,
+  'data'
+)
+
+export function updateUnlistedCourse(courseId, isUnlisted) {
+  return dispatch => {
+    dispatch(updateUnlistedCourseRequest(courseId, isUnlisted))
+
+    return axios.put(`/api/courses/${courseId}/update`, isUnlisted).then(
+      res => {
+        dispatch(updateUnlistedCourseSuccess(courseId, res.data))
+      },
+      err => {
+        console.error(err)
+        dispatch(updateUnlistedCourseFailure(err))
+      }
+    )
+  }
+}
+
+/**
  * Loading all courses
  */
 export const fetchCoursesRequest = makeActionCreator(

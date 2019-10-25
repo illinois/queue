@@ -222,6 +222,26 @@ router.post(
   })
 )
 
+// Change course's state as unlisted
+router.put(
+  '/:courseId/update',
+  [requireAdmin, requireCourse, failIfErrors],
+  safeAsync(async (req, res) => {
+    const courseId = res.locals.course.dataValues.id
+    const unlisted = req.body.isUnlisted
+    await Course.update(
+      {
+        isUnlisted: unlisted,
+      },
+      {
+        where: { id: courseId },
+        returning: true,
+        plain: true,
+      }
+    )
+  })
+)
+
 // Add someone to course staff
 router.post(
   '/:courseId/staff',

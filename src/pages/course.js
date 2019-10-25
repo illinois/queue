@@ -4,7 +4,12 @@ import { connect } from 'react-redux'
 import { Container, Row, Card, CardBody, Button } from 'reactstrap'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faUsers, faDownload } from '@fortawesome/free-solid-svg-icons'
+import {
+  faPlus,
+  faUsers,
+  faDownload,
+  faCog,
+} from '@fortawesome/free-solid-svg-icons'
 
 import { Link } from '../routes'
 import { fetchCourseRequest, fetchCourse } from '../actions/course'
@@ -67,7 +72,15 @@ const Course = props => {
               <FontAwesomeIcon icon={faDownload} className="mr-2" />
               Download Queue Data
             </Button>
-            <Link
+            <Button
+              color="primary"
+              className="mt-3"
+              href={withBaseUrl(`/course/${props.courseId}/settings`)}
+            >
+              <FontAwesomeIcon icon={faCog} className="mr-2" />
+              Settings
+            </Button>
+            {/* <Link
               route="courseStaff"
               params={{ id: props.courseId }}
               prefetch
@@ -77,7 +90,7 @@ const Course = props => {
                 <FontAwesomeIcon icon={faUsers} className="mr-2" />
                 Manage staff
               </Button>
-            </Link>
+            </Link> */}
           </ShowForCourseStaff>
         </div>
         <div className="d-flex flex-wrap align-items-center mb-4">
