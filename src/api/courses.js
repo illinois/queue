@@ -229,16 +229,14 @@ router.put(
   safeAsync(async (req, res) => {
     const courseId = res.locals.course.dataValues.id
     const unlisted = req.body.isUnlisted
-    await Course.update(
-      {
-        isUnlisted: unlisted,
-      },
-      {
-        where: { id: courseId },
-        returning: true,
-        plain: true,
-      }
-    )
+
+    await Course.findOne({
+      where: { id: courseId },
+    }).then(async course => {
+      course.isUnlisted = unlisted
+      const newCourse = await course.save()
+      res.status(201).send(newCourse)
+    })
   })
 )
 
