@@ -58,7 +58,7 @@ module.exports = (sequelize, DataTypes) => {
         include: [
           [
             sequelize.literal(
-              '(SELECT COUNT(`questions`.`id`) FROM `questions` WHERE `questions`.`queueId` = `queue`.`id` AND `questions`.`dequeueTime` IS NULL)'
+              '(SELECT COUNT("questions"."id") FROM "questions" WHERE "questions"."queueId" = "queue"."id" AND "questions"."dequeueTime" IS NULL)'
             ),
             'questionCount',
           ],
