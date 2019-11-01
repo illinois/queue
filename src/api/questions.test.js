@@ -445,7 +445,7 @@ describe('Questions API', () => {
     })
   })
 
-  describe('POST /api/queues/:queueId/questions/:questionId/answered', () => {
+  describe('POST /api/queues/:queueId/questions/:questionId/answeredWith', () => {
     test('succeeds for admin', async () => {
       const feedback = {
         preparedness: 'good',
@@ -453,7 +453,7 @@ describe('Questions API', () => {
       }
       const request = await requestAsUser(app, 'admin')
       const res = await request
-        .post('/api/queues/1/questions/1/answered')
+        .post('/api/queues/1/questions/1/answeredWith')
         .send(feedback)
       expect(res.statusCode).toBe(200)
       expect(res.body).toHaveProperty('askedBy')
@@ -469,7 +469,7 @@ describe('Questions API', () => {
       }
       const request = await requestAsUser(app, '225staff')
       const res = await request
-        .post('/api/queues/1/questions/1/answered')
+        .post('/api/queues/1/questions/1/answeredWith')
         .send(feedback)
       expect(res.statusCode).toBe(200)
       expect(res.body).toHaveProperty('askedBy')
@@ -484,7 +484,7 @@ describe('Questions API', () => {
       }
       const request = await requestAsUser(app, 'admin')
       const res = await request
-        .post('/api/queues/1/questions/1/answered')
+        .post('/api/queues/1/questions/1/answeredWith')
         .send(feedback)
       expect(res.statusCode).toBe(422)
     })
@@ -496,20 +496,20 @@ describe('Questions API', () => {
       }
       const request = await requestAsUser(app, 'admin')
       const res = await request
-        .post('/api/queues/1/questions/1/answered')
+        .post('/api/queues/1/questions/1/answeredWith')
         .send(feedback)
       expect(res.statusCode).toBe(422)
     })
 
     test('fails for course staff of different course', async () => {
       const request = await requestAsUser(app, '241staff')
-      const res = await request.post('/api/queues/1/questions/1/answered')
+      const res = await request.post('/api/queues/1/questions/1/answeredWith')
       expect(res.statusCode).toBe(403)
     })
 
     test('fails for student', async () => {
       const request = await requestAsUser(app, 'student')
-      const res = await request.post('/api/queues/1/questions/1/answered')
+      const res = await request.post('/api/queues/1/questions/1/answeredWith')
       expect(res.statusCode).toBe(403)
     })
   })

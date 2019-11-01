@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {
   Col,
+  CustomInput,
   Form,
   FormGroup,
   FormFeedback,
@@ -22,6 +23,7 @@ class NewCourse extends React.Component {
       name: '',
       shortcode: '',
       isUnlisted: false,
+      questionFeedback: false,
       isFieldValid: {},
     }
 
@@ -60,6 +62,7 @@ class NewCourse extends React.Component {
       name: this.state.name,
       shortcode: this.state.shortcode,
       isUnlisted: this.state.isUnlisted,
+      questionFeedback: this.state.questionFeedback,
     }
 
     this.props.onCreateCourse(course)
@@ -111,28 +114,43 @@ class NewCourse extends React.Component {
           <Label for="name" sm={3}>
             Unlisted Course
           </Label>
-          <Col sm={9}>
-            <ButtonGroup>
-              <Button
-                color="primary"
-                onClick={() => this.setState({ isUnlisted: true })}
-                active={this.state.isUnlisted}
-              >
-                Yes
-              </Button>
-              <Button
-                color="primary"
-                onClick={() => this.setState({ isUnlisted: false })}
-                active={!this.state.isUnlisted}
-              >
-                No
-              </Button>
-            </ButtonGroup>
-            <FormText>
-              Making your course unlisted will only allow students with the
-              course shortcode to view this course.
-            </FormText>
-          </Col>
+          <Form>
+            <Col sm={9}>
+              <CustomInput
+                id="isUnlisted"
+                type="switch"
+                name="isUnlisted"
+                defaultChecked={this.state.isUnlisted}
+                onChange={e => this.setState({ isUnlisted: e.target.checked })}
+              />
+              <FormText color="muted">
+                Making your course unlisted will only allow students with the
+                course shortcode to view this course.
+              </FormText>
+            </Col>
+          </Form>
+        </FormGroup>
+        <FormGroup row>
+          <Label for="name" sm={3}>
+            Question Feedback
+          </Label>
+          <Form>
+            <Col sm={9}>
+              <CustomInput
+                id="questionFeedback"
+                type="switch"
+                name="questionFeedback"
+                defaultChecked={this.state.questionFeedback}
+                onChange={e =>
+                  this.setState({ questionFeedback: e.target.checked })
+                }
+              />
+              <FormText color="muted">
+                Allowing question feedback will let your course staff provide
+                feedback after answering each student's question.
+              </FormText>
+            </Col>
+          </Form>
         </FormGroup>
         <FormGroup row className="mb-0">
           <Col md={6}>

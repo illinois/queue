@@ -212,10 +212,12 @@ router.post(
   safeAsync(async (req, res, _next) => {
     const { name, shortcode } = matchedData(req)
     const isUnlisted = req.body.isUnlisted
+    const questionFeedback = req.body.questionFeedback
     const course = Course.build({
       name,
       shortcode,
       isUnlisted,
+      questionFeedback,
     })
     const newCourse = await course.save()
     res.status(201).send(newCourse)
@@ -224,7 +226,7 @@ router.post(
 
 // Change course's state as unlisted
 router.put(
-  '/:courseId/update',
+  '/:courseId/updateUnlisted',
   [requireAdmin, requireCourse, failIfErrors],
   safeAsync(async (req, res) => {
     const courseId = res.locals.course.dataValues.id
@@ -234,6 +236,24 @@ router.put(
       where: { id: courseId },
     }).then(async course => {
       course.isUnlisted = unlisted
+      const newCourse = await course.save()
+      res.status(201).send(newCourse)
+    })
+  })
+)
+
+// Change course's question feedback option
+router.put(
+  '/:courseId/updateQuestionFeedback',
+  [requireAdmin, requireCourse, failIfErrors],
+  safeAsync(async (req, res) => {
+    const courseId = res.locals.course.dataValues.id
+    const questionFeedback = req.body.questionFeedback
+
+    await Course.findOne({
+      where: { id: courseId },
+    }).then(async course => {
+      course.questionFeedback = questionFeedback
       const newCourse = await course.save()
       res.status(201).send(newCourse)
     })

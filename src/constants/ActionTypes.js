@@ -12,6 +12,9 @@ export const CREATE_COURSE = makeActionStrings('CREATE_COURSE')
 export const UPDATE_UNLISTED_COURSE = makeActionStrings(
   'UPDATE_UNLISTED_COURSE'
 )
+export const UPDATE_QUESTION_FEEDBACK = makeActionStrings(
+  'UPDATE_QUESTION_FEEDBACK'
+)
 export const ADD_COURSE_STAFF = makeActionStrings('ADD_COURSE_STAFF')
 export const REMOVE_COURSE_STAFF = makeActionStrings('REMOVE_COURSE_STAFF')
 

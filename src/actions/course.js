@@ -55,15 +55,53 @@ export function updateUnlistedCourse(courseId, isUnlisted) {
   return dispatch => {
     dispatch(updateUnlistedCourseRequest(courseId, isUnlisted))
 
-    return axios.put(`/api/courses/${courseId}/update`, isUnlisted).then(
-      res => {
-        dispatch(updateUnlistedCourseSuccess(courseId, res.data))
-      },
-      err => {
-        console.error(err)
-        dispatch(updateUnlistedCourseFailure(err))
-      }
-    )
+    return axios
+      .put(`/api/courses/${courseId}/updateUnlisted`, isUnlisted)
+      .then(
+        res => {
+          dispatch(updateUnlistedCourseSuccess(courseId, res.data))
+        },
+        err => {
+          console.error(err)
+          dispatch(updateUnlistedCourseFailure(err))
+        }
+      )
+  }
+}
+
+/**
+ * Allow question feedback/not
+ */
+const updateQuestionFeedbackRequest = makeActionCreator(
+  types.UPDATE_QUESTION_FEEDBACK.REQUEST,
+  'courseId',
+  'questionFeedback'
+)
+const updateQuestionFeedbackSuccess = makeActionCreator(
+  types.UPDATE_QUESTION_FEEDBACK.SUCCESS,
+  'courseId',
+  'questionFeedback'
+)
+const updateQuestionFeedbackFailure = makeActionCreator(
+  types.UPDATE_QUESTION_FEEDBACK.FAILURE,
+  'data'
+)
+
+export function updateQuestionFeedback(courseId, questionFeedback) {
+  return dispatch => {
+    dispatch(updateQuestionFeedbackRequest(courseId, questionFeedback))
+
+    return axios
+      .put(`/api/courses/${courseId}/updateQuestionFeedback`, questionFeedback)
+      .then(
+        res => {
+          dispatch(updateQuestionFeedbackSuccess(courseId, res.data))
+        },
+        err => {
+          console.error(err)
+          dispatch(updateQuestionFeedbackFailure(err))
+        }
+      )
   }
 }
 

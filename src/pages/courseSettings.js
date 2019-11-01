@@ -2,6 +2,9 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import {
   Form,
+  CustomInput,
+  Col,
+  FormText,
   FormGroup,
   Label,
   Input,
@@ -22,6 +25,7 @@ import {
   addCourseStaff,
   removeCourseStaff,
   updateUnlistedCourse,
+  updateQuestionFeedback,
 } from '../actions/course'
 
 import Error from '../components/Error'
@@ -31,6 +35,7 @@ import RemoveableUserItem from '../components/RemoveableUserItem'
 import { withBaseUrl } from '../util'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDownload } from '@fortawesome/free-solid-svg-icons'
+import ShowForAdmin from '../components/ShowForAdmin'
 
 class CourseSettings extends React.Component {
   static async getInitialProps({ isServer, store, query }) {
@@ -65,6 +70,11 @@ class CourseSettings extends React.Component {
     this.props.updateUnlistedCourse(courseId, isUnlisted)
   }
 
+  updateQuestionFeedback(questionFeedback) {
+    const { courseId } = this.props
+    this.props.updateQuestionFeedback(courseId, questionFeedback)
+  }
+
   render() {
     if (this.props.isFetching) {
       return null
@@ -74,7 +84,6 @@ class CourseSettings extends React.Component {
     }
 
     const { courseId } = this.props
-    var unlisted = this.props.course.isUnlisted
 
     let users
     if (this.props.course.staff && this.props.course.staff.length > 0) {
@@ -121,46 +130,68 @@ class CourseSettings extends React.Component {
             </Card>
           </Container>
         </div>
+        <ShowForAdmin>
+          <div className="d-flex flex-wrap align-items-center mb-4">
+            <Container>
+              <Card className="staff-card">
+                <CardHeader className="bg-primary text-white d-flex align-items-center">
+                  <CardTitle tag="h4" className="mb-0">
+                    Change {this.props.course.name}'s Listing
+                  </CardTitle>
+                </CardHeader>
+                <Form>
+                  <Col sm={9}>
+                    <CustomInput
+                      id="isUnlisted"
+                      type="switch"
+                      name="isUnlisted"
+                      defaultChecked={this.props.course.isUnlisted}
+                      onChange={e =>
+                        this.updateUnlisted({ isUnlisted: e.target.checked })
+                      }
+                    />
+                    <FormText color="muted">
+                      Making your course unlisted will only allow students with
+                      the course shortcode to view this course.
+                    </FormText>
+                  </Col>
+                </Form>
+              </Card>
+            </Container>
+          </div>
+        </ShowForAdmin>
+
         <div className="d-flex flex-wrap align-items-center mb-4">
-          <Container align="center">
+          <Container>
             <Card className="staff-card">
               <CardHeader className="bg-primary text-white d-flex align-items-center">
                 <CardTitle tag="h4" className="mb-0">
-                  Change {this.props.course.name}'s Listing Status
+                  Show Question Feedback Form
                 </CardTitle>
               </CardHeader>
-              <Form fluid>
-                <FormGroup
-                  check
-                  onClick={() => {
-                    console.log(this.state)
-                    unlisted = true
-                  }}
-                >
-                  <Label check>
-                    <Input type="radio" name="radio1" /> Unlisted
-                  </Label>
-                </FormGroup>
-                <FormGroup
-                  check
-                  onClick={() => {
-                    console.log(this.state)
-                    unlisted = false
-                  }}
-                >
-                  <Label check>
-                    <Input type="radio" name="radio1" /> Listed
-                  </Label>
-                </FormGroup>
-                <Button
-                  onClick={() => this.updateUnlisted({ isUnlisted: unlisted })}
-                >
-                  Submit
-                </Button>
+              <Form>
+                <Col sm={9}>
+                  <CustomInput
+                    id="questionFeedback"
+                    type="switch"
+                    name="questionFeedback"
+                    defaultChecked={this.props.course.questionFeedback}
+                    onChange={e =>
+                      this.updateQuestionFeedback({
+                        questionFeedback: e.target.checked,
+                      })
+                    }
+                  />
+                  <FormText color="muted">
+                    Allowing question feedback will let your course staff
+                    provide feedback after answering each student's question.
+                  </FormText>
+                </Col>
               </Form>
             </Card>
           </Container>
         </div>
+
         <div className="d-flex flex-wrap align-items-center mb-4">
           <Container align="center">
             <Button
@@ -192,6 +223,7 @@ CourseSettings.propTypes = {
   addCourseStaff: PropTypes.func.isRequired,
   removeCourseStaff: PropTypes.func.isRequired,
   updateUnlistedCourse: PropTypes.func.isRequired,
+  updateQuestionFeedback: PropTypes.func.isRequired,
   course: PropTypes.shape({
     name: PropTypes.string,
     staff: PropTypes.arrayOf(PropTypes.number),
@@ -225,6 +257,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(removeCourseStaff(courseId, userId)),
   updateUnlistedCourse: (courseId, isUnlisted) =>
     dispatch(updateUnlistedCourse(courseId, isUnlisted)),
+  updateQuestionFeedback: (courseId, questionFeedback) =>
+    dispatch(updateQuestionFeedback(courseId, questionFeedback)),
   dispatch,
 })
 

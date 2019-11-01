@@ -297,7 +297,7 @@ router.delete(
 
 // Mark the question as answered
 router.post(
-  '/:questionId/answered',
+  '/:questionId/answeredWith',
   [
     requireCourseStaffForQueueForQuestion,
     requireQuestion,
@@ -328,6 +328,22 @@ router.post(
     question.answerFinishTime = new Date()
     question.dequeueTime = new Date()
     question.preparedness = mappedPreparedness
+    question.comments = data.comments
+    question.answeredById = res.locals.userAuthn.id
+
+    const updatedQuestion = await question.save()
+    res.send(updatedQuestion)
+  })
+)
+
+router.post(
+  '/:questionId/answeredNoFeedback',
+  [requireCourseStaffForQueueForQuestion, requireQuestion, failIfErrors],
+  safeAsync(async (req, res, _next) => {
+    const data = matchedData(req)
+    const { question } = res.locals
+    question.answerFinishTime = new Date()
+    question.dequeueTime = new Date()
     question.comments = data.comments
     question.answeredById = res.locals.userAuthn.id
 

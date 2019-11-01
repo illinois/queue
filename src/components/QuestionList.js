@@ -30,18 +30,28 @@ class QuestionList extends React.Component {
       deleteId: null,
       cancelId: null,
     }
+
+    if (props.course && props.course.questionFeedback) {
+      this.state.shouldShowFeedbackModal = true
+    } else {
+      this.state.shouldShowFeedbackModal = false
+    }
   }
 
   handleFinishedAnswering(feedbackId) {
-    this.setState({
-      showFeedbackModal: true,
-      feedbackId,
-    })
+    if (this.state.shouldShowFeedbackModal) {
+      this.setState({
+        showFeedbackModal: true,
+        feedbackId,
+      })
+    } else {
+      this.props.finishAnsweringQuestion(feedbackId, false, {})
+    }
   }
 
   handleSubmitFeedback(feedback) {
     this.props
-      .finishAnsweringQuestion(this.state.feedbackId, feedback)
+      .finishAnsweringQuestion(this.state.feedbackId, true, feedback)
       .then(() => {
         this.setState({
           showFeedbackModal: false,
@@ -153,7 +163,7 @@ class QuestionList extends React.Component {
   }
 
   render() {
-    const { queue, userId } = this.props
+    const { queue, userId, course } = this.props
     let questions
     if (queue && queue.questions) {
       if (queue.questions.length > 0) {
@@ -179,9 +189,9 @@ class QuestionList extends React.Component {
                 deleteQuestion={() => this.deleteQuestion(questionId)}
                 cancelQuestion={() => this.cancelQuestion(questionId)}
                 startQuestion={() => this.startQuestion(questionId)}
-                finishedAnswering={() =>
+                finishedAnswering={() => {
                   this.handleFinishedAnswering(questionId)
-                }
+                }}
                 editQuestion={() => this.handleEditQuestion(questionId)}
                 {...question}
               />

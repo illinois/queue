@@ -64,33 +64,12 @@ const Course = props => {
           <ShowForCourseStaff courseId={props.courseId}>
             <Button
               color="primary"
-              className="mr-3 mt-3"
-              href={withBaseUrl(
-                `/api/courses/${props.courseId}/data/questions`
-              )}
-            >
-              <FontAwesomeIcon icon={faDownload} className="mr-2" />
-              Download Queue Data
-            </Button>
-            <Button
-              color="primary"
               className="mt-3"
               href={withBaseUrl(`/course/${props.courseId}/settings`)}
             >
               <FontAwesomeIcon icon={faCog} className="mr-2" />
               Settings
             </Button>
-            {/* <Link
-              route="courseStaff"
-              params={{ id: props.courseId }}
-              prefetch
-              passHref
-            >
-              <Button tag="a" color="primary" className="mt-3">
-                <FontAwesomeIcon icon={faUsers} className="mr-2" />
-                Manage staff
-              </Button>
-            </Link> */}
           </ShowForCourseStaff>
         </div>
         <div className="d-flex flex-wrap align-items-center mb-4">

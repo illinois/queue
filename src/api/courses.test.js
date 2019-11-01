@@ -160,7 +160,9 @@ describe('Courses API', () => {
     test('change to unlisted', async () => {
       const request = await requestAsUser(app, 'admin')
       const isUnlisted = { isUnlisted: true }
-      const res = await request.put('/api/courses/1/update').send(isUnlisted)
+      const res = await request
+        .put('/api/courses/1/updateUnlisted')
+        .send(isUnlisted)
       expect(res.statusCode).toBe(201)
       expect(res.body.isUnlisted).toBe(true)
     })
@@ -168,7 +170,9 @@ describe('Courses API', () => {
     test('change from unlisted', async () => {
       const request = await requestAsUser(app, 'admin')
       const isUnlisted = { isUnlisted: false }
-      const res = await request.put('/api/courses/1/update').send(isUnlisted)
+      const res = await request
+        .put('/api/courses/1/updateUnlisted')
+        .send(isUnlisted)
       expect(res.statusCode).toBe(201)
       expect(res.body.isUnlisted).toBe(false)
     })
@@ -176,7 +180,9 @@ describe('Courses API', () => {
     test('fails for non-admin', async () => {
       const request = await requestAsUser(app, 'student')
       const isUnlisted = { isUnlisted: false }
-      const res = await request.put('/api/courses/1/update').send(isUnlisted)
+      const res = await request
+        .put('/api/courses/1/updateUnlisted')
+        .send(isUnlisted)
       expect(res.statusCode).toBe(403)
     })
   })

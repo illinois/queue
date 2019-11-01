@@ -139,10 +139,12 @@ export function updateQuestion(questionId, attributes) {
 /**
  * Finishes answering a question and submits feedback for it
  */
+
 const finishAnsweringQuestionRequest = makeActionCreator(
   types.FINISH_ANSWERING_QUESTION.REQUEST,
   'queueId',
   'questionId',
+  'shouldCheckFeedback',
   'feedback'
 )
 const finishAnsweringQuestionSuccess = makeActionCreator(
@@ -158,18 +160,51 @@ const finishAnsweringQuestionFailure = makeActionCreator(
   'feedback'
 )
 
-export function finishAnsweringQuestion(queueId, questionId, feedback) {
+export function finishAnsweringQuestion(
+  queueId,
+  questionId,
+  shouldCheckFeedback,
+  feedback
+) {
   return dispatch => {
-    dispatch(finishAnsweringQuestionRequest(queueId, questionId, feedback))
-
-    return axios.post(`/api/questions/${questionId}/answered`, feedback).then(
-      () =>
-        dispatch(finishAnsweringQuestionSuccess(queueId, questionId, feedback)),
-      err => {
-        console.error(err)
-        dispatch(finishAnsweringQuestionFailure(queueId, questionId))
-      }
+    dispatch(
+      finishAnsweringQuestionRequest(
+        queueId,
+        questionId,
+        shouldCheckFeedback,
+        feedback
+      )
     )
+
+    if (shouldCheckFeedback) {
+      return axios
+        .post(`/api/questions/${questionId}/answeredWith`, feedback)
+        .then(
+          () =>
+            dispatch(
+              finishAnsweringQuestionSuccess(queueId, questionId, feedback)
+            ),
+          err => {
+            console.error(err)
+            dispatch(
+              finishAnsweringQuestionFailure(queueId, questionId, feedback)
+            )
+          }
+        )
+    } else {
+      return axios.post(`/api/questions/${questionId}/answeredNoFeedback`).then(
+        () =>
+          dispatch(
+            finishAnsweringQuestionSuccess(queueId, questionId, feedback)
+          ),
+        err => {
+          console.error(err)
+          dispatch(
+            finishAnsweringQuestionFailure(queueId, questionId, feedback)
+          )
+        }
+      )
+    }
   }
 }
 
