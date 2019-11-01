@@ -5,7 +5,7 @@ const router = require('express').Router({
 const { check, oneOf } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 
-const { Queue, ActiveStaff, Question, User } = require('../models')
+const { Queue, Course, ActiveStaff, Question, User } = require('../models')
 const safeAsync = require('../middleware/safeAsync')
 
 const {
@@ -33,10 +33,22 @@ function validateLocation(req, res, next) {
 router.get(
   '/',
   safeAsync(async (req, res, _next) => {
-    const queuesResult = await Queue.scope(
-      'defaultScope',
-      'questionCount'
-    ).findAll()
+    const listedCourseIds = await Course.findAll({
+      where: { isUnlisted: false },
+      attributes: ['id'],
+      raw: true,
+    }).then(course => course.map(course => course.id))
+
+    console.log(listedCourseIds)
+
+    const queuesResult = await Queue.scope('defaultScope', 'questionCount')
+      .findAll()
+      .then(queue =>
+        queue.filter(queue => listedCourseIds.includes(queue.courseId))
+      )
+
+    console.log(queuesResult)
+
     const queues = queuesResult.map(queue => queue.get({ plain: true }))
     res.json(queues)
   })
