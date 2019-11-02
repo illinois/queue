@@ -148,6 +148,23 @@ describe('Courses API', () => {
       expect(getRes.body[2].shortcode).toBe('cs446')
     })
 
+    test('check course without question feedback creation', async () => {
+      const course = {
+        name: 'CS446',
+        shortcode: 'cs446',
+        isUnlisted: false,
+        questionFeedback: false,
+      }
+      const request = await requestAsUser(app, 'admin')
+      const res = await request.post('/api/courses').send(course)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.id).toBe(3)
+      expect(res.body.name).toBe('CS446')
+      expect(res.body.isUnlisted).toBe(false)
+      expect(res.body.questionFeedback).toBe(false)
+      expect(res.body.shortcode).toBe('cs446')
+    })
+
     test('fails for non-admin', async () => {
       const course = { name: 'CS446', shortcode: 'cs446', isUnlisted: true }
       const request = await requestAsUser(app, 'student')
@@ -156,7 +173,7 @@ describe('Courses API', () => {
     })
   })
 
-  describe('PUT /api/courses', () => {
+  describe('PUT /api/courses/:id/updateUnlisted', () => {
     test('change to unlisted', async () => {
       const request = await requestAsUser(app, 'admin')
       const isUnlisted = { isUnlisted: true }
@@ -183,6 +200,37 @@ describe('Courses API', () => {
       const res = await request
         .put('/api/courses/1/updateUnlisted')
         .send(isUnlisted)
+      expect(res.statusCode).toBe(403)
+    })
+  })
+
+  describe('PUT /api/courses/:id/updateQuestionFeedback', () => {
+    test('change to show question feedback form', async () => {
+      const request = await requestAsUser(app, '225staff')
+      const questionFeedback = { questionFeedback: true }
+      const res = await request
+        .put('/api/courses/1/updateQuestionFeedback')
+        .send(questionFeedback)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.questionFeedback).toBe(true)
+    })
+
+    test('change to not show question feedback form', async () => {
+      const request = await requestAsUser(app, '225staff')
+      const questionFeedback = { questionFeedback: false }
+      const res = await request
+        .put('/api/courses/1/updateQuestionFeedback')
+        .send(questionFeedback)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.questionFeedback).toBe(false)
+    })
+
+    test('fails for non-staff', async () => {
+      const request = await requestAsUser(app, 'student')
+      const questionFeedback = { questionFeedback: false }
+      const res = await request
+        .put('/api/courses/1/updateUnlisted')
+        .send(questionFeedback)
       expect(res.statusCode).toBe(403)
     })
   })

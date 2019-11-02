@@ -514,6 +514,48 @@ describe('Questions API', () => {
     })
   })
 
+  describe('POST /api/queues/:queueId/questions/:questionId/answeredNoFeedback', () => {
+    test('succeeds for admin', async () => {
+      const request = await requestAsUser(app, 'admin')
+      const res = await request.post(
+        '/api/queues/1/questions/1/answeredNoFeedback'
+      )
+      expect(res.statusCode).toBe(200)
+      expect(res.body).toHaveProperty('askedBy')
+      expect(res.body.askedBy.netid).toBe('admin')
+      expect(res.body.beingAnswered).toBe(false)
+      expect(res.body.answeredById).toBe(2)
+    })
+
+    test('succeeds for course staff', async () => {
+      const request = await requestAsUser(app, '225staff')
+      const res = await request.post(
+        '/api/queues/1/questions/1/answeredNoFeedback'
+      )
+      expect(res.statusCode).toBe(200)
+      expect(res.body).toHaveProperty('askedBy')
+      expect(res.body.askedBy.netid).toBe('admin')
+      expect(res.body.beingAnswered).toBe(false)
+      expect(res.body.answeredById).toBe(3)
+    })
+
+    test('fails for course staff of different course', async () => {
+      const request = await requestAsUser(app, '241staff')
+      const res = await request.post(
+        '/api/queues/1/questions/1/answeredNoFeedback'
+      )
+      expect(res.statusCode).toBe(403)
+    })
+
+    test('fails for student', async () => {
+      const request = await requestAsUser(app, 'student')
+      const res = await request.post(
+        '/api/queues/1/questions/1/answeredNoFeedback'
+      )
+      expect(res.statusCode).toBe(403)
+    })
+  })
+
   describe('DELETE /api/queues/:queueId/questions/:questionId', () => {
     test('succeeds for course staff', async () => {
       const request = await requestAsUser(app, '225staff')

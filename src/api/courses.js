@@ -245,7 +245,7 @@ router.put(
 // Change course's question feedback option
 router.put(
   '/:courseId/updateQuestionFeedback',
-  [requireAdmin, requireCourse, failIfErrors],
+  [requireCourseStaff, requireCourse, failIfErrors],
   safeAsync(async (req, res) => {
     const courseId = res.locals.course.dataValues.id
     const questionFeedback = req.body.questionFeedback

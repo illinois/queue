@@ -113,7 +113,6 @@ const queues = (state = defaultState, action) => {
         ...state,
         isFetching: false,
         queues: {
-          ...state.queues,
           ...action.course.queues.reduce((obj, item) => {
             const newQueue = normalizeQueue(item)
             // We'll merge in any new info about this queue but keep existing
@@ -137,7 +136,6 @@ const queues = (state = defaultState, action) => {
         ...state,
         isFetching: false,
         queues: {
-          ...state.queues,
           ...action.queues.reduce((obj, item) => {
             // eslint-disable-next-line no-param-reassign
             obj[item.id] = normalizeQueue(item)

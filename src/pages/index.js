@@ -11,7 +11,7 @@ import {
   fetchCourses,
   createCourse,
 } from '../actions/course'
-import { fetchQueues, createQueue } from '../actions/queue'
+import { fetchQueues, createQueue, fetchQueuesRequest } from '../actions/queue'
 import { mapObjectToArray } from '../util'
 
 import PageWithUser from '../components/PageWithUser'
@@ -27,6 +27,7 @@ class Index extends React.Component {
     if (isServer) {
       // We're going to start loading as soon as we're on the client
       store.dispatch(fetchCoursesRequest())
+      // store.dispatch(fetchQueuesRequest())
     }
   }
 
