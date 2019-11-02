@@ -3,7 +3,6 @@ module.exports = {
     return queryInterface.addColumn('courses', 'questionFeedback', {
       type: Sequelize.BOOLEAN,
       defaultValue: true,
-      after: 'messageEnabled',
     })
   },
 

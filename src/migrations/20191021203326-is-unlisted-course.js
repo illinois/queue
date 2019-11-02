@@ -3,7 +3,6 @@ module.exports = {
     return queryInterface.addColumn('courses', 'isUnlisted', {
       type: Sequelize.BOOLEAN,
       defaultValue: false,
-      after: 'messageEnabled',
     })
   },
 
