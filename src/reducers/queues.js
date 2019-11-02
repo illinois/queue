@@ -113,6 +113,7 @@ const queues = (state = defaultState, action) => {
         ...state,
         isFetching: false,
         queues: {
+          ...state.queues,
           ...action.course.queues.reduce((obj, item) => {
             const newQueue = normalizeQueue(item)
             // We'll merge in any new info about this queue but keep existing
