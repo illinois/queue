@@ -70,8 +70,26 @@ const AdminThemePreview = () => {
       ))}
       <br />
       {colors.map(color => (
+        <Button disabled color={color} className="mr-3 mb-3" key={color}>
+          {color}
+        </Button>
+      ))}
+      <br />
+      {colors.map(color => (
         <Button color={color} outline className="mr-3 mb-3" key={color}>
           {color}
+        </Button>
+      ))}
+      <br />
+      {colors.map(color => (
+        <Button
+          disabled
+          color={color}
+          outline
+          className="mr-3 mb-3"
+          key={color}
+        >
+          {color} - Disabled
         </Button>
       ))}
       <Header>Cards</Header>
