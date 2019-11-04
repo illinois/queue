@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes'
 
 const StaffMember = ({ name, netid, isUserCourseStaff, removeStaff }) => (
   <div className="pt-2 pb-2 d-flex align-items-center">

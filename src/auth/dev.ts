@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { createOrUpdateUser, addJwtCookie } from './util'
-import * as safeAsync from '../middleware/safeAsync'
+import safeAsync from '../middleware/safeAsync'
 
 /**
  * This is used for user impersonation during local dev; it trusts that the

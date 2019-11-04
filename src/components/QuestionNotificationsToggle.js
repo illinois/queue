@@ -2,7 +2,8 @@
 import React, { Fragment } from 'react'
 import { Button, ButtonGroup } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBell, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
+import { faBell } from '@fortawesome/free-solid-svg-icons/faBell'
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons/faInfoCircle'
 
 import QuestionNotificationsToggleExplanationModal from './QuestionNotificationsToggleExplanationModal'
 

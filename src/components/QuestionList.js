@@ -4,7 +4,7 @@ import { ListGroup, ListGroupItem } from 'reactstrap'
 import FlipMove from 'react-flip-move'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons/faSpinner'
 
 import Question from './Question'
 import QuestionFeedback from './QuestionFeedback'

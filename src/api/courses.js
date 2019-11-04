@@ -4,7 +4,6 @@ const router = require('express').Router({
 
 const { check } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
-const moment = require('moment')
 
 const { Course, Queue, Question, User, Sequelize } = require('../models')
 const { requireCourse, requireUser, failIfErrors } = require('./util')
@@ -34,13 +33,6 @@ const getCsv = questions => {
     'queue.Queue_CreatedAt',
     'queue.course.CourseName',
   ])
-  const timeFields = new Set([
-    'queue.Queue_CreatedAt',
-    'enqueueTime',
-    'dequeueTime',
-    'answerStartTime',
-    'answerFinishTime',
-  ])
 
   // Taken from https://stackoverflow.com/questions/8847766/how-to-convert-json-to-csv-format-and-store-in-a-variable
   const header = Array.from(columns)
@@ -48,16 +40,6 @@ const getCsv = questions => {
   const csv = questions.map(row =>
     header
       .map(fieldName => {
-        if (timeFields.has(fieldName)) {
-          const time = row[fieldName]
-          const formattedTime =
-            time !== null
-              ? moment
-                  .tz(time, 'YYYY-MM-DD HH:mm:ss.SSS Z', 'US/Central')
-                  .format('YYYY-MM-DD HH:mm:ss')
-              : ''
-          return JSON.stringify(formattedTime, replacer)
-        }
         return JSON.stringify(row[fieldName], replacer)
       })
       .join(',')

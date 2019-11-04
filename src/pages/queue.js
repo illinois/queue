@@ -12,7 +12,8 @@ import {
   UncontrolledTooltip,
 } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMapMarker, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import { faMapMarker } from '@fortawesome/free-solid-svg-icons/faMapMarker'
+import { faEyeSlash } from '@fortawesome/free-solid-svg-icons/faEyeSlash'
 
 import { Link } from '../routes'
 import { fetchQueue } from '../actions/queue'

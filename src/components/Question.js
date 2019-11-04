@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { ListGroupItem, Button, Badge } from 'reactstrap'
-import Moment from 'react-moment'
-import moment from 'moment'
+import { parseISO, formatRelative } from 'date-fns'
 
 import ParrotText from './ParrotText'
+import RelativeDate from './RelativeDate'
 
 /* eslint-disable react/prefer-stateless-function */
 class Question extends React.Component {
@@ -103,6 +103,8 @@ class Question extends React.Component {
     const answeringName =
       (answeredBy && (answeredBy.name || answeredBy.netid)) || undefined
 
+    const enqueueDate = parseISO(enqueueTime)
+
     return (
       <Fragment>
         <ListGroupItem key={id} className="d-sm-flex align-items-center">
@@ -156,8 +158,8 @@ class Question extends React.Component {
                     <span className="mr-2 ml-2">&bull;</span>
                   </Fragment>
                 )}
-                <span title={moment(enqueueTime).calendar()}>
-                  <Moment fromNow>{enqueueTime}</Moment>
+                <span title={formatRelative(enqueueDate, Date.now())}>
+                  <RelativeDate date={enqueueDate} />
                 </span>
               </span>
             </div>
