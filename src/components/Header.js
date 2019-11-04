@@ -16,7 +16,9 @@ import { useBoolean } from 'react-hanger'
 import Switch from 'react-switch'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUser, faSun, faMoon } from '@fortawesome/free-solid-svg-icons'
+import { faUser } from '@fortawesome/free-solid-svg-icons/faUser'
+import { faSun } from '@fortawesome/free-solid-svg-icons/faSun'
+import { faMoon } from '@fortawesome/free-solid-svg-icons/faMoon'
 
 import { Link } from '../routes'
 import { withBaseUrl } from '../util'

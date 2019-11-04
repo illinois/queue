@@ -4,7 +4,9 @@ import { connect } from 'react-redux'
 import { Container, Row, Card, CardBody, Button } from 'reactstrap'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faUsers, faDownload } from '@fortawesome/free-solid-svg-icons'
+import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus'
+import { faUsers } from '@fortawesome/free-solid-svg-icons/faUsers'
+import { faDownload } from '@fortawesome/free-solid-svg-icons/faDownload'
 
 import { Link } from '../routes'
 import { fetchCourseRequest, fetchCourse } from '../actions/course'

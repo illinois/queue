@@ -2,12 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Card, CardBody, CardTitle, CardSubtitle } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faMapMarker,
-  faQuestionCircle,
-  faEyeSlash,
-  faCog,
-} from '@fortawesome/free-solid-svg-icons'
+import { faMapMarker } from '@fortawesome/free-solid-svg-icons/faMapMarker'
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons/faQuestionCircle'
+import { faEyeSlash } from '@fortawesome/free-solid-svg-icons/faEyeSlash'
+import { faCog } from '@fortawesome/free-solid-svg-icons/faCog'
 
 import { Link } from '../routes'
 import ShowForCourseStaff from './ShowForCourseStaff'

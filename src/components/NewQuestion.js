@@ -17,7 +17,7 @@ import {
 } from 'reactstrap'
 import classNames from 'classnames'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons/faChevronDown'
 
 import constants from '../constants'
 import { CREATE_QUESTION } from '../constants/ActionTypes'

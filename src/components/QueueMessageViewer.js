@@ -4,7 +4,8 @@ import classNames from 'classnames'
 
 import { Card, CardHeader, CardBody, Collapse } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faEdit } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons/faChevronDown'
+import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit'
 import css from 'styled-jsx/css'
 import useLocalStorage from '@illinois/react-use-local-storage'
 
