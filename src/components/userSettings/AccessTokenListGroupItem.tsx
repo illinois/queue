@@ -9,7 +9,10 @@ import {
   InputGroupAddon,
   Button,
 } from 'reactstrap'
-import moment from 'moment'
+import { parseISO, formatRelative, formatDistanceToNow } from 'date-fns'
+
+const formatDateDistanceToNow = (date: Date) =>
+  formatDistanceToNow(date, { addSuffix: true })
 
 interface AdminTokenListGroupItemProps {
   createdAt: string
@@ -32,12 +35,20 @@ const AccessTokenListGroupItem = (props: AdminTokenListGroupItemProps) => {
     }
   }
 
-  const createdAt = moment(props.createdAt)
-  const createdAtHumanReadable = createdAt.fromNow()
-  const createdAtCalendar = createdAt.calendar()
-  const lastUsedAt = moment(props.lastUsedAt)
-  const lastUsedAtHumanReadable = lastUsedAt.fromNow()
-  const lastUsedAtCalendar = lastUsedAt.calendar()
+  const createdAt = parseISO(props.createdAt)
+  const createdAtCalendar = formatRelative(createdAt, Date.now())
+  const createdAtHumanReadable = formatDateDistanceToNow(createdAt)
+
+  let lastUsedAtCalendar
+  let lastUsedAtHumanReadable
+  if (props.lastUsedAt) {
+    const lastUsedAt = parseISO(props.lastUsedAt)
+    lastUsedAtCalendar = formatRelative(lastUsedAt, Date.now())
+    lastUsedAtHumanReadable = formatDateDistanceToNow(lastUsedAt)
+  } else {
+    lastUsedAtCalendar = 'Never used'
+    lastUsedAtHumanReadable = 'Never used'
+  }
 
   return (
     <ListGroupItem>
