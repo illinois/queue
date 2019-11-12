@@ -64,7 +64,7 @@ const ManageStaffPanel = ({
       <CardBody>
         <ListGroup flush className="position-relative">
           <AddStaff
-            onAddStaff={staff => {
+            onAddStaff={(staff: Record<string, string>) => {
               const { netid, name } = staff
               addCourseStaff(course.id, netid, name)
             }}
