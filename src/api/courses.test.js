@@ -173,68 +173,59 @@ describe('Courses API', () => {
     })
   })
 
-  // describe('PATCH /api/courses/:id/update', () => {
-  //   // test('change to unlisted', async () => {
-  //   //   const request = await requestAsUser(app, 'admin')
-  //   //   const isUnlisted = { isUnlisted: true }
-  //   //   const res = await request
-  //   //     .put('/api/courses/1/update')
-  //   //     .send(isUnlisted)
-  //   //   expect(res.statusCode).toBe(201)
-  //   //   expect(res.body.isUnlisted).toBe(true)
-  //   // })
+  describe('PATCH /api/courses/:id', () => {
+    test('change to unlisted', async () => {
+      const request = await requestAsUser(app, 'admin')
+      var getRes = await request.get('/api/courses/1')
+      getRes.body.isUnlisted = true
+      const res = await request.patch('/api/courses/1').send(getRes.body)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.isUnlisted).toBe(true)
+    })
 
-  //   // test('change from unlisted', async () => {
-  //   //   const request = await requestAsUser(app, '225staff')
-  //   //   const isUnlisted = { isUnlisted: false }
-  //   //   const res = await request
-  //   //     .put('/api/courses/1/update')
-  //   //     .send(isUnlisted)
-  //   //   expect(res.statusCode).toBe(201)
-  //   //   expect(res.body.isUnlisted).toBe(false)
-  //   // })
+    test('change from unlisted', async () => {
+      const request = await requestAsUser(app, '225staff')
+      var getRes = await request.get('/api/courses/1')
+      getRes.body.isUnlisted = false
+      const res = await request.patch('/api/courses/1').send(getRes.body)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.isUnlisted).toBe(false)
+    })
 
-  //   // test('fails for non-admin', async () => {
-  //   //   const request = await requestAsUser(app, 'student')
-  //   //   const isUnlisted = { isUnlisted: false }
-  //   //   const res = await request
-  //   //     .put('/api/courses/1/updateUnlisted')
-  //   //     .send(isUnlisted)
-  //   //   expect(res.statusCode).toBe(403)
-  //   // })
+    test('fails for non-staff', async () => {
+      const request = await requestAsUser(app, 'student')
+      var getRes = await request.get('/api/courses/1')
+      getRes.body.isUnlisted = true
+      const res = await request.patch('/api/courses/1').send(getRes.body)
+      expect(res.statusCode).toBe(403)
+    })
 
-  //   test('change to show question feedback form', async () => {
-  //     const request = await requestAsUser(app, '225staff')
-  //     var course = (await request.get('/api/courses/1')).body
-  //     course.questionFeedback = true
-  //     const res = await request
-  //       .patch('/api/courses/1/update')
-  //       .send(course)
-  //     expect(res.statusCode).toBe(201)
-  //     expect(res.body.questionFeedback).toBe(true)
-  //   })
+    test('change to show question feedback', async () => {
+      const request = await requestAsUser(app, 'admin')
+      var getRes = await request.get('/api/courses/1')
+      getRes.body.questionFeedback = true
+      const res = await request.patch('/api/courses/1').send(getRes.body)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.questionFeedback).toBe(true)
+    })
 
-  //   // test('change to not show question feedback form', async () => {
-  //   //   const request = await requestAsUser(app, '225staff')
-  //   //   var course = await request.get('/api/courses/1')
-  //   //   course.questionFeedback = false
-  //   //   const res = await request
-  //   //     .patch('/api/courses/1/update')
-  //   //     .send(course)
-  //   //   expect(res.statusCode).toBe(201)
-  //   //   expect(res.body.questionFeedback).toBe(false)
-  //   // })
+    test('change to not show question feedback', async () => {
+      const request = await requestAsUser(app, '225staff')
+      var getRes = await request.get('/api/courses/1')
+      getRes.body.questionFeedback = false
+      const res = await request.patch('/api/courses/1').send(getRes.body)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.questionFeedback).toBe(false)
+    })
 
-  //   // test('fails for non-staff', async () => {
-  //   //   const request = await requestAsUser(app, 'student')
-  //   //   var course = await request.get('/api/courses/1')
-  //   //   course.questionFeedback = false
-  //   //   const res = await request
-  //   //     .patch('/api/courses/1/update')
-  //   //     .send(course)
-  //   //   expect(res.statusCode).toBe(403)
-  //   // })
-  // })
+    test('fails for non-staff', async () => {
+      const request = await requestAsUser(app, 'student')
+      var getRes = await request.get('/api/courses/1')
+      getRes.body.questionFeedback = true
+      const res = await request.patch('/api/courses/1').send(getRes.body)
+      expect(res.statusCode).toBe(403)
+    })
+  })
 
   describe('POST /api/course/:courseId/staff', () => {
     test('succeeds for admin', async () => {
