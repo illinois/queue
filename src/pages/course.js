@@ -4,14 +4,8 @@ import { connect } from 'react-redux'
 import { Container, Row, Card, CardBody, Button } from 'reactstrap'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faPlus,
-  faUsers,
-  faDownload,
-  faCog,
-} from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faCog } from '@fortawesome/free-solid-svg-icons'
 
-import { Link } from '../routes'
 import { fetchCourseRequest, fetchCourse } from '../actions/course'
 import { createQueue } from '../actions/queue'
 import { mapObjectToArray, withBaseUrl } from '../util'

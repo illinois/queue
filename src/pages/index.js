@@ -11,7 +11,7 @@ import {
   fetchCourses,
   createCourse,
 } from '../actions/course'
-import { fetchQueues, createQueue, fetchQueuesRequest } from '../actions/queue'
+import { fetchQueues, createQueue } from '../actions/queue'
 import { mapObjectToArray } from '../util'
 
 import PageWithUser from '../components/PageWithUser'
@@ -27,7 +27,6 @@ class Index extends React.Component {
     if (isServer) {
       // We're going to start loading as soon as we're on the client
       store.dispatch(fetchCoursesRequest())
-      // store.dispatch(fetchQueuesRequest())
     }
   }
 
@@ -89,8 +88,9 @@ class Index extends React.Component {
 
     let courseButtons
     if (this.props.courses && this.props.courses.length > 0) {
-      courseButtons = this.props.courses.map(course => {
-        if (!course.isUnlisted) {
+      courseButtons = this.props.courses
+        .filter(course => !course.isUnlisted)
+        .map(course => {
           return (
             <Link
               route="course"
@@ -104,8 +104,7 @@ class Index extends React.Component {
               </Button>
             </Link>
           )
-        }
-      })
+        })
     }
 
     const openQueueIds = this.props.queues

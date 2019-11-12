@@ -297,58 +297,52 @@ router.delete(
 
 // Mark the question as answered
 router.post(
-  '/:questionId/answeredWith',
-  [
-    requireCourseStaffForQueueForQuestion,
-    requireQuestion,
-    check('preparedness').isIn(['bad', 'average', 'good']),
-    check('comments')
-      .optional({ nullable: true })
-      .trim(),
-    failIfErrors,
-  ],
-  safeAsync(async (req, res, _next) => {
-    const data = matchedData(req)
-
-    // Temporary, easy fix to avoid having to rename enums
-    // TODO Fix this garbage
-    let mappedPreparedness = data.preparedness
-    switch (data.preparedness) {
-      case 'bad':
-        mappedPreparedness = 'not'
-        break
-      case 'good':
-        mappedPreparedness = 'well'
-        break
-      default:
-        break
-    }
-
-    const { question } = res.locals
-    question.answerFinishTime = new Date()
-    question.dequeueTime = new Date()
-    question.preparedness = mappedPreparedness
-    question.comments = data.comments
-    question.answeredById = res.locals.userAuthn.id
-
-    const updatedQuestion = await question.save()
-    res.send(updatedQuestion)
-  })
-)
-
-router.post(
-  '/:questionId/answeredNoFeedback',
+  '/:questionId/answered',
   [requireCourseStaffForQueueForQuestion, requireQuestion, failIfErrors],
   safeAsync(async (req, res, _next) => {
     const data = matchedData(req)
-    const { question } = res.locals
-    question.answerFinishTime = new Date()
-    question.dequeueTime = new Date()
-    question.comments = data.comments
-    question.answeredById = res.locals.userAuthn.id
+    const { shouldCheckFeedback } = data
+    const { feedback } = data
 
-    const updatedQuestion = await question.save()
-    res.send(updatedQuestion)
+    if (shouldCheckFeedback) {
+      if (
+        feedback.preparedness !== 'bad' &&
+        feedback.preparedness !== 'good' &&
+        feedback.preparedness !== 'average'
+      ) {
+        res.status(422).send({ error: 'malformed preparedness' })
+      }
+      let mappedPreparedness = feedback.preparedness
+      switch (feedback.preparedness) {
+        case 'bad':
+          mappedPreparedness = 'not'
+          break
+        case 'good':
+          mappedPreparedness = 'well'
+          break
+        default:
+          break
+      }
+
+      const { question } = res.locals
+      question.answerFinishTime = new Date()
+      question.dequeueTime = new Date()
+      question.preparedness = mappedPreparedness
+      question.comments =
+        feedback.comments == null ? feedback.comments : feedback.comments.trim()
+      question.answeredById = res.locals.userAuthn.id
+
+      const updatedQuestion = await question.save()
+      res.send(updatedQuestion)
+    } else {
+      const { question } = res.locals
+      question.answerFinishTime = new Date()
+      question.dequeueTime = new Date()
+      question.answeredById = res.locals.userAuthn.id
+
+      const updatedQuestion = await question.save()
+      res.send(updatedQuestion)
+    }
   })
 )
 

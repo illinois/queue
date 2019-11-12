@@ -195,7 +195,7 @@ router.get(
 
     res
       .type('text/csv')
-      .attachment('queueData.csv')
+      .attachment('courseData.csv')
       .send(getCsv(questions))
   })
 )
@@ -211,8 +211,8 @@ router.post(
   ],
   safeAsync(async (req, res, _next) => {
     const { name, shortcode } = matchedData(req)
-    const isUnlisted = req.body.isUnlisted
-    const questionFeedback = req.body.questionFeedback
+    const { isUnlisted } = req.body
+    const { questionFeedback } = req.body
     const course = Course.build({
       name,
       shortcode,
@@ -224,39 +224,34 @@ router.post(
   })
 )
 
-// Change course's state as unlisted
-router.put(
-  '/:courseId/updateUnlisted',
-  [requireAdmin, requireCourse, failIfErrors],
-  safeAsync(async (req, res) => {
+// Modify a queue for a course
+router.patch(
+  '/:courseId',
+  [
+    requireCourseStaff,
+    requireCourse,
+    check('name').exists(),
+    check('shortcode').exists(),
+    check('isUnlisted').isBoolean(),
+    check('questionFeedback').isBoolean(),
+    failIfErrors,
+  ],
+  safeAsync(async (req, res, _next) => {
     const courseId = res.locals.course.dataValues.id
-    const unlisted = req.body.isUnlisted
-
-    await Course.findOne({
-      where: { id: courseId },
-    }).then(async course => {
-      course.isUnlisted = unlisted
-      const newCourse = await course.save()
-      res.status(201).send(newCourse)
+    const { course } = res.locals
+    const data = matchedData(req)
+    await course.update({
+      name: data.name !== null ? data.name : undefined,
+      shortcode: data.shortcode !== null ? data.shortcode : undefined,
+      isUnlisted: data.isUnlisted !== null ? data.isUnlisted : undefined,
+      questionFeedback:
+        data.questionFeedback !== null ? data.questionFeedback : undefined,
     })
-  })
-)
 
-// Change course's question feedback option
-router.put(
-  '/:courseId/updateQuestionFeedback',
-  [requireCourseStaff, requireCourse, failIfErrors],
-  safeAsync(async (req, res) => {
-    const courseId = res.locals.course.dataValues.id
-    const questionFeedback = req.body.questionFeedback
-
-    await Course.findOne({
+    const updatedCourse = await Course.findOne({
       where: { id: courseId },
-    }).then(async course => {
-      course.questionFeedback = questionFeedback
-      const newCourse = await course.save()
-      res.status(201).send(newCourse)
     })
+    res.status(201).send(updatedCourse)
   })
 )
 

@@ -9,6 +9,7 @@ function makeActionStrings(action) {
 export const FETCH_COURSES = makeActionStrings('FETCH_COURSES')
 export const FETCH_COURSE = makeActionStrings('FETCH_COURSE')
 export const CREATE_COURSE = makeActionStrings('CREATE_COURSE')
+export const UPDATE_COURSE = makeActionStrings('UPDATE_COURSE')
 export const UPDATE_UNLISTED_COURSE = makeActionStrings(
   'UPDATE_UNLISTED_COURSE'
 )

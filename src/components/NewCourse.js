@@ -10,7 +10,6 @@ import {
   Label,
   Input,
   Button,
-  ButtonGroup,
 } from 'reactstrap'
 
 const isInvalid = error => error !== undefined && error !== ''
@@ -114,43 +113,39 @@ class NewCourse extends React.Component {
           <Label for="name" sm={3}>
             Unlisted Course
           </Label>
-          <Form>
-            <Col sm={9}>
-              <CustomInput
-                id="isUnlisted"
-                type="switch"
-                name="isUnlisted"
-                defaultChecked={this.state.isUnlisted}
-                onChange={e => this.setState({ isUnlisted: e.target.checked })}
-              />
-              <FormText color="muted">
-                Making your course unlisted will only allow students with the
-                course shortcode to view this course.
-              </FormText>
-            </Col>
-          </Form>
+          <Col sm={9}>
+            <CustomInput
+              id="isUnlisted"
+              type="switch"
+              name="isUnlisted"
+              defaultChecked={this.state.isUnlisted}
+              onChange={e => this.setState({ isUnlisted: e.target.checked })}
+            />
+            <FormText color="muted">
+              Making your course unlisted will only allow students with the
+              course shortcode to view this course.
+            </FormText>
+          </Col>
         </FormGroup>
         <FormGroup row>
           <Label for="name" sm={3}>
             Question Feedback
           </Label>
-          <Form>
-            <Col sm={9}>
-              <CustomInput
-                id="questionFeedback"
-                type="switch"
-                name="questionFeedback"
-                defaultChecked={this.state.questionFeedback}
-                onChange={e =>
-                  this.setState({ questionFeedback: e.target.checked })
-                }
-              />
-              <FormText color="muted">
-                Allowing question feedback will let your course staff provide
-                feedback after answering each student's question.
-              </FormText>
-            </Col>
-          </Form>
+          <Col sm={9}>
+            <CustomInput
+              id="questionFeedback"
+              type="switch"
+              name="questionFeedback"
+              defaultChecked={this.state.questionFeedback}
+              onChange={e =>
+                this.setState({ questionFeedback: e.target.checked })
+              }
+            />
+            <FormText color="muted">
+              Allowing question feedback will let your course staff provide
+              feedback after answering each student's question.
+            </FormText>
+          </Col>
         </FormGroup>
         <FormGroup row className="mb-0">
           <Col md={6}>

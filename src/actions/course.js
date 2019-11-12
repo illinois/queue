@@ -34,74 +34,33 @@ export function createCourse(course) {
 }
 
 /**
- * Make a course unlisted/not unlisted
+ * Update a course's attributes
  */
-const updateUnlistedCourseRequest = makeActionCreator(
-  types.UPDATE_UNLISTED_COURSE.REQUEST,
+const updateCourseRequest = makeActionCreator(
+  types.UPDATE_COURSE.REQUEST,
   'courseId',
-  'isUnlisted'
+  'attributes'
 )
-const updateUnlistedCourseSuccess = makeActionCreator(
-  types.UPDATE_UNLISTED_COURSE.SUCCESS,
+export const updateCourseSuccess = makeActionCreator(
+  types.UPDATE_COURSE.SUCCESS,
   'courseId',
-  'isUnlisted'
+  'course'
 )
-const updateUnlistedCourseFailure = makeActionCreator(
-  types.UPDATE_UNLISTED_COURSE.FAILURE,
-  'data'
+const updateCourseFailure = makeActionCreator(
+  types.UPDATE_COURSE.FAILURE,
+  'courseId'
 )
 
-export function updateUnlistedCourse(courseId, isUnlisted) {
+export function updateCourse(courseId, attributes) {
   return dispatch => {
-    dispatch(updateUnlistedCourseRequest(courseId, isUnlisted))
-
-    return axios
-      .put(`/api/courses/${courseId}/updateUnlisted`, isUnlisted)
-      .then(
-        res => {
-          dispatch(updateUnlistedCourseSuccess(courseId, res.data))
-        },
-        err => {
-          console.error(err)
-          dispatch(updateUnlistedCourseFailure(err))
-        }
-      )
-  }
-}
-
-/**
- * Allow question feedback/not
- */
-const updateQuestionFeedbackRequest = makeActionCreator(
-  types.UPDATE_QUESTION_FEEDBACK.REQUEST,
-  'courseId',
-  'questionFeedback'
-)
-const updateQuestionFeedbackSuccess = makeActionCreator(
-  types.UPDATE_QUESTION_FEEDBACK.SUCCESS,
-  'courseId',
-  'questionFeedback'
-)
-const updateQuestionFeedbackFailure = makeActionCreator(
-  types.UPDATE_QUESTION_FEEDBACK.FAILURE,
-  'data'
-)
-
-export function updateQuestionFeedback(courseId, questionFeedback) {
-  return dispatch => {
-    dispatch(updateQuestionFeedbackRequest(courseId, questionFeedback))
-
-    return axios
-      .put(`/api/courses/${courseId}/updateQuestionFeedback`, questionFeedback)
-      .then(
-        res => {
-          dispatch(updateQuestionFeedbackSuccess(courseId, res.data))
-        },
-        err => {
-          console.error(err)
-          dispatch(updateQuestionFeedbackFailure(err))
-        }
-      )
+    dispatch(updateCourseRequest(courseId, attributes))
+    return axios.patch(`/api/courses/${courseId}`, attributes).then(
+      res => dispatch(updateCourseSuccess(courseId, res.data)),
+      err => {
+        console.error(err)
+        dispatch(updateCourseFailure(courseId))
+      }
+    )
   }
 }
 

@@ -1,229 +1,85 @@
-import React, { Fragment } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import {
-  Form,
-  CustomInput,
-  Col,
-  FormText,
-  FormGroup,
-  Label,
-  Input,
-  Button,
-  Container,
-  Card,
-  CardHeader,
-  CardTitle,
-  ListGroup,
-  ListGroupItem,
-} from 'reactstrap'
+import { Container } from 'reactstrap'
 import { connect } from 'react-redux'
-import FlipMove from 'react-flip-move'
 
 import {
   fetchCourse,
   fetchCourseRequest,
   addCourseStaff,
   removeCourseStaff,
-  updateUnlistedCourse,
-  updateQuestionFeedback,
+  updateCourse as updateCourseAction,
 } from '../actions/course'
 
 import Error from '../components/Error'
 import PageWithUser from '../components/PageWithUser'
-import AddStaff from '../components/AddStaff'
-import RemoveableUserItem from '../components/RemoveableUserItem'
-import { withBaseUrl } from '../util'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faDownload } from '@fortawesome/free-solid-svg-icons'
-import ShowForAdmin from '../components/ShowForAdmin'
+import GeneralPanel from '../components/courseSettings/GeneralPanel'
+import DownloadPanel from '../components/courseSettings/DownloadPanel'
+import ManageStaffPanel from '../components/courseSettings/ManageStaffPanel'
+import { isUserCourseStaff, isUserAdmin } from '../selectors'
 
-class CourseSettings extends React.Component {
-  static async getInitialProps({ isServer, store, query }) {
-    const courseId = Number.parseInt(query.id, 10)
-    if (isServer) {
-      store.dispatch(fetchCourseRequest(courseId))
-    }
-    return {
-      courseId,
-      isFetching: isServer,
-    }
-  }
+const CourseSettings = props => {
+  const [courseLoading, setCourseLoading] = useState(true)
 
-  static pageTransitionDelayEnter = true
-
-  componentDidMount() {
-    this.props.fetchCourse(this.props.courseId).then(() => {
-      if (this.props.pageTransitionReadyToEnter) {
-        this.props.pageTransitionReadyToEnter()
+  useEffect(() => {
+    setCourseLoading(true)
+    props.fetchCourse(props.courseId).then(() => {
+      setCourseLoading(false)
+      if (props.pageTransitionReadyToEnter) {
+        props.pageTransitionReadyToEnter()
       }
     })
+  }, [props.courseId])
+
+  const updateCourse = attributes => {
+    props.updateCourse(props.courseId, attributes)
   }
 
-  addStaff(staff) {
-    const { netid, name } = staff
-    const { courseId } = this.props
-    this.props.addCourseStaff(courseId, netid, name)
+  if (courseLoading) return null
+
+  if (!courseLoading && !props.course) {
+    return <Error statusCode={404} />
   }
 
-  updateUnlisted(isUnlisted) {
-    const { courseId } = this.props
-    this.props.updateUnlistedCourse(courseId, isUnlisted)
+  if (!props.isUserAdmin && !props.isUserCourseStaff) {
+    return <Error statusCode={403} />
   }
 
-  updateQuestionFeedback(questionFeedback) {
-    const { courseId } = this.props
-    this.props.updateQuestionFeedback(courseId, questionFeedback)
-  }
-
-  render() {
-    if (this.props.isFetching) {
-      return null
-    }
-    if (!this.props.isFetching && !this.props.course) {
-      return <Error statusCode={404} />
-    }
-
-    const { courseId } = this.props
-
-    let users
-    if (this.props.course.staff && this.props.course.staff.length > 0) {
-      users = this.props.course.staff.map(id => {
-        const user = this.props.users[id]
-        return (
-          <RemoveableUserItem
-            key={user.id}
-            onRemove={userId => this.props.removeCourseStaff(courseId, userId)}
-            {...user}
-          />
-        )
-      })
-    } else {
-      users = (
-        <ListGroupItem className="text-center text-muted pt-4 pb-4">
-          This course doesn&apos;t have any staff yet
-        </ListGroupItem>
-      )
-    }
-
-    return (
-      <Fragment>
-        <div className="d-flex flex-wrap align-items-center mb-4">
-          <Container align="center">
-            <h1 className="display-4">{this.props.course.name} Settings</h1>
-            <Card className="staff-card">
-              <CardHeader className="bg-primary text-white d-flex align-items-center">
-                <CardTitle tag="h4" className="mb-0">
-                  Manage {this.props.course && this.props.course.name} Staff
-                </CardTitle>
-              </CardHeader>
-              <ListGroup flush className="position-relative">
-                <AddStaff onAddStaff={staff => this.addStaff(staff)} />
-                <FlipMove
-                  enterAnimation="accordionVertical"
-                  leaveAnimation="accordionVertical"
-                  duration={200}
-                  typeName={null}
-                >
-                  {users}
-                </FlipMove>
-              </ListGroup>
-            </Card>
-          </Container>
-        </div>
-        <ShowForAdmin>
-          <div className="d-flex flex-wrap align-items-center mb-4">
-            <Container>
-              <Card className="staff-card">
-                <CardHeader className="bg-primary text-white d-flex align-items-center">
-                  <CardTitle tag="h4" className="mb-0">
-                    Change {this.props.course.name}'s Listing
-                  </CardTitle>
-                </CardHeader>
-                <Form>
-                  <Col sm={9}>
-                    <CustomInput
-                      id="isUnlisted"
-                      type="switch"
-                      name="isUnlisted"
-                      defaultChecked={this.props.course.isUnlisted}
-                      onChange={e =>
-                        this.updateUnlisted({ isUnlisted: e.target.checked })
-                      }
-                    />
-                    <FormText color="muted">
-                      Making your course unlisted will only allow students with
-                      the course shortcode to view this course.
-                    </FormText>
-                  </Col>
-                </Form>
-              </Card>
-            </Container>
-          </div>
-        </ShowForAdmin>
-
-        <div className="d-flex flex-wrap align-items-center mb-4">
-          <Container>
-            <Card className="staff-card">
-              <CardHeader className="bg-primary text-white d-flex align-items-center">
-                <CardTitle tag="h4" className="mb-0">
-                  Show Question Feedback Form
-                </CardTitle>
-              </CardHeader>
-              <Form>
-                <Col sm={9}>
-                  <CustomInput
-                    id="questionFeedback"
-                    type="switch"
-                    name="questionFeedback"
-                    defaultChecked={this.props.course.questionFeedback}
-                    onChange={e =>
-                      this.updateQuestionFeedback({
-                        questionFeedback: e.target.checked,
-                      })
-                    }
-                  />
-                  <FormText color="muted">
-                    Allowing question feedback will let your course staff
-                    provide feedback after answering each student's question.
-                  </FormText>
-                </Col>
-              </Form>
-            </Card>
-          </Container>
-        </div>
-
-        <div className="d-flex flex-wrap align-items-center mb-4">
-          <Container align="center">
-            <Button
-              color="primary"
-              align="center"
-              href={withBaseUrl(`/api/courses/${courseId}/data/questions`)}
-            >
-              <FontAwesomeIcon icon={faDownload} className="mr-2" />
-              Download Queue Data
-            </Button>
-          </Container>
-        </div>
-        <style jsx>{`
-          :global(.staff-card) {
-            width: 100%;
-            max-width: 500px;
-            margin: auto;
-          }
-        `}</style>
-      </Fragment>
-    )
-  }
+  return (
+    <Container>
+      <h1 className="display-4">Course Settings</h1>
+      <h2 className="mb-5">{props.course.name}</h2>
+      <GeneralPanel
+        course={props.course}
+        updateCourse={attributes => updateCourse(attributes)}
+      />
+      <ManageStaffPanel
+        course={props.course}
+        users={props.users}
+        removeCourseStaff={props.removeCourseStaff}
+        addCourseStaff={props.addCourseStaff}
+      />
+      <DownloadPanel course={props.course} />
+    </Container>
+  )
 }
+
+CourseSettings.getInitialProps = async ({ isServer, store, query }) => {
+  const courseId = Number.parseInt(query.id, 10)
+  if (isServer) {
+    store.dispatch(fetchCourseRequest(courseId))
+  }
+  return { courseId }
+}
+
+CourseSettings.pageTransitionDelayEnter = true
 
 CourseSettings.propTypes = {
   courseId: PropTypes.number.isRequired,
-  isFetching: PropTypes.bool.isRequired,
   fetchCourse: PropTypes.func.isRequired,
   addCourseStaff: PropTypes.func.isRequired,
   removeCourseStaff: PropTypes.func.isRequired,
-  updateUnlistedCourse: PropTypes.func.isRequired,
-  updateQuestionFeedback: PropTypes.func.isRequired,
+  updateCourse: PropTypes.func.isRequired,
   course: PropTypes.shape({
     name: PropTypes.string,
     staff: PropTypes.arrayOf(PropTypes.number),
@@ -235,6 +91,8 @@ CourseSettings.propTypes = {
       name: PropTypes.string,
     })
   ).isRequired,
+  isUserCourseStaff: PropTypes.bool.isRequired,
+  isUserAdmin: PropTypes.bool.isRequired,
   pageTransitionReadyToEnter: PropTypes.func,
 }
 
@@ -243,10 +101,11 @@ CourseSettings.defaultProps = {
   pageTransitionReadyToEnter: null,
 }
 
-const mapStateToProps = (state, { courseId }) => ({
-  course: state.courses.courses[courseId],
+const mapStateToProps = (state, ownProps) => ({
+  course: state.courses.courses[ownProps.courseId],
+  isUserCourseStaff: isUserCourseStaff(state, ownProps),
+  isUserAdmin: isUserAdmin(state, ownProps),
   users: state.users.users,
-  isFetching: state.courses.isFetching || state.users.isFetching,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -255,10 +114,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(addCourseStaff(courseId, netid, name)),
   removeCourseStaff: (courseId, userId) =>
     dispatch(removeCourseStaff(courseId, userId)),
-  updateUnlistedCourse: (courseId, isUnlisted) =>
-    dispatch(updateUnlistedCourse(courseId, isUnlisted)),
-  updateQuestionFeedback: (courseId, questionFeedback) =>
-    dispatch(updateQuestionFeedback(courseId, questionFeedback)),
+  updateCourse: (courseId, attributes) =>
+    dispatch(updateCourseAction(courseId, attributes)),
   dispatch,
 })
 

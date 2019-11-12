@@ -48,8 +48,6 @@ const mapDispatchToProps = (dispatch, { queueId }) => ({
         feedback
       )
     ),
-  // finishAnsweringQuestion: (questionId) =>
-  //   dispatch(finishAnsweringQuestion(queueId, questionId)),
 })
 
 export default connect(

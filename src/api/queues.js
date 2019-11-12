@@ -35,8 +35,6 @@ router.get(
   safeAsync(async (req, res, _next) => {
     const listedCourseIds = await Course.findAll({
       where: { isUnlisted: false },
-      attributes: ['id'],
-      raw: true,
     }).then(course => course.map(course => course.id))
 
     const queuesResult = await Queue.scope('defaultScope', 'questionCount')

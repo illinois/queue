@@ -176,35 +176,15 @@ export function finishAnsweringQuestion(
       )
     )
 
-    if (shouldCheckFeedback) {
-      return axios
-        .post(`/api/questions/${questionId}/answeredWith`, feedback)
-        .then(
-          () =>
-            dispatch(
-              finishAnsweringQuestionSuccess(queueId, questionId, feedback)
-            ),
-          err => {
-            console.error(err)
-            dispatch(
-              finishAnsweringQuestionFailure(queueId, questionId, feedback)
-            )
-          }
-        )
-    } else {
-      return axios.post(`/api/questions/${questionId}/answeredNoFeedback`).then(
-        () =>
-          dispatch(
-            finishAnsweringQuestionSuccess(queueId, questionId, feedback)
-          ),
-        err => {
-          console.error(err)
-          dispatch(
-            finishAnsweringQuestionFailure(queueId, questionId, feedback)
-          )
-        }
-      )
-    }
+    const request = { shouldCheckFeedback, feedback }
+    return axios.post(`/api/questions/${questionId}/answered`, request).then(
+      () =>
+        dispatch(finishAnsweringQuestionSuccess(queueId, questionId, feedback)),
+      err => {
+        console.error(err)
+        dispatch(finishAnsweringQuestionFailure(queueId, questionId, feedback))
+      }
+    )
   }
 }
 

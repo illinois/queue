@@ -30,16 +30,10 @@ class QuestionList extends React.Component {
       deleteId: null,
       cancelId: null,
     }
-
-    if (props.course && props.course.questionFeedback) {
-      this.state.shouldShowFeedbackModal = true
-    } else {
-      this.state.shouldShowFeedbackModal = false
-    }
   }
 
   handleFinishedAnswering(feedbackId) {
-    if (this.state.shouldShowFeedbackModal) {
+    if (this.props.course.questionFeedback) {
       this.setState({
         showFeedbackModal: true,
         feedbackId,
@@ -163,7 +157,7 @@ class QuestionList extends React.Component {
   }
 
   render() {
-    const { queue, userId, course } = this.props
+    const { queue, userId } = this.props
     let questions
     if (queue && queue.questions) {
       if (queue.questions.length > 0) {
@@ -270,6 +264,12 @@ class QuestionList extends React.Component {
 }
 
 QuestionList.propTypes = {
+  course: PropTypes.shape({
+    name: PropTypes.string,
+    shortcode: PropTypes.string,
+    isUnlisted: PropTypes.bool,
+    questionFeedback: PropTypes.bool,
+  }),
   queue: PropTypes.shape({
     questions: PropTypes.arrayOf(PropTypes.number),
     fixedLocation: PropTypes.bool,
@@ -296,6 +296,7 @@ QuestionList.propTypes = {
 QuestionList.defaultProps = {
   queue: null,
   questions: null,
+  course: null,
 }
 
 export default QuestionList
