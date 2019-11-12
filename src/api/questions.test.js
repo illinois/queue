@@ -445,16 +445,20 @@ describe('Questions API', () => {
     })
   })
 
-  describe('POST /api/queues/:queueId/questions/:questionId/answeredWith', () => {
+  describe('POST /api/queues/:queueId/questions/:questionId/answered with feedback', () => {
     test('succeeds for admin', async () => {
       const feedback = {
         preparedness: 'good',
         comments: 'Nice Good Job A+',
       }
+      const comments = {
+        shouldCheckFeedback: true,
+        feedback: feedback,
+      }
       const request = await requestAsUser(app, 'admin')
       const res = await request
-        .post('/api/queues/1/questions/1/answeredWith')
-        .send(feedback)
+        .post('/api/queues/1/questions/1/answered')
+        .send(comments)
       expect(res.statusCode).toBe(200)
       expect(res.body).toHaveProperty('askedBy')
       expect(res.body.askedBy.netid).toBe('admin')
@@ -467,10 +471,14 @@ describe('Questions API', () => {
         preparedness: 'bad',
         comments: 'Nice Good Job A+',
       }
+      const comments = {
+        shouldCheckFeedback: true,
+        feedback: feedback,
+      }
       const request = await requestAsUser(app, '225staff')
       const res = await request
-        .post('/api/queues/1/questions/1/answeredWith')
-        .send(feedback)
+        .post('/api/queues/1/questions/1/answered')
+        .send(comments)
       expect(res.statusCode).toBe(200)
       expect(res.body).toHaveProperty('askedBy')
       expect(res.body.askedBy.netid).toBe('admin')
@@ -482,10 +490,14 @@ describe('Questions API', () => {
       const feedback = {
         comments: 'Nice Good Job A+',
       }
+      const comments = {
+        shouldCheckFeedback: true,
+        feedback: feedback,
+      }
       const request = await requestAsUser(app, 'admin')
       const res = await request
-        .post('/api/queues/1/questions/1/answeredWith')
-        .send(feedback)
+        .post('/api/queues/1/questions/1/answered')
+        .send(comments)
       expect(res.statusCode).toBe(422)
     })
 
@@ -494,32 +506,36 @@ describe('Questions API', () => {
         preparedness: 'idk bruh',
         comments: 'Nice Good Job A+',
       }
+      const comments = {
+        shouldCheckFeedback: true,
+        feedback: feedback,
+      }
       const request = await requestAsUser(app, 'admin')
       const res = await request
-        .post('/api/queues/1/questions/1/answeredWith')
-        .send(feedback)
+        .post('/api/queues/1/questions/1/answered')
+        .send(comments)
       expect(res.statusCode).toBe(422)
     })
 
     test('fails for course staff of different course', async () => {
       const request = await requestAsUser(app, '241staff')
-      const res = await request.post('/api/queues/1/questions/1/answeredWith')
+      const res = await request.post('/api/queues/1/questions/1/answered')
       expect(res.statusCode).toBe(403)
     })
 
     test('fails for student', async () => {
       const request = await requestAsUser(app, 'student')
-      const res = await request.post('/api/queues/1/questions/1/answeredWith')
+      const res = await request.post('/api/queues/1/questions/1/answered')
       expect(res.statusCode).toBe(403)
     })
   })
 
-  describe('POST /api/queues/:queueId/questions/:questionId/answeredNoFeedback', () => {
+  describe('POST /api/queues/:queueId/questions/:questionId/answered without feedback', () => {
     test('succeeds for admin', async () => {
       const request = await requestAsUser(app, 'admin')
-      const res = await request.post(
-        '/api/queues/1/questions/1/answeredNoFeedback'
-      )
+      const res = await request
+        .post('/api/queues/1/questions/1/answered')
+        .send({ shouldCheckFeedback: false, feedback: {} })
       expect(res.statusCode).toBe(200)
       expect(res.body).toHaveProperty('askedBy')
       expect(res.body.askedBy.netid).toBe('admin')
@@ -529,9 +545,9 @@ describe('Questions API', () => {
 
     test('succeeds for course staff', async () => {
       const request = await requestAsUser(app, '225staff')
-      const res = await request.post(
-        '/api/queues/1/questions/1/answeredNoFeedback'
-      )
+      const res = await request
+        .post('/api/queues/1/questions/1/answered')
+        .send({ shouldCheckFeedback: false, feedback: {} })
       expect(res.statusCode).toBe(200)
       expect(res.body).toHaveProperty('askedBy')
       expect(res.body.askedBy.netid).toBe('admin')
@@ -541,17 +557,17 @@ describe('Questions API', () => {
 
     test('fails for course staff of different course', async () => {
       const request = await requestAsUser(app, '241staff')
-      const res = await request.post(
-        '/api/queues/1/questions/1/answeredNoFeedback'
-      )
+      const res = await request
+        .post('/api/queues/1/questions/1/answered')
+        .send({ shouldCheckFeedback: false, feedback: {} })
       expect(res.statusCode).toBe(403)
     })
 
     test('fails for student', async () => {
       const request = await requestAsUser(app, 'student')
-      const res = await request.post(
-        '/api/queues/1/questions/1/answeredNoFeedback'
-      )
+      const res = await request
+        .post('/api/queues/1/questions/1/answered')
+        .send({ shouldCheckFeedback: false, feedback: {} })
       expect(res.statusCode).toBe(403)
     })
   })

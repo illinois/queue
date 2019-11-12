@@ -300,40 +300,41 @@ router.post(
   '/:questionId/answered',
   [requireCourseStaffForQueueForQuestion, requireQuestion, failIfErrors],
   safeAsync(async (req, res, _next) => {
-    const data = matchedData(req)
-    const { shouldCheckFeedback } = data
-    const { feedback } = data
-
+    const shouldCheckFeedback = req.body.shouldCheckFeedback
     if (shouldCheckFeedback) {
+      const feedback = req.body.feedback
       if (
         feedback.preparedness !== 'bad' &&
         feedback.preparedness !== 'good' &&
         feedback.preparedness !== 'average'
       ) {
         res.status(422).send({ error: 'malformed preparedness' })
-      }
-      let mappedPreparedness = feedback.preparedness
-      switch (feedback.preparedness) {
-        case 'bad':
-          mappedPreparedness = 'not'
-          break
-        case 'good':
-          mappedPreparedness = 'well'
-          break
-        default:
-          break
-      }
+      } else {
+        let mappedPreparedness = feedback.preparedness
+        switch (feedback.preparedness) {
+          case 'bad':
+            mappedPreparedness = 'not'
+            break
+          case 'good':
+            mappedPreparedness = 'well'
+            break
+          default:
+            break
+        }
 
-      const { question } = res.locals
-      question.answerFinishTime = new Date()
-      question.dequeueTime = new Date()
-      question.preparedness = mappedPreparedness
-      question.comments =
-        feedback.comments == null ? feedback.comments : feedback.comments.trim()
-      question.answeredById = res.locals.userAuthn.id
+        const { question } = res.locals
+        question.answerFinishTime = new Date()
+        question.dequeueTime = new Date()
+        question.preparedness = mappedPreparedness
+        question.comments =
+          feedback.comments == null
+            ? feedback.comments
+            : feedback.comments.trim()
+        question.answeredById = res.locals.userAuthn.id
 
-      const updatedQuestion = await question.save()
-      res.send(updatedQuestion)
+        const updatedQuestion = await question.save()
+        res.status(200).send(updatedQuestion)
+      }
     } else {
       const { question } = res.locals
       question.answerFinishTime = new Date()
@@ -341,7 +342,7 @@ router.post(
       question.answeredById = res.locals.userAuthn.id
 
       const updatedQuestion = await question.save()
-      res.send(updatedQuestion)
+      res.status(200).send(updatedQuestion)
     }
   })
 )
