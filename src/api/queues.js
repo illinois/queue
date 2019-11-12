@@ -33,18 +33,36 @@ function validateLocation(req, res, next) {
 router.get(
   '/',
   safeAsync(async (req, res, _next) => {
-    const listedCourseIds = await Course.findAll({
-      where: { isUnlisted: false },
-    }).then(course => course.map(course => course.id))
-
-    const queuesResult = await Queue.scope('defaultScope', 'questionCount')
-      .findAll()
-      .then(queue =>
-        queue.filter(queue => listedCourseIds.includes(queue.courseId))
+    const {
+      locals: { userAuthz },
+    } = res
+    const queuesResult = await Queue.scope(
+      'defaultScope',
+      'questionCount'
+    ).findAll()
+    if (userAuthz.isAdmin) {
+      const queues = queuesResult.map(queue => queue.get({ plain: true }))
+      res.json(queues)
+    } else {
+      const courses = await Course.findAll()
+      const filteredCourseIds = courses
+        .filter(course => {
+          const courseId = course.id
+          if (
+            !course.isUnlisted ||
+            userAuthz.staffedCourseIds.indexOf(courseId) !== -1
+          ) {
+            return true
+          }
+          return false
+        })
+        .map(course => course.id)
+      const filteredQueues = queuesResult.filter(queue =>
+        filteredCourseIds.includes(queue.courseId)
       )
-
-    const queues = await queuesResult.map(queue => queue.get({ plain: true }))
-    res.json(queues)
+      const queues = filteredQueues.map(queue => queue.get({ plain: true }))
+      res.json(queues)
+    }
   })
 )
 

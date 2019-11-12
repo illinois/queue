@@ -453,7 +453,7 @@ describe('Questions API', () => {
       }
       const comments = {
         shouldCheckFeedback: true,
-        feedback: feedback,
+        feedback,
       }
       const request = await requestAsUser(app, 'admin')
       const res = await request
@@ -473,7 +473,7 @@ describe('Questions API', () => {
       }
       const comments = {
         shouldCheckFeedback: true,
-        feedback: feedback,
+        feedback,
       }
       const request = await requestAsUser(app, '225staff')
       const res = await request
@@ -492,7 +492,7 @@ describe('Questions API', () => {
       }
       const comments = {
         shouldCheckFeedback: true,
-        feedback: feedback,
+        feedback,
       }
       const request = await requestAsUser(app, 'admin')
       const res = await request
@@ -508,7 +508,7 @@ describe('Questions API', () => {
       }
       const comments = {
         shouldCheckFeedback: true,
-        feedback: feedback,
+        feedback,
       }
       const request = await requestAsUser(app, 'admin')
       const res = await request

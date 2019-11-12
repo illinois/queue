@@ -88,23 +88,38 @@ class Index extends React.Component {
 
     let courseButtons
     if (this.props.courses && this.props.courses.length > 0) {
-      courseButtons = this.props.courses
-        .filter(course => !course.isUnlisted)
-        .map(course => {
-          return (
-            <Link
-              route="course"
-              params={{ id: course.id }}
-              key={course.id}
-              prefetch
-              passHref
-            >
-              <Button color="primary" tag="a" className="mr-3 mb-3" outline>
-                {course.name}
-              </Button>
-            </Link>
-          )
-        })
+      courseButtons = this.props.courses.map(course => {
+        return (
+          <Link
+            route="course"
+            params={{ id: course.id }}
+            key={course.id}
+            prefetch
+            passHref
+          >
+            <Button color="primary" tag="a" className="mr-3 mb-3" outline>
+              {course.name}
+            </Button>
+          </Link>
+        )
+      })
+      // courseButtons = this.props.courses
+      //   .filter(course => !course.isUnlisted)
+      //   .map(course => {
+      //     return (
+      //       <Link
+      //         route="course"
+      //         params={{ id: course.id }}
+      //         key={course.id}
+      //         prefetch
+      //         passHref
+      //       >
+      //         <Button color="primary" tag="a" className="mr-3 mb-3" outline>
+      //           {course.name}
+      //         </Button>
+      //       </Link>
+      //     )
+      //   })
     }
 
     const openQueueIds = this.props.queues

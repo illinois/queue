@@ -74,7 +74,27 @@ const getCsv = questions => {
 // Get all courses
 router.get(
   '/',
-  safeAsync(async (req, res, _next) => res.send(await Course.findAll()))
+  safeAsync(async (req, res, _next) => {
+    const {
+      locals: { userAuthz },
+    } = res
+    const courses = await Course.findAll()
+    if (userAuthz.isAdmin) {
+      res.send(courses)
+    } else {
+      const coursesToShow = courses.filter(course => {
+        const courseId = course.id
+        if (
+          !course.isUnlisted ||
+          userAuthz.staffedCourseIds.indexOf(courseId) !== -1
+        ) {
+          return true
+        }
+        return false
+      })
+      res.send(coursesToShow)
+    }
+  })
 )
 
 // Get a specific course

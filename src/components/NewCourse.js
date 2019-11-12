@@ -143,7 +143,7 @@ class NewCourse extends React.Component {
             />
             <FormText color="muted">
               Allowing question feedback will let your course staff provide
-              feedback after answering each student's question.
+              feedback after answering each student&apos;s question.
             </FormText>
           </Col>
         </FormGroup>

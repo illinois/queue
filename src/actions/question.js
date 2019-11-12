@@ -177,8 +177,8 @@ export function finishAnsweringQuestion(
     )
 
     const request = {
-      shouldCheckFeedback: shouldCheckFeedback,
-      feedback: feedback,
+      shouldCheckFeedback,
+      feedback,
     }
     return axios.post(`/api/questions/${questionId}/answered`, request).then(
       () =>

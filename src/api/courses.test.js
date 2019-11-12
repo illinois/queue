@@ -176,7 +176,7 @@ describe('Courses API', () => {
   describe('PATCH /api/courses/:id', () => {
     test('change to unlisted', async () => {
       const request = await requestAsUser(app, 'admin')
-      var getRes = await request.get('/api/courses/1')
+      const getRes = await request.get('/api/courses/1')
       getRes.body.isUnlisted = true
       const res = await request.patch('/api/courses/1').send(getRes.body)
       expect(res.statusCode).toBe(201)
@@ -185,7 +185,7 @@ describe('Courses API', () => {
 
     test('change from unlisted', async () => {
       const request = await requestAsUser(app, '225staff')
-      var getRes = await request.get('/api/courses/1')
+      const getRes = await request.get('/api/courses/1')
       getRes.body.isUnlisted = false
       const res = await request.patch('/api/courses/1').send(getRes.body)
       expect(res.statusCode).toBe(201)
@@ -194,7 +194,7 @@ describe('Courses API', () => {
 
     test('fails for non-staff', async () => {
       const request = await requestAsUser(app, 'student')
-      var getRes = await request.get('/api/courses/1')
+      const getRes = await request.get('/api/courses/1')
       getRes.body.isUnlisted = true
       const res = await request.patch('/api/courses/1').send(getRes.body)
       expect(res.statusCode).toBe(403)
@@ -202,7 +202,7 @@ describe('Courses API', () => {
 
     test('change to show question feedback', async () => {
       const request = await requestAsUser(app, 'admin')
-      var getRes = await request.get('/api/courses/1')
+      const getRes = await request.get('/api/courses/1')
       getRes.body.questionFeedback = true
       const res = await request.patch('/api/courses/1').send(getRes.body)
       expect(res.statusCode).toBe(201)
@@ -211,7 +211,7 @@ describe('Courses API', () => {
 
     test('change to not show question feedback', async () => {
       const request = await requestAsUser(app, '225staff')
-      var getRes = await request.get('/api/courses/1')
+      const getRes = await request.get('/api/courses/1')
       getRes.body.questionFeedback = false
       const res = await request.patch('/api/courses/1').send(getRes.body)
       expect(res.statusCode).toBe(201)
@@ -220,7 +220,7 @@ describe('Courses API', () => {
 
     test('fails for non-staff', async () => {
       const request = await requestAsUser(app, 'student')
-      var getRes = await request.get('/api/courses/1')
+      const getRes = await request.get('/api/courses/1')
       getRes.body.questionFeedback = true
       const res = await request.patch('/api/courses/1').send(getRes.body)
       expect(res.statusCode).toBe(403)

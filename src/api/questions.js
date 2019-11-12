@@ -300,9 +300,9 @@ router.post(
   '/:questionId/answered',
   [requireCourseStaffForQueueForQuestion, requireQuestion, failIfErrors],
   safeAsync(async (req, res, _next) => {
-    const shouldCheckFeedback = req.body.shouldCheckFeedback
+    const { shouldCheckFeedback } = req.body
     if (shouldCheckFeedback) {
-      const feedback = req.body.feedback
+      const { feedback } = req.body
       if (
         feedback.preparedness !== 'bad' &&
         feedback.preparedness !== 'good' &&
