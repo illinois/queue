@@ -12,6 +12,7 @@ module.exports = withTypescript(
       publicRuntimeConfig: {
         uidName: process.env.UID_NAME || 'email',
         uidArticle: process.env.UID_ARTICLE || 'an',
+        institutionName: process.env.INSTITUTION_NAME || 'Illinois',
       },
     })
   )

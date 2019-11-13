@@ -54,6 +54,7 @@ Several configuration options are exposed via environment variables and `.env`:
 - `UID_NAME`: official name for user ids (default: `email`)
 - `UID_ARTICLE`: article used in reference to `UID_NAME` (default: `an`)
 - `EPPN_SUFFIX`: the expected suffix for all valid Shibboleth eppn attributes. If this variable is not present, then all Shibboleth responses will be accepted.
+- `INSTITUTION_NAME`: to set branding other than 'Illinois'.
 
 Database information is also stored through environment variables, and can be configured for multiple environments depending on the value of `NODE_ENV`.
 ```
