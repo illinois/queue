@@ -88,11 +88,11 @@ const GeneralPanel = ({ course, updateCourse }: GeneralPanelProps) => {
                 onChange={isUnlisted.toggle}
                 checked={isUnlisted.value}
               />
+              <FormText color="muted">
+                Making your course unlisted will only allow students with the
+                course shortcode to view this course.
+              </FormText>
             </Col>
-            <FormText color="muted">
-              Making your course unlisted will only allow students with the
-              course shortcode to view this course.
-            </FormText>
           </FormGroup>
           <FormGroup row>
             <Label for="questionFeedback" sm={3}>
@@ -106,11 +106,11 @@ const GeneralPanel = ({ course, updateCourse }: GeneralPanelProps) => {
                 onChange={questionFeedback.toggle}
                 checked={questionFeedback.value}
               />
+              <FormText color="muted">
+                Allowing question feedback will let your course staff provide
+                feedback after answering each student&apos;s question.
+              </FormText>
             </Col>
-            <FormText color="muted">
-              Allowing question feedback will let your course staff provide
-              feedback after answering each student&apos;s question.
-            </FormText>
           </FormGroup>
           <Button disabled={!changed} color="primary" type="submit">
             Update
