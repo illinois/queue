@@ -40,14 +40,7 @@ const mapDispatchToProps = (dispatch, { queueId }) => ({
     dispatch(updateQuestion(questionId, attributes)),
   // eslint-disable-next-line max-len
   finishAnsweringQuestion: (questionId, shouldCheckFeedback, feedback) =>
-    dispatch(
-      finishAnsweringQuestion(
-        queueId,
-        questionId,
-        shouldCheckFeedback,
-        feedback
-      )
-    ),
+    dispatch(finishAnsweringQuestion(queueId, questionId, feedback)),
 })
 
 export default connect(

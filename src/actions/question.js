@@ -144,7 +144,6 @@ const finishAnsweringQuestionRequest = makeActionCreator(
   types.FINISH_ANSWERING_QUESTION.REQUEST,
   'queueId',
   'questionId',
-  'shouldCheckFeedback',
   'feedback'
 )
 const finishAnsweringQuestionSuccess = makeActionCreator(
@@ -160,27 +159,11 @@ const finishAnsweringQuestionFailure = makeActionCreator(
   'feedback'
 )
 
-export function finishAnsweringQuestion(
-  queueId,
-  questionId,
-  shouldCheckFeedback,
-  feedback
-) {
+export function finishAnsweringQuestion(queueId, questionId, feedback) {
   return dispatch => {
-    dispatch(
-      finishAnsweringQuestionRequest(
-        queueId,
-        questionId,
-        shouldCheckFeedback,
-        feedback
-      )
-    )
+    dispatch(finishAnsweringQuestionRequest(queueId, questionId, feedback))
 
-    const request = {
-      shouldCheckFeedback,
-      feedback,
-    }
-    return axios.post(`/api/questions/${questionId}/answered`, request).then(
+    return axios.post(`/api/questions/${questionId}/answered`, feedback).then(
       () =>
         dispatch(finishAnsweringQuestionSuccess(queueId, questionId, feedback)),
       err => {

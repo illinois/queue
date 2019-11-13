@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Card, CardHeader, CardTitle, CardBody, Table } from 'reactstrap'
+import { Card, CardHeader, CardTitle, Table } from 'reactstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faDownload } from '@fortawesome/free-solid-svg-icons'
 import { withBaseUrl } from '../../util'
 
 interface DownloadPanelProps {
@@ -14,47 +16,43 @@ const DownloadPanel = ({ course }: DownloadPanelProps) => {
     <Card className="mb-3">
       <CardHeader>
         <CardTitle tag="h5" className="mb-0">
-          Downloads
+          Downloads <FontAwesomeIcon icon={faDownload} className="mr-2" />
         </CardTitle>
       </CardHeader>
-      <CardBody>
-        <Table hover>
-          <thead>
-            <tr>
-              <th />
-              <th>Data File</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row" />
-              <td>
-                <a
-                  href={withBaseUrl(`/api/courses/${course.id}/data/questions`)}
-                  download
-                >
-                  courseData.csv
-                </a>
-              </td>
-              <td>
-                Detailed data for each question answered on all the queues owned
-                by this course.
-              </td>
-            </tr>
-          </tbody>
-        </Table>
-      </CardBody>
+
+      <Table hover class="table-responsive">
+        <thead>
+          <tr>
+            <th />
+            <th>Data File</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row" />
+            <td>
+              <a
+                href={withBaseUrl(`/api/courses/${course.id}/data/questions`)}
+                download
+              >
+                courseData.csv
+              </a>
+            </td>
+            <td>
+              Detailed data for each question answered on all the queues owned
+              by this course.
+            </td>
+          </tr>
+        </tbody>
+      </Table>
     </Card>
   )
 }
 
 DownloadPanel.propTypes = {
   course: PropTypes.shape({
-    name: PropTypes.string,
-    shortcode: PropTypes.string,
-    isUnlisted: PropTypes.bool,
-    questionFeedback: PropTypes.bool,
+    id: PropTypes.number,
   }).isRequired,
 }
 

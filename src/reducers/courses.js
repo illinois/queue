@@ -2,6 +2,8 @@ import {
   FETCH_COURSES,
   FETCH_COURSE,
   CREATE_COURSE,
+  UPDATE_COURSE,
+  UPDATE_COURSES,
   CREATE_QUEUE,
   DELETE_QUEUE,
   UPDATE_QUEUES,
@@ -25,6 +27,13 @@ function normalizeCourse(course) {
   }
   return newCourse
 }
+
+const reduceCourses = courses =>
+  courses.reduce((obj, item) => {
+    // eslint-disable-next-line no-param-reassign
+    obj[item.id] = normalizeCourse(item)
+    return obj
+  }, {})
 
 function addStaffToCourse(state, courseId, userId) {
   if (
@@ -155,6 +164,29 @@ const courses = (state = defaultState, action) => {
         courses: {
           ...state.courses,
           [course.id]: normalizeCourse(course),
+        },
+      }
+    }
+    case UPDATE_COURSE.SUCCESS: {
+      const { course } = action
+      const originalCourse = state.courses[course.id]
+      return {
+        ...state,
+        courses: {
+          ...state.courses,
+          [course.id]: {
+            ...originalCourse,
+            ...course,
+          },
+        },
+      }
+    }
+    case UPDATE_COURSES: {
+      return {
+        ...state,
+        courses: {
+          ...state.courses,
+          ...reduceCourses(action.courses),
         },
       }
     }

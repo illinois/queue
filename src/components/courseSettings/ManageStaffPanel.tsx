@@ -9,6 +9,8 @@ import {
   ListGroupItem,
 } from 'reactstrap'
 import FlipMove from 'react-flip-move'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUsers } from '@fortawesome/free-solid-svg-icons'
 import AddStaff from '../AddStaff'
 
 import RemoveableUserItem from '../RemoveableUserItem'
@@ -58,26 +60,26 @@ const ManageStaffPanel = ({
     <Card className="mb-3">
       <CardHeader>
         <CardTitle tag="h5" className="mb-0">
-          Manage {course && course.name} Staff
+          Manage Staff <FontAwesomeIcon icon={faUsers} className="mr-2" />
         </CardTitle>
       </CardHeader>
+      <ListGroup flush className="position-relative">
+        <FlipMove
+          enterAnimation="accordionVertical"
+          leaveAnimation="accordionVertical"
+          duration={200}
+          typeName={null}
+        >
+          {newUsers}
+        </FlipMove>
+      </ListGroup>
       <CardBody>
-        <ListGroup flush className="position-relative">
-          <AddStaff
-            onAddStaff={(staff: Record<string, string>) => {
-              const { netid, name } = staff
-              addCourseStaff(course.id, netid, name)
-            }}
-          />
-          <FlipMove
-            enterAnimation="accordionVertical"
-            leaveAnimation="accordionVertical"
-            duration={200}
-            typeName={null}
-          >
-            {newUsers}
-          </FlipMove>
-        </ListGroup>
+        <AddStaff
+          onAddStaff={(staff: Record<string, string>) => {
+            const { netid, name } = staff
+            addCourseStaff(course.id, netid, name)
+          }}
+        />
       </CardBody>
     </Card>
   )

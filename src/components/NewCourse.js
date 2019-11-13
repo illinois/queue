@@ -111,7 +111,7 @@ class NewCourse extends React.Component {
         </FormGroup>
         <FormGroup row>
           <Label for="name" sm={3}>
-            Unlisted Course
+            Unlisted
           </Label>
           <Col sm={9}>
             <CustomInput
@@ -129,7 +129,7 @@ class NewCourse extends React.Component {
         </FormGroup>
         <FormGroup row>
           <Label for="name" sm={3}>
-            Question Feedback
+            Enable Question Feedback
           </Label>
           <Col sm={9}>
             <CustomInput

@@ -78,22 +78,17 @@ router.get(
     const {
       locals: { userAuthz },
     } = res
-    const courses = await Course.findAll()
-    if (userAuthz.isAdmin) {
-      res.send(courses)
-    } else {
-      const coursesToShow = courses.filter(course => {
-        const courseId = course.id
-        if (
-          !course.isUnlisted ||
-          userAuthz.staffedCourseIds.indexOf(courseId) !== -1
-        ) {
-          return true
-        }
-        return false
-      })
-      res.send(coursesToShow)
-    }
+
+    const courses = await Course.findAll().then(course =>
+      course.filter(
+        c =>
+          userAuthz.isAdmin ||
+          !c.isUnlisted ||
+          userAuthz.staffedCourseIds.indexOf(c.id) !== -1
+      )
+    )
+
+    res.send(courses)
   })
 )
 
@@ -227,12 +222,13 @@ router.post(
     requireAdmin,
     check('name', 'name must be specified').exists(),
     check('shortcode', 'shortcode must be specified').exists(),
+    check('isUnlisted').isBoolean(),
+    check('questionFeedback').isBoolean(),
     failIfErrors,
   ],
   safeAsync(async (req, res, _next) => {
     const { name, shortcode } = matchedData(req)
-    const { isUnlisted } = req.body
-    const { questionFeedback } = req.body
+    const { isUnlisted, questionFeedback } = req.body
     const course = Course.build({
       name,
       shortcode,
@@ -244,7 +240,7 @@ router.post(
   })
 )
 
-// Modify a queue for a course
+// Modify a course's metadata
 router.patch(
   '/:courseId',
   [

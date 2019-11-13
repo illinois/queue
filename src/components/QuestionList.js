@@ -39,13 +39,13 @@ class QuestionList extends React.Component {
         feedbackId,
       })
     } else {
-      this.props.finishAnsweringQuestion(feedbackId, false, {})
+      this.props.finishAnsweringQuestion(feedbackId, {})
     }
   }
 
   handleSubmitFeedback(feedback) {
     this.props
-      .finishAnsweringQuestion(this.state.feedbackId, true, feedback)
+      .finishAnsweringQuestion(this.state.feedbackId, feedback)
       .then(() => {
         this.setState({
           showFeedbackModal: false,

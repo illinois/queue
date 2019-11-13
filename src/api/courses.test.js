@@ -102,7 +102,12 @@ describe('Courses API', () => {
 
   describe('POST /api/courses', () => {
     test('succeeds for admin', async () => {
-      const course = { name: 'CS423', shortcode: 'cs423' }
+      const course = {
+        name: 'CS423',
+        shortcode: 'cs423',
+        isUnlisted: false,
+        questionFeedback: true,
+      }
       const request = await requestAsUser(app, 'admin')
       const res = await request.post('/api/courses').send(course)
       expect(res.statusCode).toBe(201)
@@ -122,8 +127,25 @@ describe('Courses API', () => {
       const res = await request.post('/api/courses').send(course)
       expect(res.statusCode).toBe(422)
     })
+    test('fails for missing isUnlisted', async () => {
+      const course = { name: 'CS423', shortcode: 'cs423' }
+      const request = await requestAsUser(app, 'admin')
+      const res = await request.post('/api/courses').send(course)
+      expect(res.statusCode).toBe(422)
+    })
+    test('fails for missing questionFeedback', async () => {
+      const course = { name: 'CS423', shortcode: 'cs423', isUnlisted: false }
+      const request = await requestAsUser(app, 'admin')
+      const res = await request.post('/api/courses').send(course)
+      expect(res.statusCode).toBe(422)
+    })
     test('fails for non-admin', async () => {
-      const course = { name: 'CS423' }
+      const course = {
+        name: 'CS423',
+        shortcode: 'cs423',
+        isUnlisted: false,
+        questionFeedback: true,
+      }
       const request = await requestAsUser(app, 'student')
       const res = await request.post('/api/courses').send(course)
       expect(res.statusCode).toBe(403)
@@ -132,7 +154,12 @@ describe('Courses API', () => {
 
   describe('GET/POST /api/courses', () => {
     test('check unlisted course creation', async () => {
-      const course = { name: 'CS446', shortcode: 'cs446', isUnlisted: true }
+      const course = {
+        name: 'CS446',
+        shortcode: 'cs446',
+        isUnlisted: true,
+        questionFeedback: true,
+      }
       const request = await requestAsUser(app, 'admin')
       const res = await request.post('/api/courses').send(course)
       expect(res.statusCode).toBe(201)
@@ -140,6 +167,7 @@ describe('Courses API', () => {
       expect(res.body.name).toBe('CS446')
       expect(res.body.isUnlisted).toBe(true)
       expect(res.body.shortcode).toBe('cs446')
+      expect(res.body.questionFeedback).toBe(true)
 
       const getRes = await request.get('/api/courses').send(course.shortcode)
       expect(getRes.body[2].id).toBe(3)

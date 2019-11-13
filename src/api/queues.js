@@ -40,29 +40,23 @@ router.get(
       'defaultScope',
       'questionCount'
     ).findAll()
-    if (userAuthz.isAdmin) {
-      const queues = queuesResult.map(queue => queue.get({ plain: true }))
-      res.json(queues)
-    } else {
-      const courses = await Course.findAll()
-      const filteredCourseIds = courses
-        .filter(course => {
-          const courseId = course.id
-          if (
-            !course.isUnlisted ||
-            userAuthz.staffedCourseIds.indexOf(courseId) !== -1
-          ) {
-            return true
-          }
-          return false
-        })
-        .map(course => course.id)
-      const filteredQueues = queuesResult.filter(queue =>
-        filteredCourseIds.includes(queue.courseId)
+
+    const filteredCourseIds = await Course.findAll()
+      .then(course =>
+        course.filter(
+          c =>
+            userAuthz.isAdmin ||
+            !c.isUnlisted ||
+            userAuthz.staffedCourseIds.indexOf(c.id) !== -1
+        )
       )
-      const queues = filteredQueues.map(queue => queue.get({ plain: true }))
-      res.json(queues)
-    }
+      .map(course => course.id)
+
+    const queues = queuesResult
+      .filter(queue => filteredCourseIds.includes(queue.courseId))
+      .map(queue => queue.get({ plain: true }))
+
+    res.json(queues)
   })
 )
 

@@ -300,50 +300,56 @@ router.post(
   '/:questionId/answered',
   [requireCourseStaffForQueueForQuestion, requireQuestion, failIfErrors],
   safeAsync(async (req, res, _next) => {
-    const { shouldCheckFeedback } = req.body
+    const { question } = res.locals
+    const { queueId } = question
+
+    const course = await Course.findOne({
+      attributes: ['questionFeedback'],
+      include: [
+        {
+          model: Queue,
+          attributes: [],
+          where: { id: queueId },
+        },
+      ],
+      raw: true,
+    })
+
+    const shouldCheckFeedback = course.questionFeedback
+
     if (shouldCheckFeedback) {
-      const { feedback } = req.body
+      const feedback = req.body
+      const { comments } = feedback
+      let { preparedness } = feedback
       if (
-        feedback.preparedness !== 'bad' &&
-        feedback.preparedness !== 'good' &&
-        feedback.preparedness !== 'average'
+        preparedness !== 'bad' &&
+        preparedness !== 'good' &&
+        preparedness !== 'average'
       ) {
         res.status(422).send({ error: 'malformed preparedness' })
-      } else {
-        let mappedPreparedness = feedback.preparedness
-        switch (feedback.preparedness) {
-          case 'bad':
-            mappedPreparedness = 'not'
-            break
-          case 'good':
-            mappedPreparedness = 'well'
-            break
-          default:
-            break
-        }
-
-        const { question } = res.locals
-        question.answerFinishTime = new Date()
-        question.dequeueTime = new Date()
-        question.preparedness = mappedPreparedness
-        question.comments =
-          feedback.comments == null
-            ? feedback.comments
-            : feedback.comments.trim()
-        question.answeredById = res.locals.userAuthn.id
-
-        const updatedQuestion = await question.save()
-        res.status(200).send(updatedQuestion)
+        return
       }
-    } else {
-      const { question } = res.locals
-      question.answerFinishTime = new Date()
-      question.dequeueTime = new Date()
-      question.answeredById = res.locals.userAuthn.id
+      switch (preparedness) {
+        case 'bad':
+          preparedness = 'not'
+          break
+        case 'good':
+          preparedness = 'well'
+          break
+        default:
+          break
+      }
 
-      const updatedQuestion = await question.save()
-      res.status(200).send(updatedQuestion)
+      question.preparedness = preparedness
+      question.comments = comments == null ? comments : comments.trim()
     }
+
+    question.answerFinishTime = new Date()
+    question.dequeueTime = new Date()
+    question.answeredById = res.locals.userAuthn.id
+
+    const updatedQuestion = await question.save()
+    res.status(200).send(updatedQuestion)
   })
 )
 

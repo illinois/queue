@@ -10,6 +10,7 @@ import {
   Input,
   Form,
   FormGroup,
+  FormText,
   Label,
   Col,
 } from 'reactstrap'
@@ -77,7 +78,7 @@ const GeneralPanel = ({ course, updateCourse }: GeneralPanelProps) => {
           </FormGroup>
           <FormGroup row>
             <Label for="isUnlisted" sm={3}>
-              Change to Unlisted
+              Unlisted
             </Label>
             <Col sm={9}>
               <CustomInput
@@ -88,10 +89,14 @@ const GeneralPanel = ({ course, updateCourse }: GeneralPanelProps) => {
                 checked={isUnlisted.value}
               />
             </Col>
+            <FormText color="muted">
+              Making your course unlisted will only allow students with the
+              course shortcode to view this course.
+            </FormText>
           </FormGroup>
           <FormGroup row>
             <Label for="questionFeedback" sm={3}>
-              Show Question Feedback
+              Enable Question Feedback
             </Label>
             <Col sm={9}>
               <CustomInput
@@ -102,6 +107,10 @@ const GeneralPanel = ({ course, updateCourse }: GeneralPanelProps) => {
                 checked={questionFeedback.value}
               />
             </Col>
+            <FormText color="muted">
+              Allowing question feedback will let your course staff provide
+              feedback after answering each student&apos;s question.
+            </FormText>
           </FormGroup>
           <Button disabled={!changed} color="primary" type="submit">
             Update

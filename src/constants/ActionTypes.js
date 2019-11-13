@@ -10,12 +10,6 @@ export const FETCH_COURSES = makeActionStrings('FETCH_COURSES')
 export const FETCH_COURSE = makeActionStrings('FETCH_COURSE')
 export const CREATE_COURSE = makeActionStrings('CREATE_COURSE')
 export const UPDATE_COURSE = makeActionStrings('UPDATE_COURSE')
-export const UPDATE_UNLISTED_COURSE = makeActionStrings(
-  'UPDATE_UNLISTED_COURSE'
-)
-export const UPDATE_QUESTION_FEEDBACK = makeActionStrings(
-  'UPDATE_QUESTION_FEEDBACK'
-)
 export const ADD_COURSE_STAFF = makeActionStrings('ADD_COURSE_STAFF')
 export const REMOVE_COURSE_STAFF = makeActionStrings('REMOVE_COURSE_STAFF')
 
@@ -48,6 +42,7 @@ export const UPDATE_USER_PREFERRED_NAME = makeActionStrings(
 /* These events will be fired on websocket messages */
 export const REPLACE_QUESTIONS = 'REPLACE_QUESTIONS'
 export const UPDATE_QUEUES = 'UPDATE_QUEUES'
+export const UPDATE_COURSES = 'UPDATE_COURSES'
 export const REPLACE_ACTIVE_STAFF = 'REPLACE_ACTIVE_STAFF'
 
 /* Actions for socket status */
