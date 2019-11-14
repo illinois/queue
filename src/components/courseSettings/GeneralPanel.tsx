@@ -15,7 +15,6 @@ import {
   Col,
 } from 'reactstrap'
 import { useInput, useBoolean } from 'react-hanger'
-import ShowForAdmin from '../ShowForAdmin'
 
 interface GeneralPanelProps {
   course: {
@@ -24,7 +23,7 @@ interface GeneralPanelProps {
     isUnlisted: boolean
     questionFeedback: boolean
   }
-  isUserAdmin: boolean
+  isAdmin: boolean
   updateCourse: (course: {
     name: string
     shortcode: string
@@ -33,11 +32,7 @@ interface GeneralPanelProps {
   }) => void
 }
 
-const GeneralPanel = ({
-  course,
-  isUserAdmin,
-  updateCourse,
-}: GeneralPanelProps) => {
+const GeneralPanel = ({ course, isAdmin, updateCourse }: GeneralPanelProps) => {
   const name = useInput(course.name)
   const shortcode = useInput(course.shortcode)
   const isUnlisted = useBoolean(course.isUnlisted)
@@ -66,7 +61,7 @@ const GeneralPanel = ({
       </CardHeader>
       <CardBody>
         <Form autoComplete="off" onSubmit={onSubmit}>
-          <ShowForAdmin isAdmin={isUserAdmin}>
+          {isAdmin ? (
             <FormGroup row>
               <Label for="name" sm={3}>
                 Name
@@ -75,6 +70,8 @@ const GeneralPanel = ({
                 <Input id="name" {...name.bindToInput} />
               </Col>
             </FormGroup>
+          ) : null}
+          {isAdmin ? (
             <FormGroup row>
               <Label for="shortcode" sm={3}>
                 Shortcode
@@ -83,7 +80,7 @@ const GeneralPanel = ({
                 <Input id="shortcode" {...shortcode.bindToInput} />
               </Col>
             </FormGroup>
-          </ShowForAdmin>
+          ) : null}
           <FormGroup row>
             <Label for="isUnlisted" sm={3}>
               Unlisted
@@ -136,7 +133,7 @@ GeneralPanel.propTypes = {
     isUnlisted: PropTypes.bool,
     questionFeedback: PropTypes.bool,
   }).isRequired,
-  isUserAdmin: PropTypes.bool.isRequired,
+  isAdmin: PropTypes.bool.isRequired,
   updateCourse: PropTypes.func.isRequired,
 }
 
