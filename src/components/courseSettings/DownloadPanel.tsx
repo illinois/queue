@@ -20,7 +20,7 @@ const DownloadPanel = ({ course }: DownloadPanelProps) => {
         </CardTitle>
       </CardHeader>
 
-      <Table hover class="table-responsive">
+      <Table hover responsive>
         <thead>
           <tr>
             <th />
