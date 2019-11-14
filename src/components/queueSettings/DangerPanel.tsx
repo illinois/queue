@@ -9,9 +9,9 @@ import {
   ListGroupItem,
 } from 'reactstrap'
 import { useBoolean } from 'react-hanger'
-import ConfirmDeleteQueueModal from '../ConfirmDeleteQueueModel'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
+import ConfirmDeleteQueueModal from '../ConfirmDeleteQueueModel'
 
 interface DangerPanelProps {
   deleteQueue: () => void
