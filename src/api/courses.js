@@ -257,15 +257,32 @@ router.patch(
   ],
   safeAsync(async (req, res, _next) => {
     const courseId = res.locals.course.dataValues.id
-    const { course } = res.locals
+    const {
+      locals: { userAuthz, course },
+    } = res
     const data = matchedData(req)
-    await course.update({
-      name: data.name !== null ? data.name : undefined,
-      shortcode: data.shortcode !== null ? data.shortcode : undefined,
-      isUnlisted: data.isUnlisted !== null ? data.isUnlisted : undefined,
-      questionFeedback:
-        data.questionFeedback !== null ? data.questionFeedback : undefined,
-    })
+
+    if (userAuthz.isAdmin) {
+      await course.update({
+        name: data.name !== null ? data.name : undefined,
+        shortcode: data.shortcode !== null ? data.shortcode : undefined,
+        isUnlisted: data.isUnlisted !== null ? data.isUnlisted : undefined,
+        questionFeedback:
+          data.questionFeedback !== null ? data.questionFeedback : undefined,
+      })
+    } else {
+      if (data.name !== course.name || data.shortcode !== course.shortcode) {
+        res
+          .status(403)
+          .error({ error: "don't have permission to change name or shortcode" })
+        return
+      }
+      await course.update({
+        isUnlisted: data.isUnlisted !== null ? data.isUnlisted : undefined,
+        questionFeedback:
+          data.questionFeedback !== null ? data.questionFeedback : undefined,
+      })
+    }
 
     const updatedCourse = await Course.findOne({
       where: { id: courseId },

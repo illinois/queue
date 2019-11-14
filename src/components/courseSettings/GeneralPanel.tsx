@@ -15,6 +15,7 @@ import {
   Col,
 } from 'reactstrap'
 import { useInput, useBoolean } from 'react-hanger'
+import ShowForAdmin from '../ShowForAdmin'
 
 interface GeneralPanelProps {
   course: {
@@ -23,6 +24,7 @@ interface GeneralPanelProps {
     isUnlisted: boolean
     questionFeedback: boolean
   }
+  isUserAdmin: boolean
   updateCourse: (course: {
     name: string
     shortcode: string
@@ -31,7 +33,11 @@ interface GeneralPanelProps {
   }) => void
 }
 
-const GeneralPanel = ({ course, updateCourse }: GeneralPanelProps) => {
+const GeneralPanel = ({
+  course,
+  isUserAdmin,
+  updateCourse,
+}: GeneralPanelProps) => {
   const name = useInput(course.name)
   const shortcode = useInput(course.shortcode)
   const isUnlisted = useBoolean(course.isUnlisted)
@@ -60,22 +66,24 @@ const GeneralPanel = ({ course, updateCourse }: GeneralPanelProps) => {
       </CardHeader>
       <CardBody>
         <Form autoComplete="off" onSubmit={onSubmit}>
-          <FormGroup row>
-            <Label for="name" sm={3}>
-              Name
-            </Label>
-            <Col sm={9}>
-              <Input id="name" {...name.bindToInput} />
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Label for="shortcode" sm={3}>
-              Shortcode
-            </Label>
-            <Col sm={9}>
-              <Input id="shortcode" {...shortcode.bindToInput} />
-            </Col>
-          </FormGroup>
+          <ShowForAdmin isAdmin={isUserAdmin}>
+            <FormGroup row>
+              <Label for="name" sm={3}>
+                Name
+              </Label>
+              <Col sm={9}>
+                <Input id="name" {...name.bindToInput} />
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label for="shortcode" sm={3}>
+                Shortcode
+              </Label>
+              <Col sm={9}>
+                <Input id="shortcode" {...shortcode.bindToInput} />
+              </Col>
+            </FormGroup>
+          </ShowForAdmin>
           <FormGroup row>
             <Label for="isUnlisted" sm={3}>
               Unlisted
@@ -128,6 +136,7 @@ GeneralPanel.propTypes = {
     isUnlisted: PropTypes.bool,
     questionFeedback: PropTypes.bool,
   }).isRequired,
+  isUserAdmin: PropTypes.bool.isRequired,
   updateCourse: PropTypes.func.isRequired,
 }
 
