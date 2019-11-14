@@ -16,7 +16,7 @@ const DownloadPanel = ({ course }: DownloadPanelProps) => {
     <Card className="mb-3">
       <CardHeader>
         <CardTitle tag="h5" className="mb-0">
-          Downloads <FontAwesomeIcon icon={faDownload} className="mr-2" />
+          <FontAwesomeIcon icon={faDownload} className="mr-2" /> Downloads
         </CardTitle>
       </CardHeader>
 

@@ -60,19 +60,9 @@ const ManageStaffPanel = ({
     <Card className="mb-3">
       <CardHeader>
         <CardTitle tag="h5" className="mb-0">
-          Manage Staff <FontAwesomeIcon icon={faUsers} className="mr-2" />
+          <FontAwesomeIcon icon={faUsers} className="mr-2" /> Manage Staff
         </CardTitle>
       </CardHeader>
-      <ListGroup flush className="position-relative">
-        <FlipMove
-          enterAnimation="accordionVertical"
-          leaveAnimation="accordionVertical"
-          duration={200}
-          typeName={null}
-        >
-          {newUsers}
-        </FlipMove>
-      </ListGroup>
       <CardBody>
         <AddStaff
           onAddStaff={(staff: Record<string, string>) => {
@@ -80,6 +70,17 @@ const ManageStaffPanel = ({
             addCourseStaff(course.id, netid, name)
           }}
         />
+
+        <ListGroup flush className="position-relative">
+          <FlipMove
+            enterAnimation="accordionVertical"
+            leaveAnimation="accordionVertical"
+            duration={200}
+            typeName={null}
+          >
+            {newUsers}
+          </FlipMove>
+        </ListGroup>
       </CardBody>
     </Card>
   )

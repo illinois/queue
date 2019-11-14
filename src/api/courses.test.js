@@ -13,7 +13,7 @@ afterEach(() => testutil.destroyTestDb())
 
 describe('Courses API', () => {
   test('GET /api/courses', async () => {
-    const request = await requestAsUser(app, 'admin')
+    const request = await requestAsUser(app, 'student')
     const res = await request.get('/api/courses')
     expect(res.statusCode).toBe(200)
     expect(res.body).toHaveLength(2)

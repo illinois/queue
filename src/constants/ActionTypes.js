@@ -42,7 +42,6 @@ export const UPDATE_USER_PREFERRED_NAME = makeActionStrings(
 /* These events will be fired on websocket messages */
 export const REPLACE_QUESTIONS = 'REPLACE_QUESTIONS'
 export const UPDATE_QUEUES = 'UPDATE_QUEUES'
-export const UPDATE_COURSES = 'UPDATE_COURSES'
 export const REPLACE_ACTIVE_STAFF = 'REPLACE_ACTIVE_STAFF'
 
 /* Actions for socket status */

@@ -5,7 +5,14 @@ const router = require('express').Router({
 const { check, oneOf } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 
-const { Queue, Course, ActiveStaff, Question, User } = require('../models')
+const {
+  Queue,
+  Course,
+  ActiveStaff,
+  Question,
+  User,
+  Sequelize,
+} = require('../models')
 const safeAsync = require('../middleware/safeAsync')
 
 const {
@@ -41,16 +48,19 @@ router.get(
       'questionCount'
     ).findAll()
 
-    const filteredCourseIds = await Course.findAll()
-      .then(course =>
-        course.filter(
-          c =>
-            userAuthz.isAdmin ||
-            !c.isUnlisted ||
-            userAuthz.staffedCourseIds.indexOf(c.id) !== -1
-        )
-      )
-      .map(course => course.id)
+    let courses
+    if (userAuthz.isAdmin) {
+      courses = await Course.findAll()
+    } else {
+      const { staffedCourseIds } = userAuthz
+      courses = await Course.findAll({
+        where: {
+          [Sequelize.Op.or]: [{ id: staffedCourseIds }, { isUnlisted: false }],
+        },
+      })
+    }
+
+    const filteredCourseIds = courses.map(course => course.id)
 
     const queues = queuesResult
       .filter(queue => filteredCourseIds.includes(queue.courseId))

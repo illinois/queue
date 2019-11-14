@@ -551,32 +551,6 @@ describe('Questions API', () => {
       expect(res.body.beingAnswered).toBe(false)
       expect(res.body.answeredById).toBe(3)
     })
-
-    test('fails for course staff of different course', async () => {
-      const reqAdmin = await requestAsUser(app, 'admin')
-      const getRes = await reqAdmin.get('/api/courses/1')
-      getRes.body.questionFeedback = false
-      await reqAdmin.patch('/api/courses/1').send(getRes.body)
-
-      const request = await requestAsUser(app, '241staff')
-      const res = await request
-        .post('/api/queues/1/questions/1/answered')
-        .send({})
-      expect(res.statusCode).toBe(403)
-    })
-
-    test('fails for student', async () => {
-      const reqAdmin = await requestAsUser(app, 'admin')
-      const getRes = await reqAdmin.get('/api/courses/1')
-      getRes.body.questionFeedback = false
-      await reqAdmin.patch('/api/courses/1').send(getRes.body)
-
-      const request = await requestAsUser(app, 'student')
-      const res = await request
-        .post('/api/queues/1/questions/1/answered')
-        .send({})
-      expect(res.statusCode).toBe(403)
-    })
   })
 
   describe('DELETE /api/queues/:queueId/questions/:questionId', () => {

@@ -79,14 +79,17 @@ router.get(
       locals: { userAuthz },
     } = res
 
-    const courses = await Course.findAll().then(course =>
-      course.filter(
-        c =>
-          userAuthz.isAdmin ||
-          !c.isUnlisted ||
-          userAuthz.staffedCourseIds.indexOf(c.id) !== -1
-      )
-    )
+    let courses
+    if (userAuthz.isAdmin) {
+      courses = await Course.findAll()
+    } else {
+      const { staffedCourseIds } = userAuthz
+      courses = await Course.findAll({
+        where: {
+          [Sequelize.Op.or]: [{ id: staffedCourseIds }, { isUnlisted: false }],
+        },
+      })
+    }
 
     res.send(courses)
   })
