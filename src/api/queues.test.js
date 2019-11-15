@@ -126,9 +126,9 @@ describe('Queues API', () => {
       expect(Array.isArray(res.body.questions)).toBeTruthy()
       expect(res.body.questions).toHaveLength(2)
       const [question1, question2] = res.body.questions
-      expect(question1).toHaveProperty('askedById', 5)
+      expect(question1).toHaveProperty('askedById', 6)
       expect(question1).toHaveProperty('askedBy.netid', 'student')
-      expect(question2).toHaveProperty('askedById', 6)
+      expect(question2).toHaveProperty('askedById', 7)
       expect(question2).toHaveProperty('askedBy.netid', 'otherstudent')
       includesPrivateAttributes(res.body)
     }
@@ -145,13 +145,13 @@ describe('Queues API', () => {
       const request = await requestAsUser(app, user)
       const res = await request.get('/api/queues/5')
 
-      // We expect all questions not asked by 'student' (user 5) to have no
+      // We expect all questions not asked by 'student' (user 6) to have no
       // information besides question ID
       expect(Array.isArray(res.body.questions)).toBeTruthy()
       expect(res.body.questions).toHaveLength(2)
       res.body.questions.forEach(question => {
         if (Object.keys(question).length > 1) {
-          expect(question.askedById).toEqual(5)
+          expect(question.askedById).toEqual(6)
         } else {
           expect(Object.keys(question)).toEqual(['id'])
         }

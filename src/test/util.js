@@ -19,6 +19,7 @@ module.exports.createTestUsers = async () => {
     { netid: 'admin', universityName: 'Admin', isAdmin: true },
     { netid: '225staff', universityName: '225 Staff', isAdmin: false },
     { netid: '241staff', universityName: '241 Staff', isAdmin: false },
+    { netid: '446staff', universityName: '446 Staff', isAdmin: false },
     { netid: 'student', isAdmin: false },
     { netid: 'otherstudent', isAdmin: false },
   ])
@@ -37,7 +38,12 @@ module.exports.createTestTokens = async () => {
 }
 
 module.exports.createTestCourses = async () => {
-  await models.Course.bulkCreate([{ name: 'CS225' }, { name: 'CS241' }])
+  await models.Course.bulkCreate([
+    { name: 'CS225' },
+    { name: 'CS241' },
+    { name: 'CS446', shortcode: 'cs446', isUnlisted: true },
+    { name: 'CS445', shortcode: 'cs445', isUnlisted: true },
+  ])
 }
 
 module.exports.createTestQueues = async () => {
@@ -94,7 +100,7 @@ module.exports.createTestQuestions = async () => {
       name: 'Jordi',
       location: 'ECEB',
       topic: 'Canada',
-      askedById: 5,
+      askedById: 6,
     },
     {
       queueId: 3,
@@ -108,14 +114,14 @@ module.exports.createTestQuestions = async () => {
       name: 'Student',
       location: '',
       topic: 'Secret',
-      askedById: 5,
+      askedById: 6,
     },
     {
       queueId: 5,
       name: 'Other Student',
       location: '',
       topic: 'Secret',
-      askedById: 6,
+      askedById: 7,
     },
   ])
 }
@@ -130,6 +136,9 @@ module.exports.populateTestDb = async () => {
 
   const staff241 = await models.User.findOne({ where: { netid: '241staff' } })
   await staff241.addStaffAssignment(2)
+
+  const staff446 = await models.User.findOne({ where: { netid: '446staff' } })
+  await staff446.addStaffAssignment(3)
 
   await module.exports.createTestQueues()
   await module.exports.createTestQuestions()
