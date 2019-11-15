@@ -6,7 +6,6 @@ When a new version is tagged, the changes since the last deploy should be labele
 with the current semantic version and the next changes should go under a **[Next]** header.
 
 ## [Next]
-## v1.4.0
 * Created a course settings page, which allows for unlisted courses and removal of the question feedback modal. ([@rittikaadhikari](https://github.com/rittikaadhikari) in [#293](https://github.com/illinois/queue/pull/293))
 
 ## v1.3.0
