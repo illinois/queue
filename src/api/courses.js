@@ -261,15 +261,13 @@ router.patch(
       locals: { userAuthz, course },
     } = res
     const data = matchedData(req)
-    console.log('NAME HERE')
-    console.log(data.isUnlisted)
-    const name = data.name == undefined ? course.name : data.name
+    const name = data.name === undefined ? course.name : data.name
     const shortcode =
-      data.shortcode == undefined ? course.shortcode : data.shortcode
+      data.shortcode === undefined ? course.shortcode : data.shortcode
     const isUnlisted =
-      data.isUnlisted == undefined ? course.isUnlisted : data.isUnlisted
+      data.isUnlisted === undefined ? course.isUnlisted : data.isUnlisted
     const questionFeedback =
-      data.questionFeedback == undefined
+      data.questionFeedback === undefined
         ? course.questionFeedback
         : data.questionFeedback
 
@@ -284,11 +282,9 @@ router.patch(
     } else {
       if (data.name !== undefined || data.shortcode !== undefined) {
         if (data.name !== course.name || data.shortcode !== course.shortcode) {
-          res
-            .status(403)
-            .send({
-              error: "don't have permission to change name or shortcode",
-            })
+          res.status(403).send({
+            error: "don't have permission to change name or shortcode",
+          })
           return
         }
       }
