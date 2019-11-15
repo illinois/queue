@@ -61,26 +61,26 @@ const GeneralPanel = ({ course, isAdmin, updateCourse }: GeneralPanelProps) => {
       </CardHeader>
       <CardBody>
         <Form autoComplete="off" onSubmit={onSubmit}>
-          {isAdmin ? (
-            <FormGroup row>
-              <Label for="name" sm={3}>
-                Name
-              </Label>
-              <Col sm={9}>
-                <Input id="name" {...name.bindToInput} />
-              </Col>
-            </FormGroup>
-          ) : null}
-          {isAdmin ? (
-            <FormGroup row>
-              <Label for="shortcode" sm={3}>
-                Shortcode
-              </Label>
-              <Col sm={9}>
-                <Input id="shortcode" {...shortcode.bindToInput} />
-              </Col>
-            </FormGroup>
-          ) : null}
+          {isAdmin && (
+            <>
+              <FormGroup row>
+                <Label for="name" sm={3}>
+                  Name
+                </Label>
+                <Col sm={9}>
+                  <Input id="name" {...name.bindToInput} />
+                </Col>
+              </FormGroup>
+              <FormGroup row>
+                <Label for="shortcode" sm={3}>
+                  Shortcode
+                </Label>
+                <Col sm={9}>
+                  <Input id="shortcode" {...shortcode.bindToInput} />
+                </Col>
+              </FormGroup>
+            </>
+          )}
           <FormGroup row>
             <Label for="isUnlisted" sm={3}>
               Unlisted

@@ -51,7 +51,7 @@ const CourseSettings = props => {
       <h2 className="mb-5">{props.course.name}</h2>
       <GeneralPanel
         course={props.course}
-        isUserAdmin={props.isUserAdmin}
+        isAdmin={props.isUserAdmin}
         updateCourse={attributes => updateCourse(attributes)}
       />
       <ManageStaffPanel
