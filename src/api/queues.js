@@ -43,29 +43,33 @@ router.get(
     const {
       locals: { userAuthz },
     } = res
-    const queuesResult = await Queue.scope(
-      'defaultScope',
-      'questionCount'
-    ).findAll()
 
-    let courses
+    let queuesResult
     if (userAuthz.isAdmin) {
-      courses = await Course.findAll()
+      queuesResult = await Queue.scope(
+        'defaultScope',
+        'questionCount'
+      ).findAll()
     } else {
       const { staffedCourseIds } = userAuthz
-      courses = await Course.findAll({
-        where: {
-          [Sequelize.Op.or]: [{ id: staffedCourseIds }, { isUnlisted: false }],
-        },
-      })
+      queuesResult = await Queue.scope('defaultScope', 'questionCount').findAll(
+        {
+          include: [
+            {
+              model: Course,
+              where: {
+                [Sequelize.Op.or]: [
+                  { id: staffedCourseIds },
+                  { isUnlisted: false },
+                ],
+              },
+            },
+          ],
+        }
+      )
     }
 
-    const filteredCourseIds = courses.map(course => course.id)
-
-    const queues = queuesResult
-      .filter(queue => filteredCourseIds.includes(queue.courseId))
-      .map(queue => queue.get({ plain: true }))
-
+    const queues = queuesResult.map(queue => queue.get({ plain: true }))
     res.json(queues)
   })
 )

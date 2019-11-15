@@ -70,7 +70,6 @@ const ManageStaffPanel = ({
             addCourseStaff(course.id, netid, name)
           }}
         />
-
         <ListGroup flush className="position-relative">
           <FlipMove
             enterAnimation="accordionVertical"
