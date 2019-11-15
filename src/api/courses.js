@@ -249,10 +249,10 @@ router.patch(
   [
     requireCourseStaff,
     requireCourse,
-    check('name').exists(),
-    check('shortcode').exists(),
-    check('isUnlisted').isBoolean(),
-    check('questionFeedback').isBoolean(),
+    check('name').optional({ nullable: true }),
+    check('shortcode').optional({ nullable: true }),
+    check('isUnlisted').optional({ nullable: true }),
+    check('questionFeedback').optional({ nullable: true }),
     failIfErrors,
   ],
   safeAsync(async (req, res, _next) => {
@@ -261,26 +261,42 @@ router.patch(
       locals: { userAuthz, course },
     } = res
     const data = matchedData(req)
+    console.log('NAME HERE')
+    console.log(data.isUnlisted)
+    const name = data.name == undefined ? course.name : data.name
+    const shortcode =
+      data.shortcode == undefined ? course.shortcode : data.shortcode
+    const isUnlisted =
+      data.isUnlisted == undefined ? course.isUnlisted : data.isUnlisted
+    const questionFeedback =
+      data.questionFeedback == undefined
+        ? course.questionFeedback
+        : data.questionFeedback
 
     if (userAuthz.isAdmin) {
       await course.update({
-        name: data.name !== null ? data.name : undefined,
-        shortcode: data.shortcode !== null ? data.shortcode : undefined,
-        isUnlisted: data.isUnlisted !== null ? data.isUnlisted : undefined,
+        name: name !== null ? name : undefined,
+        shortcode: shortcode !== null ? shortcode : undefined,
+        isUnlisted: isUnlisted !== null ? isUnlisted : undefined,
         questionFeedback:
-          data.questionFeedback !== null ? data.questionFeedback : undefined,
+          questionFeedback !== null ? questionFeedback : undefined,
       })
     } else {
-      if (data.name !== course.name || data.shortcode !== course.shortcode) {
-        res
-          .status(403)
-          .error({ error: "don't have permission to change name or shortcode" })
-        return
+      if (data.name !== undefined || data.shortcode !== undefined) {
+        if (data.name !== course.name || data.shortcode !== course.shortcode) {
+          res
+            .status(403)
+            .send({
+              error: "don't have permission to change name or shortcode",
+            })
+          return
+        }
       }
+
       await course.update({
-        isUnlisted: data.isUnlisted !== null ? data.isUnlisted : undefined,
+        isUnlisted: isUnlisted !== null ? isUnlisted : undefined,
         questionFeedback:
-          data.questionFeedback !== null ? data.questionFeedback : undefined,
+          questionFeedback !== null ? questionFeedback : undefined,
       })
     }
 

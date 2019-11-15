@@ -522,9 +522,8 @@ describe('Questions API', () => {
   describe('POST /api/queues/:queueId/questions/:questionId/answered without feedback', () => {
     test('succeeds for admin', async () => {
       const request = await requestAsUser(app, 'admin')
-      const getRes = await request.get('/api/courses/1')
-      getRes.body.questionFeedback = false
-      await request.patch('/api/courses/1').send(getRes.body)
+      const patch = { questionFeedback: false }
+      await request.patch('/api/courses/1').send(patch)
 
       const res = await request
         .post('/api/queues/1/questions/1/answered')
@@ -538,9 +537,8 @@ describe('Questions API', () => {
 
     test('succeeds for course staff', async () => {
       const request = await requestAsUser(app, '225staff')
-      const getRes = await request.get('/api/courses/1')
-      getRes.body.questionFeedback = false
-      await request.patch('/api/courses/1').send(getRes.body)
+      const patch = { questionFeedback: false }
+      await request.patch('/api/courses/1').send(patch)
 
       const res = await request
         .post('/api/queues/1/questions/1/answered')

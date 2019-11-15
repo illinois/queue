@@ -224,55 +224,46 @@ describe('Courses API', () => {
   })
 
   describe('PATCH /api/courses/:id', () => {
-    test('change to unlisted', async () => {
+    test('succeeds to change everything for admin', async () => {
       const request = await requestAsUser(app, 'admin')
-      const getRes = await request.get('/api/courses/1')
-      getRes.body.isUnlisted = true
-      const res = await request.patch('/api/courses/1').send(getRes.body)
+      const patch = {
+        name: 'updated225',
+        shortcode: 'u225',
+        isUnlisted: false,
+        questionFeedback: true,
+      }
+      const res = await request.patch('/api/courses/1').send(patch)
       expect(res.statusCode).toBe(201)
-      expect(res.body.isUnlisted).toBe(true)
-    })
-
-    test('change from unlisted', async () => {
-      const request = await requestAsUser(app, '225staff')
-      const getRes = await request.get('/api/courses/1')
-      getRes.body.isUnlisted = false
-      const res = await request.patch('/api/courses/1').send(getRes.body)
-      expect(res.statusCode).toBe(201)
+      expect(res.body.name).toBe('updated225')
+      expect(res.body.shortcode).toBe('u225')
       expect(res.body.isUnlisted).toBe(false)
-    })
-
-    test('fails for non-staff', async () => {
-      const request = await requestAsUser(app, 'student')
-      const getRes = await request.get('/api/courses/1')
-      getRes.body.isUnlisted = true
-      const res = await request.patch('/api/courses/1').send(getRes.body)
-      expect(res.statusCode).toBe(403)
-    })
-
-    test('change to show question feedback', async () => {
-      const request = await requestAsUser(app, 'admin')
-      const getRes = await request.get('/api/courses/1')
-      getRes.body.questionFeedback = true
-      const res = await request.patch('/api/courses/1').send(getRes.body)
-      expect(res.statusCode).toBe(201)
       expect(res.body.questionFeedback).toBe(true)
     })
 
-    test('change to not show question feedback', async () => {
+    test('patch unlisted and question feedback as staff', async () => {
       const request = await requestAsUser(app, '225staff')
-      const getRes = await request.get('/api/courses/1')
-      getRes.body.questionFeedback = false
-      const res = await request.patch('/api/courses/1').send(getRes.body)
+      const patch = { isUnlisted: true, questionFeedback: true }
+      const res = await request.patch('/api/courses/1').send(patch)
       expect(res.statusCode).toBe(201)
-      expect(res.body.questionFeedback).toBe(false)
+      expect(res.body.isUnlisted).toBe(true)
+      expect(res.body.questionFeedback).toBe(true)
+    })
+
+    test('fails to change name and shortcode as staff', async () => {
+      const request = await requestAsUser(app, '225staff')
+      const patch = {
+        name: 'idk a good name',
+        shortcode: 'short',
+        isUnlisted: true,
+      }
+      const res = await request.patch('/api/courses/1').send(patch)
+      expect(res.statusCode).toBe(403)
     })
 
     test('fails for non-staff', async () => {
       const request = await requestAsUser(app, 'student')
-      const getRes = await request.get('/api/courses/1')
-      getRes.body.questionFeedback = true
-      const res = await request.patch('/api/courses/1').send(getRes.body)
+      const patch = { isUnlisted: true }
+      const res = await request.patch('/api/courses/1').send(patch)
       expect(res.statusCode).toBe(403)
     })
   })
