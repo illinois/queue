@@ -30,6 +30,7 @@ describe('Queues API', () => {
       const request = await requestAsUser(app, user)
       const res = await request.get(`/api/queues`)
       expect(res.statusCode).toBe(200)
+      console.log(res.body)
       expect(res.body.length).toEqual(5)
       expect(res.body[0].name).toBe('CS225 Queue')
       expect(res.body[1].name).toBe('CS241 Queue')
