@@ -4,12 +4,12 @@ module.exports = (sequelize, DataTypes) => {
     shortcode: DataTypes.STRING,
     isUnlisted: {
       type: DataTypes.BOOLEAN,
-      allowNull: false,
+      allowNull: true,
       defaultValue: false,
     },
     questionFeedback: {
       type: DataTypes.BOOLEAN,
-      allowNull: false,
+      allowNull: true,
       defaultValue: true,
     },
   })

@@ -261,23 +261,18 @@ router.patch(
       locals: { userAuthz, course },
     } = res
     const data = matchedData(req)
-    const name = data.name === undefined ? course.name : data.name
-    const shortcode =
-      data.shortcode === undefined ? course.shortcode : data.shortcode
-    const isUnlisted =
-      data.isUnlisted === undefined ? course.isUnlisted : data.isUnlisted
-    const questionFeedback =
-      data.questionFeedback === undefined
-        ? course.questionFeedback
-        : data.questionFeedback
+    const { name, shortcode, isUnlisted, questionFeedback } = course
 
     if (userAuthz.isAdmin) {
       await course.update({
-        name: name !== null ? name : undefined,
-        shortcode: shortcode !== null ? shortcode : undefined,
-        isUnlisted: isUnlisted !== null ? isUnlisted : undefined,
+        name: data.name !== undefined ? data.name : name,
+        shortcode: data.shortcode !== undefined ? data.shortcode : shortcode,
+        isUnlisted:
+          data.isUnlisted !== undefined ? data.isUnlisted : isUnlisted,
         questionFeedback:
-          questionFeedback !== null ? questionFeedback : undefined,
+          data.questionFeedback !== undefined
+            ? data.questionFeedback
+            : questionFeedback,
       })
     } else {
       if (data.name !== undefined || data.shortcode !== undefined) {
@@ -290,9 +285,12 @@ router.patch(
       }
 
       await course.update({
-        isUnlisted: isUnlisted !== null ? isUnlisted : undefined,
+        isUnlisted:
+          data.isUnlisted !== undefined ? data.isUnlisted : isUnlisted,
         questionFeedback:
-          questionFeedback !== null ? questionFeedback : undefined,
+          questionFeedback !== undefined
+            ? data.questionFeedback
+            : questionFeedback,
       })
     }
 
