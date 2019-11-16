@@ -32,7 +32,7 @@ describe('Queues API', () => {
       expect(res.statusCode).toBe(200)
       expect(res.body.length).toEqual(5)
 
-      res.body.forEach(function(course) {
+      res.body.forEach(course => {
         if (course.name === 'CS225 Queue') {
           expect(course.location).toBe('Here')
           expect(course.id).toBe(1)
