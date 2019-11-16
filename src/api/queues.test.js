@@ -30,14 +30,17 @@ describe('Queues API', () => {
       const request = await requestAsUser(app, user)
       const res = await request.get(`/api/queues`)
       expect(res.statusCode).toBe(200)
-      console.log(res.body)
       expect(res.body.length).toEqual(5)
-      expect(res.body[0].name).toBe('CS225 Queue')
-      expect(res.body[1].name).toBe('CS241 Queue')
-      expect(res.body[0].location).toBe('Here')
-      expect(res.body[1].location).toBe('There')
-      expect(res.body[0].id).toBe(1)
-      expect(res.body[1].id).toBe(2)
+
+      res.body.forEach(function(course) {
+        if (course.name === 'CS225 Queue') {
+          expect(course.location).toBe('Here')
+          expect(course.id).toBe(1)
+        } else if (course.name === 'CS241 Queue') {
+          expect(course.location).toBe('There')
+          expect(course.id).toBe(2)
+        }
+      })
 
       res.body.forEach(queue => {
         // This endpoint shouldn't include private attributes
