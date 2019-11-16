@@ -16,7 +16,7 @@ module.exports = {
         'questionFeedback',
         {
           type: Sequelize.BOOLEAN,
-          defaultValue: false,
+          defaultValue: true,
           after: 'isUnlisted',
         },
         { transaction }
