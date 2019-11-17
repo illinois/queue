@@ -4,12 +4,12 @@ import { connect } from 'react-redux'
 import { Container, Row, Card, CardBody, Button } from 'reactstrap'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faUsers } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faUsers, faDownload } from '@fortawesome/free-solid-svg-icons'
 
 import { Link } from '../routes'
 import { fetchCourseRequest, fetchCourse } from '../actions/course'
 import { createQueue } from '../actions/queue'
-import { mapObjectToArray } from '../util'
+import { mapObjectToArray, withBaseUrl } from '../util'
 
 import Error from '../components/Error'
 import PageWithUser from '../components/PageWithUser'
@@ -57,6 +57,16 @@ const Course = props => {
             {props.course.name}
           </h1>
           <ShowForCourseStaff courseId={props.courseId}>
+            <Button
+              color="primary"
+              className="mr-3 mt-3"
+              href={withBaseUrl(
+                `/api/courses/${props.courseId}/data/questions`
+              )}
+            >
+              <FontAwesomeIcon icon={faDownload} className="mr-2" />
+              Download Queue Data
+            </Button>
             <Link
               route="courseStaff"
               params={{ id: props.courseId }}

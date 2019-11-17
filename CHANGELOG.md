@@ -8,6 +8,11 @@ with the current semantic version and the next changes should go under a **[Next
 ## [Next]
 * Refactor authentication to support multiple logins and institutions. ([@nwalters512](https://github.com/nwalters512) in [#283](https://github.com/illinois/queue/pull/283))
 
+* Handle disabled button states in dark mode ([@nwalters512](https://github.com/nwalters512) in [#294](https://github.com/illinois/queue/pull/294))
+
+## v1.3.0
+* Add button to download all queue data for a course. ([@jackieo5023](https://github.com/jackieo5023) in [#290](https://github.com/illinois/queue/pull/290))
+
 ## v1.2.1
 
 * Refine dark mode: better styles, new Bootstrap colors, and a custom select component. ([@nwalters512](https://github.com/nwalters512) in [#279](https://github.com/illinois/queue/pull/279))
