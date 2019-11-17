@@ -10,7 +10,7 @@
     "start": "NODE_ENV=production node build/server.js",
     "now-start": "NODE_ENV=now node build/server.js",
     "test": "NODE_ENV=test jest",
-    "test-sequential": "jest --runInBand",
+    "test-sequential": "NODE_ENV=test jest --runInBand",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ./src",
     "fix-lint": "npm run lint -- --fix",
     "typecheck": "npx tsc --noEmit",

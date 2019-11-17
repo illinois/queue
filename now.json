@@ -10,7 +10,7 @@
     "env": {
       "DB_DIALECT_NOW": "sqlite",
       "DB_STORAGE_NOW": "/tmp/now.sqlite",
-      "DB_LOGGING_NOW": false
+      "DB_LOGGING_NOW": "false"
     }
   }
 }

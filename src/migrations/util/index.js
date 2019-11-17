@@ -51,6 +51,7 @@ module.exports.createVerificationDatabases = async () => {
   const migrationUri = 'mysql://queue@localhost/queue_migrations'
 
   const syncedSequelize = new Sequelize(sequelizeUri, {
+    dialect: 'mysql',
     operatorsAliases: false,
     dialectOptions: {
       multipleStatements: true,
@@ -58,6 +59,7 @@ module.exports.createVerificationDatabases = async () => {
     logging: false,
   })
   const migrationSequelize = new Sequelize(migrationUri, {
+    dialect: 'mysql',
     operatorsAliases: false,
     dialectOptions: {
       multipleStatements: true,
