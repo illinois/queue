@@ -77,7 +77,7 @@ describe('Courses API', () => {
 
   describe('GET /api/courses/:courseId/data/questions', () => {
     const expectedCsv =
-      'id,topic,enqueueTime,dequeueTime,answerStartTime,answerFinishTime,comments,preparedness,UserLocation,AnsweredBy_netid,AnsweredBy_UniversityName,AskedBy_netid,AskedBy_UniversityName,queueId,courseId,QueueName,QueueLocation,Queue_CreatedAt,CourseName\n1,"Queue","","","","","","","Siebel","","","admin","Admin",1,1,"CS225 Queue","Here","2019-10-05 17:05:41","CS225"\n2,"Canada","","","","","","","ECEB","","","student","",1,1,"CS225 Queue","Here","2019-10-05 17:05:41","CS225"\n3,"Sauce","","","","","","","","","","admin","Admin",3,1,"CS225 Fixed Location","Everywhere","2019-10-05 17:15:41","CS225"\n4,"Secret","","","","","","","","","","student","",5,1,"CS225 Confidential Queue","Everywhere","2019-10-05 17:35:41","CS225"\n5,"Secret","","","","","","","","","","otherstudent","",5,1,"CS225 Confidential Queue","Everywhere","2019-10-05 17:35:41","CS225"'
+      'id,topic,enqueueTime,dequeueTime,answerStartTime,answerFinishTime,comments,preparedness,UserLocation,AnsweredBy_uid,AnsweredBy_UniversityName,AskedBy_uid,AskedBy_UniversityName,queueId,courseId,QueueName,QueueLocation,Queue_CreatedAt,CourseName\n1,"Queue","","","","","","","Siebel","","","admin@illinois.edu","Admin",1,1,"CS225 Queue","Here","2019-10-05 17:05:41","CS225"\n2,"Canada","","","","","","","ECEB","","","student@illinois.edu","",1,1,"CS225 Queue","Here","2019-10-05 17:05:41","CS225"\n3,"Sauce","","","","","","","","","","admin@illinois.edu","Admin",3,1,"CS225 Fixed Location","Everywhere","2019-10-05 17:15:41","CS225"\n4,"Secret","","","","","","","","","","student@illinois.edu","",5,1,"CS225 Confidential Queue","Everywhere","2019-10-05 17:35:41","CS225"\n5,"Secret","","","","","","","","","","otherstudent@illinois.edu","",5,1,"CS225 Confidential Queue","Everywhere","2019-10-05 17:35:41","CS225"'
     test('succeeds for admin', async () => {
       const request = await requestAsUser(app, 'admin@illinois.edu')
       const res = await request.get('/api/courses/1/data/questions')
@@ -93,7 +93,7 @@ describe('Courses API', () => {
     })
 
     test('fails for student', async () => {
-      const request = await requestAsUser(app, 'student')
+      const request = await requestAsUser(app, 'student@illinois.edu')
       const res = await request.get('/api/courses/1/data/questions')
       expect(res.statusCode).toBe(403)
     })
