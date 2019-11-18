@@ -12,15 +12,37 @@ beforeEach(async () => {
 afterEach(() => testutil.destroyTestDb())
 
 describe('Courses API', () => {
-  test('GET /api/courses', async () => {
-    const request = await requestAsUser(app, 'admin')
-    const res = await request.get('/api/courses')
-    expect(res.statusCode).toBe(200)
-    expect(res.body).toHaveLength(2)
-    expect(res.body[0].name).toBe('CS225')
-    expect(res.body[1].name).toBe('CS241')
-  })
+  describe('GET /api/courses/', () => {
+    test('shows all courses for admin', async () => {
+      const request = await requestAsUser(app, 'admin')
+      const res = await request.get('/api/courses')
+      expect(res.statusCode).toBe(200)
+      expect(res.body).toHaveLength(4)
+      expect(res.body[0].name).toBe('CS225')
+      expect(res.body[1].name).toBe('CS241')
+      expect(res.body[2].name).toBe('CS446')
+      expect(res.body[3].name).toBe('CS445')
+    })
 
+    test('shows listed courses for students not on any staff', async () => {
+      const request = await requestAsUser(app, 'student')
+      const res = await request.get('/api/courses')
+      expect(res.statusCode).toBe(200)
+      expect(res.body).toHaveLength(2)
+      expect(res.body[0].name).toBe('CS225')
+      expect(res.body[1].name).toBe('CS241')
+    })
+
+    test('shows listed courses & unlisted course that student is on staff for', async () => {
+      const request = await requestAsUser(app, '446staff')
+      const res = await request.get('/api/courses')
+      expect(res.statusCode).toBe(200)
+      expect(res.body).toHaveLength(3)
+      expect(res.body[0].name).toBe('CS225')
+      expect(res.body[1].name).toBe('CS241')
+      expect(res.body[2].name).toBe('CS446')
+    })
+  })
   describe('GET /api/courses/:courseId', () => {
     test('succeeds for admin', async () => {
       const request = await requestAsUser(app, 'admin')
@@ -102,11 +124,16 @@ describe('Courses API', () => {
 
   describe('POST /api/courses', () => {
     test('succeeds for admin', async () => {
-      const course = { name: 'CS423', shortcode: 'cs423' }
+      const course = {
+        name: 'CS423',
+        shortcode: 'cs423',
+        isUnlisted: false,
+        questionFeedback: true,
+      }
       const request = await requestAsUser(app, 'admin')
       const res = await request.post('/api/courses').send(course)
       expect(res.statusCode).toBe(201)
-      expect(res.body.id).toBe(3)
+      expect(res.body.id).toBe(5)
       expect(res.body.name).toBe('CS423')
       expect(res.body.shortcode).toBe('cs423')
     })
@@ -122,10 +149,121 @@ describe('Courses API', () => {
       const res = await request.post('/api/courses').send(course)
       expect(res.statusCode).toBe(422)
     })
+    test('fails for missing isUnlisted', async () => {
+      const course = { name: 'CS423', shortcode: 'cs423' }
+      const request = await requestAsUser(app, 'admin')
+      const res = await request.post('/api/courses').send(course)
+      expect(res.statusCode).toBe(422)
+    })
+    test('fails for missing questionFeedback', async () => {
+      const course = { name: 'CS423', shortcode: 'cs423', isUnlisted: false }
+      const request = await requestAsUser(app, 'admin')
+      const res = await request.post('/api/courses').send(course)
+      expect(res.statusCode).toBe(422)
+    })
     test('fails for non-admin', async () => {
-      const course = { name: 'CS423' }
+      const course = {
+        name: 'CS423',
+        shortcode: 'cs423',
+        isUnlisted: false,
+        questionFeedback: true,
+      }
       const request = await requestAsUser(app, 'student')
       const res = await request.post('/api/courses').send(course)
+      expect(res.statusCode).toBe(403)
+    })
+  })
+
+  describe('GET/POST /api/courses', () => {
+    test('check unlisted course creation', async () => {
+      const course = {
+        name: 'CS447',
+        shortcode: 'cs447',
+        isUnlisted: true,
+        questionFeedback: true,
+      }
+      const request = await requestAsUser(app, 'admin')
+      const res = await request.post('/api/courses').send(course)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.id).toBe(5)
+      expect(res.body.name).toBe('CS447')
+      expect(res.body.isUnlisted).toBe(true)
+      expect(res.body.shortcode).toBe('cs447')
+      expect(res.body.questionFeedback).toBe(true)
+
+      const getRes = await request.get('/api/courses').send(course.shortcode)
+      expect(getRes.body[4].id).toBe(5)
+      expect(getRes.body[4].name).toBe('CS447')
+      expect(getRes.body[4].isUnlisted).toBe(true)
+      expect(getRes.body[4].shortcode).toBe('cs447')
+    })
+
+    test('check course without question feedback creation', async () => {
+      const course = {
+        name: 'CS447',
+        shortcode: 'cs447',
+        isUnlisted: false,
+        questionFeedback: false,
+      }
+      const request = await requestAsUser(app, 'admin')
+      const res = await request.post('/api/courses').send(course)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.id).toBe(5)
+      expect(res.body.name).toBe('CS447')
+      expect(res.body.isUnlisted).toBe(false)
+      expect(res.body.questionFeedback).toBe(false)
+      expect(res.body.shortcode).toBe('cs447')
+    })
+
+    test('fails for non-admin', async () => {
+      const course = { name: 'CS447', shortcode: 'cs447', isUnlisted: true }
+      const request = await requestAsUser(app, 'student')
+      const res = await request.post('/api/courses').send(course)
+      expect(res.statusCode).toBe(403)
+    })
+  })
+
+  describe('PATCH /api/courses/:id', () => {
+    test('succeeds to change everything for admin', async () => {
+      const request = await requestAsUser(app, 'admin')
+      const patch = {
+        name: 'updated225',
+        shortcode: 'u225',
+        isUnlisted: false,
+        questionFeedback: true,
+      }
+      const res = await request.patch('/api/courses/1').send(patch)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.name).toBe('updated225')
+      expect(res.body.shortcode).toBe('u225')
+      expect(res.body.isUnlisted).toBe(false)
+      expect(res.body.questionFeedback).toBe(true)
+    })
+
+    test('patch unlisted and question feedback as staff', async () => {
+      const request = await requestAsUser(app, '225staff')
+      const patch = { isUnlisted: true, questionFeedback: true }
+      const res = await request.patch('/api/courses/1').send(patch)
+      expect(res.statusCode).toBe(201)
+      expect(res.body.isUnlisted).toBe(true)
+      expect(res.body.questionFeedback).toBe(true)
+    })
+
+    test('fails to change name and shortcode as staff', async () => {
+      const request = await requestAsUser(app, '225staff')
+      const patch = {
+        name: 'idk a good name',
+        shortcode: 'short',
+        isUnlisted: true,
+      }
+      const res = await request.patch('/api/courses/1').send(patch)
+      expect(res.statusCode).toBe(403)
+    })
+
+    test('fails for non-staff', async () => {
+      const request = await requestAsUser(app, 'student')
+      const patch = { isUnlisted: true }
+      const res = await request.patch('/api/courses/1').send(patch)
       expect(res.statusCode).toBe(403)
     })
   })

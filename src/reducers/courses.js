@@ -2,6 +2,7 @@ import {
   FETCH_COURSES,
   FETCH_COURSE,
   CREATE_COURSE,
+  UPDATE_COURSE,
   CREATE_QUEUE,
   DELETE_QUEUE,
   UPDATE_QUEUES,
@@ -155,6 +156,20 @@ const courses = (state = defaultState, action) => {
         courses: {
           ...state.courses,
           [course.id]: normalizeCourse(course),
+        },
+      }
+    }
+    case UPDATE_COURSE.SUCCESS: {
+      const { course } = action
+      const originalCourse = state.courses[course.id]
+      return {
+        ...state,
+        courses: {
+          ...state.courses,
+          [course.id]: {
+            ...originalCourse,
+            ...course,
+          },
         },
       }
     }

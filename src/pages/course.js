@@ -4,9 +4,8 @@ import { connect } from 'react-redux'
 import { Container, Row, Card, CardBody, Button } from 'reactstrap'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faUsers, faDownload } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faCog } from '@fortawesome/free-solid-svg-icons'
 
-import { Link } from '../routes'
 import { fetchCourseRequest, fetchCourse } from '../actions/course'
 import { createQueue } from '../actions/queue'
 import { mapObjectToArray, withBaseUrl } from '../util'
@@ -59,25 +58,12 @@ const Course = props => {
           <ShowForCourseStaff courseId={props.courseId}>
             <Button
               color="primary"
-              className="mr-3 mt-3"
-              href={withBaseUrl(
-                `/api/courses/${props.courseId}/data/questions`
-              )}
+              className="mt-3"
+              href={withBaseUrl(`/course/${props.courseId}/settings`)}
             >
-              <FontAwesomeIcon icon={faDownload} className="mr-2" />
-              Download Queue Data
+              <FontAwesomeIcon icon={faCog} className="mr-2" />
+              Settings
             </Button>
-            <Link
-              route="courseStaff"
-              params={{ id: props.courseId }}
-              prefetch
-              passHref
-            >
-              <Button tag="a" color="primary" className="mt-3">
-                <FontAwesomeIcon icon={faUsers} className="mr-2" />
-                Manage staff
-              </Button>
-            </Link>
           </ShowForCourseStaff>
         </div>
         <div className="d-flex flex-wrap align-items-center mb-4">

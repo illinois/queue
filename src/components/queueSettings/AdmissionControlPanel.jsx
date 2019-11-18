@@ -14,6 +14,8 @@ import {
   Col,
 } from 'reactstrap'
 import { useBoolean, useInput } from 'react-hanger'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHandPaper } from '@fortawesome/free-solid-svg-icons'
 
 const AdmissionControlPanel = ({ queue, updateQueue }) => {
   const admissionControlUrl = queue.admissionControlUrl || ''
@@ -35,7 +37,8 @@ const AdmissionControlPanel = ({ queue, updateQueue }) => {
     <Card className="mb-3">
       <CardHeader>
         <CardTitle tag="h5" className="mb-0">
-          Admission control
+          <FontAwesomeIcon icon={faHandPaper} className="mr-2" /> Admission
+          control
         </CardTitle>
       </CardHeader>
       <CardBody>

@@ -139,6 +139,7 @@ export function updateQuestion(questionId, attributes) {
 /**
  * Finishes answering a question and submits feedback for it
  */
+
 const finishAnsweringQuestionRequest = makeActionCreator(
   types.FINISH_ANSWERING_QUESTION.REQUEST,
   'queueId',
@@ -167,7 +168,7 @@ export function finishAnsweringQuestion(queueId, questionId, feedback) {
         dispatch(finishAnsweringQuestionSuccess(queueId, questionId, feedback)),
       err => {
         console.error(err)
-        dispatch(finishAnsweringQuestionFailure(queueId, questionId))
+        dispatch(finishAnsweringQuestionFailure(queueId, questionId, feedback))
       }
     )
   }

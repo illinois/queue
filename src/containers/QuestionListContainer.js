@@ -26,6 +26,7 @@ const mapStateToProps = (state, props) => ({
   ),
   isUserAdmin: isUserAdmin(state, props),
   userId: state.user.user.id,
+  course: state.courses.courses[state.queues.queues[props.queueId].courseId],
 })
 
 const mapDispatchToProps = (dispatch, { queueId }) => ({
@@ -38,7 +39,7 @@ const mapDispatchToProps = (dispatch, { queueId }) => ({
   updateQuestion: (questionId, attributes) =>
     dispatch(updateQuestion(questionId, attributes)),
   // eslint-disable-next-line max-len
-  finishAnsweringQuestion: (questionId, feedback) =>
+  finishAnsweringQuestion: (questionId, shouldCheckFeedback, feedback) =>
     dispatch(finishAnsweringQuestion(queueId, questionId, feedback)),
 })
 

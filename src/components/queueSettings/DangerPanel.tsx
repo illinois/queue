@@ -9,6 +9,8 @@ import {
   ListGroupItem,
 } from 'reactstrap'
 import { useBoolean } from 'react-hanger'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 import ConfirmDeleteQueueModal from '../ConfirmDeleteQueueModel'
 
 interface DangerPanelProps {
@@ -22,6 +24,7 @@ const DangerPanel = (props: DangerPanelProps) => {
       <Card className="border border-danger">
         <CardHeader className="bg-danger text-white">
           <CardTitle tag="h5" className="mb-0">
+            <FontAwesomeIcon icon={faExclamationTriangle} className="mr-2" />{' '}
             Danger zone
           </CardTitle>
           <small>Here be dragons</small>
