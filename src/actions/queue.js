@@ -236,6 +236,68 @@ export function removeQueueStaff(queueId, userId, activeStaffId) {
 }
 
 /**
+ * Add a user as staff for a course
+ */
+const addStarredByUserRequest = makeActionCreator(
+  types.ADD_STARRED_BY_USER.REQUEST,
+  'queueId'
+)
+const addStarredByUserSuccess = makeActionCreator(
+  types.ADD_STARRED_BY_USER.SUCCESS,
+  'queue'
+)
+const addStarredByUserFailure = makeActionCreator(
+  types.ADD_STARRED_BY_USER.FAILURE,
+  'data'
+)
+
+export function addStarredByUser(queue, userId) {
+  return dispatch => {
+    const { id } = queue
+    dispatch(addStarredByUserRequest(id, userId))
+
+    return axios.post(`/api/queues/${id}/star/${userId}`).then(
+      () => dispatch(addStarredByUserSuccess(queue)),
+      err => {
+        console.error(err)
+        dispatch(addStarredByUserFailure(err))
+      }
+    )
+  }
+}
+
+/**
+ * Remove a user as staff for a course
+ */
+const removeStarredByUserRequest = makeActionCreator(
+  types.REMOVE_STARRED_BY_USER.REQUEST,
+  'queueId'
+)
+const removeStarredByUserSuccess = makeActionCreator(
+  types.REMOVE_STARRED_BY_USER.SUCCESS,
+  'queue'
+)
+const removeStarredByUserFailure = makeActionCreator(
+  types.REMOVE_STARRED_BY_USER.FAILURE,
+  'data'
+)
+
+export function removeStarredByUser(queue, userId) {
+  return dispatch => {
+    const { id } = queue
+    dispatch(removeStarredByUserRequest(id))
+
+    return axios.delete(`/api/queues/${id}/star/${userId}`).then(
+      () => dispatch(removeStarredByUserSuccess(queue)),
+      err => {
+        console.error(err)
+        dispatch(removeStarredByUserFailure(err))
+      }
+    )
+  }
+}
+
+/**
  * Update all queues for a course
  */
 export const updateQueues = makeActionCreator(

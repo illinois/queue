@@ -19,6 +19,8 @@ export const UPDATE_QUEUE = makeActionStrings('UPDATE_QUEUE')
 export const DELETE_QUEUE = makeActionStrings('DELETE_QUEUE')
 export const ADD_QUEUE_STAFF = makeActionStrings('ADD_QUEUE_STAFF')
 export const REMOVE_QUEUE_STAFF = makeActionStrings('REMOVE_QUEUE_STAFF')
+export const ADD_STARRED_BY_USER = makeActionStrings('ADD_STARRED_BY_USER')
+export const REMOVE_STARRED_BY_USER = makeActionStrings('REMOVE_STARRED_BY_USER')
 
 export const FETCH_QUESTIONS = makeActionStrings('FETCH_QUESTIONS')
 export const CREATE_QUESTION = makeActionStrings('CREATE_QUESTION')

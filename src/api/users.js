@@ -2,7 +2,7 @@ const router = require('express').Router()
 
 const { requireUser, failIfErrors, ApiError } = require('./util')
 
-const { User, Course } = require('../models')
+const { User, Course, Queue } = require('../models')
 
 const requireAdmin = require('../middleware/requireAdmin')
 const safeAsync = require('../middleware/safeAsync')
@@ -27,6 +27,7 @@ router.get(
             attributes: [],
           },
         },
+        { model: Queue, as: 'starredQueues', through: { attributes: [] } },
       ],
     })
     res.send(user)

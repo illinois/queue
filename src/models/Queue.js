@@ -52,6 +52,10 @@ module.exports = (sequelize, DataTypes) => {
     models.Queue.hasMany(models.ActiveStaff)
     models.Queue.hasMany(models.Question)
     models.Queue.belongsTo(models.User, { as: 'createdByUser' })
+    models.Queue.belongsToMany(models.User, {
+      as: 'starredBy',
+      through: models.StarredQueue,
+    })
 
     models.Queue.addScope('questionCount', {
       attributes: {

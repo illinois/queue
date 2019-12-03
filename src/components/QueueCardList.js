@@ -59,9 +59,10 @@ const QueueCardList = props => {
     }
 
     props.queueIds.sort(queueSorter)
-
+    
     queues = props.queueIds.map(queueId => {
       const queue = props.queues[queueId]
+      const isStarred = props.starredQueueIds.includes(queue.id)
       const courseName = props.courses[queue.courseId].name
       return (
         <CardCol key={queue.id}>
@@ -69,6 +70,7 @@ const QueueCardList = props => {
             queue={queue}
             open={props.openQueue}
             courseName={props.showCourseName ? courseName : null}
+            isStarred={isStarred}
             onClick={() => handleQueueClick(queue.id)}
             onKeyPress={e => handleQueueKeyPress(e, queue.id)}
             tabIndex="0"
@@ -81,8 +83,8 @@ const QueueCardList = props => {
       <Col>
         <Card className="bg-light">
           <CardBody className="text-center">
-            There aren&apos;t any {props.openQueue ? 'open' : 'closed'} queues
-            right now
+            There aren&apos;t any {props.openQueue ? 'open' : 'closed'}{' '}
+            {props.isStarred ? 'starred' : ''} queues right now
           </CardBody>
         </Card>
       </Col>
@@ -115,6 +117,8 @@ QueueCardList.defaultProps = {
   queues: {},
   showCourseName: false,
   openQueue: true,
+  isStarred: false,
+  starredQueueIds: [],
 }
 
 QueueCardList.propTypes = {
@@ -132,6 +136,8 @@ QueueCardList.propTypes = {
   ),
   showCourseName: PropTypes.bool,
   openQueue: PropTypes.bool,
+  isStarred: PropTypes.bool,
+  starredQueueIds: PropTypes.arrayOf(PropTypes.number),
 }
 
 export default QueueCardList

@@ -24,6 +24,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.17",
     "@fortawesome/free-brands-svg-icons": "^5.8.1",
+    "@fortawesome/free-regular-svg-icons": "^5.11.2",
     "@fortawesome/free-solid-svg-icons": "^5.8.1",
     "@fortawesome/react-fontawesome": "^0.1.4",
     "@illinois/react-use-local-storage": "^1.1.0",
@@ -73,6 +74,7 @@
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
     "sequelize": "^5.3.4",
+    "sequelize-cli": "^5.5.1",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0",
     "styled-jsx": "^3.2.1",
