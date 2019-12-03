@@ -107,14 +107,26 @@ class Index extends React.Component {
 
     const openQueueIds = this.props.queues
       .filter(
-        queue => queue.open && this.props.starredQueues.find(starred => starred.id === queue.id) === undefined
+        queue =>
+          queue.open &&
+          this.props.starredQueues.find(starred => starred.id === queue.id) ===
+            undefined
       )
       .map(queue => queue.id)
     const closedQueueIds = this.props.queues
       .filter(queue => !queue.open)
       .map(queue => queue.id)
-    const starredQueueIds = this.props.queues
-      .filter(queue => this.props.starredQueues.find(starred => starred.id === queue.id))
+    const allStarredQueueIds = this.props.queues
+      .filter(queue =>
+        this.props.starredQueues.find(starred => starred.id === queue.id)
+      )
+      .map(queue => queue.id)
+    const openStarredQueueIds = this.props.queues
+      .filter(
+        queue =>
+          queue.open &&
+          this.props.starredQueues.find(starred => starred.id === queue.id)
+      )
       .map(queue => queue.id)
 
     return (
@@ -127,11 +139,11 @@ class Index extends React.Component {
           </h1>
           <Row className="equal-height">
             <QueueCardListContainer
-              queueIds={starredQueueIds}
+              queueIds={openStarredQueueIds}
               showCourseName
               openQueue
               isStarred
-              starredQueueIds={starredQueueIds}
+              starredQueueIds={allStarredQueueIds}
             />
           </Row>
           <div className="d-flex flex-wrap align-items-center mb-4">
@@ -169,7 +181,7 @@ class Index extends React.Component {
               showCourseName
               openQueue
               isStarred={false}
-              starredQueueIds={starredQueueIds}
+              starredQueueIds={allStarredQueueIds}
             />
           </Row>
           <div className="d-flex flex-wrap align-items-center mb-4">
@@ -211,7 +223,7 @@ class Index extends React.Component {
               showCourseName
               openQueue={false}
               isStarred={false}
-              starredQueueIds={starredQueueIds}
+              starredQueueIds={allStarredQueueIds}
             />
           </Row>
         </Container>
