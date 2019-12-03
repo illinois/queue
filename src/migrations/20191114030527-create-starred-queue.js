@@ -32,5 +32,5 @@ module.exports = {
 
   down: (queryInterface, _Sequelize) => {
     return queryInterface.dropTable('starredQueues')
-  }
-};
+  },
+}

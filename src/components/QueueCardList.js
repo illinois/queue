@@ -59,7 +59,7 @@ const QueueCardList = props => {
     }
 
     props.queueIds.sort(queueSorter)
-    
+
     queues = props.queueIds.map(queueId => {
       const queue = props.queues[queueId]
       const isStarred = props.starredQueueIds.includes(queue.id)

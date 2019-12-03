@@ -17,7 +17,11 @@ function normalizeUser(user) {
 }
 
 function addStarToQueue(state, queue) {
-  if (state.user.starredQueues.find(starredQueue => starredQueue.id === queue.id) !== undefined) {
+  if (
+    state.user.starredQueues.find(
+      starredQueue => starredQueue.id === queue.id
+    ) !== undefined
+  ) {
     return state
   }
 
@@ -27,15 +31,19 @@ function addStarToQueue(state, queue) {
 }
 
 function removeStarFromQueue(state, queue) {
-  if (state.user.starredQueues.find(starredQueue => starredQueue.id === queue.id) === undefined) {
+  if (
+    state.user.starredQueues.find(
+      starredQueue => starredQueue.id === queue.id
+    ) === undefined
+  ) {
     return state
   }
 
-  const newState = { ...state } 
+  const newState = { ...state }
   newState.user.starredQueues = newState.user.starredQueues.filter(
     oldQueue => oldQueue.id !== queue.id
   )
-  return newState;
+  return newState
 }
 
 const user = (state = defaultState, action) => {
