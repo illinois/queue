@@ -13,6 +13,8 @@ import {
   Col,
 } from 'reactstrap'
 import { useInput } from 'react-hanger'
+import { faSlidersH } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 interface GeneralPanelProps {
   queue: {
@@ -39,7 +41,7 @@ const GeneralPanel = ({ queue, updateQueue }: GeneralPanelProps) => {
     <Card className="mb-3">
       <CardHeader>
         <CardTitle tag="h5" className="mb-0">
-          General
+          <FontAwesomeIcon icon={faSlidersH} className="mr-2" /> General
         </CardTitle>
       </CardHeader>
       <CardBody>

@@ -137,7 +137,6 @@ const queues = (state = defaultState, action) => {
         ...state,
         isFetching: false,
         queues: {
-          ...state.queues,
           ...action.queues.reduce((obj, item) => {
             // eslint-disable-next-line no-param-reassign
             obj[item.id] = normalizeQueue(item)

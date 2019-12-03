@@ -14,7 +14,7 @@ describe('Autocomplete API', () => {
     const request = await requestAsUser(app, 'admin')
     const res = await request.get('/api/autocomplete/users?q=')
     expect(res.statusCode).toBe(200)
-    expect(res.body).toHaveLength(6)
+    expect(res.body).toHaveLength(7)
     expect(res.body[0]).toMatchObject({
       netid: 'dev',
       isAdmin: true,

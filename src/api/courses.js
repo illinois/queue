@@ -74,7 +74,25 @@ const getCsv = questions => {
 // Get all courses
 router.get(
   '/',
-  safeAsync(async (req, res, _next) => res.send(await Course.findAll()))
+  safeAsync(async (req, res, _next) => {
+    const {
+      locals: { userAuthz },
+    } = res
+
+    let courses
+    if (userAuthz.isAdmin) {
+      courses = await Course.findAll()
+    } else {
+      const { staffedCourseIds } = userAuthz
+      courses = await Course.findAll({
+        where: {
+          [Sequelize.Op.or]: [{ id: staffedCourseIds }, { isUnlisted: false }],
+        },
+      })
+    }
+
+    res.send(courses)
+  })
 )
 
 // Get a specific course
@@ -195,7 +213,7 @@ router.get(
 
     res
       .type('text/csv')
-      .attachment('queueData.csv')
+      .attachment('courseData.csv')
       .send(getCsv(questions))
   })
 )
@@ -207,16 +225,79 @@ router.post(
     requireAdmin,
     check('name', 'name must be specified').exists(),
     check('shortcode', 'shortcode must be specified').exists(),
+    check('isUnlisted').isBoolean(),
+    check('questionFeedback').isBoolean(),
     failIfErrors,
   ],
   safeAsync(async (req, res, _next) => {
     const { name, shortcode } = matchedData(req)
+    const { isUnlisted, questionFeedback } = req.body
     const course = Course.build({
       name,
       shortcode,
+      isUnlisted,
+      questionFeedback,
     })
     const newCourse = await course.save()
     res.status(201).send(newCourse)
+  })
+)
+
+// Modify a course's metadata
+router.patch(
+  '/:courseId',
+  [
+    requireCourseStaff,
+    requireCourse,
+    check('name').optional({ nullable: true }),
+    check('shortcode').optional({ nullable: true }),
+    check('isUnlisted').optional({ nullable: true }),
+    check('questionFeedback').optional({ nullable: true }),
+    failIfErrors,
+  ],
+  safeAsync(async (req, res, _next) => {
+    const courseId = res.locals.course.dataValues.id
+    const {
+      locals: { userAuthz, course },
+    } = res
+    const data = matchedData(req)
+    const { name, shortcode, isUnlisted, questionFeedback } = course
+
+    if (userAuthz.isAdmin) {
+      await course.update({
+        name: data.name !== undefined ? data.name : name,
+        shortcode: data.shortcode !== undefined ? data.shortcode : shortcode,
+        isUnlisted:
+          data.isUnlisted !== undefined ? data.isUnlisted : isUnlisted,
+        questionFeedback:
+          data.questionFeedback !== undefined
+            ? data.questionFeedback
+            : questionFeedback,
+      })
+    } else {
+      if (data.name !== undefined || data.shortcode !== undefined) {
+        if (data.name !== course.name || data.shortcode !== course.shortcode) {
+          res.status(403).send({
+            error: "don't have permission to change name or shortcode",
+          })
+          return
+        }
+      }
+
+      await course.update({
+        isUnlisted:
+          data.isUnlisted !== undefined ? data.isUnlisted : isUnlisted,
+        questionFeedback:
+          questionFeedback !== undefined
+            ? data.questionFeedback
+            : questionFeedback,
+      })
+    }
+
+    const updatedCourse = await Course.findOne({
+      where: { id: courseId },
+    })
+    res.status(201).send(updatedCourse)
   })
 )
 

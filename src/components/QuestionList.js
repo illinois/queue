@@ -33,10 +33,14 @@ class QuestionList extends React.Component {
   }
 
   handleFinishedAnswering(feedbackId) {
-    this.setState({
-      showFeedbackModal: true,
-      feedbackId,
-    })
+    if (this.props.course.questionFeedback) {
+      this.setState({
+        showFeedbackModal: true,
+        feedbackId,
+      })
+    } else {
+      this.props.finishAnsweringQuestion(feedbackId, {})
+    }
   }
 
   handleSubmitFeedback(feedback) {
@@ -179,9 +183,9 @@ class QuestionList extends React.Component {
                 deleteQuestion={() => this.deleteQuestion(questionId)}
                 cancelQuestion={() => this.cancelQuestion(questionId)}
                 startQuestion={() => this.startQuestion(questionId)}
-                finishedAnswering={() =>
+                finishedAnswering={() => {
                   this.handleFinishedAnswering(questionId)
-                }
+                }}
                 editQuestion={() => this.handleEditQuestion(questionId)}
                 {...question}
               />
@@ -260,6 +264,12 @@ class QuestionList extends React.Component {
 }
 
 QuestionList.propTypes = {
+  course: PropTypes.shape({
+    name: PropTypes.string,
+    shortcode: PropTypes.string,
+    isUnlisted: PropTypes.bool,
+    questionFeedback: PropTypes.bool,
+  }),
   queue: PropTypes.shape({
     questions: PropTypes.arrayOf(PropTypes.number),
     fixedLocation: PropTypes.bool,
@@ -286,6 +296,7 @@ QuestionList.propTypes = {
 QuestionList.defaultProps = {
   queue: null,
   questions: null,
+  course: null,
 }
 
 export default QuestionList

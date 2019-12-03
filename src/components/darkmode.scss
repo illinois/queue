@@ -127,6 +127,17 @@ body.darkmode {
     background-color: rgba(0, 0, 0, 0.1) !important;
   }
 
+  /* Tables */
+  .table {
+    color: #fff;
+    background-color: $dark-background;
+    border-color: #434343;
+
+    .notfirst:hover {
+      background-color: darken($control-background, 10%);
+    }
+  }
+
   /* Dropdowns */
 
   .dropdown-menu {

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { ListGroupItem, Form, Input, Button } from 'reactstrap'
+import { Form, FormGroup, Input, Button } from 'reactstrap'
 
 class AddStaff extends React.Component {
   constructor(props) {
@@ -34,7 +34,7 @@ class AddStaff extends React.Component {
 
   render() {
     return (
-      <ListGroupItem>
+      <FormGroup>
         <Form
           autoComplete="off"
           className="d-flex align-items-center"
@@ -58,7 +58,7 @@ class AddStaff extends React.Component {
             Add staff
           </Button>
         </Form>
-      </ListGroupItem>
+      </FormGroup>
     )
   }
 }

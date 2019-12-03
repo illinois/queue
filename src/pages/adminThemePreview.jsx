@@ -18,6 +18,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Table,
 } from 'reactstrap'
 import PageWithUser from '../components/PageWithUser'
 import Select from '../components/Select'
@@ -96,6 +97,33 @@ const AdminThemePreview = () => {
       <Card>
         <CardBody>This is some card content.</CardBody>
       </Card>
+      <Header>Tables</Header>
+      <Table hover>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td>Larry</td>
+            <td>the Bird</td>
+          </tr>
+        </tbody>
+      </Table>
       <Header>Dropdowns</Header>
       <UncontrolledDropdown>
         <DropdownToggle caret>Dropdown</DropdownToggle>

@@ -20,7 +20,7 @@ routes
   .add('queueSettings', withBaseUrl('/queue/:id/settings'))
   .add('createCourse', withBaseUrl('/course/create'))
   .add('course', withBaseUrl('/course/:id'))
-  .add('courseStaff', withBaseUrl('/course/:id/staff'))
+  .add('courseSettings', withBaseUrl('/course/:id/settings'))
   .add('createQueue', withBaseUrl('/course/:courseId/queue/create'))
   .add('userSettings', withBaseUrl('/settings'))
   .add('adminIndex', withBaseUrl('/admin'))
