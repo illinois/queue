@@ -250,7 +250,7 @@ router.delete(
     const { id } = res.locals.user
     const [user] = await User.findOrCreate({ where: { id } })
     await user.removeStarredQueue(res.locals.queue.id)
-    res.status(201).send(user)
+    res.status(200).send(user)
   })
 )
 
