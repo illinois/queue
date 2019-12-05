@@ -27,7 +27,12 @@ router.get(
             attributes: [],
           },
         },
-        { model: Queue, as: 'starredQueues', through: { attributes: [] } },
+        {
+          model: Queue,
+          as: 'starredQueues',
+          through: { attributes: [] },
+          attributes: ['id'],
+        },
       ],
     })
     res.send(user)
