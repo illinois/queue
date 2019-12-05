@@ -9,19 +9,19 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      userId: {
+      queueId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'users',
+          model: 'queues',
           key: 'id',
         },
         onUpdate: 'cascade',
         onDelete: 'cascade',
       },
-      queueId: {
+      userId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'queues',
+          model: 'users',
           key: 'id',
         },
         onUpdate: 'cascade',
