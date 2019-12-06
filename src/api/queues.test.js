@@ -279,20 +279,17 @@ describe('Queues API', () => {
   describe('POST /api/queues/1/star/:userId', () => {
     test('succeeds for a user to star a queue', async () => {
       const request = await requestAsUser(app, 'student')
-      const res = await request.post('api/queues/1/star/4')
+      const res = await request.post('/api/queues/1/star/6')
       expect(res.statusCode).toBe(201)
-      const expectedQueue = { id: 1 }
-      expect(res.starredQueues[0]).toMatchObject(expectedQueue)
     })
   })
 
   describe('POST /api/queues/1/star/:userId', () => {
     test('succeeds for a user to unstar a queue', async () => {
       const request = await requestAsUser(app, 'student')
-      await request.post('api/queues/1/star/4')
-      const res = await request.delete('api/queues/1/star/4')
-      expect(res.statusCode).toBe(201)
-      expect(res.starredQueues).toHaveLength(0)
+      await request.post('/api/queues/1/star/6')
+      const res = await request.delete('/api/queues/1/star/6')
+      expect(res.statusCode).toBe(200)
     })
   })
 
