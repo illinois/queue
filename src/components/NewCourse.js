@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {
   Col,
+  CustomInput,
   Form,
   FormGroup,
   FormFeedback,
@@ -20,6 +21,8 @@ class NewCourse extends React.Component {
     this.state = {
       name: '',
       shortcode: '',
+      isUnlisted: false,
+      questionFeedback: false,
       isFieldValid: {},
     }
 
@@ -57,6 +60,8 @@ class NewCourse extends React.Component {
     const course = {
       name: this.state.name,
       shortcode: this.state.shortcode,
+      isUnlisted: this.state.isUnlisted,
+      questionFeedback: this.state.questionFeedback,
     }
 
     this.props.onCreateCourse(course)
@@ -101,6 +106,44 @@ class NewCourse extends React.Component {
               Adding a shortcode will allow you to generate a special link that
               will direct students to your currently open queue when they visit
               it.
+            </FormText>
+          </Col>
+        </FormGroup>
+        <FormGroup row>
+          <Label for="name" sm={3}>
+            Unlisted
+          </Label>
+          <Col sm={9}>
+            <CustomInput
+              id="isUnlisted"
+              type="switch"
+              name="isUnlisted"
+              defaultChecked={this.state.isUnlisted}
+              onChange={e => this.setState({ isUnlisted: e.target.checked })}
+            />
+            <FormText color="muted">
+              Making your course unlisted will only allow students with the
+              course shortcode to view this course.
+            </FormText>
+          </Col>
+        </FormGroup>
+        <FormGroup row>
+          <Label for="name" sm={3}>
+            Enable Question Feedback
+          </Label>
+          <Col sm={9}>
+            <CustomInput
+              id="questionFeedback"
+              type="switch"
+              name="questionFeedback"
+              defaultChecked={this.state.questionFeedback}
+              onChange={e =>
+                this.setState({ questionFeedback: e.target.checked })
+              }
+            />
+            <FormText color="muted">
+              Allowing question feedback will let your course staff provide
+              feedback after answering each student&apos;s question.
             </FormText>
           </Col>
         </FormGroup>

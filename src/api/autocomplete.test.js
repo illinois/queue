@@ -14,7 +14,7 @@ describe('Autocomplete API', () => {
     const request = await requestAsUser(app, 'admin@illinois.edu')
     const res = await request.get('/api/autocomplete/users?q=')
     expect(res.statusCode).toBe(200)
-    expect(res.body).toHaveLength(6)
+    expect(res.body).toHaveLength(7)
     expect(res.body[0]).toMatchObject({
       uid: 'dev@illinois.edu',
       isAdmin: true,

@@ -27,6 +27,11 @@ module.exports.createTestUsers = async () => {
       universityName: '241 Staff',
       isAdmin: false,
     },
+    {
+      uid: '446staff@illinois.edu',
+      universityName: '446 Staff',
+      isAdmin: false,
+    },
     { uid: 'student@illinois.edu', isAdmin: false },
     { uid: 'otherstudent@illinois.edu', isAdmin: false },
   ])
@@ -45,7 +50,12 @@ module.exports.createTestTokens = async () => {
 }
 
 module.exports.createTestCourses = async () => {
-  await models.Course.bulkCreate([{ name: 'CS225' }, { name: 'CS241' }])
+  await models.Course.bulkCreate([
+    { name: 'CS225' },
+    { name: 'CS241' },
+    { name: 'CS446', shortcode: 'cs446', isUnlisted: true },
+    { name: 'CS445', shortcode: 'cs445', isUnlisted: true },
+  ])
 }
 
 module.exports.createTestQueues = async () => {
@@ -102,7 +112,7 @@ module.exports.createTestQuestions = async () => {
       name: 'Jordi',
       location: 'ECEB',
       topic: 'Canada',
-      askedById: 5,
+      askedById: 6,
     },
     {
       queueId: 3,
@@ -116,14 +126,14 @@ module.exports.createTestQuestions = async () => {
       name: 'Student',
       location: '',
       topic: 'Secret',
-      askedById: 5,
+      askedById: 6,
     },
     {
       queueId: 5,
       name: 'Other Student',
       location: '',
       topic: 'Secret',
-      askedById: 6,
+      askedById: 7,
     },
   ])
 }
@@ -142,6 +152,11 @@ module.exports.populateTestDb = async () => {
     where: { uid: '241staff@illinois.edu' },
   })
   await staff241.addStaffAssignment(2)
+
+  const staff446 = await models.User.findOne({
+    where: { uid: '446staff@illinois.edu' },
+  })
+  await staff446.addStaffAssignment(3)
 
   await module.exports.createTestQueues()
   await module.exports.createTestQuestions()

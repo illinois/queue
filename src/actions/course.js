@@ -21,12 +21,44 @@ const createCourseFailure = makeActionCreator(
 export function createCourse(course) {
   return dispatch => {
     dispatch(createCourseRequest(course))
-
     return axios.post('/api/courses', course).then(
-      res => dispatch(createCourseSuccess(res.data)),
+      res => {
+        dispatch(createCourseSuccess(res.data))
+      },
       err => {
         console.error(err)
         dispatch(createCourseFailure(err))
+      }
+    )
+  }
+}
+
+/**
+ * Update a course's attributes
+ */
+const updateCourseRequest = makeActionCreator(
+  types.UPDATE_COURSE.REQUEST,
+  'courseId',
+  'attributes'
+)
+export const updateCourseSuccess = makeActionCreator(
+  types.UPDATE_COURSE.SUCCESS,
+  'courseId',
+  'course'
+)
+const updateCourseFailure = makeActionCreator(
+  types.UPDATE_COURSE.FAILURE,
+  'courseId'
+)
+
+export function updateCourse(courseId, attributes) {
+  return dispatch => {
+    dispatch(updateCourseRequest(courseId, attributes))
+    return axios.patch(`/api/courses/${courseId}`, attributes).then(
+      res => dispatch(updateCourseSuccess(courseId, res.data)),
+      err => {
+        console.error(err)
+        dispatch(updateCourseFailure(courseId))
       }
     )
   }

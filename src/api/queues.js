@@ -5,7 +5,14 @@ const router = require('express').Router({
 const { check, oneOf } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 
-const { Queue, ActiveStaff, Question, User } = require('../models')
+const {
+  Queue,
+  Course,
+  ActiveStaff,
+  Question,
+  User,
+  Sequelize,
+} = require('../models')
 const safeAsync = require('../middleware/safeAsync')
 
 const {
@@ -33,10 +40,35 @@ function validateLocation(req, res, next) {
 router.get(
   '/',
   safeAsync(async (req, res, _next) => {
-    const queuesResult = await Queue.scope(
-      'defaultScope',
-      'questionCount'
-    ).findAll()
+    const {
+      locals: { userAuthz },
+    } = res
+
+    let queuesResult
+    if (userAuthz.isAdmin) {
+      queuesResult = await Queue.scope(
+        'defaultScope',
+        'questionCount'
+      ).findAll()
+    } else {
+      const { staffedCourseIds } = userAuthz
+      queuesResult = await Queue.scope('defaultScope', 'questionCount').findAll(
+        {
+          include: [
+            {
+              model: Course,
+              where: {
+                [Sequelize.Op.or]: [
+                  { id: staffedCourseIds },
+                  { isUnlisted: false },
+                ],
+              },
+            },
+          ],
+        }
+      )
+    }
+
     const queues = queuesResult.map(queue => queue.get({ plain: true }))
     res.json(queues)
   })

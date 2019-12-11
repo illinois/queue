@@ -8,6 +8,13 @@ with the current semantic version and the next changes should go under a **[Next
 ## [Next]
 * Refactor authentication to support multiple logins and institutions. ([@nwalters512](https://github.com/nwalters512) in [#283](https://github.com/illinois/queue/pull/283))
 
+## v1.4.1
+
+* Fix question feedback submission. ([@james9909](https://github.com/jamse9909) in [#299](https://github.com/illinois/queue/pull/299))
+
+## v1.4.0
+* Created a course settings page, which allows for unlisted courses and removal of the question feedback modal. ([@rittikaadhikari](https://github.com/rittikaadhikari) in [#293](https://github.com/illinois/queue/pull/293))
+
 * Handle disabled button states in dark mode ([@nwalters512](https://github.com/nwalters512) in [#294](https://github.com/illinois/queue/pull/294))
 
 ## v1.3.0

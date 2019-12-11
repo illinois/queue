@@ -298,41 +298,58 @@ router.delete(
 // Mark the question as answered
 router.post(
   '/:questionId/answered',
-  [
-    requireCourseStaffForQueueForQuestion,
-    requireQuestion,
-    check('preparedness').isIn(['bad', 'average', 'good']),
-    check('comments')
-      .optional({ nullable: true })
-      .trim(),
-    failIfErrors,
-  ],
+  [requireCourseStaffForQueueForQuestion, requireQuestion, failIfErrors],
   safeAsync(async (req, res, _next) => {
-    const data = matchedData(req)
+    const { question } = res.locals
+    const { queueId } = question
 
-    // Temporary, easy fix to avoid having to rename enums
-    // TODO Fix this garbage
-    let mappedPreparedness = data.preparedness
-    switch (data.preparedness) {
-      case 'bad':
-        mappedPreparedness = 'not'
-        break
-      case 'good':
-        mappedPreparedness = 'well'
-        break
-      default:
-        break
+    const course = await Course.findOne({
+      attributes: ['questionFeedback'],
+      include: [
+        {
+          model: Queue,
+          attributes: [],
+          where: { id: queueId },
+        },
+      ],
+      raw: true,
+    })
+
+    const shouldCheckFeedback = course.questionFeedback
+
+    if (shouldCheckFeedback) {
+      const feedback = req.body
+      const { comments } = feedback
+      let { preparedness } = feedback
+      if (
+        preparedness !== 'bad' &&
+        preparedness !== 'good' &&
+        preparedness !== 'average'
+      ) {
+        res.status(422).send({ error: 'malformed preparedness' })
+        return
+      }
+      switch (preparedness) {
+        case 'bad':
+          preparedness = 'not'
+          break
+        case 'good':
+          preparedness = 'well'
+          break
+        default:
+          break
+      }
+
+      question.preparedness = preparedness
+      question.comments = comments == null ? comments : comments.trim()
     }
 
-    const { question } = res.locals
     question.answerFinishTime = new Date()
     question.dequeueTime = new Date()
-    question.preparedness = mappedPreparedness
-    question.comments = data.comments
     question.answeredById = res.locals.userAuthn.id
 
     const updatedQuestion = await question.save()
-    res.send(updatedQuestion)
+    res.status(200).send(updatedQuestion)
   })
 )
 

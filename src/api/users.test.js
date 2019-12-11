@@ -115,7 +115,7 @@ describe('Users API', () => {
       const request = await requestAsUser(app, 'admin@illinois.edu')
       const res = await request.get('/api/users')
       expect(res.statusCode).toBe(200)
-      expect(res.body).toHaveLength(6)
+      expect(res.body).toHaveLength(7)
     })
 
     test('returns 403 for 225staff', async () => {
@@ -137,7 +137,7 @@ describe('Users API', () => {
       const res = await request.get('/api/users/5')
       expect(res.statusCode).toBe(200)
       expect(res.body.id).toBe(5)
-      expect(res.body.uid).toBe('student@illinois.edu')
+      expect(res.body.uid).toBe('446staff@illinois.edu')
     })
 
     test('fails for 225staff', async () => {

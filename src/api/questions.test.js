@@ -195,9 +195,9 @@ describe('Questions API', () => {
       expect(Array.isArray(res.body)).toBeTruthy()
       expect(res.body).toHaveLength(2)
       const [question1, question2] = res.body
-      expect(question1).toHaveProperty('askedById', 5)
+      expect(question1).toHaveProperty('askedById', 6)
       expect(question1).toHaveProperty('askedBy.uid', 'student@illinois.edu')
-      expect(question2).toHaveProperty('askedById', 6)
+      expect(question2).toHaveProperty('askedById', 7)
       expect(question2).toHaveProperty(
         'askedBy.uid',
         'otherstudent@illinois.edu'
@@ -226,11 +226,11 @@ describe('Questions API', () => {
       expect(res.statusCode).toBe(200)
       expect(Array.isArray(res.body)).toBeTruthy()
       expect(res.body).toHaveLength(2)
-      // We expect all questions not asked by 'student@illinois.edu' (user 5) to have no
+      // We expect all questions not asked by 'student@illinois.edu' (user 6) to have no
       // information besides question ID
       res.body.forEach(question => {
         if (Object.keys(question).length > 1) {
-          expect(question.askedById).toEqual(5)
+          expect(question.askedById).toEqual(6)
         } else {
           expect(Object.keys(question)).toEqual(['id'])
         }
@@ -450,7 +450,7 @@ describe('Questions API', () => {
     })
   })
 
-  describe('POST /api/queues/:queueId/questions/:questionId/answered', () => {
+  describe('POST /api/queues/:queueId/questions/:questionId/answered with feedback', () => {
     test('succeeds for admin', async () => {
       const feedback = {
         preparedness: 'good',
@@ -514,8 +514,42 @@ describe('Questions API', () => {
 
     test('fails for student', async () => {
       const request = await requestAsUser(app, 'student@illinois.edu')
-      const res = await request.post('/api/queues/1/questions/1/answered')
+      const res = await request
+        .post('/api/queues/1/questions/1/answered')
+        .send({})
       expect(res.statusCode).toBe(403)
+    })
+  })
+
+  describe('POST /api/queues/:queueId/questions/:questionId/answered without feedback', () => {
+    test('succeeds for admin', async () => {
+      const request = await requestAsUser(app, 'admin@illinois.edu')
+      const patch = { questionFeedback: false }
+      await request.patch('/api/courses/1').send(patch)
+
+      const res = await request
+        .post('/api/queues/1/questions/1/answered')
+        .send({})
+      expect(res.statusCode).toBe(200)
+      expect(res.body).toHaveProperty('askedBy')
+      expect(res.body.askedBy.uid).toBe('admin@illinois.edu')
+      expect(res.body.beingAnswered).toBe(false)
+      expect(res.body.answeredById).toBe(2)
+    })
+
+    test('succeeds for course staff', async () => {
+      const request = await requestAsUser(app, '225staff@illinois.edu')
+      const patch = { questionFeedback: false }
+      await request.patch('/api/courses/1').send(patch)
+
+      const res = await request
+        .post('/api/queues/1/questions/1/answered')
+        .send({})
+      expect(res.statusCode).toBe(200)
+      expect(res.body).toHaveProperty('askedBy')
+      expect(res.body.askedBy.uid).toBe('admin@illinois.edu')
+      expect(res.body.beingAnswered).toBe(false)
+      expect(res.body.answeredById).toBe(3)
     })
   })
 
