@@ -161,7 +161,7 @@ Course.propTypes = {
   ),
   starredQueues: PropTypes.arrayOf(
     PropTypes.shape({
-      name: PropTypes.string,
+      id: PropTypes.number,
     })
   ),
   createQueue: PropTypes.func.isRequired,
