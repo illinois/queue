@@ -6,6 +6,7 @@ When a new version is tagged, the changes since the last deploy should be labele
 with the current semantic version and the next changes should go under a **[Next]** header.
 
 ## [Next]
+* Implemented the ability for users to star queues, allowing for easier access to the queues they care about. ([@jackieo5023](https://github.com/jackieo5023) in [#298](https://github.com/illinois/queue/pull/298))
 
 ## v1.4.0
 * Created a course settings page, which allows for unlisted courses and removal of the question feedback modal. ([@rittikaadhikari](https://github.com/rittikaadhikari) in [#293](https://github.com/illinois/queue/pull/293))

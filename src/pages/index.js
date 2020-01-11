@@ -264,7 +264,7 @@ Index.propTypes = {
   ),
   starredQueues: PropTypes.arrayOf(
     PropTypes.shape({
-      name: PropTypes.string,
+      id: PropTypes.number,
     })
   ),
   fetchCourses: PropTypes.func.isRequired,
