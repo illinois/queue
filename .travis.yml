@@ -9,6 +9,7 @@ before_install:
   - wget https://dev.mysql.com/get/mysql-apt-config_0.8.12-1_all.deb
   - sudo dpkg -i mysql-apt-config_0.8.12-1_all.deb
   - sudo apt-get update
+  - pip install dnspython --user
   - sudo apt-get install mysql-utilities
   - mysql -e 'CREATE USER 'queue'@'localhost'; GRANT ALL PRIVILEGES ON *.* TO 'queue'@'localhost'; CREATE DATABASE queue; CREATE DATABASE queue_test;'
 script:
