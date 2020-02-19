@@ -4,7 +4,7 @@ const safeAsync = require('../middleware/safeAsync')
 
 module.exports = safeAsync(async (req, res) => {
   // Get the user's email based on the "eppn" header
-  const uid = req.get('eppn') || ''
+  const uid = req.get('eppn') || req.get('edupersonprincipalname') || ''
   if (!uid.endsWith('@illinois.edu')) {
     res.status(400).send('No login information found')
     return
