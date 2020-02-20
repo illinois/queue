@@ -6,6 +6,8 @@ When a new version is tagged, the changes since the last deploy should be labele
 with the current semantic version and the next changes should go under a **[Next]** header.
 
 ## [Next]
+
+## v2.0.0
 * Refactor authentication to support multiple logins and institutions. ([@nwalters512](https://github.com/nwalters512) in [#283](https://github.com/illinois/queue/pull/283))
 
 * Update API doc ([@jackieo5023](https://github.com/jackieo5023) in [#303](https://github.com/illinois/queue/pull/303))
