@@ -11,6 +11,7 @@ import {
   NavItem,
   Button,
 } from 'reactstrap'
+import getConfig from 'next/config'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { useBoolean } from 'react-hanger'
@@ -28,6 +29,8 @@ const styles = {
     zIndex: '10',
   },
 }
+
+const { institutionName } = getConfig().publicRuntimeConfig
 
 const logoutRoute = withBaseUrl('/logout')
 
@@ -48,12 +51,12 @@ const Header = props => {
   // login page
   let brandText
   if (moment().isAfter('2019-04-02T00:00:00-0500')) {
-    brandText = 'Queue@Illinois'
+    brandText = `Queue@${institutionName}`
   } else {
     brandText = (
       <>
         <span style={{ textDecoration: 'line-through' }}>Queue</span>
-        Stack@Illinois
+        Stack@{institutionName}
       </>
     )
   }

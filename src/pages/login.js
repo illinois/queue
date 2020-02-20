@@ -2,10 +2,13 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 
 import { Button } from 'reactstrap'
+import getConfig from 'next/config'
 
 import DevModeLogin from '../components/DevModeLogin'
 import { useTheme } from '../components/ThemeProvider'
 import { withBaseUrl, isDev, isNow } from '../util'
+
+const { institutionName } = getConfig().publicRuntimeConfig
 
 const Login = props => {
   const { isDarkMode } = useTheme()
@@ -23,7 +26,7 @@ const Login = props => {
           Welcome back! Log in to access the Queue.
         </p>
         <Button className="btn-illinois" color={null} block href={shibUrl}>
-          Log in with Illinois
+          Log in with {institutionName}
         </Button>
         {showDevModeLogin && (
           <Fragment>
