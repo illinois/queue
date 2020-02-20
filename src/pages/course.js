@@ -4,11 +4,12 @@ import { connect } from 'react-redux'
 import { Container, Row, Card, CardBody, Button } from 'reactstrap'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faCog } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faCog, faChartLine } from '@fortawesome/free-solid-svg-icons'
 
 import { fetchCourseRequest, fetchCourse } from '../actions/course'
 import { createQueue } from '../actions/queue'
 import { mapObjectToArray, withBaseUrl } from '../util'
+import { Link } from '../routes'
 
 import Error from '../components/Error'
 import PageWithUser from '../components/PageWithUser'
@@ -56,6 +57,12 @@ const Course = props => {
             {props.course.name}
           </h1>
           <ShowForCourseStaff courseId={props.courseId}>
+            <Link params={{ id: props.courseId }} route="courseAnalytics">
+              <Button color="primary" className="mt-3 mr-3">
+                <FontAwesomeIcon icon={faChartLine} className="mr-2" />
+                Analytics
+              </Button>
+            </Link>
             <Button
               color="primary"
               className="mt-3"

@@ -18,6 +18,7 @@ routes
   .add('login', withBaseUrl('/login'))
   .add('queue', withBaseUrl('/queue/:id'))
   .add('queueSettings', withBaseUrl('/queue/:id/settings'))
+  .add('courseAnalytics', withBaseUrl('/course/:id/analytics'))
   .add('createCourse', withBaseUrl('/course/create'))
   .add('course', withBaseUrl('/course/:id'))
   .add('courseSettings', withBaseUrl('/course/:id/settings'))
