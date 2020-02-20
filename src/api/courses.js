@@ -23,9 +23,9 @@ const getCsv = questions => {
     'comments',
     'preparedness',
     'UserLocation',
-    'answeredBy.AnsweredBy_netid',
+    'answeredBy.AnsweredBy_uid',
     'answeredBy.AnsweredBy_UniversityName',
-    'askedBy.AskedBy_netid',
+    'askedBy.AskedBy_uid',
     'askedBy.AskedBy_UniversityName',
     'queue.queueId',
     'queue.courseId',
@@ -113,7 +113,7 @@ router.get(
       includes.push({
         model: User,
         as: 'staff',
-        attributes: ['id', 'netid', 'name'],
+        attributes: ['id', 'uid', 'name'],
         through: {
           attributes: [],
         },
@@ -179,7 +179,7 @@ router.get(
           model: User,
           as: 'askedBy',
           attributes: [
-            ['netid', 'AskedBy_netid'],
+            ['uid', 'AskedBy_uid'],
             ['universityName', 'AskedBy_UniversityName'],
           ],
           required: true,
@@ -189,7 +189,7 @@ router.get(
           model: User,
           as: 'answeredBy',
           attributes: [
-            ['netid', 'AnsweredBy_netid'],
+            ['uid', 'AnsweredBy_uid'],
             ['universityName', 'AnsweredBy_UniversityName'],
           ],
           required: false,
@@ -302,20 +302,11 @@ router.patch(
 )
 
 // Add someone to course staff
-router.post(
-  '/:courseId/staff',
-  [
-    requireCourseStaff,
-    requireCourse,
-    check('netid', 'netid must be specified')
-      .exists()
-      .trim(),
-    failIfErrors,
-  ],
+router.put(
+  '/:courseId/staff/:userId',
+  [requireCourseStaff, requireCourse, requireUser, failIfErrors],
   safeAsync(async (req, res, _next) => {
-    const { netid: originalNetid } = matchedData(req)
-    const [netid] = originalNetid.split('@')
-    const [user] = await User.findOrCreate({ where: { netid } })
+    const { user } = res.locals
     await user.addStaffAssignment(res.locals.course.id)
     res.status(201).send(user)
   })
@@ -327,10 +318,7 @@ router.delete(
   [requireCourseStaff, requireCourse, requireUser, failIfErrors],
   safeAsync(async (req, res, _next) => {
     const { user, course } = res.locals
-    const oldStaffAssignments = await user.getStaffAssignments()
-    await user.setStaffAssignments(
-      oldStaffAssignments.filter(c => c.id !== course.id)
-    )
+    await user.removeStaffAssignment(course)
     res.status(202).send()
   })
 )

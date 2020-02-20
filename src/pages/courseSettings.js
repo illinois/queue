@@ -88,7 +88,7 @@ CourseSettings.propTypes = {
   users: PropTypes.objectOf(
     PropTypes.shape({
       id: PropTypes.number,
-      netid: PropTypes.string,
+      uid: PropTypes.string,
       name: PropTypes.string,
     })
   ).isRequired,
@@ -111,8 +111,8 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchCourse: courseId => dispatch(fetchCourse(courseId)),
-  addCourseStaff: (courseId, netid, name) =>
-    dispatch(addCourseStaff(courseId, netid, name)),
+  addCourseStaff: (courseId, uid, name) =>
+    dispatch(addCourseStaff(courseId, uid, name)),
   removeCourseStaff: (courseId, userId) =>
     dispatch(removeCourseStaff(courseId, userId)),
   updateCourse: (courseId, attributes) =>

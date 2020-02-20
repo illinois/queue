@@ -10,10 +10,10 @@ import * as safeAsync from '../middleware/safeAsync'
  */
 module.exports = safeAsync(
   async (req: Request, res: Response): Promise<void> => {
-    const { netid }: { netid: string } = req.body
+    const { uid }: { uid: string } = req.body
 
-    const user = await createOrUpdateUser(req, netid)
-    if (netid === 'dev' && !user.isAdmin) {
+    const user = await createOrUpdateUser(req, uid)
+    if (uid === 'dev@illinois.edu' && !user.isAdmin) {
       // This is a special user - let's make them an admin!
       user.isAdmin = true
       await user.save()

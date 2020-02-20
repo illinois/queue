@@ -7,4 +7,11 @@ import { sequelize } from '../models'
 
 Enzyme.configure({ adapter: new Adapter() })
 
+jest.mock('next/config', () => () => ({
+  publicRuntimeConfig: {
+    uidName: 'email',
+    uidArticle: 'an',
+  },
+}))
+
 afterAll(async () => sequelize.close())

@@ -23,11 +23,11 @@ interface ManageStaffPanelProps {
   }
   users: {
     id: number
-    netid: string
+    uid: string
     name: string
   }[]
   removeCourseStaff: (courseId: number, userId: number) => void
-  addCourseStaff: (courseId: number, netid: string, name: string) => void
+  addCourseStaff: (courseId: number, uid: string, name: string) => void
 }
 
 const ManageStaffPanel = ({
@@ -50,9 +50,11 @@ const ManageStaffPanel = ({
     })
   } else {
     newUsers = (
-      <ListGroupItem className="text-center text-muted pt-4 pb-4">
-        This course doesn&apos;t have any staff yet
-      </ListGroupItem>
+      <div>
+        <ListGroupItem className="text-center text-muted pt-4 pb-4">
+          This course doesn&apos;t have any staff yet
+        </ListGroupItem>
+      </div>
     )
   }
 
@@ -66,8 +68,8 @@ const ManageStaffPanel = ({
       <CardBody>
         <AddStaff
           onAddStaff={(staff: Record<string, string>) => {
-            const { netid, name } = staff
-            addCourseStaff(course.id, netid, name)
+            const { id, name } = staff
+            addCourseStaff(course.id, id, name)
           }}
         />
         <ListGroup flush className="position-relative">
@@ -95,7 +97,7 @@ ManageStaffPanel.propTypes = {
   users: PropTypes.objectOf(
     PropTypes.shape({
       id: PropTypes.number,
-      netid: PropTypes.string,
+      uid: PropTypes.string,
       name: PropTypes.string,
     })
   ).isRequired,

@@ -3,15 +3,14 @@ const { createOrUpdateUser, addJwtCookie, isSafeUrl } = require('./util')
 const safeAsync = require('../middleware/safeAsync')
 
 module.exports = safeAsync(async (req, res) => {
-  // Get the user's NetID based on the "eppn" header
-  const email = req.get('eppn') || ''
-  if (email.indexOf('@') === -1) {
+  // Get the user's email based on the "eppn" header
+  const uid = req.get('eppn') || req.get('edupersonprincipalname') || ''
+  if ('EPPN_SUFFIX' in process.env && !uid.endsWith(process.env.EPPN_SUFFIX)) {
     res.status(400).send('No login information found')
     return
   }
-  const [netid] = email.split('@')
 
-  const user = await createOrUpdateUser(req, netid)
+  const user = await createOrUpdateUser(req, uid)
   addJwtCookie(req, res, user)
 
   const { redirect } = req.query

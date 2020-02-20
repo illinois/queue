@@ -101,7 +101,7 @@ class Question extends React.Component {
 
     const isBeingAnswered = !!answeredBy
     const answeringName =
-      (answeredBy && (answeredBy.name || answeredBy.netid)) || undefined
+      (answeredBy && (answeredBy.name || answeredBy.uid)) || undefined
 
     return (
       <Fragment>
@@ -142,9 +142,9 @@ class Question extends React.Component {
             <strong className="d-block">
               <span title="Name">{name}</span>
               {isUserCourseStaff && (
-                <span title="NetID" className="text-muted">
+                <span title="UID" className="text-muted">
                   {' '}
-                  ({askedBy.netid})
+                  ({askedBy.uid})
                 </span>
               )}
             </strong>
@@ -185,10 +185,10 @@ Question.propTypes = {
   enqueueTime: PropTypes.string.isRequired,
   answeredBy: PropTypes.shape({
     name: PropTypes.string,
-    netid: PropTypes.string,
+    uid: PropTypes.string,
   }),
   askedBy: PropTypes.shape({
-    netid: PropTypes.string,
+    uid: PropTypes.string,
   }).isRequired,
   didUserAskQuestion: PropTypes.bool.isRequired,
   isUserCourseStaff: PropTypes.bool.isRequired,

@@ -14,13 +14,19 @@ import {
 } from 'reactstrap'
 import { useInput } from 'react-hanger'
 import { connect } from 'react-redux'
+import getConfig from 'next/config'
 import * as Redux from 'redux'
 
 import { updateUserPreferredName as updateUserPreferredNameAction } from '../../actions/user'
 
+const { uidName } = getConfig().publicRuntimeConfig
+
+const capitalizeString = (string: string) =>
+  string.charAt(0).toUpperCase() + string.slice(1)
+
 interface UserProfilePanelProps {
   user: {
-    netid: string
+    uid: string
     name: string
     preferredName?: string
     universityName?: string
@@ -47,8 +53,8 @@ const UserProfilePanel = (props: UserProfilePanelProps) => {
       </CardHeader>
       <CardBody>
         <div className="mb-3">
-          <div className="text-muted small">Net ID</div>
-          <div>{user.netid}</div>
+          <div className="text-muted small">{capitalizeString(uidName)}</div>
+          <div>{user.uid}</div>
         </div>
         <div className="mb-3">
           <div className="text-muted small">University Name</div>
@@ -86,6 +92,7 @@ const UserProfilePanel = (props: UserProfilePanelProps) => {
     </Card>
   )
 }
+
 UserProfilePanel.propTypes = {
   user: PropTypes.shape({
     universityName: PropTypes.string,
