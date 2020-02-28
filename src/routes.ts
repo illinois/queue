@@ -1,4 +1,4 @@
-import * as Routes from 'next-routes'
+import Routes from 'next-routes'
 import { baseUrl, withBaseUrl } from './util'
 
 // @ts-ignore

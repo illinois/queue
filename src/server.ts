@@ -2,16 +2,16 @@
 import 'dotenv/config'
 
 import { Server } from 'http'
-import * as io from 'socket.io'
+import io from 'socket.io'
 import co from 'co'
 import next from 'next'
 
-import * as app from './app'
+import app from './app'
 import { logger } from './util/logger'
-import * as models from './models'
-import * as migrations from './migrations/util'
+import models from './models'
+import migrations from './migrations/util'
 import routes from './routes'
-import * as serverSocket from './socket/server'
+import serverSocket from './socket/server'
 import { baseUrl } from './util'
 
 const prodEnvironments = ['now', 'staging', 'production']
