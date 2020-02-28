@@ -3,8 +3,8 @@ import 'dotenv/config'
 
 import { Server } from 'http'
 import * as io from 'socket.io'
-import * as nextJs from 'next'
 import co from 'co'
+import next from 'next'
 
 import * as app from './app'
 import { logger } from './util/logger'
@@ -18,7 +18,8 @@ const prodEnvironments = ['now', 'staging', 'production']
 const DEV = prodEnvironments.indexOf(process.env.NODE_ENV as string) === -1
 const PORT = process.env.PORT || 3000
 
-const nextApp = nextJs({ dev: DEV, dir: DEV ? 'src' : 'build', quiet: true })
+const dev = process.env.NODE_ENV !== 'production'
+const nextApp = next({ dev })
 const handler = routes.getRequestHandler(nextApp)
 
 /* eslint-disable func-names */
