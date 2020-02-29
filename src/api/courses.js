@@ -113,17 +113,19 @@ router.get(
       includes.push({
         model: User,
         as: 'staff',
-        attributes: ['id', 'uid', 'name'],
+        attributes: ['id', 'uid', 'universityName'],
         through: {
           attributes: [],
         },
       })
     }
 
-    const course = (await Course.findOne({
-      where: { id: courseId },
-      include: includes,
-    })).toJSON()
+    const course = (
+      await Course.findOne({
+        where: { id: courseId },
+        include: includes,
+      })
+    ).toJSON()
 
     if (includeStaffList) {
       // This is a workaround to https://github.com/sequelize/sequelize/issues/10552

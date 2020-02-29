@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import { useInput } from 'react-hanger'
 import { useDebounce } from 'use-debounce'
-import { CancelToken } from 'axios'
 import { AsyncTypeahead, Highlighter } from 'react-bootstrap-typeahead'
 
 import 'react-bootstrap-typeahead/css/Typeahead.css'

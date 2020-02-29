@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
           {
             model: models.User,
             as: 'answeredBy',
-            attributes: ['name', 'uid'],
+            attributes: ['universityName', 'preferredName', 'uid'],
             required: false,
           },
           {
