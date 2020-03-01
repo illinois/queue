@@ -87,7 +87,9 @@ const Queue = props => {
   }, [props.queueId])
 
   useEffect(() => {
-    const NOOP = () => {}
+    const NOOP = () => {
+      /* do nothing */
+    }
     if (previousSocketStatus === props.socketStatus) return NOOP
     if (
       previousSocketStatus === SOCKET_CONNECTED &&
@@ -254,7 +256,4 @@ const mapDispatchToProps = dispatch => ({
   dispatch,
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PageWithUser(Queue))
+export default connect(mapStateToProps, mapDispatchToProps)(PageWithUser(Queue))

@@ -69,7 +69,9 @@ const AdminUsersPanel = (props: AdminUsersPanelProps) => {
 
   useEffect((): (() => void) => {
     if (!uidQuery) {
-      return () => {}
+      return () => {
+        /* do nothing */
+      }
     }
     const source = axiosBase.CancelToken.source()
     setUserSuggestionsLoading(true)

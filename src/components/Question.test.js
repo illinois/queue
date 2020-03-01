@@ -16,7 +16,9 @@ const ASKED_BY = {
 }
 
 const makeProps = (props = {}) => {
-  const noop = () => {}
+  const noop = () => {
+    /* do nothing */
+  }
 
   return {
     id: 1,

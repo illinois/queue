@@ -75,7 +75,9 @@ const addHooks = ({ sequelize, stream }) => {
 module.exports = sequelize => {
   const stream = new Readable({
     objectMode: true,
-    read() {},
+    read() {
+      /* do nothing */
+    },
   })
   addHooks({ sequelize, stream })
   return stream

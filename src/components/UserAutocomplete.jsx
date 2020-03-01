@@ -19,7 +19,9 @@ const UserAutocomplete = props => {
 
   useEffect(() => {
     if (!uidQuery) {
-      return () => {}
+      return () => {
+        /* do nothing */
+      }
     }
     const source = CancelToken.source()
     setUserSuggestionsLoading(true)

@@ -5,7 +5,9 @@ import { Collapse } from 'reactstrap'
 import QueueMessageViewer from './QueueMessageViewer'
 
 const makeProps = (props = {}) => {
-  const noop = () => {}
+  const noop = () => {
+    /* do nothing */
+  }
   return {
     collapsible: props.collapsible || false,
     onEdit: props.onEdit || noop,

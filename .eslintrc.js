@@ -51,6 +51,7 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off',
     // Reenable this once we have more complete and comprehensive types
     '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/ban-ts-ignore': 'off',
   },
   overrides: [
     {
