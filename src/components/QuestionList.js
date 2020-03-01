@@ -165,9 +165,9 @@ class QuestionList extends React.Component {
           const question = this.props.questions[questionId]
           if (
             !queue.isConfidential ||
-            (userId === question.askedById ||
+            userId === question.askedById ||
               this.props.isUserCourseStaff ||
-              this.props.isUserAdmin)
+              this.props.isUserAdmin
           ) {
             return (
               <Question
@@ -279,6 +279,8 @@ QuestionList.propTypes = {
     PropTypes.shape({
       name: PropTypes.string,
       location: PropTypes.string,
+      askedById: PropTypes.number,
+      answeredById: PropTypes.number,
       topic: PropTypes.string,
     })
   ),

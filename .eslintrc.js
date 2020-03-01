@@ -39,6 +39,11 @@ module.exports = {
     /**
      * TypeScript
      */
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      { js: 'never', jsx: 'never', ts: 'never', tsx: 'never' },
+    ],
     '@typescript-eslint/no-unused-vars': [
       'error',
       { args: 'after-used', argsIgnorePattern: '^_', ignoreRestSiblings: true },

@@ -218,6 +218,7 @@ NewQueue.propTypes = {
   ).isRequired,
   user: PropTypes.shape({
     staffAssignments: PropTypes.arrayOf(PropTypes.number).isRequired,
+    isAdmin: PropTypes.bool,
   }).isRequired,
 }
 
@@ -236,7 +237,4 @@ const mapStateToProps = state => ({
   }),
 })
 
-export default connect(
-  mapStateToProps,
-  null
-)(NewQueue)
+export default connect(mapStateToProps, null)(NewQueue)

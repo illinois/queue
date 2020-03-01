@@ -128,6 +128,8 @@ QueueCardList.propTypes = {
     PropTypes.shape({
       name: PropTypes.string,
       location: PropTypes.string,
+      courseId: PropTypes.number,
+      id: PropTypes.number,
     })
   ),
   showCourseName: PropTypes.bool,

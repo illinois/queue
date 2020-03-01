@@ -93,6 +93,11 @@ QueueCard.defaultProps = {
 QueueCard.propTypes = {
   queue: PropTypes.shape({
     courseId: PropTypes.number,
+    name: PropTypes.string,
+    location: PropTypes.string,
+    questionCount: PropTypes.number,
+    isConfidential: PropTypes.bool,
+    id: PropTypes.number,
   }).isRequired,
   courseName: PropTypes.string,
   open: PropTypes.bool,

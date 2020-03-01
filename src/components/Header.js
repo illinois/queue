@@ -165,6 +165,7 @@ Header.propTypes = {
   user: PropTypes.shape({
     uid: PropTypes.string,
     name: PropTypes.string,
+    isAdmin: PropTypes.bool,
   }),
 }
 
@@ -172,7 +173,4 @@ const mapStateToProps = ({ user }) => ({
   user: user.user,
 })
 
-export default connect(
-  mapStateToProps,
-  null
-)(Header)
+export default connect(mapStateToProps, null)(Header)

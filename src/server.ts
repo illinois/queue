@@ -14,8 +14,6 @@ import routes from './routes'
 import serverSocket from './socket/server'
 import { baseUrl } from './util'
 
-const prodEnvironments = ['now', 'staging', 'production']
-const DEV = prodEnvironments.indexOf(process.env.NODE_ENV as string) === -1
 const PORT = process.env.PORT || 3000
 
 const dev = process.env.NODE_ENV !== 'production'

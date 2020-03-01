@@ -150,6 +150,8 @@ StaffSidebar.propTypes = {
   }),
   queue: PropTypes.shape({
     activeStaff: PropTypes.arrayOf(PropTypes.number),
+    id: PropTypes.number,
+    open: PropTypes.bool,
   }),
   users: PropTypes.objectOf(
     PropTypes.shape({
@@ -194,7 +196,4 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     ),
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(StaffSidebar)
+export default connect(mapStateToProps, mapDispatchToProps)(StaffSidebar)
