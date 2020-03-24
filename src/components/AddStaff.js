@@ -28,13 +28,13 @@ const AddStaff = props => {
       'AddStaff:: handleAddStaff - uidInput ' + JSON.stringify(uidInput)
     )
     if (pendingUser[0]) {
-      props.onAddStaff(pendingUser[0].id, null)
+      return props.onAddStaff(pendingUser[0].id, null)
     }
     console.log(
       'pending user, which leads to onAddStaff attribute on AddStaff/ element',
       pendingUser[0]
     )
-    props.onAddStaff(null, uidInput)
+    return props.onAddStaff(null, uidInput)
   }
 
   // We want to exclude existing staff from the autocompletion list
