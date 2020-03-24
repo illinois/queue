@@ -24,6 +24,17 @@ const UserAutocomplete = props => {
   const [uidQuery] = useDebounce(uidInput.value, 300)
   const [userSuggestions, setUserSuggestions] = useState([])
   const [userSuggestionsLoading, setUserSuggestionsLoading] = useState(false)
+  const renderMenu = (results, menuProps, _props) => {
+    console.log('results', results)
+    console.log('menuProps', menuProps)
+    console.log('props', _props)
+    const menuItems = results.map((result, idx) => {
+      console.log('result', result)
+      console.log('idx', idx)
+      return null
+    })
+    return null
+  }
 
   useEffect(() => {
     if (!uidQuery) {
@@ -79,24 +90,26 @@ const UserAutocomplete = props => {
         autoComplete: 'new-user-uid',
         ...inputProps,
       }}
-      // renderMenu={(results, menuProps) => {
-      //   // Hide the menu when there are no results.
-      //   if (!results.length) {
-      //     return null
-      //   }
-      //   return (    <Menu {...menuProps}>
-
-      //   </Menu>)
-      // }}
-      renderMenuItemChildren={(option, typeaheadProps) => {
-        return (
-          <>
-            <Highlighter search={typeaheadProps.text}>{option.uid}</Highlighter>
-            {option.name && (
-              <span className="text-muted ml-2">({option.name})</span>
+      // renderMenu={renderMenu}
+      renderMenu={(results, menuProps, props) => {
+        // Hide the autocomplete when user is not admin
+        if (!user.isAdmin) {
+          return <></>
+        }
+        const items = results.map((result, idx) => (
+          <MenuItem
+            key={result.id}
+            option={result}
+            position={idx}
+            className="GlobalSearchTypeahead__option"
+          >
+            <Highlighter search={menuProps.text}>{result.uid}</Highlighter>
+            {result.name && (
+              <span className="text-muted ml-2">({result.name})</span>
             )}
-          </>
-        )
+          </MenuItem>
+        ))
+        return <Menu {...menuProps}>{items}</Menu>
       }}
       {...restProps}
     />
