@@ -111,8 +111,8 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchCourse: courseId => dispatch(fetchCourse(courseId)),
-  addCourseStaff: (courseId, uid, name) =>
-    dispatch(addCourseStaff(courseId, uid, name)),
+  addCourseStaff: (courseId, userId, uid) =>
+    dispatch(addCourseStaff(courseId, userId, uid)),
   removeCourseStaff: (courseId, userId) =>
     dispatch(removeCourseStaff(courseId, userId)),
   updateCourse: (courseId, attributes) =>
