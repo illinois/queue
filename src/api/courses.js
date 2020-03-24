@@ -7,7 +7,7 @@ const { matchedData } = require('express-validator/filter')
 const moment = require('moment')
 
 const { Course, Queue, Question, User, Sequelize } = require('../models')
-const { requireCourse, requireUser, failIfErrors } = require('./util')
+const { requireCourse, requireUser, failIfErrors, ApiError } = require('./util')
 const requireAdmin = require('../middleware/requireAdmin')
 const requireCourseStaff = require('../middleware/requireCourseStaff')
 const safeAsync = require('../middleware/safeAsync')
@@ -302,13 +302,31 @@ router.patch(
 )
 
 // Add someone to course staff
+// Need to add a user by :uid because staff have no access to get :userIds
 router.put(
-  '/:courseId/staff/:userId',
-  [requireCourseStaff, requireCourse, requireUser, failIfErrors],
+  '/:courseId/staff',
+  [requireCourseStaff, requireCourse, failIfErrors],
   safeAsync(async (req, res, _next) => {
-    const { user } = res.locals
+    console.log(req.params)
+    const id = req.body.id ? req.body.id : null
+    const uid = req.body.uid ? req.body.uid : null
+
+    let query = null
+
+    if (!id && !uid) {
+      return _next(new ApiError(400, 'User id or uid expected'))
+    }
+
+    if (!id) {
+      query = { where: { uid } }
+    } else {
+      query = { where: { id } }
+    }
+
+    const user = await User.findOne(query)
+    // const { user } = res.locals
     await user.addStaffAssignment(res.locals.course.id)
-    res.status(201).send(user)
+    return res.status(201).send(user)
   })
 )
 
