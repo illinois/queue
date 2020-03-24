@@ -7,9 +7,9 @@ import { useDebounce } from 'use-debounce'
 import { CancelToken } from 'axios'
 import {
   AsyncTypeahead,
+  Highlighter,
   Menu,
   MenuItem,
-  Highlighter,
 } from 'react-bootstrap-typeahead'
 
 import 'react-bootstrap-typeahead/css/Typeahead.css'
@@ -18,8 +18,7 @@ import 'react-bootstrap-typeahead/css/Typeahead-bs4.css'
 import axios from '../actions/axios'
 
 const UserAutocomplete = props => {
-  const { user } = props
-  const { setUidInput } = props
+  const { user, setUidInput } = props
   const uidInput = useInput('')
   const [uidQuery] = useDebounce(uidInput.value, 300)
   const [userSuggestions, setUserSuggestions] = useState([])
@@ -30,12 +29,7 @@ const UserAutocomplete = props => {
       return <></>
     }
     const items = results.map((result, idx) => (
-      <MenuItem
-        key={result.id}
-        option={result}
-        position={idx}
-        className="GlobalSearchTypeahead__option"
-      >
+      <MenuItem key={result.id} option={result} position={idx}>
         <Highlighter search={menuProps.text}>{result.uid}</Highlighter>
         {result.name && (
           <span className="text-muted ml-2">({result.name})</span>
@@ -96,7 +90,6 @@ const UserAutocomplete = props => {
         autoComplete: 'new-user-uid',
         ...inputProps,
       }}
-      // renderMenu={renderMenu}
       renderMenu={renderMenu}
       {...restProps}
     />
@@ -107,6 +100,7 @@ UserAutocomplete.propTypes = {
   user: PropTypes.shape({
     uid: PropTypes.string,
     userId: PropTypes.string,
+    isAdmin: PropTypes.bool,
   }).isRequired,
   selected: PropTypes.arrayOf(
     PropTypes.shape({
