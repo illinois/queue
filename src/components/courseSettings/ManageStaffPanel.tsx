@@ -27,7 +27,7 @@ interface ManageStaffPanelProps {
     name: string
   }[]
   removeCourseStaff: (courseId: number, userId: number) => void
-  addCourseStaff: (courseId: number, uid: string, name: string) => void
+  addCourseStaff: (courseId: number, userId: string, uid: string) => void
 }
 
 const ManageStaffPanel = ({
@@ -67,9 +67,10 @@ const ManageStaffPanel = ({
       </CardHeader>
       <CardBody>
         <AddStaff
-          onAddStaff={(staff: Record<string, string>) => {
-            const { id, name } = staff
-            addCourseStaff(course.id, id, name)
+          onAddStaff={(userId: string, uid: string) => {
+            console.log('ManageStaffPanel:: onAddStaff userId: ' + userId)
+            console.log('ManageStaffPanel:: onAddStaff uid: ' + uid)
+            addCourseStaff(course.id, userId, uid)
           }}
         />
         <ListGroup flush className="position-relative">
