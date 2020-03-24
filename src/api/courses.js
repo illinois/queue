@@ -307,24 +307,15 @@ router.put(
   '/:courseId/staff',
   [requireCourseStaff, requireCourse, failIfErrors],
   safeAsync(async (req, res, _next) => {
-    console.log(req.params)
     const id = req.body.id ? req.body.id : null
     const uid = req.body.uid ? req.body.uid : null
-
-    let query = null
+    const query = id ? { where: { id } } : { where: { uid } }
 
     if (!id && !uid) {
       return _next(new ApiError(400, 'User id or uid expected'))
     }
 
-    if (!id) {
-      query = { where: { uid } }
-    } else {
-      query = { where: { id } }
-    }
-
     const user = await User.findOne(query)
-    // const { user } = res.locals
     await user.addStaffAssignment(res.locals.course.id)
     return res.status(201).send(user)
   })

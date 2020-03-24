@@ -20,20 +20,9 @@ const AddStaff = props => {
 
   const handleAddStaff = e => {
     if (e) e.preventDefault()
-    console.log(
-      'AddStaff:: handleAddStaff - pendingUser[0] ' +
-        JSON.stringify(pendingUser[0])
-    )
-    console.log(
-      'AddStaff:: handleAddStaff - uidInput ' + JSON.stringify(uidInput)
-    )
     if (pendingUser[0]) {
       return props.onAddStaff(pendingUser[0].id, null)
     }
-    console.log(
-      'pending user, which leads to onAddStaff attribute on AddStaff/ element',
-      pendingUser[0]
-    )
     return props.onAddStaff(null, uidInput)
   }
 

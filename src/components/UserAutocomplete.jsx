@@ -24,16 +24,25 @@ const UserAutocomplete = props => {
   const [uidQuery] = useDebounce(uidInput.value, 300)
   const [userSuggestions, setUserSuggestions] = useState([])
   const [userSuggestionsLoading, setUserSuggestionsLoading] = useState(false)
-  const renderMenu = (results, menuProps, _props) => {
-    console.log('results', results)
-    console.log('menuProps', menuProps)
-    console.log('props', _props)
-    const menuItems = results.map((result, idx) => {
-      console.log('result', result)
-      console.log('idx', idx)
-      return null
-    })
-    return null
+  const renderMenu = (results, menuProps) => {
+    // Hide the autocomplete when user is staff
+    if (!user.isAdmin) {
+      return <></>
+    }
+    const items = results.map((result, idx) => (
+      <MenuItem
+        key={result.id}
+        option={result}
+        position={idx}
+        className="GlobalSearchTypeahead__option"
+      >
+        <Highlighter search={menuProps.text}>{result.uid}</Highlighter>
+        {result.name && (
+          <span className="text-muted ml-2">({result.name})</span>
+        )}
+      </MenuItem>
+    ))
+    return <Menu {...menuProps}>{items}</Menu>
   }
 
   useEffect(() => {
@@ -41,7 +50,6 @@ const UserAutocomplete = props => {
       return () => {}
     }
     const source = CancelToken.source()
-    console.log('user', user)
     if (user.isAdmin) {
       setUserSuggestionsLoading(true)
       axios
@@ -79,9 +87,7 @@ const UserAutocomplete = props => {
       labelKey="uid"
       onInputChange={value => {
         uidInput.setValue(value)
-        // setPendingUser([{ uid: value }])
         setUidInput(value)
-        console.log('uidInput and setPendingUser u.uid', uidInput)
       }}
       minLength={1}
       useCache={false}
@@ -91,26 +97,7 @@ const UserAutocomplete = props => {
         ...inputProps,
       }}
       // renderMenu={renderMenu}
-      renderMenu={(results, menuProps, props) => {
-        // Hide the autocomplete when user is not admin
-        if (!user.isAdmin) {
-          return <></>
-        }
-        const items = results.map((result, idx) => (
-          <MenuItem
-            key={result.id}
-            option={result}
-            position={idx}
-            className="GlobalSearchTypeahead__option"
-          >
-            <Highlighter search={menuProps.text}>{result.uid}</Highlighter>
-            {result.name && (
-              <span className="text-muted ml-2">({result.name})</span>
-            )}
-          </MenuItem>
-        ))
-        return <Menu {...menuProps}>{items}</Menu>
-      }}
+      renderMenu={renderMenu}
       {...restProps}
     />
   )
@@ -118,8 +105,8 @@ const UserAutocomplete = props => {
 
 UserAutocomplete.propTypes = {
   user: PropTypes.shape({
-    universityName: PropTypes.string,
-    preferredName: PropTypes.string,
+    uid: PropTypes.string,
+    userId: PropTypes.string,
   }).isRequired,
   selected: PropTypes.arrayOf(
     PropTypes.shape({

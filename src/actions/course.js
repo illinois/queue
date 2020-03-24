@@ -142,7 +142,6 @@ const addCourseStaffFailure = makeActionCreator(
 export function addCourseStaff(courseId, userId, uid) {
   return dispatch => {
     dispatch(addCourseStaffRequest(courseId, userId, uid))
-    console.log('DISPATCHED: ' + JSON.stringify({ courseId, userId, uid }))
     return axios
       .put(`/api/courses/${courseId}/staff`, { id: userId, uid })
       .then(

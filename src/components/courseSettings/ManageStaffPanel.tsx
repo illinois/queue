@@ -68,8 +68,6 @@ const ManageStaffPanel = ({
       <CardBody>
         <AddStaff
           onAddStaff={(userId: string, uid: string) => {
-            console.log('ManageStaffPanel:: onAddStaff userId: ' + userId)
-            console.log('ManageStaffPanel:: onAddStaff uid: ' + uid)
             addCourseStaff(course.id, userId, uid)
           }}
         />
