@@ -106,12 +106,7 @@ class Index extends React.Component {
     }
 
     const openQueueIds = this.props.queues
-      .filter(
-        queue =>
-          queue.open &&
-          this.props.starredQueues.find(starred => starred.id === queue.id) ===
-            undefined
-      )
+      .filter(queue => queue.open)
       .map(queue => queue.id)
     const closedQueueIds = this.props.queues
       .filter(queue => !queue.open)

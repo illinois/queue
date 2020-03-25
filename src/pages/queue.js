@@ -30,10 +30,18 @@ import QuestionNotificationsToggle from '../components/QuestionNotificationsTogg
 import QueueStatusToggleContainer from '../containers/QueueStatusToggleContainer'
 import DeleteAllQuestionsButtonContainer from '../containers/DeleteAllQuestionsButtonContainer'
 import QueueMessageEnabledToggleContainer from '../containers/QueueMessageEnabledToggleContainer'
-import { isUserCourseStaffForQueue, isUserAdmin } from '../selectors'
+import {
+  isUserCourseStaffForQueue,
+  isUserAdmin,
+  isQueueStarred,
+} from '../selectors'
 import ConfidentialQueuePanelContainer from '../containers/ConfidentialQueuePanelContainer'
 import SocketErrorModal from '../components/SocketErrorModal'
 import { resetSocketState } from '../actions/socket'
+import {
+  addStarredByUser as addStarredByUserAction,
+  removeStarredByUser as removeStarredByUserAction,
+} from '../actions/user'
 import { FETCH_QUEUE } from '../constants/ActionTypes'
 import {
   SOCKET_CONNECTING,
@@ -64,6 +72,15 @@ const Queue = props => {
   const [queueLoading, setQueueLoading] = useState(true)
   const [showSocketStatus, setShowSocketStatus] = useState(false)
   const previousSocketStatus = usePrevious(props.socketStatus)
+
+  const handleStar = e => {
+    e.stopPropagation()
+    if (props.isQueueStarred) {
+      props.removeStarredByUser(queue)
+    } else {
+      props.addStarredByUser(queue)
+    }
+  }
 
   useEffect(() => {
     setQueueLoading(true)
@@ -146,6 +163,17 @@ const Queue = props => {
           </span>
         )}
         {queueName}
+        <Button
+          className="pb-2 pl-2 pr-0 pt-0"
+          color="link"
+          size="lg"
+          onClick={e => handleStar(e)}
+        >
+          <FontAwesomeIcon
+            icon={props.isQueueStarred ? fasStar : farStar}
+            fixedWidth
+          />
+        </Button>
       </h3>
       <h5 className="mb-3 text-muted">
         <FontAwesomeIcon icon={faMapMarker} fixedWidth className="mr-2" />
@@ -211,6 +239,7 @@ Queue.propTypes = {
   dispatch: PropTypes.func.isRequired,
   isUserCourseStaff: PropTypes.bool.isRequired,
   isUserAdmin: PropTypes.bool.isRequired,
+  isQueueStarred: PropTypes.bool.isRequired,
   queue: PropTypes.shape({
     id: PropTypes.number,
     name: PropTypes.string,
@@ -243,11 +272,14 @@ const mapStateToProps = (state, ownProps) => {
     course,
     isUserCourseStaff: isUserCourseStaffForQueue(state, ownProps),
     isUserAdmin: isUserAdmin(state, ownProps),
+    isQueueStarred: isQueueStarred(state, ownProps),
     socketStatus: state.socket.status,
   }
 }
 
 const mapDispatchToProps = dispatch => ({
+  addStarredByUser: queue => dispatch(addStarredByUserAction(queue)),
+  removeStarredByUser: queue => dispatch(removeStarredByUserAction(queue)),
   fetchQueue: queueId => dispatch(fetchQueue(queueId)),
   fetchCourse: courseId => dispatch(fetchCourse(courseId)),
   resetSocketState: () => dispatch(resetSocketState()),

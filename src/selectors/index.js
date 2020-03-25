@@ -101,3 +101,10 @@ export const isUserStudent = createSelector(
   (isAdmin, isCourseStaff, isCourseStaffForQueue) =>
     !(isAdmin || isCourseStaff || isCourseStaffForQueue)
 )
+
+export const isQueueStarred = createSelector(
+  [userSelector, queueSelector],
+  (user, queue) => {
+    return user.starredQueues.find(sQueue => sQueue.id === queue.id) != null
+  }
+)
