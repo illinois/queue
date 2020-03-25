@@ -75,7 +75,7 @@ export function addStarredByUser(queue) {
     const { id } = queue
     dispatch(addStarredByUserRequest(id))
 
-    return axios.post(`/api/me/star/${id}`).then(
+    return axios.post(`/api/users/me/star/${id}`).then(
       () => dispatch(addStarredByUserSuccess(queue)),
       err => {
         console.error(err)
@@ -106,7 +106,7 @@ export function removeStarredByUser(queue) {
     const { id } = queue
     dispatch(removeStarredByUserRequest(id))
 
-    return axios.delete(`/api/me/star/${id}`).then(
+    return axios.delete(`/api/users/me/star/${id}`).then(
       () => dispatch(removeStarredByUserSuccess(queue)),
       err => {
         console.error(err)

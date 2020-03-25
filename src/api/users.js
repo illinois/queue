@@ -143,12 +143,12 @@ router.post(
         },
       ],
     })
-    await user.removeStarredQueue(res.locals.queue.id)
+    await user.addStarredQueue(req.params.queueId)
     res.status(201).send(user)
   })
 )
 
-router.post(
+router.delete(
   '/me/star/:queueId',
   safeAsync(async (req, res, _next) => {
     const { id } = res.locals.userAuthn
@@ -164,7 +164,7 @@ router.post(
         },
       ],
     })
-    await user.removeStarredQueue(res.locals.queue.id)
+    await user.removeStarredQueue(req.params.queueId)
     res.status(200).send(user)
   })
 )
