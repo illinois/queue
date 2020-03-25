@@ -44,8 +44,8 @@ module.exports.createVerificationDatabases = async () => {
   // Create test databases to create our test tables in
   await testConnection.query('DROP DATABASE IF EXISTS `queue_sequelize`;')
   await testConnection.query('DROP DATABASE IF EXISTS `queue_migrations`;')
-  await testConnection.query('CREATE DATABASE `queue_sequelize`')
-  await testConnection.query('CREATE DATABASE `queue_migrations`')
+  await testConnection.query('CREATE DATABASE `queue_sequelize`;')
+  await testConnection.query('CREATE DATABASE `queue_migrations`;')
 
   const sequelizeUri = 'mysql://queue@localhost/queue_sequelize'
   const migrationUri = 'mysql://queue@localhost/queue_migrations'
