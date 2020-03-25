@@ -53,3 +53,65 @@ export function updateUserPreferredName(preferredName) {
     )
   }
 }
+
+/**
+ * Add a queue to a user's starred queues
+ */
+const addStarredByUserRequest = makeActionCreator(
+  types.ADD_STARRED_BY_USER.REQUEST,
+  'queueId'
+)
+const addStarredByUserSuccess = makeActionCreator(
+  types.ADD_STARRED_BY_USER.SUCCESS,
+  'queue'
+)
+const addStarredByUserFailure = makeActionCreator(
+  types.ADD_STARRED_BY_USER.FAILURE,
+  'data'
+)
+
+export function addStarredByUser(queue) {
+  return dispatch => {
+    const { id } = queue
+    dispatch(addStarredByUserRequest(id))
+
+    return axios.post(`/api/me/star/${id}`).then(
+      () => dispatch(addStarredByUserSuccess(queue)),
+      err => {
+        console.error(err)
+        dispatch(addStarredByUserFailure(err))
+      }
+    )
+  }
+}
+
+/**
+ * Remove a queue from a user's starred queues
+ */
+const removeStarredByUserRequest = makeActionCreator(
+  types.REMOVE_STARRED_BY_USER.REQUEST,
+  'queueId'
+)
+const removeStarredByUserSuccess = makeActionCreator(
+  types.REMOVE_STARRED_BY_USER.SUCCESS,
+  'queue'
+)
+const removeStarredByUserFailure = makeActionCreator(
+  types.REMOVE_STARRED_BY_USER.FAILURE,
+  'data'
+)
+
+export function removeStarredByUser(queue) {
+  return dispatch => {
+    const { id } = queue
+    dispatch(removeStarredByUserRequest(id))
+
+    return axios.delete(`/api/me/star/${id}`).then(
+      () => dispatch(removeStarredByUserSuccess(queue)),
+      err => {
+        console.error(err)
+        dispatch(removeStarredByUserFailure(err))
+      }
+    )
+  }
+}

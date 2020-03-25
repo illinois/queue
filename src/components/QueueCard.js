@@ -15,7 +15,7 @@ import { faStar as farStar } from '@fortawesome/free-regular-svg-icons'
 import {
   addStarredByUser as addStarredByUserAction,
   removeStarredByUser as removeStarredByUserAction,
-} from '../actions/queue'
+} from '../actions/user'
 import { Link } from '../routes'
 import ShowForCourseStaff from './ShowForCourseStaff'
 
@@ -42,9 +42,9 @@ const QueueCard = ({
   const handleStar = e => {
     e.stopPropagation()
     if (isStarred) {
-      removeStarredByUser(queue, userId)
+      removeStarredByUser(queue)
     } else {
-      addStarredByUser(queue, userId)
+      addStarredByUser(queue)
     }
   }
 
@@ -136,18 +136,11 @@ QueueCard.propTypes = {
   addStarredByUser: PropTypes.func.isRequired,
   removeStarredByUser: PropTypes.func.isRequired,
   isStarred: PropTypes.bool,
-  userId: PropTypes.number.isRequired,
 }
 
-const mapStateToProps = state => ({
-  userId: state.user.user.id,
-})
-
 const mapDispatchToProps = dispatch => ({
-  addStarredByUser: (queue, userId) =>
-    dispatch(addStarredByUserAction(queue, userId)),
-  removeStarredByUser: (queue, userId) =>
-    dispatch(removeStarredByUserAction(queue, userId)),
+  addStarredByUser: queue => dispatch(addStarredByUserAction(queue)),
+  removeStarredByUser: queue => dispatch(removeStarredByUserAction(queue)),
 })
 
 export default connect(

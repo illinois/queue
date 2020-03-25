@@ -126,4 +126,71 @@ router.get(
   }
 )
 
+// Add a starred queue to the currently authenticated user
+router.post(
+  '/me/star/:queueId',
+  safeAsync(async (req, res, _next) => {
+    const { id } = res.locals.userAuthn
+    const user = await User.findOne({
+      where: { id },
+      include: [
+        {
+          model: Course,
+          as: 'staffAssignments',
+          through: {
+            attributes: [],
+          },
+        },
+      ],
+    })
+    await user.removeStarredQueue(res.locals.queue.id)
+    res.status(201).send(user)
+  })
+)
+
+router.post(
+  '/me/star/:queueId',
+  safeAsync(async (req, res, _next) => {
+    const { id } = res.locals.userAuthn
+    const user = await User.findOne({
+      where: { id },
+      include: [
+        {
+          model: Course,
+          as: 'staffAssignments',
+          through: {
+            attributes: [],
+          },
+        },
+      ],
+    })
+    await user.removeStarredQueue(res.locals.queue.id)
+    res.status(200).send(user)
+  })
+)
+
+// // Add a starred queue
+// router.post(
+//   '/:queueId/star/:userId',
+//   [requireQueue, requireUser, failIfErrors],
+//   safeAsync(async (req, res, _next) => {
+//     const { id } = res.locals.user
+//     const [user] = await User.findOrCreate({ where: { id } })
+//     await user.addStarredQueue(res.locals.queue.id)
+//     res.status(201).send(user)
+//   })
+// )
+
+// // Remove a starred queue
+// router.delete(
+//   '/:queueId/star/:userId',
+//   [requireQueue, requireUser, failIfErrors],
+//   safeAsync(async (req, res, _next) => {
+//     const { id } = res.locals.user
+//     const [user] = await User.findOrCreate({ where: { id } })
+//     await user.removeStarredQueue(res.locals.queue.id)
+//     res.status(200).send(user)
+//   })
+// )
+
 module.exports = router

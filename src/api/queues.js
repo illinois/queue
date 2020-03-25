@@ -230,30 +230,6 @@ router.patch(
   })
 )
 
-// Add a starred queue
-router.post(
-  '/:queueId/star/:userId',
-  [requireQueue, requireUser, failIfErrors],
-  safeAsync(async (req, res, _next) => {
-    const { id } = res.locals.user
-    const [user] = await User.findOrCreate({ where: { id } })
-    await user.addStarredQueue(res.locals.queue.id)
-    res.status(201).send(user)
-  })
-)
-
-// Remove a starred queue
-router.delete(
-  '/:queueId/star/:userId',
-  [requireQueue, requireUser, failIfErrors],
-  safeAsync(async (req, res, _next) => {
-    const { id } = res.locals.user
-    const [user] = await User.findOrCreate({ where: { id } })
-    await user.removeStarredQueue(res.locals.queue.id)
-    res.status(200).send(user)
-  })
-)
-
 // Gets the on-duty staff list for a specific queue
 router.get(
   '/:queueId/staff',
