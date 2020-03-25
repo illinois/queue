@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { usePrevious } from 'react-hanger'
 import {
+  Button,
   Container,
   Row,
   Col,
@@ -12,7 +13,12 @@ import {
   UncontrolledTooltip,
 } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMapMarker, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import {
+  faMapMarker,
+  faEyeSlash,
+  faStar as fasStar,
+} from '@fortawesome/free-solid-svg-icons'
+import { faStar as farStar } from '@fortawesome/free-regular-svg-icons'
 
 import { Link } from '../routes'
 import { fetchQueue } from '../actions/queue'
@@ -75,10 +81,16 @@ const Queue = props => {
 
   const handleStar = e => {
     e.stopPropagation()
+    const {
+      isQueueStarred,
+      removeStarredByUser,
+      addStarredByUser,
+      queue,
+    } = props
     if (props.isQueueStarred) {
-      props.removeStarredByUser(queue)
+      removeStarredByUser(queue)
     } else {
-      props.addStarredByUser(queue)
+      addStarredByUser(queue)
     }
   }
 
