@@ -13,7 +13,4 @@ const mapStateToProps = (state, ownProps) => ({
   isUserCourseStaff: isUserCourseStaffForQueue(state, ownProps),
 })
 
-export default connect(
-  mapStateToProps,
-  null
-)(QuestionPanel)
+export default connect(mapStateToProps, null)(QuestionPanel)

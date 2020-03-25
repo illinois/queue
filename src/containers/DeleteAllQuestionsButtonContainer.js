@@ -7,7 +7,4 @@ const mapDispatchToProps = dispatch => ({
   deleteAllQuestions: queueId => dispatch(deleteAllQuestions(queueId)),
 })
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(DeleteAllQuestionsButton)
+export default connect(null, mapDispatchToProps)(DeleteAllQuestionsButton)

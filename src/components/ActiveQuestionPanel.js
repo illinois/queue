@@ -68,7 +68,4 @@ const mapDispatchToProps = (dispatch, { queueId, questionId }) => ({
   deleteQuestion: () => dispatch(deleteQuestion(queueId, questionId)),
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ActiveQuestionPanel)
+export default connect(mapStateToProps, mapDispatchToProps)(ActiveQuestionPanel)

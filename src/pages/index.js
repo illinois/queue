@@ -267,7 +267,4 @@ const mapDispatchToProps = dispatch => ({
   createQueue: (courseId, queue) => dispatch(createQueue(courseId, queue)),
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PageWithUser(Index))
+export default connect(mapStateToProps, mapDispatchToProps)(PageWithUser(Index))

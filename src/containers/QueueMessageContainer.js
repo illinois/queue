@@ -20,7 +20,4 @@ const mapDispatchToProps = dispatch => ({
     dispatch(updateQueue(queueId, attributes)),
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(QueueMessage)
+export default connect(mapStateToProps, mapDispatchToProps)(QueueMessage)

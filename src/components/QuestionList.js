@@ -166,8 +166,8 @@ class QuestionList extends React.Component {
           if (
             !queue.isConfidential ||
             userId === question.askedById ||
-              this.props.isUserCourseStaff ||
-              this.props.isUserAdmin
+            this.props.isUserCourseStaff ||
+            this.props.isUserAdmin
           ) {
             return (
               <Question
