@@ -316,6 +316,22 @@ describe('Courses API', () => {
       expect(res1.statusCode).toBe(403)
       expect(res2.statusCode).toBe(403)
     })
+
+    test('fails when adding non-existent user', async () => {
+      const request = await requestAsUser(app, 'admin@illinois.edu')
+      const res1 = await request.put('/api/courses/1/staff').send({ id: 99999 })
+      const res2 = await request
+        .put('/api/courses/1/staff')
+        .send({ uid: 'fakeuser@fake.com' })
+      expect(res1.statusCode).toBe(404)
+      expect(res2.statusCode).toBe(404)
+      expect(JSON.parse(res1.error.text).message).toBe(
+        'User does not exist. Has user logged in?'
+      )
+      expect(JSON.parse(res2.error.text).message).toBe(
+        'User does not exist. Has user logged in?'
+      )
+    })
   })
 
   describe('DELETE /api/courses/:courseId/staff/:userId', () => {
