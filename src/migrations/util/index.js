@@ -96,3 +96,5 @@ module.exports.destroyVerificationDatabases = async () => {
 
   testConnection.close()
 }
+
+export {}
