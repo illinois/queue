@@ -139,17 +139,18 @@ const addCourseStaffFailure = makeActionCreator(
   'data'
 )
 
-export function addCourseStaff(courseId, userId) {
+export function addCourseStaff(courseId, userId, uid) {
   return dispatch => {
-    dispatch(addCourseStaffRequest(courseId, userId))
-
-    return axios.put(`/api/courses/${courseId}/staff/${userId}`).then(
-      res => dispatch(addCourseStaffSuccess(courseId, res.data)),
-      err => {
-        console.error(err)
-        dispatch(addCourseStaffFailure(err))
-      }
-    )
+    dispatch(addCourseStaffRequest(courseId, userId, uid))
+    return axios
+      .put(`/api/courses/${courseId}/staff`, { id: userId, uid })
+      .then(
+        res => dispatch(addCourseStaffSuccess(courseId, res.data)),
+        err => {
+          console.error(err)
+          dispatch(addCourseStaffFailure(err))
+        }
+      )
   }
 }
 

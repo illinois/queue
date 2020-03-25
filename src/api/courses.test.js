@@ -272,31 +272,65 @@ describe('Courses API', () => {
     test('succeeds for admin', async () => {
       const request = await requestAsUser(app, 'admin@illinois.edu')
       // This is the "241staff" user
-      const res = await request.put('/api/courses/1/staff/4').send()
-      expect(res.statusCode).toBe(201)
-      expect(res.body.uid).toBe('241staff@illinois.edu')
+      const res1 = await request.put('/api/courses/1/staff').send({ id: 4 })
+      const res2 = await request
+        .put('/api/courses/1/staff')
+        .send({ uid: '241staff@illinois.edu' })
+      expect(res1.statusCode).toBe(201)
+      expect(res1.body.uid).toBe('241staff@illinois.edu')
+      expect(res2.statusCode).toBe(201)
+      expect(res2.body.uid).toBe('241staff@illinois.edu')
     })
 
     test('succeeds for course staff', async () => {
       const request = await requestAsUser(app, '225staff@illinois.edu')
       // This is the "241staff" user
-      const res = await request.put('/api/courses/1/staff/4').send()
-      expect(res.statusCode).toBe(201)
-      expect(res.body.uid).toBe('241staff@illinois.edu')
+      const res1 = await request.put('/api/courses/1/staff').send({ id: 4 })
+      const res2 = await request
+        .put('/api/courses/1/staff')
+        .send({ uid: '241staff@illinois.edu' })
+      expect(res1.statusCode).toBe(201)
+      expect(res2.statusCode).toBe(201)
+      expect(res1.body.uid).toBe('241staff@illinois.edu')
+      expect(res2.body.uid).toBe('241staff@illinois.edu')
     })
 
     test('fails for course staff of different course', async () => {
       const request = await requestAsUser(app, '241staff@illinois.edu')
       // This is the "241staff" user
-      const res = await request.put('/api/courses/1/staff/4').send()
-      expect(res.statusCode).toBe(403)
+      const res1 = await request.put('/api/courses/1/staff').send({ id: 4 })
+      const res2 = await request
+        .put('/api/courses/1/staff')
+        .send({ uid: '241staff@illinois.edu' })
+      expect(res1.statusCode).toBe(403)
+      expect(res2.statusCode).toBe(403)
     })
 
     test('fails for student', async () => {
       const request = await requestAsUser(app, '241staff@illinois.edu')
       // This is the "241staff" user
-      const res = await request.put('/api/courses/1/staff/4').send()
-      expect(res.statusCode).toBe(403)
+      const res1 = await request.put('/api/courses/1/staff').send({ id: 4 })
+      const res2 = await request
+        .put('/api/courses/1/staff')
+        .send({ uid: '241staff@illinois.edu' })
+      expect(res1.statusCode).toBe(403)
+      expect(res2.statusCode).toBe(403)
+    })
+
+    test('fails when adding non-existent user', async () => {
+      const request = await requestAsUser(app, 'admin@illinois.edu')
+      const res1 = await request.put('/api/courses/1/staff').send({ id: 99999 })
+      const res2 = await request
+        .put('/api/courses/1/staff')
+        .send({ uid: 'fakeuser@fake.com' })
+      expect(res1.statusCode).toBe(404)
+      expect(res2.statusCode).toBe(404)
+      expect(JSON.parse(res1.error.text).message).toBe(
+        'User does not exist. Has user logged in?'
+      )
+      expect(JSON.parse(res2.error.text).message).toBe(
+        'User does not exist. Has user logged in?'
+      )
     })
   })
 
