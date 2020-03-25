@@ -154,7 +154,7 @@ StaffSidebar.propTypes = {
   users: PropTypes.objectOf(
     PropTypes.shape({
       id: PropTypes.number,
-      netid: PropTypes.string,
+      uid: PropTypes.string,
       name: PropTypes.string,
     })
   ),

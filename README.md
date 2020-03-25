@@ -40,7 +40,7 @@ If you wish to report a bug, feature request, etc., please open a new issue (fir
 
 Run `npm run build` to build assets for production; read more about the build process [in the docs](docs/Build.md). Run `npm run start` to start the application.
 
-Several configuration options are exposed via environment variables:
+Several configuration options are exposed via environment variables and `.env`:
 
 - `PORT`: controls which port the app will be served from.
 - `BASE_URL`: allows the app to be served from somewhere other than the server
@@ -51,3 +51,29 @@ Several configuration options are exposed via environment variables:
   `/my/path/`, then you should run with `BASE_URL=/my/path` (note the lack of
   trailing slash), and a request for queue 1 should be received as `/my/path/queue/1`.
 - `JWT_SECRET`: a secret key used to sign JSON Web Tokens for our users.
+- `UID_NAME`: official name for user ids (default: `email`)
+- `UID_ARTICLE`: article used in reference to `UID_NAME` (default: `an`)
+- `EPPN_SUFFIX`: the expected suffix for all valid Shibboleth eppn attributes. If this variable is not present, then all Shibboleth responses will be accepted.
+- `INSTITUTION_NAME`: to set branding other than 'Illinois'.
+
+Database information is also stored through environment variables, and can be configured for multiple environments depending on the value of `NODE_ENV`.
+```
+DB_USERNAME_<ENV>="username"
+DB_PASSWORD_<ENV>="password"
+DB_DATABASE_<ENV>="database_name"
+DB_HOST_<ENV>="localhost"
+DB_DIALECT_<ENV>="sqlite"
+DB_LOGGING_<ENV>="false"
+DB_STORAGE_<ENV>="./dev.sqlite"  # Sqlite only
+
+# Example for development:
+DB_USERNAME_DEVELOPMENT="username"
+DB_PASSWORD_DEVELOPMENT="password"
+DB_DATABASE_DEVELOPMENT="queue"
+DB_HOST_DEVELOPMENT="localhost"
+DB_DIALECT_DEVELOPMENT="sqlite"
+DB_LOGGING_DEVELOPMENT="false"
+DB_STORAGE_DEVELOPMENT="./dev.sqlite"  # Sqlite only
+```
+
+Note that for SQLite databases, only `DB_STORAGE_<ENV>` is required.

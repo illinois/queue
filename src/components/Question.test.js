@@ -9,10 +9,10 @@ const TOPIC = 'Canadian Bacon'
 const ENQUEUE_TIME = '2018-04-01T05:17:00.000Z'
 const ANSWERED_BY = {
   name: 'Wade',
-  netid: 'waf',
+  uid: 'waf@illinois.edu',
 }
 const ASKED_BY = {
-  netid: 'cheeren',
+  uid: 'cheeren@illinois.edu',
 }
 
 const makeProps = (props = {}) => {
@@ -66,16 +66,16 @@ describe('<Question />', () => {
     expect(locationNode.text()).toBe(LOCATION)
   })
 
-  test('hides NetID for standard user', () => {
+  test('hides UID for standard user', () => {
     const wrapper = makeWrapper()
-    expect(wrapper.find('[title="NetID"]')).toHaveLength(0)
+    expect(wrapper.find('[title="UID"]')).toHaveLength(0)
   })
 
-  test('shows NetID for course staff', () => {
+  test('shows UID for course staff', () => {
     const wrapper = makeWrapper({ isUserCourseStaff: true })
-    const netIdNode = wrapper.find('[title="NetID"]')
-    expect(netIdNode).toHaveLength(1)
-    expect(netIdNode.text()).toEqual(expect.stringContaining(ASKED_BY.netid))
+    const uidNode = wrapper.find('[title="UID"]')
+    expect(uidNode).toHaveLength(1)
+    expect(uidNode.text()).toEqual(expect.stringContaining(ASKED_BY.uid))
   })
 
   test('hides "Start answering" button for standard user', () => {

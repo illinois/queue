@@ -2,10 +2,10 @@ module.exports = (sequelize, DataTypes) => {
   const obj = sequelize.define(
     'user',
     {
-      netid: {
+      uid: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: 'netid',
+        unique: true,
       },
       universityName: DataTypes.STRING,
       preferredName: DataTypes.STRING,

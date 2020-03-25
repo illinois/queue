@@ -93,7 +93,7 @@ export default store => next => action => {
 
       // If question is marked as being answered and it is the user who asked this question
       if (markedBeingAnswered) {
-        const name = question.answeredBy.name || question.answeredBy.netid
+        const name = question.answeredBy.name || question.answeredBy.uid
         const title = `${name} is answering your question`
 
         const options = {

@@ -38,6 +38,7 @@ module.exports.createVerificationDatabases = async () => {
   const testConnection = await mysql.createConnection({
     host: 'localhost',
     user: 'queue',
+    charset: 'UTF8MB4_GENERAL_CI',
   })
 
   // Create test databases to create our test tables in
@@ -50,6 +51,7 @@ module.exports.createVerificationDatabases = async () => {
   const migrationUri = 'mysql://queue@localhost/queue_migrations'
 
   const syncedSequelize = new Sequelize(sequelizeUri, {
+    dialect: 'mysql',
     operatorsAliases: false,
     dialectOptions: {
       multipleStatements: true,
@@ -57,6 +59,7 @@ module.exports.createVerificationDatabases = async () => {
     logging: false,
   })
   const migrationSequelize = new Sequelize(migrationUri, {
+    dialect: 'mysql',
     operatorsAliases: false,
     dialectOptions: {
       multipleStatements: true,
@@ -84,6 +87,7 @@ module.exports.destroyVerificationDatabases = async () => {
   const testConnection = await mysql.createConnection({
     host: 'localhost',
     user: 'queue',
+    charset: 'UTF8MB4_GENERAL_CI',
   })
 
   // Cleanup time!

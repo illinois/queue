@@ -11,6 +11,7 @@ import {
   NavItem,
   Button,
 } from 'reactstrap'
+import getConfig from 'next/config'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { useBoolean } from 'react-hanger'
@@ -29,6 +30,8 @@ const styles = {
   },
 }
 
+const { institutionName } = getConfig().publicRuntimeConfig
+
 const logoutRoute = withBaseUrl('/logout')
 
 const Header = props => {
@@ -38,8 +41,8 @@ const Header = props => {
   const { user } = props
   let userName
   if (user) {
-    const { name, netid } = user
-    userName = name ? `${name} (${netid})` : `${netid}`
+    const { name, uid } = user
+    userName = name ? `${name} (${uid})` : `${uid}`
   }
 
   // If there isn't a user in the store, that means the user is necessarily
@@ -48,12 +51,12 @@ const Header = props => {
   // login page
   let brandText
   if (moment().isAfter('2019-04-02T00:00:00-0500')) {
-    brandText = 'Queue@Illinois'
+    brandText = `Queue@${institutionName}`
   } else {
     brandText = (
       <>
         <span style={{ textDecoration: 'line-through' }}>Queue</span>
-        Stack@Illinois
+        Stack@{institutionName}
       </>
     )
   }
@@ -160,7 +163,7 @@ Header.defaultProps = {
 
 Header.propTypes = {
   user: PropTypes.shape({
-    netid: PropTypes.string,
+    uid: PropTypes.string,
     name: PropTypes.string,
   }),
 }

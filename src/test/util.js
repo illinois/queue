@@ -15,13 +15,25 @@ module.exports.destroyTestDb = async () => {
 
 module.exports.createTestUsers = async () => {
   await models.User.bulkCreate([
-    { netid: 'dev', isAdmin: true },
-    { netid: 'admin', universityName: 'Admin', isAdmin: true },
-    { netid: '225staff', universityName: '225 Staff', isAdmin: false },
-    { netid: '241staff', universityName: '241 Staff', isAdmin: false },
-    { netid: '446staff', universityName: '446 Staff', isAdmin: false },
-    { netid: 'student', isAdmin: false },
-    { netid: 'otherstudent', isAdmin: false },
+    { uid: 'dev@illinois.edu', isAdmin: true },
+    { uid: 'admin@illinois.edu', universityName: 'Admin', isAdmin: true },
+    {
+      uid: '225staff@illinois.edu',
+      universityName: '225 Staff',
+      isAdmin: false,
+    },
+    {
+      uid: '241staff@illinois.edu',
+      universityName: '241 Staff',
+      isAdmin: false,
+    },
+    {
+      uid: '446staff@illinois.edu',
+      universityName: '446 Staff',
+      isAdmin: false,
+    },
+    { uid: 'student@illinois.edu', isAdmin: false },
+    { uid: 'otherstudent@illinois.edu', isAdmin: false },
   ])
 }
 
@@ -131,13 +143,19 @@ module.exports.populateTestDb = async () => {
   await module.exports.createTestTokens()
   await module.exports.createTestCourses()
 
-  const staff225 = await models.User.findOne({ where: { netid: '225staff' } })
+  const staff225 = await models.User.findOne({
+    where: { uid: '225staff@illinois.edu' },
+  })
   await staff225.addStaffAssignment(1)
 
-  const staff241 = await models.User.findOne({ where: { netid: '241staff' } })
+  const staff241 = await models.User.findOne({
+    where: { uid: '241staff@illinois.edu' },
+  })
   await staff241.addStaffAssignment(2)
 
-  const staff446 = await models.User.findOne({ where: { netid: '446staff' } })
+  const staff446 = await models.User.findOne({
+    where: { uid: '446staff@illinois.edu' },
+  })
   await staff446.addStaffAssignment(3)
 
   await module.exports.createTestQueues()
@@ -146,7 +164,7 @@ module.exports.populateTestDb = async () => {
 
 module.exports.requestAsUser = async (app, user) => {
   const testSession = session(app)
-  await testSession.post('/login/dev').send({ netid: user })
+  await testSession.post('/login/dev').send({ uid: user })
   return testSession
 }
 

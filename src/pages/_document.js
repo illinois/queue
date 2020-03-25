@@ -5,8 +5,11 @@ import flush from 'styled-jsx/server'
 import { dom } from '@fortawesome/fontawesome-svg-core'
 import moment from 'moment'
 import nextCookies from 'next-cookies'
+import getConfig from 'next/config'
 
 import { baseUrl, isDev, isNow } from '../util'
+
+const { institutionName } = getConfig().publicRuntimeConfig
 
 export default class MyDocument extends Document {
   static getInitialProps(ctx) {
@@ -54,7 +57,11 @@ export default class MyDocument extends Document {
             crossOrigin="use-credentials"
             href={manifestPath}
           />
-          <title>{isAprilFools ? 'Stack@Illinois' : 'Queue@Illinois'}</title>
+          <title>
+            {isAprilFools
+              ? `Stack@${institutionName}`
+              : `Queue@${institutionName}`}
+          </title>
           <style>{dom.css()}</style>
           <link rel="icon" href={faviconPath} type="image/png" />
           <script dangerouslySetInnerHTML={script} />

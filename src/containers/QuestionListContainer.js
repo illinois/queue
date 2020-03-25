@@ -32,14 +32,11 @@ const mapStateToProps = (state, props) => ({
 const mapDispatchToProps = (dispatch, { queueId }) => ({
   fetchQuestions: () => dispatch(fetchQuestions(queueId)),
   deleteQuestion: questionId => dispatch(deleteQuestion(queueId, questionId)),
-  // eslint-disable-next-line max-len
   updateQuestionBeingAnswered: (questionId, beingAnswered) =>
     dispatch(updateQuestionAnswering(questionId, beingAnswered)),
-  // eslint-disable-next-line max-len
   updateQuestion: (questionId, attributes) =>
     dispatch(updateQuestion(questionId, attributes)),
-  // eslint-disable-next-line max-len
-  finishAnsweringQuestion: (questionId, shouldCheckFeedback, feedback) =>
+  finishAnsweringQuestion: (questionId, feedback) =>
     dispatch(finishAnsweringQuestion(queueId, questionId, feedback)),
 })
 

@@ -8,6 +8,17 @@ with the current semantic version and the next changes should go under a **[Next
 ## [Next]
 * Implemented the ability for users to star queues, allowing for easier access to the queues they care about. ([@jackieo5023](https://github.com/jackieo5023) in [#298](https://github.com/illinois/queue/pull/298))
 
+* Brand customization ([@winstan](https://github.com/winstan) in [#297](https://github.com/illinois/queue/pull/297))
+
+## v2.0.0
+* Refactor authentication to support multiple logins and institutions. ([@nwalters512](https://github.com/nwalters512) in [#283](https://github.com/illinois/queue/pull/283))
+
+* Update API doc ([@jackieo5023](https://github.com/jackieo5023) in [#303](https://github.com/illinois/queue/pull/303))
+
+## v1.4.1
+
+* Fix question feedback submission. ([@james9909](https://github.com/jamse9909) in [#299](https://github.com/illinois/queue/pull/299))
+
 ## v1.4.0
 * Created a course settings page, which allows for unlisted courses and removal of the question feedback modal. ([@rittikaadhikari](https://github.com/rittikaadhikari) in [#293](https://github.com/illinois/queue/pull/293))
 
