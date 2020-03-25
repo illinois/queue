@@ -318,7 +318,9 @@ router.put(
     const user = await User.findOne(query)
 
     if (!user) {
-      return _next(new ApiError(404, 'User does not exist'))
+      return _next(
+        new ApiError(404, 'User does not exist. Has user logged in?')
+      )
     }
 
     await user.addStaffAssignment(res.locals.course.id)
