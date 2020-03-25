@@ -316,6 +316,11 @@ router.put(
     }
 
     const user = await User.findOne(query)
+
+    if (!user) {
+      return _next(new ApiError(404, 'User does not exist'))
+    }
+
     await user.addStaffAssignment(res.locals.course.id)
     return res.status(201).send(user)
   })
