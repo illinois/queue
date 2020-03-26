@@ -26,7 +26,6 @@ const QueueCard = ({
   addStarredByUser,
   removeStarredByUser,
   isStarred,
-  userId,
   ...rest
 }) => {
   const { name: queueName, location, questionCount, isConfidential } = queue

@@ -279,23 +279,6 @@ describe('Queues API', () => {
     })
   })
 
-  describe('POST /api/queues/1/star/:userId', () => {
-    test('succeeds for a user to star a queue', async () => {
-      const request = await requestAsUser(app, 'student')
-      const res = await request.post('/api/queues/1/star/6')
-      expect(res.statusCode).toBe(201)
-    })
-  })
-
-  describe('POST /api/queues/1/star/:userId', () => {
-    test('succeeds for a user to unstar a queue', async () => {
-      const request = await requestAsUser(app, 'student')
-      await request.post('/api/queues/1/star/6')
-      const res = await request.delete('/api/queues/1/star/6')
-      expect(res.statusCode).toBe(200)
-    })
-  })
-
   describe('POST /api/queues/1/staff/:userId', () => {
     test('succeeds for course staff to add self', async () => {
       const request = await requestAsUser(app, '225staff@illinois.edu')

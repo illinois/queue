@@ -152,4 +152,21 @@ describe('Users API', () => {
       expect(res.statusCode).toBe(403)
     })
   })
+
+  describe('PUT /api/users/me/star/:queueId', () => {
+    test('succeeds for a user to star a queue', async () => {
+      const request = await requestAsUser(app, 'student@illinois.edu')
+      const res = await request.put('/api/users/me/star/1')
+      expect(res.statusCode).toBe(201)
+    })
+  })
+
+  describe('DELETE /api/users/me/star/:queueId', () => {
+    test('succeeds for a user to unstar a queue', async () => {
+      const request = await requestAsUser(app, 'student@illinois.edu')
+      await request.put('/api/users/me/star/1')
+      const res = await request.delete('/api/users/me/star/1')
+      expect(res.statusCode).toBe(204)
+    })
+  })
 })

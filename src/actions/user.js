@@ -75,7 +75,7 @@ export function addStarredByUser(queue) {
     const { id } = queue
     dispatch(addStarredByUserRequest(id))
 
-    return axios.post(`/api/users/me/star/${id}`).then(
+    return axios.put(`/api/users/me/star/${id}`).then(
       () => dispatch(addStarredByUserSuccess(queue)),
       err => {
         console.error(err)

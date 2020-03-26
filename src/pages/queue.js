@@ -258,6 +258,8 @@ Queue.propTypes = {
   pageTransitionReadyToEnter: PropTypes.func,
   socketStatus: PropTypes.string,
   isStarred: PropTypes.bool,
+  addStarredByUser: PropTypes.func.isRequired,
+  removeStarredByUser: PropTypes.func.isRequired,
 }
 
 Queue.defaultProps = {
