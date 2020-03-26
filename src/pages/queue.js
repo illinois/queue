@@ -36,11 +36,7 @@ import QuestionNotificationsToggle from '../components/QuestionNotificationsTogg
 import QueueStatusToggleContainer from '../containers/QueueStatusToggleContainer'
 import DeleteAllQuestionsButtonContainer from '../containers/DeleteAllQuestionsButtonContainer'
 import QueueMessageEnabledToggleContainer from '../containers/QueueMessageEnabledToggleContainer'
-import {
-  isUserCourseStaffForQueue,
-  isUserAdmin,
-  isQueueStarred,
-} from '../selectors'
+import { isUserCourseStaffForQueue, isUserAdmin } from '../selectors'
 import ConfidentialQueuePanelContainer from '../containers/ConfidentialQueuePanelContainer'
 import SocketErrorModal from '../components/SocketErrorModal'
 import { resetSocketState } from '../actions/socket'
@@ -81,13 +77,8 @@ const Queue = props => {
 
   const handleStar = e => {
     e.stopPropagation()
-    const {
-      isQueueStarred,
-      removeStarredByUser,
-      addStarredByUser,
-      queue,
-    } = props
-    if (props.isQueueStarred) {
+    const { addStarredByUser, isStarred, queue, removeStarredByUser } = props
+    if (isStarred) {
       removeStarredByUser(queue)
     } else {
       addStarredByUser(queue)
@@ -182,7 +173,7 @@ const Queue = props => {
           onClick={e => handleStar(e)}
         >
           <FontAwesomeIcon
-            icon={props.isQueueStarred ? fasStar : farStar}
+            icon={props.isStarred ? fasStar : farStar}
             fixedWidth
           />
         </Button>
@@ -251,7 +242,6 @@ Queue.propTypes = {
   dispatch: PropTypes.func.isRequired,
   isUserCourseStaff: PropTypes.bool.isRequired,
   isUserAdmin: PropTypes.bool.isRequired,
-  isQueueStarred: PropTypes.bool.isRequired,
   queue: PropTypes.shape({
     id: PropTypes.number,
     name: PropTypes.string,
@@ -267,6 +257,7 @@ Queue.propTypes = {
   }),
   pageTransitionReadyToEnter: PropTypes.func,
   socketStatus: PropTypes.string,
+  isStarred: PropTypes.bool,
 }
 
 Queue.defaultProps = {
@@ -274,6 +265,7 @@ Queue.defaultProps = {
   course: null,
   pageTransitionReadyToEnter: null,
   socketStatus: SOCKET_CONNECTING,
+  isStarred: false,
 }
 
 const mapStateToProps = (state, ownProps) => {
@@ -284,8 +276,12 @@ const mapStateToProps = (state, ownProps) => {
     course,
     isUserCourseStaff: isUserCourseStaffForQueue(state, ownProps),
     isUserAdmin: isUserAdmin(state, ownProps),
-    isQueueStarred: isQueueStarred(state, ownProps),
     socketStatus: state.socket.status,
+    isStarred: state.user.user
+      ? state.user.user.starredQueues.find(
+          starred => starred.id === ownProps.queueId
+        ) != null
+      : false,
   }
 }
 
