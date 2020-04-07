@@ -6,7 +6,7 @@ import { ListGroupItem, Button } from 'reactstrap'
 // eslint-disable-next-line react/prefer-stateless-function
 class RemoveableUserItem extends React.Component {
   render() {
-    const netidClasses = classNames('text-muted', 'small', {
+    const uidClasses = classNames('text-muted', 'small', {
       'ml-2': this.props.name,
     })
 
@@ -14,7 +14,7 @@ class RemoveableUserItem extends React.Component {
       <ListGroupItem className="d-flex align-items-center">
         <div>
           {this.props.name}
-          <span className={netidClasses}>({this.props.netid})</span>
+          <span className={uidClasses}>({this.props.uid})</span>
         </div>
         {this.props.showRemoveButton && (
           <Button
@@ -38,7 +38,7 @@ RemoveableUserItem.defaultProps = {
 
 RemoveableUserItem.propTypes = {
   id: PropTypes.number.isRequired,
-  netid: PropTypes.string.isRequired,
+  uid: PropTypes.string.isRequired,
   name: PropTypes.string,
   showRemoveButton: PropTypes.bool,
   onRemove: PropTypes.func.isRequired,

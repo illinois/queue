@@ -2,8 +2,21 @@ const fs = require('fs')
 const path = require('path')
 const Sequelize = require('sequelize')
 
-const env = process.env.NODE_ENV || 'development'
-const config = require('../config/config')[env]
+require('dotenv').config()
+
+const loadDbConfig = () => {
+  const env = (process.env.NODE_ENV || 'development').toUpperCase()
+  return {
+    username: process.env[`DB_USERNAME_${env}`],
+    password: process.env[`DB_PASSWORD_${env}`],
+    database: process.env[`DB_DATABASE_${env}`],
+    host: process.env[`DB_HOST_${env}`],
+    dialect: process.env[`DB_DIALECT_${env}`],
+    logging: process.env[`DB_LOGGING_${env}`] === 'true',
+    storage: process.env[`DB_STORAGE_${env}`], // Sqlite only
+  }
+}
+const config = loadDbConfig()
 
 /**
  * Loads our models into the given Sequelize instance

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
-const StaffMember = ({ name, netid, isUserCourseStaff, removeStaff }) => (
+const StaffMember = ({ name, uid, isUserCourseStaff, removeStaff }) => (
   <div className="pt-2 pb-2 d-flex align-items-center">
-    {name || netid}
+    {name || uid}
     {isUserCourseStaff && (
       <span className="btn-remove-staff ml-auto">
         <FontAwesomeIcon icon={faTimes} onClick={() => removeStaff()} />
@@ -31,7 +31,7 @@ StaffMember.defaultProps = {
 
 StaffMember.propTypes = {
   name: PropTypes.string,
-  netid: PropTypes.string.isRequired,
+  uid: PropTypes.string.isRequired,
   isUserCourseStaff: PropTypes.bool.isRequired,
   removeStaff: PropTypes.func.isRequired,
 }

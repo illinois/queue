@@ -18,24 +18,28 @@ import { useDebounce } from 'use-debounce'
 import axiosBase from 'axios'
 import FlipMove from 'react-flip-move'
 import { AsyncTypeahead, Highlighter } from 'react-bootstrap-typeahead'
+import getConfig from 'next/config'
+
+import 'react-bootstrap-typeahead/css/Typeahead.css'
+import 'react-bootstrap-typeahead/css/Typeahead-bs4.css'
 
 import axios from '../../actions/axios'
 import Loading from '../Loading'
 
-import 'react-bootstrap-typeahead/css/Typeahead.css'
-import 'react-bootstrap-typeahead/css/Typeahead-bs4.css'
 import RemoveableUserItem from '../RemoveableUserItem'
+
+const { uidName } = getConfig().publicRuntimeConfig
 
 interface AdminUsersPanelProps {
   user: {
-    netid: string
+    uid: string
     id: number
   }
 }
 
 interface Admin {
   id: number
-  netid: string
+  uid: string
   name: string
 }
 
@@ -45,8 +49,8 @@ const AdminTypeahead = AsyncTypeahead as AdminTypeahead
 const AdminUsersPanel = (props: AdminUsersPanelProps) => {
   const [admins, setAdmins] = useState<Admin[]>([])
   const [adminsLoading, setAdminsLoading] = useState(true)
-  const netidInput = useInput('')
-  const [netidQuery] = useDebounce(netidInput.value, 500)
+  const uidInput = useInput('')
+  const [uidQuery] = useDebounce(uidInput.value, 500)
   const [userSuggestions, setUserSuggestions] = useState([])
   const [userSuggestionsLoading, setUserSuggestionsLoading] = useState(false)
   const [pendingAdmin, setPendingAdmin] = useState<Admin[]>([])
@@ -64,7 +68,7 @@ const AdminUsersPanel = (props: AdminUsersPanelProps) => {
   }, [])
 
   useEffect((): (() => void) => {
-    if (!netidQuery) {
+    if (!uidQuery) {
       return () => {}
     }
     const source = axiosBase.CancelToken.source()
@@ -72,7 +76,7 @@ const AdminUsersPanel = (props: AdminUsersPanelProps) => {
     axios
       .get('/api/autocomplete/users', {
         params: {
-          q: netidQuery,
+          q: uidQuery,
         },
         cancelToken: source.token,
       })
@@ -89,7 +93,7 @@ const AdminUsersPanel = (props: AdminUsersPanelProps) => {
     return () => {
       source.cancel()
     }
-  }, [netidQuery])
+  }, [uidQuery])
 
   const addAdmin = () => {
     const user = pendingAdmin[0]
@@ -166,7 +170,7 @@ const AdminUsersPanel = (props: AdminUsersPanelProps) => {
       </ListGroup>
       <CardBody className="bg-light">
         <FormText color="muted" className="mb-2">
-          Search for users by NetID
+          Search for users by {uidName}
         </FormText>
         <InputGroup>
           <AdminTypeahead
@@ -177,14 +181,12 @@ const AdminUsersPanel = (props: AdminUsersPanelProps) => {
               /* This is handled by hooks, but prop must be specified */
             }}
             filterBy={option => {
-              return (
-                admins.findIndex(admin => admin.netid === option.netid) === -1
-              )
+              return admins.findIndex(admin => admin.id === option.id) === -1
             }}
-            labelKey="netid"
+            labelKey="uid"
             selected={pendingAdmin}
             onChange={options => setPendingAdmin(options)}
-            onInputChange={value => netidInput.setValue(value)}
+            onInputChange={value => uidInput.setValue(value)}
             minLength={1}
             useCache={false}
             onKeyDown={handleKeyDown}
@@ -192,7 +194,7 @@ const AdminUsersPanel = (props: AdminUsersPanelProps) => {
               return (
                 <>
                   <Highlighter search={typeaheadProps.text as string}>
-                    {option.netid}
+                    {option.uid}
                   </Highlighter>
                   {option.name && (
                     <span className="text-muted ml-2">({option.name})</span>
@@ -218,8 +220,8 @@ const AdminUsersPanel = (props: AdminUsersPanelProps) => {
 
 AdminUsersPanel.propTypes = {
   user: PropTypes.shape({
-    netid: PropTypes.string,
     id: PropTypes.number,
+    name: PropTypes.string,
   }).isRequired,
 }
 

@@ -1,6 +1,9 @@
 import React from 'react'
 import { Alert } from 'reactstrap'
+import getConfig from 'next/config'
 import moment from 'moment'
+
+const { institutionName } = getConfig().publicRuntimeConfig
 
 const StackRebrandingAlert = () => {
   // Hide alert after April Fool's day
@@ -8,7 +11,9 @@ const StackRebrandingAlert = () => {
 
   return (
     <Alert color="primary" fade={false}>
-      <span className="mr-3">We&apos;re rebranding to Stack@Illinois!</span>
+      <span className="mr-3">
+        We&apos;re rebranding to Stack@{institutionName}!
+      </span>
       <strong>
         <a href="https://queue.illinois.edu/blog/stack">
           Read&nbsp;more&nbsp;→

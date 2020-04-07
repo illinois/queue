@@ -24,7 +24,7 @@ describe('authnToken middleware', () => {
     await authnToken(req, res, next)
     expect(next).toBeCalledWith()
     expect(res.locals.userAuthn).toBeDefined()
-    expect(res.locals.userAuthn.netid).toBe('admin')
+    expect(res.locals.userAuthn.uid).toBe('admin@illinois.edu')
   })
 
   it('succeeds for a valid token as a header', async () => {
@@ -42,7 +42,7 @@ describe('authnToken middleware', () => {
     await authnToken(req, res, next)
     expect(next).toBeCalledWith()
     expect(res.locals.userAuthn).toBeDefined()
-    expect(res.locals.userAuthn.netid).toBe('admin')
+    expect(res.locals.userAuthn.uid).toBe('admin@illinois.edu')
   })
 
   it('fails for an invalid token', async () => {
