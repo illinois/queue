@@ -6,6 +6,8 @@ When a new version is tagged, the changes since the last deploy should be labele
 with the current semantic version and the next changes should go under a **[Next]** header.
 
 ## [Next]
+* Fix legacy Edge edit message bug. ([@rittikaadhikari](https://github.com/rittikaadhikari) in [#317](https://github.com/illinois/queue/pull/317))
+
 * Brand customization ([@winstan](https://github.com/winstan) in [#297](https://github.com/illinois/queue/pull/297))
 
 ## v2.0.0

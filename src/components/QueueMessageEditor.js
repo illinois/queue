@@ -25,7 +25,7 @@ const QueueMessageEditor = props => {
     if (messageInputRef.current) {
       messageInputRef.current.focus()
       messageInputRef.current.setSelectionRange(0, 0)
-      messageInputRef.current.scrollTo(0, 0)
+      messageInputRef.current.scrollTop = 0
     }
   }, [])
   useEffect(() => {
