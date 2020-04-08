@@ -1,18 +1,33 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { Card, CardBody, CardTitle, CardSubtitle } from 'reactstrap'
+import { Button, Card, CardBody, CardTitle, CardSubtitle } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faMapMarker,
   faQuestionCircle,
   faEyeSlash,
   faCog,
+  faStar as fasStar,
 } from '@fortawesome/free-solid-svg-icons'
+import { faStar as farStar } from '@fortawesome/free-regular-svg-icons'
 
+import {
+  addStarredByUser as addStarredByUserAction,
+  removeStarredByUser as removeStarredByUserAction,
+} from '../actions/user'
 import { Link } from '../routes'
 import ShowForCourseStaff from './ShowForCourseStaff'
 
-const QueueCard = ({ queue, courseName, open, ...rest }) => {
+const QueueCard = ({
+  queue,
+  courseName,
+  open,
+  addStarredByUser,
+  removeStarredByUser,
+  isStarred,
+  ...rest
+}) => {
   const { name: queueName, location, questionCount, isConfidential } = queue
 
   const questionCountText = `${questionCount} Question${
@@ -22,6 +37,15 @@ const QueueCard = ({ queue, courseName, open, ...rest }) => {
 
   const title = courseName || queueName
   const showQueueNameInBody = !!courseName
+
+  const handleStar = e => {
+    e.stopPropagation()
+    if (isStarred) {
+      removeStarredByUser(queue)
+    } else {
+      addStarredByUser(queue)
+    }
+  }
 
   return (
     <Card
@@ -35,6 +59,17 @@ const QueueCard = ({ queue, courseName, open, ...rest }) => {
               <FontAwesomeIcon icon={faEyeSlash} fixedWidth className="mr-2" />
             )}
             {title}
+            <Button
+              className="pb-2 pl-2 pr-0 pt-0"
+              color="link"
+              size="lg"
+              onClick={e => handleStar(e)}
+            >
+              <FontAwesomeIcon
+                icon={isStarred ? fasStar : farStar}
+                fixedWidth
+              />
+            </Button>
           </span>
           <div>
             <ShowForCourseStaff courseId={queue.courseId}>
@@ -87,6 +122,7 @@ const QueueCard = ({ queue, courseName, open, ...rest }) => {
 
 QueueCard.defaultProps = {
   courseName: null,
+  isStarred: false,
   open: PropTypes.bool,
 }
 
@@ -96,6 +132,17 @@ QueueCard.propTypes = {
   }).isRequired,
   courseName: PropTypes.string,
   open: PropTypes.bool,
+  addStarredByUser: PropTypes.func.isRequired,
+  removeStarredByUser: PropTypes.func.isRequired,
+  isStarred: PropTypes.bool,
 }
 
-export default QueueCard
+const mapDispatchToProps = dispatch => ({
+  addStarredByUser: queue => dispatch(addStarredByUserAction(queue)),
+  removeStarredByUser: queue => dispatch(removeStarredByUserAction(queue)),
+})
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(QueueCard)

@@ -47,6 +47,11 @@ const Course = props => {
     .filter(queue => !queue.open)
     .filter(queue => queue.courseId === props.courseId)
     .map(queue => queue.id)
+  const starredQueueIds = props.queues
+    .filter(queue =>
+      props.starredQueues.find(starred => starred.id === queue.id)
+    )
+    .map(queue => queue.id)
 
   return (
     <Fragment>
@@ -99,7 +104,12 @@ const Course = props => {
           </Card>
         )}
         <Row className="equal-height mb-5">
-          <QueueCardListContainer queueIds={openQueueIds} openQueue />
+          <QueueCardListContainer
+            queueIds={openQueueIds}
+            openQueue
+            isStarred={false}
+            starredQueueIds={starredQueueIds}
+          />
         </Row>
         <div className="d-flex flex-wrap align-items-center mb-4">
           <h2 className="d-inline-block mb-0 mt-3 mr-auto pr-3">
@@ -107,7 +117,12 @@ const Course = props => {
           </h2>
         </div>
         <Row className="equal-height mb-5">
-          <QueueCardListContainer queueIds={closedQueueIds} openQueue={false} />
+          <QueueCardListContainer
+            queueIds={closedQueueIds}
+            openQueue={false}
+            isStarred={false}
+            starredQueueIds={starredQueueIds}
+          />
         </Row>
         <CourseShortCodeInfo course={props.course} />
       </Container>
@@ -144,6 +159,11 @@ Course.propTypes = {
       courseId: PropTypes.number,
     })
   ),
+  starredQueues: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+    })
+  ),
   createQueue: PropTypes.func.isRequired,
   fetchCourse: PropTypes.func.isRequired,
   pageTransitionReadyToEnter: PropTypes.func,
@@ -154,6 +174,7 @@ Course.pageTransitionDelayEnter = true
 Course.defaultProps = {
   course: null,
   queues: [],
+  starredQueues: [],
   pageTransitionReadyToEnter: false,
 }
 
@@ -162,6 +183,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     course,
     queues: mapObjectToArray(state.queues.queues),
+    starredQueues: state.user.user ? state.user.user.starredQueues : [],
   }
 }
 

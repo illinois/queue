@@ -2,7 +2,7 @@ const router = require('express').Router()
 
 const { requireUser, failIfErrors, ApiError } = require('./util')
 
-const { User, Course } = require('../models')
+const { User, Course, Queue } = require('../models')
 
 const requireAdmin = require('../middleware/requireAdmin')
 const safeAsync = require('../middleware/safeAsync')
@@ -26,6 +26,12 @@ router.get(
           through: {
             attributes: [],
           },
+        },
+        {
+          model: Queue,
+          as: 'starredQueues',
+          through: { attributes: [] },
+          attributes: ['id'],
         },
       ],
     })
@@ -118,6 +124,31 @@ router.get(
   (req, res, _next) => {
     res.send(res.locals.user)
   }
+)
+
+// Add a starred queue to the currently authenticated user
+router.put(
+  '/me/star/:queueId',
+  safeAsync(async (req, res, _next) => {
+    const { id } = res.locals.userAuthn
+    const user = await User.findOne({
+      where: { id },
+    })
+    await user.addStarredQueue(req.params.queueId)
+    res.status(201).send(user)
+  })
+)
+
+router.delete(
+  '/me/star/:queueId',
+  safeAsync(async (req, res, _next) => {
+    const { id } = res.locals.userAuthn
+    const user = await User.findOne({
+      where: { id },
+    })
+    await user.removeStarredQueue(req.params.queueId)
+    res.status(204).send(user)
+  })
 )
 
 module.exports = router

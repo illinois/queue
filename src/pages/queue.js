@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { usePrevious } from 'react-hanger'
 import {
+  Button,
   Container,
   Row,
   Col,
@@ -12,7 +13,12 @@ import {
   UncontrolledTooltip,
 } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMapMarker, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import {
+  faMapMarker,
+  faEyeSlash,
+  faStar as fasStar,
+} from '@fortawesome/free-solid-svg-icons'
+import { faStar as farStar } from '@fortawesome/free-regular-svg-icons'
 
 import { Link } from '../routes'
 import { fetchQueue } from '../actions/queue'
@@ -34,6 +40,10 @@ import { isUserCourseStaffForQueue, isUserAdmin } from '../selectors'
 import ConfidentialQueuePanelContainer from '../containers/ConfidentialQueuePanelContainer'
 import SocketErrorModal from '../components/SocketErrorModal'
 import { resetSocketState } from '../actions/socket'
+import {
+  addStarredByUser as addStarredByUserAction,
+  removeStarredByUser as removeStarredByUserAction,
+} from '../actions/user'
 import { FETCH_QUEUE } from '../constants/ActionTypes'
 import {
   SOCKET_CONNECTING,
@@ -64,6 +74,16 @@ const Queue = props => {
   const [queueLoading, setQueueLoading] = useState(true)
   const [showSocketStatus, setShowSocketStatus] = useState(false)
   const previousSocketStatus = usePrevious(props.socketStatus)
+
+  const handleStar = e => {
+    e.stopPropagation()
+    const { addStarredByUser, isStarred, queue, removeStarredByUser } = props
+    if (isStarred) {
+      removeStarredByUser(queue)
+    } else {
+      addStarredByUser(queue)
+    }
+  }
 
   useEffect(() => {
     setQueueLoading(true)
@@ -146,6 +166,17 @@ const Queue = props => {
           </span>
         )}
         {queueName}
+        <Button
+          className="pb-2 pl-2 pr-0 pt-0"
+          color="link"
+          size="lg"
+          onClick={e => handleStar(e)}
+        >
+          <FontAwesomeIcon
+            icon={props.isStarred ? fasStar : farStar}
+            fixedWidth
+          />
+        </Button>
       </h3>
       <h5 className="mb-3 text-muted">
         <FontAwesomeIcon icon={faMapMarker} fixedWidth className="mr-2" />
@@ -226,6 +257,9 @@ Queue.propTypes = {
   }),
   pageTransitionReadyToEnter: PropTypes.func,
   socketStatus: PropTypes.string,
+  isStarred: PropTypes.bool,
+  addStarredByUser: PropTypes.func.isRequired,
+  removeStarredByUser: PropTypes.func.isRequired,
 }
 
 Queue.defaultProps = {
@@ -233,6 +267,7 @@ Queue.defaultProps = {
   course: null,
   pageTransitionReadyToEnter: null,
   socketStatus: SOCKET_CONNECTING,
+  isStarred: false,
 }
 
 const mapStateToProps = (state, ownProps) => {
@@ -244,10 +279,17 @@ const mapStateToProps = (state, ownProps) => {
     isUserCourseStaff: isUserCourseStaffForQueue(state, ownProps),
     isUserAdmin: isUserAdmin(state, ownProps),
     socketStatus: state.socket.status,
+    isStarred: state.user.user
+      ? state.user.user.starredQueues.find(
+          starred => starred.id === ownProps.queueId
+        ) != null
+      : false,
   }
 }
 
 const mapDispatchToProps = dispatch => ({
+  addStarredByUser: queue => dispatch(addStarredByUserAction(queue)),
+  removeStarredByUser: queue => dispatch(removeStarredByUserAction(queue)),
   fetchQueue: queueId => dispatch(fetchQueue(queueId)),
   fetchCourse: courseId => dispatch(fetchCourse(courseId)),
   resetSocketState: () => dispatch(resetSocketState()),

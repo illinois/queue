@@ -111,12 +111,36 @@ class Index extends React.Component {
     const closedQueueIds = this.props.queues
       .filter(queue => !queue.open)
       .map(queue => queue.id)
+    const allStarredQueueIds = this.props.queues
+      .filter(queue =>
+        this.props.starredQueues.find(starred => starred.id === queue.id)
+      )
+      .map(queue => queue.id)
+    const openStarredQueueIds = this.props.queues
+      .filter(
+        queue =>
+          queue.open &&
+          this.props.starredQueues.find(starred => starred.id === queue.id)
+      )
+      .map(queue => queue.id)
 
     return (
       <Fragment>
         <Container>
           <DevWorkshopAd />
           <StackRebrandingAlert />
+          <h1 className="display-4 d-inline-block mb-4 mt-3 mr-auto pr-3">
+            Starred queues
+          </h1>
+          <Row className="equal-height">
+            <QueueCardListContainer
+              queueIds={openStarredQueueIds}
+              showCourseName
+              openQueue
+              isStarred
+              starredQueueIds={allStarredQueueIds}
+            />
+          </Row>
           <div className="d-flex flex-wrap align-items-center mb-4">
             <h1 className="display-4 d-inline-block mb-0 mt-3 mr-auto pr-3">
               Open queues
@@ -151,6 +175,8 @@ class Index extends React.Component {
               queueIds={openQueueIds}
               showCourseName
               openQueue
+              isStarred={false}
+              starredQueueIds={allStarredQueueIds}
             />
           </Row>
           <div className="d-flex flex-wrap align-items-center mb-4">
@@ -191,6 +217,8 @@ class Index extends React.Component {
               queueIds={closedQueueIds}
               showCourseName
               openQueue={false}
+              isStarred={false}
+              starredQueueIds={allStarredQueueIds}
             />
           </Row>
         </Container>
@@ -229,6 +257,11 @@ Index.propTypes = {
       name: PropTypes.string,
     })
   ),
+  starredQueues: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+    })
+  ),
   fetchCourses: PropTypes.func.isRequired,
   fetchQueues: PropTypes.func.isRequired,
   createCourse: PropTypes.func.isRequired,
@@ -239,6 +272,7 @@ Index.propTypes = {
 Index.defaultProps = {
   courses: [],
   queues: [],
+  starredQueues: [],
   pageTransitionReadyToEnter: null,
 }
 
@@ -258,6 +292,7 @@ const mapStateToProps = state => ({
     return 0
   }),
   queues: mapObjectToArray(state.queues.queues),
+  starredQueues: state.user.user ? state.user.user.starredQueues : [],
 })
 
 const mapDispatchToProps = dispatch => ({

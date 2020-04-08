@@ -37,6 +37,10 @@ module.exports = (sequelize, DataTypes) => {
       as: 'staffAssignments',
       through: models.CourseStaff,
     })
+    models.User.belongsToMany(models.Queue, {
+      as: 'starredQueues',
+      through: models.StarredQueue,
+    })
   }
 
   return obj
