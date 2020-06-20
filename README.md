@@ -64,16 +64,8 @@ DB_DATABASE_<ENV>="database_name"
 DB_HOST_<ENV>="localhost"
 DB_DIALECT_<ENV>="sqlite"
 DB_LOGGING_<ENV>="false"
-DB_STORAGE_<ENV>="./dev.sqlite"  # Sqlite only
-
-# Example for development:
-DB_USERNAME_DEVELOPMENT="username"
-DB_PASSWORD_DEVELOPMENT="password"
-DB_DATABASE_DEVELOPMENT="queue"
-DB_HOST_DEVELOPMENT="localhost"
-DB_DIALECT_DEVELOPMENT="sqlite"
-DB_LOGGING_DEVELOPMENT="false"
-DB_STORAGE_DEVELOPMENT="./dev.sqlite"  # Sqlite only
+# Only necessary when using SQLite
+DB_STORAGE_<ENV>="./dev.sqlite"
 ```
 
-Note that for SQLite databases, only `DB_STORAGE_<ENV>` is required.
+The Queue ships with defaults for development in `.env.defaults`. When operating the Queue in production, you'll want to create a `.env` file with values for production.
