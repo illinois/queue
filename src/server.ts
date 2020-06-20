@@ -1,5 +1,5 @@
 /* eslint global-require: "off", no-console: "off" */
-import 'dotenv-defaults/config'
+import '../dotenv-defaults.config'
 
 import { Server } from 'http'
 import * as io from 'socket.io'

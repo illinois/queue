@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const Sequelize = require('sequelize')
 
-require('dotenv-defaults').config()
+require('../../dotenv-defaults').config()
 
 const loadDbConfig = () => {
   const env = (process.env.NODE_ENV || 'development').toUpperCase()
