@@ -36,7 +36,6 @@
     "classnames": "^2.2.6",
     "co": "^4.6.0",
     "cookie-parser": "^1.4.4",
-    "dotenv": "^7.0.0",
     "dotenv-defaults": "^1.1.1",
     "express": "^4.16.4",
     "express-urlrewrite": "^1.2.0",
