@@ -31,7 +31,7 @@ If you wish to report a bug, feature request, etc., please open a new issue (fir
 
 Several configuration options are exposed via environment variables and `.env`:
 
-- `[PORT](PORT)`: controls which port the app will be served from.
+- `PORT`: controls which port the app will be served from.
 - `BASE_URL`: allows the app to be served from somewhere other than the server
   root. This affects asset and API routes, websocket endpoints, generated links,
   and more. Note that for this to work effectively, the app must still receive
