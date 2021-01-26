@@ -1,0 +1,43 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.155.1/containers/javascript-node-postgres
+// Update the VARIANT arg in docker-compose.yml to pick a Node.js version: 10, 12, 14
+{
+  "name": "Node.js & MariaDB",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+
+  // Set *default* container specific settings.json values on container create.
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash",
+    "sqltools.connections": [
+      {
+        "name": "Container database",
+        "driver": "MariaDB",
+        "previewLimit": 50,
+        "server": "localhost",
+        "port": 3306,
+        "database": "queue",
+        "username": "queue",
+        "password": "queue"
+      }
+    ]
+  },
+
+  // Add the IDs of extensions you want installed when the container is created.
+  "extensions": [
+    "dbaeumer.vscode-eslint",
+    "orta.vscode-jest",
+    "mtxr.sqltools",
+    "mtxr.sqltools-driver-mysql"
+  ],
+
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // "forwardPorts": [3000, 5432],
+
+  // Use 'postCreateCommand' to run commands after the container is created.
+  // "postCreateCommand": "npm install --include=dev",
+
+  // Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+  "remoteUser": "node"
+}
