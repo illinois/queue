@@ -34,8 +34,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
         env:
-          DATABASE_URL: mysql://queue:queue@localhost:3306/queue
+          DATABASE_URL: mysql://queue:queue@mysql:3306/queue
       - run: npm run build --if-present
       - run: npm run test-sequential
         env:
-          DATABASE_URL: mysql://queue:queue@localhost:3306/queue
+          DATABASE_URL: mysql://queue:queue@mysql:3306/queue
