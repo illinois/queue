@@ -25,6 +25,8 @@ jobs:
           MYSQL_DATABASE: queue
           MYSQL_USER: queue
           MYSQL_PASSWORD: queue
+        ports:
+          - 3306:3306
 
     steps:
       - uses: actions/checkout@v2
@@ -32,10 +34,19 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.npm
+          key: ${{ runner.os }}-${{ matrix.node-version }}-build-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.node-version }}-build-
+            ${{ runner.os }}-${{ matrix.node-version }}
       - run: npm ci
         env:
-          DATABASE_URL: mysql://queue:queue@mysql:3306/queue
+          DATABASE_URL: mysql://queue:queue@localhost:3306/queue
       - run: npm run build --if-present
       - run: npm run test-sequential
         env:
-          DATABASE_URL: mysql://queue:queue@mysql:3306/queue
+          DATABASE_URL: mysql://queue:queue@localhost:3306/queue
