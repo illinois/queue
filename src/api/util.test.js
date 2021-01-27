@@ -19,16 +19,6 @@ describe('Testing Utils', () => {
   describe('findPropertyInRequest', () => {
     test('finds a property in the body', () => {
       const req = {
-        body: {},
-        params: {
-          property: 'a',
-        },
-      }
-      const res = util.findPropertyInRequest(req, 'property')
-      expect(res).toBe('a')
-    })
-    test('finds a property in the body', () => {
-      const req = {
         body: {
           property: 'a',
         },

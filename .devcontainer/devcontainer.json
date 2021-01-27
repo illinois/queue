@@ -27,7 +27,7 @@
   // Add the IDs of extensions you want installed when the container is created.
   "extensions": [
     "dbaeumer.vscode-eslint",
-    "orta.vscode-jest",
+    "kavod-io.vscode-jest-test-adapter",
     "mtxr.sqltools",
     "mtxr.sqltools-driver-mysql"
   ],
