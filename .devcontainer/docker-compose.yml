@@ -38,7 +38,6 @@ services:
       MYSQL_ROOT_PASSWORD: examplepass
       MYSQL_DATABASE: queue
       MYSQL_USER: queue
-      MYSQL_PASSWORD: queue
 
 volumes:
   mysql-data:
