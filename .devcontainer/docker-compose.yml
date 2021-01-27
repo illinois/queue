@@ -13,7 +13,7 @@ services:
         USER_GID: 1000
 
     environment:
-      DATABASE_URL: mysql://localhost:3306/queue
+      DATABASE_URL: mysql://queue:queue@localhost:3306/queue
 
     volumes:
       - ..:/workspace:cached
@@ -38,6 +38,7 @@ services:
       MYSQL_ROOT_PASSWORD: examplepass
       MYSQL_DATABASE: queue
       MYSQL_USER: queue
+      MYSQL_PASSWORD: queue
 
 volumes:
   mysql-data:

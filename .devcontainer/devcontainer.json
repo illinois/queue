@@ -18,7 +18,8 @@
         "server": "localhost",
         "port": 3306,
         "database": "queue",
-        "username": "queue"
+        "username": "queue",
+        "password": "queue"
       }
     ]
   },

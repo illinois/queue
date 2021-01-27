@@ -24,6 +24,7 @@ jobs:
           MYSQL_ROOT_PASSWORD: examplepass
           MYSQL_DATABASE: queue
           MYSQL_USER: queue
+          MYSQL_PASSWORD: queue
 
     steps:
       - uses: actions/checkout@v2
@@ -33,8 +34,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
         env:
-          DATABASE_URL: mysql://localhost:3306/queue
+          DATABASE_URL: mysql://queue:queue@localhost:3306/queue
       - run: npm run build --if-present
       - run: npm test
         env:
-          DATABASE_URL: mysql://localhost:3306/queue
+          DATABASE_URL: mysql://queue:queue@localhost:3306/queue
