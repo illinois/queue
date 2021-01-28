@@ -1,4 +1,4 @@
-const safeAsync = require('../middleware/safeAsync')
+import safeAsync from './safeAsync'
 
 /**
  * Checks to see if a previous middleware authenticated. If that happened,

@@ -1,3 +1,5 @@
+import safeAsync from '../middleware/safeAsync'
+
 const router = require('express').Router({
   mergeParams: true,
 })
@@ -13,7 +15,6 @@ const {
   User,
   Sequelize,
 } = require('../models')
-const safeAsync = require('../middleware/safeAsync')
 
 const {
   requireCourse,

@@ -1,4 +1,5 @@
-const safeAsync = require('../middleware/safeAsync')
+import safeAsync from './safeAsync'
+
 const { withBaseUrl } = require('../util')
 const { getUserFromJwt } = require('../auth/util')
 

@@ -148,7 +148,12 @@
       "\\.(css|less|sass|scss)$": "<rootDir>/src/test/styleMock.js"
     },
     "globals": {
-      "NODE_ENV": "test"
+      "NODE_ENV": "test",
+      "ts-jest": {
+        "diagnostics": {
+          "warnOnly": true
+        }
+      }
     }
   },
   "husky": {

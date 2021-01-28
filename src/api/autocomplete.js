@@ -1,10 +1,11 @@
+import safeAsync from '../middleware/safeAsync'
+
 const router = require('express').Router()
 
 const { User, Sequelize } = require('../models')
 
 const { failIfErrors, ApiError } = require('./util')
 const requireAdmin = require('../middleware/requireAdmin')
-const safeAsync = require('../middleware/safeAsync')
 
 router.get(
   '/users',

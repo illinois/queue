@@ -46,7 +46,9 @@ jobs:
       - run: npm ci
         env:
           DATABASE_URL: mysql://queue:queue@localhost:3306/queue
-      - run: npm run build --if-present
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run prettier-diff
       - uses: mattallty/jest-github-action@v1
         with:
           test-command: 'npm run test-sequential'

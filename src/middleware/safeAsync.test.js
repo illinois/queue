@@ -1,5 +1,5 @@
 /* eslint-env jest */
-const safeAsync = require('./safeAsync')
+import safeAsync from './safeAsync'
 
 describe('safeAsync wrapper', () => {
   test('returns a Promise', async () => {

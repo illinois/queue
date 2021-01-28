@@ -1,3 +1,5 @@
+import safeAsync from '../middleware/safeAsync'
+
 const router = require('express').Router({
   mergeParams: true,
 })
@@ -10,7 +12,6 @@ const { Course, Queue, Question, User, Sequelize } = require('../models')
 const { requireCourse, requireUser, failIfErrors, ApiError } = require('./util')
 const requireAdmin = require('../middleware/requireAdmin')
 const requireCourseStaff = require('../middleware/requireCourseStaff')
-const safeAsync = require('../middleware/safeAsync')
 
 const getCsv = questions => {
   const columns = new Set([
