@@ -47,8 +47,11 @@ jobs:
         env:
           DATABASE_URL: mysql://queue:queue@localhost:3306/queue
       - run: npm run typecheck
+        continue-on-error: true
       - run: npm run lint
+        continue-on-error: true
       - run: npm run prettier-diff
+        continue-on-error: true
       - uses: mattallty/jest-github-action@v1
         with:
           test-command: 'npm run test-sequential'
