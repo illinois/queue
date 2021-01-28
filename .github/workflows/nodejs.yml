@@ -47,6 +47,9 @@ jobs:
         env:
           DATABASE_URL: mysql://queue:queue@localhost:3306/queue
       - run: npm run build --if-present
-      - run: npm run test-sequential
+      - uses: mattallty/jest-github-action@v1
+        with:
+          test-command: 'npm run test-sequential'
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DATABASE_URL: mysql://queue:queue@localhost:3306/queue
