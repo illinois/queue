@@ -1,3 +1,5 @@
+import safeAsync from '../middleware/safeAsync'
+
 const router = require('express').Router()
 
 const { requireUser, failIfErrors, ApiError } = require('./util')
@@ -5,7 +7,6 @@ const { requireUser, failIfErrors, ApiError } = require('./util')
 const { User, Course, Queue } = require('../models')
 
 const requireAdmin = require('../middleware/requireAdmin')
-const safeAsync = require('../middleware/safeAsync')
 
 // Get list of all users
 router.get('/', [requireAdmin], (req, res, _next) =>

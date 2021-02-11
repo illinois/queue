@@ -1,3 +1,5 @@
+import safeAsync from '../middleware/safeAsync'
+
 const router = require('express').Router({
   mergeParams: true,
 })
@@ -10,7 +12,6 @@ const { matchedData } = require('express-validator/filter')
 const { ApiError, failIfErrors } = require('./util')
 
 const { AccessToken } = require('../models')
-const safeAsync = require('../middleware/safeAsync')
 
 // Get all tokens for authenticated user
 router.get(

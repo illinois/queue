@@ -1,5 +1,6 @@
+import safeAsync from './safeAsync'
+
 const { ApiError } = require('../api/util')
-const safeAsync = require('../middleware/safeAsync')
 const { getUserFromJwt, addJwtCookie } = require('../auth/util')
 
 module.exports = safeAsync(async (req, res, next) => {

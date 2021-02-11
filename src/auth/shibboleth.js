@@ -1,6 +1,7 @@
+import safeAsync from '../middleware/safeAsync'
+
 const { withBaseUrl } = require('../util')
 const { createOrUpdateUser, addJwtCookie, isSafeUrl } = require('./util')
-const safeAsync = require('../middleware/safeAsync')
 
 module.exports = safeAsync(async (req, res) => {
   // Get the user's email based on the "eppn" header

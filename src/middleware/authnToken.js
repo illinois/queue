@@ -1,7 +1,8 @@
+import safeAsync from './safeAsync'
+
 const crypto = require('crypto')
 
 const { ApiError } = require('../api/util')
-const safeAsync = require('../middleware/safeAsync')
 const { AccessToken, User } = require('../models')
 
 module.exports = safeAsync(async (req, res, next) => {

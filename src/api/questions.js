@@ -1,3 +1,5 @@
+import safeAsync from '../middleware/safeAsync'
+
 const router = require('express').Router({
   mergeParams: true,
 })
@@ -19,7 +21,6 @@ const {
 } = require('./util')
 const requireCourseStaffForQueue = require('../middleware/requireCourseStaffForQueue')
 const requireCourseStaffForQueueForQuestion = require('../middleware/requireCourseStaffForQueueForQuestion')
-const safeAsync = require('../middleware/safeAsync')
 
 /* eslint-disable no-param-reassign */
 function modifyBeingAnswered(question, answering) {
