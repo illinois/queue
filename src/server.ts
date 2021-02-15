@@ -1,5 +1,5 @@
 /* eslint global-require: "off", no-console: "off" */
-import 'dotenv/config'
+import 'dotenv-flow/config'
 
 import { Server } from 'http'
 import * as io from 'socket.io'

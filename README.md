@@ -25,21 +25,6 @@ At UIUC, this queue is hosted as a free service by Computer Science and EngrIT.
 
 If you wish to report a bug, feature request, etc., please open a new issue (first checking that your issue has not already been filed).
 
-## Running the Queue from Source
-
-### Running locally in `dev` mode
-
-- Clone the repository
-- Install [`node` and `npm`](https://nodejs.org/en/download/package-manager/)
-- Install dependencies: `npm install` in the cloned directory
-- Start the server: `npm run dev`
-  - Access the queue from a browser at `localhost:3000`
-  - You can run it on a different port by setting the `PORT` environment variable
-
-### Builing and running for production
-
-Run `npm run build` to build assets for production; read more about the build process [in the docs](docs/Build.md). Run `npm run start` to start the application.
-
 ## Configuration
 
 The Queue can be configured via a variety of environment variables:
@@ -58,16 +43,25 @@ The Queue can be configured via a variety of environment variables:
 - `EPPN_SUFFIX`: the expected suffix for all valid Shibboleth eppn attributes. If this variable is not present, then all Shibboleth responses will be accepted.
 - `INSTITUTION_NAME`: to set branding other than 'Illinois'.
 
-Though it's not required, the Queue supports [`dotenv`](https://www.npmjs.com/package/dotenv), which means you can store environment variables in a file on disk. The name of the file that environment variables are loaded from is determined by `NODE_ENV`. So, if `NODE_ENV` is `development`, environment variables are loaded from `.env.development`.
+There are also a number of environment variables that are used to configure the database connection; see `src/models/index.js` for the list of environment variables that are used.
 
-The Queue includes a default `.env.development` file, which points at a local sqlite database in local dev mode. In production environments, the following environment variables can be used to configure the database connection:
+Environment variables can be set however you prefer. If you like yo store your environment variables in files on disk, the Queue supports [`dotenv-flow`](https://www.npmjs.com/package/dotenv-flow), a variant of the popular `dotenv` library with built-in support for multiple environments and local overrides that aren't tracked by git. Check out the [`dotenv-flow` README](https://www.npmjs.com/package/dotenv-flow#README) for more information.
 
-```
-DB_USERNAME="username"
-DB_PASSWORD="password"
-DB_DATABASE="database_name"
-DB_HOST="localhost"
-DB_DIALECT="sqlite"
-DB_LOGGING="false"
-DB_STORAGE="./dev.sqlite"  # Sqlite only
-```
+The Queue includes a default `.env.development` file, which points at a local sqlite database. This ensures that local dev mode works out of the box!
+
+## Running the Queue from Source
+
+### Running locally in `dev` mode
+
+- Clone the repository
+- Install [`node` and `npm`](https://nodejs.org/en/download/package-manager/)
+- Install dependencies: `npm install` in the cloned directory
+- Start the server: `npm run dev`
+  - Access the queue from a browser at `localhost:3000`
+  - You can run it on a different port by setting the `PORT` environment variable
+
+### Builing and running for production
+
+Before running the queue in production mode, ensure you have a `.env.production.local` file containing the relevant database connection details. If you're running in production mode locally for testing, you can simply copy the values from `.env.development` to a `.env.production.local` file.
+
+Run `npm run build` to build assets for production, then run `npm run start` to start the application.
