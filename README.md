@@ -27,7 +27,7 @@ If you wish to report a bug, feature request, etc., please open a new issue (fir
 
 ## Running the Queue from Source
 
-### Running locally in `dev` mode:
+### Running locally in `dev` mode
 
 - Clone the repository
 - Install [`node` and `npm`](https://nodejs.org/en/download/package-manager/)
@@ -36,11 +36,13 @@ If you wish to report a bug, feature request, etc., please open a new issue (fir
   - Access the queue from a browser at `localhost:3000`
   - You can run it on a different port by setting the `PORT` environment variable
 
-### Production config
+### Builing and running for production
 
 Run `npm run build` to build assets for production; read more about the build process [in the docs](docs/Build.md). Run `npm run start` to start the application.
 
-Several configuration options are exposed via environment variables and `.env`:
+## Configuration
+
+The Queue can be configured via a variety of environment variables:
 
 - `PORT`: controls which port the app will be served from.
 - `BASE_URL`: allows the app to be served from somewhere other than the server
@@ -56,24 +58,16 @@ Several configuration options are exposed via environment variables and `.env`:
 - `EPPN_SUFFIX`: the expected suffix for all valid Shibboleth eppn attributes. If this variable is not present, then all Shibboleth responses will be accepted.
 - `INSTITUTION_NAME`: to set branding other than 'Illinois'.
 
-Database information is also stored through environment variables, and can be configured for multiple environments depending on the value of `NODE_ENV`.
-```
-DB_USERNAME_<ENV>="username"
-DB_PASSWORD_<ENV>="password"
-DB_DATABASE_<ENV>="database_name"
-DB_HOST_<ENV>="localhost"
-DB_DIALECT_<ENV>="sqlite"
-DB_LOGGING_<ENV>="false"
-DB_STORAGE_<ENV>="./dev.sqlite"  # Sqlite only
+Though it's not required, the Queue supports [`dotenv`](https://www.npmjs.com/package/dotenv), which means you can store environment variables in a file on disk. The name of the file that environment variables are loaded from is determined by `NODE_ENV`. So, if `NODE_ENV` is `development`, environment variables are loaded from `.env.development`.
 
-# Example for development:
-DB_USERNAME_DEVELOPMENT="username"
-DB_PASSWORD_DEVELOPMENT="password"
-DB_DATABASE_DEVELOPMENT="queue"
-DB_HOST_DEVELOPMENT="localhost"
-DB_DIALECT_DEVELOPMENT="sqlite"
-DB_LOGGING_DEVELOPMENT="false"
-DB_STORAGE_DEVELOPMENT="./dev.sqlite"  # Sqlite only
-```
+The Queue includes a default `.env.development` file, which points at a local sqlite database in local dev mode. In production environments, the following environment variables can be used to configure the database connection:
 
-Note that for SQLite databases, only `DB_STORAGE_<ENV>` is required.
+```
+DB_USERNAME="username"
+DB_PASSWORD="password"
+DB_DATABASE="database_name"
+DB_HOST="localhost"
+DB_DIALECT="sqlite"
+DB_LOGGING="false"
+DB_STORAGE="./dev.sqlite"  # Sqlite only
+```
