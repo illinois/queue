@@ -7,15 +7,14 @@ const ENV = process.env.NODE_ENV || 'development'
 require('dotenv').config({ path: `.env.${ENV}` })
 
 const loadDbConfig = () => {
-  const env = (process.env.NODE_ENV || 'development').toUpperCase()
   return {
-    username: process.env[`DB_USERNAME_${env}`],
-    password: process.env[`DB_PASSWORD_${env}`],
-    database: process.env[`DB_DATABASE_${env}`],
-    host: process.env[`DB_HOST_${env}`],
-    dialect: process.env[`DB_DIALECT_${env}`],
-    logging: process.env[`DB_LOGGING_${env}`] === 'true',
-    storage: process.env[`DB_STORAGE_${env}`], // Sqlite only
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
+    host: process.env.DB_HOST,
+    dialect: process.env.DB_DIALECT,
+    logging: process.env.DB_LOGGING === 'true',
+    storage: process.env.DB_STORAGE, // Sqlite only
   }
 }
 const config = loadDbConfig()
