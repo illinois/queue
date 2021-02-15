@@ -2,7 +2,9 @@ const withCSS = require('@zeit/next-css')
 const withSass = require('@zeit/next-sass')
 const withTypescript = require('@zeit/next-typescript')
 
-require('dotenv').config()
+const ENV = process.env.NODE_ENV || 'development'
+
+require('dotenv').config({ path: `.env.${ENV}` })
 
 module.exports = withTypescript(
   withSass(
