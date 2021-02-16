@@ -2,7 +2,7 @@ const withCSS = require('@zeit/next-css')
 const withSass = require('@zeit/next-sass')
 const withTypescript = require('@zeit/next-typescript')
 
-require('dotenv-flow').config()
+require('./src/dotenv')
 
 module.exports = withTypescript(
   withSass(

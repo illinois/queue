@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const Sequelize = require('sequelize')
 
-require('dotenv-flow').config()
+require('../dotenv')
 
 const CONFIG = {
   username: process.env.DB_USERNAME,
