@@ -4,7 +4,7 @@
   "description": "",
   "main": "node server.js",
   "scripts": {
-    "dev": "ts-node --type-check --compiler-options '{\"module\":\"commonjs\"}' src/server.ts",
+    "dev": "NODE_ENV=development ts-node --type-check --compiler-options '{\"module\":\"commonjs\"}' src/server.ts",
     "dev-watch": "nodemon src/server.ts",
     "build": "rimraf build nextbuild && cpx \"src/**/*\" nextbuild && next build ./nextbuild && tsc --project tsconfig.server.json && cpx \"nextbuild/.next/**/*\" build/.next && cpx \"src/static/**/*\" build/static/",
     "start": "NODE_ENV=production node build/server.js",
