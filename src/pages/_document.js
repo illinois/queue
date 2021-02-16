@@ -7,7 +7,7 @@ import moment from 'moment'
 import nextCookies from 'next-cookies'
 import getConfig from 'next/config'
 
-import { baseUrl, isDev, isNow } from '../util'
+import { baseUrl, isDev } from '../util'
 
 const { institutionName } = getConfig().publicRuntimeConfig
 
@@ -34,7 +34,7 @@ export default class MyDocument extends Document {
     // If we're deployed to anywhere other than the server root, we'll have to
     // store our root path that here so that the client can access it.
     const script = {
-      __html: `window.BASE_URL = '${baseUrl}'; window.IS_DEV = ${isDev}; window.IS_NOW = ${isNow};`,
+      __html: `window.BASE_URL = '${baseUrl}'; window.IS_DEV = ${isDev};`,
     }
     const faviconPath = `${baseUrl}/static/favicon.ico`
     const manifestPath = `${baseUrl}/static/manifest.json`
