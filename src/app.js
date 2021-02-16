@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser')
 const rewrite = require('express-urlrewrite')
 
 const { logger } = require('./util/logger')
-const { baseUrl, isDev, isNow } = require('./util')
+const { baseUrl, isDev } = require('./util')
 
 // We're probably running behind a proxy - trust them and derive information
 // from the X-Forwarded-* headers: https://expressjs.com/en/guide/behind-proxies.html
@@ -29,7 +29,7 @@ app.use(require('./middleware/prettyPrintJson'))
 // will hit that page with their user information present in headers. We can
 // then establish our own session with them, which can persist beyond Shib's
 // authentication restrictions.
-if (isDev || isNow) {
+if (isDev) {
   app.use(`${baseUrl}/login/dev`, require('./auth/dev'))
 }
 app.use(`${baseUrl}/login/shib`, require('./auth/shibboleth'))

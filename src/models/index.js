@@ -2,21 +2,17 @@ const fs = require('fs')
 const path = require('path')
 const Sequelize = require('sequelize')
 
-require('dotenv').config()
+require('../dotenv')
 
-const loadDbConfig = () => {
-  const env = (process.env.NODE_ENV || 'development').toUpperCase()
-  return {
-    username: process.env[`DB_USERNAME_${env}`],
-    password: process.env[`DB_PASSWORD_${env}`],
-    database: process.env[`DB_DATABASE_${env}`],
-    host: process.env[`DB_HOST_${env}`],
-    dialect: process.env[`DB_DIALECT_${env}`],
-    logging: process.env[`DB_LOGGING_${env}`] === 'true',
-    storage: process.env[`DB_STORAGE_${env}`], // Sqlite only
-  }
+const CONFIG = {
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
+  host: process.env.DB_HOST,
+  dialect: process.env.DB_DIALECT,
+  logging: process.env.DB_LOGGING === 'true',
+  storage: process.env.DB_STORAGE, // Sqlite only
 }
-const config = loadDbConfig()
 
 /**
  * Loads our models into the given Sequelize instance
@@ -55,12 +51,12 @@ const sequelizeConfig = {
 let sequelize
 if (process.env.DATABASE_URL) {
   sequelize = new Sequelize(process.env.DATABASE_URL, {
-    ...config,
+    ...CONFIG,
     ...sequelizeConfig,
   })
 } else {
-  sequelize = new Sequelize(config.database, config.username, config.password, {
-    ...config,
+  sequelize = new Sequelize(CONFIG.database, CONFIG.username, CONFIG.password, {
+    ...CONFIG,
     ...sequelizeConfig,
   })
 }

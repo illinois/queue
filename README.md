@@ -25,22 +25,9 @@ At UIUC, this queue is hosted as a free service by Computer Science and EngrIT.
 
 If you wish to report a bug, feature request, etc., please open a new issue (first checking that your issue has not already been filed).
 
-## Running the Queue from Source
+## Configuration
 
-### Running locally in `dev` mode:
-
-- Clone the repository
-- Install [`node` and `npm`](https://nodejs.org/en/download/package-manager/)
-- Install dependencies: `npm install` in the cloned directory
-- Start the server: `npm run dev`
-  - Access the queue from a browser at `localhost:3000`
-  - You can run it on a different port by setting the `PORT` environment variable
-
-### Production config
-
-Run `npm run build` to build assets for production; read more about the build process [in the docs](docs/Build.md). Run `npm run start` to start the application.
-
-Several configuration options are exposed via environment variables and `.env`:
+The Queue can be configured via a variety of environment variables:
 
 - `PORT`: controls which port the app will be served from.
 - `BASE_URL`: allows the app to be served from somewhere other than the server
@@ -56,24 +43,29 @@ Several configuration options are exposed via environment variables and `.env`:
 - `EPPN_SUFFIX`: the expected suffix for all valid Shibboleth eppn attributes. If this variable is not present, then all Shibboleth responses will be accepted.
 - `INSTITUTION_NAME`: to set branding other than 'Illinois'.
 
-Database information is also stored through environment variables, and can be configured for multiple environments depending on the value of `NODE_ENV`.
-```
-DB_USERNAME_<ENV>="username"
-DB_PASSWORD_<ENV>="password"
-DB_DATABASE_<ENV>="database_name"
-DB_HOST_<ENV>="localhost"
-DB_DIALECT_<ENV>="sqlite"
-DB_LOGGING_<ENV>="false"
-DB_STORAGE_<ENV>="./dev.sqlite"  # Sqlite only
+There are also a number of environment variables that are used to configure the database connection; see `src/models/index.js` for the list of environment variables that are used. Note that the failure to set `DB_DIALECT` will result in an error like the following:
 
-# Example for development:
-DB_USERNAME_DEVELOPMENT="username"
-DB_PASSWORD_DEVELOPMENT="password"
-DB_DATABASE_DEVELOPMENT="queue"
-DB_HOST_DEVELOPMENT="localhost"
-DB_DIALECT_DEVELOPMENT="sqlite"
-DB_LOGGING_DEVELOPMENT="false"
-DB_STORAGE_DEVELOPMENT="./dev.sqlite"  # Sqlite only
+```
+Dialect needs to be explicitly supplied as of v4.0.0
 ```
 
-Note that for SQLite databases, only `DB_STORAGE_<ENV>` is required.
+Environment variables can be set however you prefer. If you like to store your environment variables in files on disk, the Queue supports [`dotenv-flow`](https://www.npmjs.com/package/dotenv-flow), a variant of the popular `dotenv` library with built-in support for multiple environments and local overrides that aren't tracked by git. Check out the [`dotenv-flow` README](https://www.npmjs.com/package/dotenv-flow#README) for more information on the different config files that can be used and their precedence.
+
+The Queue includes a default `.env.development` file, which points at a local sqlite database. This ensures that local dev mode works out of the box!
+
+## Running the Queue from Source
+
+### Running locally in `dev` mode
+
+- Clone the repository
+- Install [`node` and `npm`](https://nodejs.org/en/download/package-manager/)
+- Install dependencies: `npm install` in the cloned directory
+- Start the server: `npm run dev`
+  - Access the queue from a browser at `localhost:3000`
+  - You can run it on a different port by setting the `PORT` environment variable
+
+### Builing and running for production
+
+Before running the queue in production mode, ensure you have a `.env.production.local` file containing the relevant database connection details. If you're running in production mode locally for testing, you can simply copy the values from `.env.development` to a `.env.production.local` file.
+
+Run `npm run build` to build assets for production, then run `npm run start` to start the application.
