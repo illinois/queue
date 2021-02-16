@@ -43,9 +43,13 @@ The Queue can be configured via a variety of environment variables:
 - `EPPN_SUFFIX`: the expected suffix for all valid Shibboleth eppn attributes. If this variable is not present, then all Shibboleth responses will be accepted.
 - `INSTITUTION_NAME`: to set branding other than 'Illinois'.
 
-There are also a number of environment variables that are used to configure the database connection; see `src/models/index.js` for the list of environment variables that are used.
+There are also a number of environment variables that are used to configure the database connection; see `src/models/index.js` for the list of environment variables that are used. Note that the failure to set `DB_DIALECT` will result in an error like the following:
 
-Environment variables can be set however you prefer. If you like yo store your environment variables in files on disk, the Queue supports [`dotenv-flow`](https://www.npmjs.com/package/dotenv-flow), a variant of the popular `dotenv` library with built-in support for multiple environments and local overrides that aren't tracked by git. Check out the [`dotenv-flow` README](https://www.npmjs.com/package/dotenv-flow#README) for more information.
+```
+Dialect needs to be explicitly supplied as of v4.0.0
+```
+
+Environment variables can be set however you prefer. If you like to store your environment variables in files on disk, the Queue supports [`dotenv-flow`](https://www.npmjs.com/package/dotenv-flow), a variant of the popular `dotenv` library with built-in support for multiple environments and local overrides that aren't tracked by git. Check out the [`dotenv-flow` README](https://www.npmjs.com/package/dotenv-flow#README) for more information on the different config files that can be used and their precedence.
 
 The Queue includes a default `.env.development` file, which points at a local sqlite database. This ensures that local dev mode works out of the box!
 
