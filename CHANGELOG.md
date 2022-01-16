@@ -16,6 +16,8 @@ with the current semantic version and the next changes should go under a **[Next
 
 * Improve configuration system by leveraging [`dotenv-flow`](https://www.npmjs.com/package/dotenv-flow). ([@nwalters512](https://github.com/nwalters512) in [#331](https://github.com/illinois/queue/pull/331))
 
+* Increase max length of location field to allow for Zoom links. ([@code-arman](https://github.com/code-arman) in [#335](https://github.com/illinois/queue/pull/335))
+
 ## v2.0.0
 * Refactor authentication to support multiple logins and institutions. ([@nwalters512](https://github.com/nwalters512) in [#283](https://github.com/illinois/queue/pull/283))
 
