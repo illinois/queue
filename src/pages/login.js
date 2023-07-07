@@ -6,13 +6,13 @@ import getConfig from 'next/config'
 
 import DevModeLogin from '../components/DevModeLogin'
 import { useTheme } from '../components/ThemeProvider'
-import { withBaseUrl, isDev, isNow } from '../util'
+import { withBaseUrl, isDev } from '../util'
 
 const { institutionName } = getConfig().publicRuntimeConfig
 
 const Login = props => {
   const { isDarkMode } = useTheme()
-  const showDevModeLogin = isDev || isNow
+  const showDevModeLogin = isDev
   let shibUrl = withBaseUrl('/login/shib')
   const { redirect } = props
   if (redirect !== withBaseUrl('') && redirect !== withBaseUrl('/')) {
