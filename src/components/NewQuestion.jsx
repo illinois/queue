@@ -236,8 +236,8 @@ const NewQuestion = props => {
                   {queue.fixedLocation ? (
                     <FormText>This is a fixed-location queue.</FormText>
                   ) : (
-                    <FormText>Please say whether you are waiting to meet
-                      <strong>in person</strong> or <strong>online</strong>.
+                    <FormText>Please say whether you are waiting to
+                      meet <strong>in person</strong> or <strong>online</strong>.
                       If your instructor requires it, also give the room
                       number or online meeting URL.
                     </FormText>
