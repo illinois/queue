@@ -152,7 +152,7 @@ class Question extends React.Component {
               <span className="text-muted" style={{ fontSize: '0.9rem' }}>
                 {!!location && (
                   <Fragment>
-                    <span title="Location">{location}</span>
+                    <span title="Location" style={{overflowWrap: 'anywhere', wordBreak: 'normal', hyphens: 'auto'}}>{location}</span>
                     <span className="mr-2 ml-2">&bull;</span>
                   </Fragment>
                 )}
