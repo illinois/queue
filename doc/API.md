@@ -27,9 +27,9 @@ described here are located under `/api/`.
 | `/queues/:queueId/staff`            | `GET`                  | Gets the on-duty staff list for a specific queue    |
 | `/queues/:queueId/staff/:userId`    | `POST`                 | Joins the specified user to the specified queue     |
 | `/queues/:queueId/staff/:userId`    | `DELETE`               | Removes the specified user from the specified queue |
-| `/questions`                        | `POST`                 | Adds a question to a queue                          |
-| `/questions`                        | `GET`                  | Get all questions for a particular queue            |
-| `/questions`                        | `DELETE`               | Delete all questions for a particular queue         |
+| `/queues/:queueId/questions`        | `POST`                 | Adds a question to a particular queue               |
+| `/queues/:queueId/questions`        | `GET`                  | Get all questions for a particular queue            |
+| `/queues/:queueId/questions`        | `DELETE`               | Delete all questions for a particular queue         |
 | `/questions/:questionId`            | `GET`                  | Get a particular question                           |
 | `/questions/:questionId`            | `PATCH`                | Updates a question's information                    |
 | `/questions/:questionId`            | `DELETE`               | Deletes a question from a queue                     |
