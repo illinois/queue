@@ -1,5 +1,9 @@
 # Illinois Open Source Queue
 
+**Disclaimer:** This is a legacy student project repo. Pending longer-term maintenance updates (see outstanding issues) from internal or external collaborators, there may be vulnerabilities and/or bugs.
+
+---
+
 [![Build Status](https://travis-ci.org/illinois/queue.svg?branch=master)](https://travis-ci.org/illinois/queue)
 
 A micro-service queue for holding open office hours.
