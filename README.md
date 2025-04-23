@@ -8,7 +8,7 @@
 
 A micro-service queue for holding open office hours.
 
-Join the #queue-general channel on the [UIUC OSS Slack team](https://illinois-oss.slack.com) to keep up with the queue!
+Join the #queue-general channel on the [UIUC OSS Slack team](https://illinois-oss.slack.com) to keep up with the queue! (Note: You can use the "create an account" option in the corner of the screen as long as you have an `illinois.edu` email address. However, this Slack is little-used as of 2025.)
 
 ## Using the Queue at Illinois
 
